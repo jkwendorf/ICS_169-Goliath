@@ -18,14 +18,16 @@ void StateManager::changeToState(StateEnum state)
 {
 	switch(state)
 	{
-	//case MAIN_MENU:
-		//break;
+	case MAIN_MENU:
+		nextState = new MainMenuState();
+		break;
 	case GAME:
 		nextState = new GameState();
 		break;
+	case END_GAME:
+		nextState = new EndGameState();
+		break;
 	//case TRANSITION:
-		//break;
-	//case END_GAME:
 		//break;
 	default:
 		nextState = new GameState();

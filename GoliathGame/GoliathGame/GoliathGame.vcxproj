@@ -84,12 +84,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="EndGameState.cpp" />
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MainMenuState.cpp" />
     <ClCompile Include="StateManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="EndGameState.h" />
     <ClInclude Include="GameState.h" />
+    <ClInclude Include="MainMenuState.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateManager.h" />
   </ItemGroup>

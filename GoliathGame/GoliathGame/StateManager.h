@@ -2,6 +2,8 @@
 
 #include "State.h"
 #include "GameState.h"
+#include "MainMenuState.h"
+#include "EndGameState.h"
 
 enum StateEnum
 {
