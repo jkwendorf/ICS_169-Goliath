@@ -36,6 +36,11 @@ void GameState::draw(sf::RenderWindow& window)
 	window.draw(r);
 }
 
+void GameState::handleEvent(sf::Event event)
+{
+
+}
+
 void GameState::loadContent()
 {
 

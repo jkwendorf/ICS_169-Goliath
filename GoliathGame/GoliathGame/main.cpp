@@ -17,11 +17,7 @@ int main()
             if (event.type == sf::Event::Closed || event.key.code == sf::Keyboard::Escape)
                 window.close();
 
-			if(event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::G)
-				sM.changeToState(GAME);
-			else if(event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::M)
-				sM.changeToState(END_GAME);
-			// JW: We might want to have the StateManager process any events in here
+			sM.handleEvent(event);
         }
 		sM.update(deltaTimer.restart().asSeconds());
 

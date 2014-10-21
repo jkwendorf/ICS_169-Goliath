@@ -18,6 +18,11 @@ void MainMenuState::draw(sf::RenderWindow& window)
 
 }
 
+void MainMenuState::handleEvent(sf::Event event)
+{
+
+}
+
 void MainMenuState::loadContent()
 {
 

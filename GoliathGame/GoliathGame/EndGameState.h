@@ -9,6 +9,7 @@ public:
 
 	void update(float deltaTime);
 	void draw(sf::RenderWindow& window);
+	void handleEvent(sf::Event event);
 	void loadContent();
 	void unloadContent();
 

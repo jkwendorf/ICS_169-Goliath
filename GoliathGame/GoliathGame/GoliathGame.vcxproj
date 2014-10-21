@@ -84,6 +84,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Button.cpp" />
     <ClCompile Include="EndGameState.cpp" />
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="main.cpp" />
@@ -91,6 +92,7 @@
     <ClCompile Include="StateManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Button.h" />
     <ClInclude Include="EndGameState.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="MainMenuState.h" />

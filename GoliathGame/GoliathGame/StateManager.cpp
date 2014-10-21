@@ -61,3 +61,8 @@ void StateManager::draw(sf::RenderWindow& window)
 {
 	currentState->draw(window);
 }
+
+void StateManager::handleEvent(sf::Event event)
+{
+	currentState->handleEvent(event);
+}

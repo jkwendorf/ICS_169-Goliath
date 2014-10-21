@@ -22,6 +22,7 @@ public:
 	void changeToState(StateEnum state);
 	void update(float deltaTime);
 	void draw(sf::RenderWindow& window);
+	void handleEvent(sf::Event event);
 
 private:
 	void loadState();

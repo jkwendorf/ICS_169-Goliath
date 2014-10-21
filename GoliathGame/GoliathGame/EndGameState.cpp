@@ -18,6 +18,11 @@ void EndGameState::draw(sf::RenderWindow& window)
 
 }
 
+void EndGameState::handleEvent(sf::Event event)
+{
+
+}
+
 void EndGameState::loadContent()
 {
 
