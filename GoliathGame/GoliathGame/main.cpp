@@ -1,11 +1,12 @@
 #include "StateManager.h"
+#include "Global.h"
 
 int main()
 {
 	// JW: Our window is set to 200x200, these should be set by global variables
-    sf::RenderWindow window(sf::VideoMode(200, 200), "Goliath Game");
+    sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Goliath Game");
 	// JW: Setting the framerate to 30, but this should be set by a global variable
-	window.setFramerateLimit(30);
+	window.setFramerateLimit(FPS);
 	StateManager sM;
 
 	sf::Clock deltaTimer;

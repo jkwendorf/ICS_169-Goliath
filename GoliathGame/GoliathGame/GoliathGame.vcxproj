@@ -95,6 +95,7 @@
     <ClInclude Include="Button.h" />
     <ClInclude Include="EndGameState.h" />
     <ClInclude Include="GameState.h" />
+    <ClInclude Include="Global.h" />
     <ClInclude Include="MainMenuState.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateManager.h" />
