@@ -14,6 +14,7 @@ public:
 	void unloadContent();
 
 private:
-	sf::RectangleShape r;
+	//sf::RectangleShape r;
+	sf::Sprite s;
 };
 
