@@ -1,5 +1,6 @@
 #pragma once
 #include "State.h"
+#include "Player.h"
 
 class GameState : public State
 {
@@ -15,6 +16,8 @@ public:
 
 private:
 	//sf::RectangleShape r;
+	//Player for GameState
+	Player p;
 	sf::Sprite s;
 };
 
