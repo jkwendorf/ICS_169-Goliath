@@ -9,21 +9,36 @@
 
 # Build results
 [Dd]ebug/
+[Dd]ebug\
+[Dd]ebug*/
+[Dd]ebug*\
 [Dd]ebugPublic/
+[Dd]ebugPublic\
 [Rr]elease/
+[Rr]elease\
 [Rr]eleases/
+[Rr]eleases\
 x64/
+x64\
 x86/
+x86\
 build/
+build\
 bld/
+bld\
 [Bb]in/
+[Bb]in\
 [Oo]bj/
+[Oo]bj\
 
 # Roslyn cache directories
 *.ide/
+*.ide\
 
 # MSTest test Results
 [Tt]est[Rr]esult*/
+[Tt]est[Rr]esult*\
+[Bb]uild[Ll]og.*
 [Bb]uild[Ll]og.*
 
 #NUNIT
@@ -32,7 +47,9 @@ TestResult.xml
 
 # Build Results of an ATL Project
 [Dd]ebugPS/
+[Dd]ebugPS\
 [Rr]eleasePS/
+[Rr]eleasePS\
 dlldata.c
 
 *_i.c
@@ -59,12 +76,15 @@ dlldata.c
 *.pidb
 *.svclog
 *.scc
+*.idb
+*.tlog
 
 # Chutzpah Test files
 _Chutzpah*
 
 # Visual C++ cache files
 ipch/
+ipch\
 *.aps
 *.ncb
 *.opensdf
@@ -78,12 +98,14 @@ ipch/
 
 # TFS 2012 Local Workspace
 $tf/
+$tf\
 
 # Guidance Automation Toolkit
 *.gpState
 
 # ReSharper is a .NET coding add-in
 _ReSharper*/
+_ReSharper*\
 *.[Rr]e[Ss]harper
 *.DotSettings.user
 
@@ -103,25 +125,37 @@ _NCrunch_*
 # MightyMoose
 *.mm.*
 AutoTest.Net/
+AutoTest.Net\
 
 # Web workbench (sass)
 .sass-cache/
+.sass-cache\
 
 # Installshield output folder
 [Ee]xpress/
+[Ee]xpress\
 
 # DocProject is a documentation generator add-in
 DocProject/buildhelp/
+DocProject\buildhelp\
 DocProject/Help/*.HxT
+DocProject\Help\*.HxT
 DocProject/Help/*.HxC
+DocProject\Help\*.HxC
 DocProject/Help/*.hhc
+DocProject\Help\*.hhc
 DocProject/Help/*.hhk
+DocProject\Help\*.hhk
 DocProject/Help/*.hhp
+DocProject\Help\*.hhp
 DocProject/Help/Html2
+DocProject\Help\Html2
 DocProject/Help/html
+DocProject\Help\html
 
 # Click-Once directory
 publish/
+publish\
 
 # Publish Web Output
 *.[Pp]ublish.xml
@@ -135,22 +169,28 @@ publish/
 *.nupkg
 # The packages folder can be ignored because of Package Restore
 **/packages/*
+**\packages\*
 # except build/, which is used as an MSBuild target.
 !**/packages/build/
+!**\packages\build\
 # If using the old MSBuild-Integrated Package Restore, uncomment this:
 #!**/packages/repositories.config
 
 # Windows Azure Build Output
 csx/
+csx\
 *.build.csdef
 
 # Windows Store app package directory
 AppPackages/
+AppPackages\
 
 # Others
 sql/
+sql\
 *.Cache
 ClientBin/
+ClientBin\
 [Ss]tyle[Cc]op.*
 ~$*
 *~
@@ -159,15 +199,19 @@ ClientBin/
 *.pfx
 *.publishsettings
 node_modules/
+node_modules\
 
 # RIA/Silverlight projects
 Generated_Code/
+Generated_Code\
 
 # Backup & report files from converting an old project file
 # to a newer Visual Studio version. Backup files are not needed,
 # because we have git ;-)
 _UpgradeReport_Files/
+_UpgradeReport_Files\
 Backup*/
+Backup*\
 UpgradeLog*.XML
 UpgradeLog*.htm
 
@@ -182,3 +226,4 @@ UpgradeLog*.htm
 
 # Microsoft Fakes
 FakesAssemblies/
+FakesAssembiles\
