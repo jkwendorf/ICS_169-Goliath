@@ -1,4 +1,5 @@
 #include "TextureManager.h"
+#include <sstream>
 
 sf::Texture* TextureManager::retrieveTexture(std::string tex)
 {
@@ -15,11 +16,18 @@ sf::Texture* TextureManager::retrieveTexture(std::string tex)
 	//Create new texture
 	sf::Texture* newTex = new sf::Texture();
 
+	std::stringstream fileAppender;
+	fileAppender << "media/art/" << tex << ".png";
+	std::string name = fileAppender.str();
+	// JW: We first need to set the string as empty, then clear.  It's strange like that.
+	fileAppender.str("");
+	fileAppender.clear();
+
 	//If you can load a texture
 	//	Store that in texManager
 	//	Return the texture
-	if(!newTex->loadFromFile(tex))
-		newTex->loadFromFile("media/FileNotFound.png");
+	if(!newTex->loadFromFile(name))
+		newTex->loadFromFile("media/art/FileNotFound.png");
 
 	texManager.emplace(tex, newTex);
 
