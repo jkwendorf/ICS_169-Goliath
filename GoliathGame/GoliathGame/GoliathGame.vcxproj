@@ -84,19 +84,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BaseObject.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="EndGameState.cpp" />
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainMenuState.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="TextureManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BaseObject.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="EndGameState.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="Global.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="MainMenuState.h" />
     <ClInclude Include="State.h" />

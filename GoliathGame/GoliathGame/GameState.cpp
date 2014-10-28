@@ -7,6 +7,9 @@ GameState::GameState(void)
 	//r.setFillColor(sf::Color::Green);
 	//r.setSize(sf::Vector2f(10, 10));
 	//r.setPosition(sf::Vector2f(100, 100));
+
+	//Code for player draw
+	//p.draw(TextureManager::GetInstance().retrieveTexture("player"), 40, 23);
 }
 
 GameState::~GameState(void)
@@ -15,6 +18,9 @@ GameState::~GameState(void)
 
 void GameState::update(float deltaTime)
 {
+	//Update for Player still needs to be fleshed out
+	//p.update();
+
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 	{
 		//r.move(0.f, -100*deltaTime);
