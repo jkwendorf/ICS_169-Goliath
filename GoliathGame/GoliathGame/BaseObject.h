@@ -1,10 +1,10 @@
 #pragma once
 
-#include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics.hpp>
 
 class BaseObject
 {
 public:
+	virtual void draw(sf::RenderWindow& window) = 0;
 	sf::Sprite sprite;
-	void draw(sf::Texture* text, int x, int y);
 };

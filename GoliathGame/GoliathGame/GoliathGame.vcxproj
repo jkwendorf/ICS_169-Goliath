@@ -84,7 +84,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BaseObject.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="EndGameState.cpp" />
     <ClCompile Include="GameState.cpp" />

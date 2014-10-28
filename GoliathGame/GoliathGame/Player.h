@@ -11,4 +11,5 @@ public:
 	void update();
 	void attack();
 	void move();
+	void draw(sf::RenderWindow& window);
 };
