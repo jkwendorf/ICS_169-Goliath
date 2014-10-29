@@ -22,17 +22,12 @@ public:
 	void update(float deltaTime);
 	void attack();
 	void move(float x, float y);
-	void grapple();
 	void draw(sf::RenderWindow& window);
 
 	// VARIABLES
 	sf::Vector2f vel;
 	float stamina;
 	float health;
-	float weaponCooldown;
-	float currentCooldown;
 	int weapon;
 	HookShot hShot;
-
-	bool grappleInProgress, facingRight;
 };
