@@ -1,5 +1,4 @@
 #include "Screen.h"
-#include "GroundTile.h"
 // include more tiles
 
 Screen::Screen(std::string s)
@@ -30,18 +29,22 @@ void Screen::update(float deltaTime)
 
 void Screen::draw(sf::RenderWindow* w)
 {
+	for(int i = 0; i < 20; i++)
+	{
 
+	}
 }
 
 
 void Screen::LoadTileMap()
 {
 	int currentRow = 0;
-	level.open(pathToText);
+	level.open("media/art/" + pathToText);
 	std::string str;
 
-	//if(!level.good())
-		//std::cout << "Level text file did not load!" << std::endl; 
+	if(!level.good())
+		std::cout << "Level text file did not load!" << std::endl; 
+		return;
 		
 
 	getline(level, str);
@@ -50,7 +53,13 @@ void Screen::LoadTileMap()
 
 	//Sets up the txtWidth, txtHeight, and tileSheet with the 
 	// values in the level.txt
-
+	std::cout << "Token[2]" << token[3] << std::endl; 
+	int screenRows = atoi(token[0].c_str());
+	int screenCols = atoi(token[1].c_str());
+	numOfTiles = atoi(token[2].c_str());
+	sf::Texture* texture = TextureManager::GetInstance().retrieveTexture(token[3]);
+	
+	tiles = new GroundTile[20];
 	//*TextureManager::GetInstance().retrieveTexture(token[6], "Tiles");	
 	//AddTexture("Images/Blank.png", "Blank");
 
@@ -59,11 +68,16 @@ void Screen::LoadTileMap()
 	while(!level.eof()) 
 	{
 		getline(level, str);
-		Tokenize(str, token);
-		//for(int i = 0; i < token.size(); i++)
-		//{
-			//tileMap[currentRow][i] = new Tile(atoi(token[i].c_str()), i * TILE_HEIGHT, currentRow * TILE_WIDTH);
-		//}
+		Tokenize(str, token, "||");
+		
+		for(int i = 0; i < token.size(); i++)
+		{
+			std::string singleTile;
+			std::vector <std::string> tileToken;
+			Tokenize(token[i], tileToken, ",");
+			
+			tiles[currentRow] = GroundTile(atoi(tileToken[i].c_str()), sf::Vector2i(i * TILE_HEIGHT, currentRow * TILE_WIDTH), screenRows, screenCols, texture);
+		}
 		currentRow++;
 		token.clear();
 	}

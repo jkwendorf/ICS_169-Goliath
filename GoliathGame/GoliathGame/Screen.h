@@ -9,9 +9,10 @@ class Screen
 private:
 	int screenNum;
 	int width, height;
+	int numOfTiles;
 	std::string pathToText;
 	std::ifstream level;
-	BaseObject* tiles;
+	GroundTile* tiles;
 
 	Screen();
 	void LoadTileMap();
