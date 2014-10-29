@@ -5,11 +5,11 @@ GroundTile::GroundTile()
 {
 }
 
-GroundTile::GroundTile(int tileNum, sf::Vector2i pos, int tileSheetRows, int tileSheetCols, sf::Texture* texture)
+GroundTile::GroundTile(int tileNum, sf::Vector2i pos, sf::Texture* texture)
 {
 	sprite.setTexture(*texture);
-	sprite.setTextureRect(sf::IntRect(TILE_HEIGHT * (tileNum % tileSheetCols),
-				TILE_WIDTH * (tileNum / tileSheetRows),TILE_WIDTH, TILE_HEIGHT));
+	sprite.setTextureRect(sf::IntRect(TILE_HEIGHT * (tileNum % TileSheetRows),
+				TILE_WIDTH * (tileNum / TileSheetRows),TILE_WIDTH, TILE_HEIGHT));
 	sprite.setPosition(pos.x, pos.y);
 }
 

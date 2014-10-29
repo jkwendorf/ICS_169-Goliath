@@ -1,5 +1,4 @@
 #include "Screen.h"
-#include "GroundTile.h"
 // include more tiles
 
 Screen::Screen(std::string s)
@@ -13,14 +12,14 @@ Screen::~Screen()
 
 }
 
-int Screen::getMapWidth()
+int Screen::getScreenWidth()
 {
-	return 1;
+	return width * TILE_WIDTH;
 }
 
-int Screen::getMapHeight()
+int Screen::getScreenHeight()
 {
-	return 1;
+	return height * TILE_HEIGHT;
 }
 
 void Screen::update(float deltaTime)
@@ -28,46 +27,61 @@ void Screen::update(float deltaTime)
 
 }
 
-void Screen::draw(sf::RenderWindow* w)
+void Screen::draw(sf::RenderWindow& w)
 {
-
+	for(int i = 0; i < numOfTiles; i++)
+	{
+		tiles[i].draw(w);
+	}
 }
 
 
 void Screen::LoadTileMap()
 {
 	int currentRow = 0;
-	level.open(pathToText);
+	std::ifstream ifs;
+	ifs.open("test.txt");
 	std::string str;
 
-	//if(!level.good())
-		//std::cout << "Level text file did not load!" << std::endl; 
+	if(!ifs.good())
+		std::cout << "Level text file did not load!" << std::endl; 
+		return;
 		
-
-	getline(level, str);
+	std::getline(ifs, str);
 	std::vector <std::string> token;
 	Tokenize(str, token, ", ");
 
 	//Sets up the txtWidth, txtHeight, and tileSheet with the 
 	// values in the level.txt
-
+	std::cout << "Token[2]" << token[3] << std::endl; 
+	width = atoi(token[0].c_str());
+	height = atoi(token[1].c_str());
+	numOfTiles = atoi(token[2].c_str());
+	sf::Texture* texture = TextureManager::GetInstance().retrieveTexture(token[3]);
+	
+	tiles = new GroundTile[numOfTiles];
 	//*TextureManager::GetInstance().retrieveTexture(token[6], "Tiles");	
 	//AddTexture("Images/Blank.png", "Blank");
 
 	token.clear();
 
-	while(!level.eof()) 
+	while(!ifs.eof()) 
 	{
-		getline(level, str);
-		Tokenize(str, token);
-		//for(int i = 0; i < token.size(); i++)
-		//{
-			//tileMap[currentRow][i] = new Tile(atoi(token[i].c_str()), i * TILE_HEIGHT, currentRow * TILE_WIDTH);
-		//}
+		std::getline(ifs, str);
+		Tokenize(str, token, "||");
+		
+		for(int i = 0; i < token.size(); i++)
+		{
+			std::string singleTile;
+			std::vector <std::string> tileToken;
+			Tokenize(token[i], tileToken, ",");
+			
+			tiles[currentRow] = GroundTile(atoi(tileToken[0].c_str()), sf::Vector2i(i * TILE_HEIGHT, currentRow * TILE_WIDTH), texture);
+		}
 		currentRow++;
 		token.clear();
 	}
-	level.close();
+	ifs.close();
 }
 
 void Screen::Tokenize(const std::string& str,

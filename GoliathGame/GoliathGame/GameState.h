@@ -2,6 +2,7 @@
 #include "State.h"
 #include "InputManager.h"
 #include "Player.h"
+#include "Screen.h"
 
 class GameState : public State
 {
@@ -19,5 +20,6 @@ public:
 
 private:
 	InputManager inputManager;
+	Screen s;
 };
 

@@ -9,9 +9,10 @@ class Screen
 private:
 	int screenNum;
 	int width, height;
+	int numOfTiles;
 	std::string pathToText;
-	std::ifstream level;
-	BaseObject* tiles;
+	
+	GroundTile* tiles;
 
 	Screen();
 	void LoadTileMap();
@@ -22,8 +23,8 @@ private:
 public:
 	Screen(std::string s);
 	~Screen();
-	int getMapWidth();
-	int getMapHeight();
+	int getScreenWidth();
+	int getScreenHeight();
 	void update(float deltaTime);
-	void draw(sf::RenderWindow* w);
+	void draw(sf::RenderWindow& w);
 };
