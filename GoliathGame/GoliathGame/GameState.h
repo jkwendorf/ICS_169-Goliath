@@ -1,5 +1,6 @@
 #pragma once
 #include "State.h"
+#include "InputManager.h"
 #include "Player.h"
 
 class GameState : public State
@@ -14,10 +15,9 @@ public:
 	void loadContent();
 	void unloadContent();
 
-private:
-	//sf::RectangleShape r;
-	//Player for GameState
 	Player p;
-	sf::Sprite s;
+
+private:
+	InputManager inputManager;
 };
 
