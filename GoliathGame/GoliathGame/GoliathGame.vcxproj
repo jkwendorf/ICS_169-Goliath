@@ -87,6 +87,8 @@
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="EndGameState.cpp" />
     <ClCompile Include="GameState.cpp" />
+    <ClCompile Include="HookShot.cpp" />
+    <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainMenuState.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -99,11 +101,14 @@
     <ClInclude Include="EndGameState.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="Global.h" />
+    <ClInclude Include="HookShot.h" />
+    <ClInclude Include="InputManager.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="MainMenuState.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateManager.h" />
+    <ClInclude Include="Weapon.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
