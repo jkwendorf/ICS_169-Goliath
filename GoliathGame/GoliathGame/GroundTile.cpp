@@ -5,7 +5,7 @@ GroundTile::GroundTile()
 {
 }
 
-GroundTile::GroundTile(int tileNum, sf::Vector2i pos, int screenRows, int screenCols, sf::Texture* texture)
+GroundTile::GroundTile(int tileNum, sf::Vector2i pos, sf::Texture* texture)
 {
 	sprite.setTexture(*texture);
 	sprite.setTextureRect(sf::IntRect(TILE_HEIGHT * (tileNum % TileSheetRows),

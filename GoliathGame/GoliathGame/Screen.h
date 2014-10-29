@@ -11,7 +11,7 @@ private:
 	int width, height;
 	int numOfTiles;
 	std::string pathToText;
-	std::ifstream level;
+	
 	GroundTile* tiles;
 
 	Screen();
@@ -23,8 +23,8 @@ private:
 public:
 	Screen(std::string s);
 	~Screen();
-	int getMapWidth();
-	int getMapHeight();
+	int getScreenWidth();
+	int getScreenHeight();
 	void update(float deltaTime);
-	void draw(sf::RenderWindow* w);
+	void draw(sf::RenderWindow& w);
 };
