@@ -4,6 +4,7 @@ HookShot::HookShot()
 {
 	sprite.setTexture(*TextureManager::GetInstance().retrieveTexture("blah"));
 	sprite.setScale(0.05,0.05);
+	sprite.setOrigin(sprite.getLocalBounds().width/2, sprite.getLocalBounds().height/2);
 }
 
 HookShot::~HookShot()
@@ -18,7 +19,12 @@ void HookShot::draw(sf::RenderWindow& window)
 
 void HookShot::update(float deltaTime)
 {
+	sprite.move((grappleLocation.x - sprite.getPosition().x)*5*deltaTime, (grappleLocation.y - sprite.getPosition().y)*5*deltaTime);
+}
 
+void HookShot::update(sf::Vector2f pos)
+{
+	sprite.setPosition(pos);
 }
 
 void HookShot::attack()
@@ -28,5 +34,5 @@ void HookShot::attack()
 
 void HookShot::grappleToLocation(sf::Vector2f location)
 {
-	sprite.move(location);
+	grappleLocation = location;
 }

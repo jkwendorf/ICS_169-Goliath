@@ -9,6 +9,7 @@ InputManager::InputManager()
 		utility[x] = false;
 		controller[x] = false;
 	}
+	utility[3] = false;
 	controller[1] = true;
 }
 
@@ -33,48 +34,19 @@ void InputManager::update(Player& s, float deltaTime)
 	*/
 
 	//change this when you want more complex movement
-	movement[0] = (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) ? true : false;
-	movement[1] = (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) ? true : false;
+	movement[0] = sf::Keyboard::isKeyPressed(sf::Keyboard::A);
+	movement[1] = sf::Keyboard::isKeyPressed(sf::Keyboard::D);
 
 
-	/*
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-	{
-		movement[0] = true;
-	}
-	else if(!sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-	{
-		movement[0] = false;
-	}
-	
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-	{
-		movement[1] = true;
-	}
-	else if(!sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-	{
-		movement[1] = false;
-	}
-	*/
-
-	utility[0] = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) ? true : false;
+	utility[0] = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift);
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && !utility[1])
 	{
 		utility[1] = true;
 		s.vel.y = -5.0;
 	}
+	utility[2] = sf::Mouse::isButtonPressed(sf::Mouse::Right) && !utility[2] ? true : false;
+	utility[3] = sf::Mouse::isButtonPressed(sf::Mouse::Left) && !utility[3] ? true : false;
 
-	/*
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
-	{
-		utility[0] = true;
-	}
-	else if(!sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
-	{
-		utility[0] = false;
-	}
-
-	*/
 
 
 	playerMove(s, deltaTime);
@@ -83,7 +55,7 @@ void InputManager::update(Player& s, float deltaTime)
 void InputManager::playerMove(Player& player, float deltaTime)
 {
 	//Change this to player Speed once a player class is made later on.
-	int speed = (utility[0]) ? 2 : 1;
+	int speed = (utility[0]) ? 4 : 1;
 	
 
 	/*
@@ -95,11 +67,13 @@ void InputManager::playerMove(Player& player, float deltaTime)
 	{
 		//r.move(-100*deltaTime, 0.f);
 		player.vel.x = -100 * speed * deltaTime;
+		player.facingRight = false;
 	}
 	if(movement[1])
 	{
 		//r.move(100*deltaTime, 0.f);
 		player.vel.x = 100 * speed * deltaTime;
+		player.facingRight = true;
 	}
 	if(utility[1])
 	{
@@ -111,6 +85,20 @@ void InputManager::playerMove(Player& player, float deltaTime)
 			player.vel.y = 0.0;
 			utility[1] = false;
 		}
+	}
+	if(utility[2])
+	{
+		if(!player.grappleInProgress)
+			player.grapple();
+		else
+			player.currentCooldown += deltaTime;
+	}
+	if(utility[3])
+	{
+		player.attack();
+		player.currentCooldown += deltaTime;
+		if(player.currentCooldown >= player.weaponCooldown)
+			utility[3] = false;
 	}
 	player.sprite.move(player.vel);
 	player.vel.x = 0.0;

@@ -18,8 +18,9 @@ public:
 
 	//utlity[0] = run
 	//utility[1] = jump
-	//utility[2] = grappleNearby
-	bool utility[3];
+	//utility[2] = grapple
+	//utility[3] = attack
+	bool utility[4];
 
 
 	//controller[0] = game pad
