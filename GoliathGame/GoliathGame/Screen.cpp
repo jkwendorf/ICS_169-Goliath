@@ -14,12 +14,12 @@ Screen::~Screen()
 
 int Screen::getScreenWidth()
 {
-	return width;
+	return width * TILE_WIDTH;
 }
 
 int Screen::getScreenHeight()
 {
-	return height;
+	return height * TILE_HEIGHT;
 }
 
 void Screen::update(float deltaTime)
@@ -47,15 +47,15 @@ void Screen::LoadTileMap()
 		std::cout << "Level text file did not load!" << std::endl; 
 		return;
 		
-	getline(ifs, str);
+	std::getline(ifs, str);
 	std::vector <std::string> token;
 	Tokenize(str, token, ", ");
 
 	//Sets up the txtWidth, txtHeight, and tileSheet with the 
 	// values in the level.txt
 	std::cout << "Token[2]" << token[3] << std::endl; 
-	width = atoi(token[0].c_str()) * TILE_WIDTH;
-	height = atoi(token[1].c_str()) * TILE_HEIGHT;
+	width = atoi(token[0].c_str());
+	height = atoi(token[1].c_str());
 	numOfTiles = atoi(token[2].c_str());
 	sf::Texture* texture = TextureManager::GetInstance().retrieveTexture(token[3]);
 	
@@ -67,7 +67,7 @@ void Screen::LoadTileMap()
 
 	while(!ifs.eof()) 
 	{
-		getline(ifs, str);
+		std::getline(ifs, str);
 		Tokenize(str, token, "||");
 		
 		for(int i = 0; i < token.size(); i++)
@@ -76,7 +76,7 @@ void Screen::LoadTileMap()
 			std::vector <std::string> tileToken;
 			Tokenize(token[i], tileToken, ",");
 			
-			tiles[currentRow] = GroundTile(atoi(tileToken[i].c_str()), sf::Vector2i(i * TILE_HEIGHT, currentRow * TILE_WIDTH), texture);
+			tiles[currentRow] = GroundTile(atoi(tileToken[0].c_str()), sf::Vector2i(i * TILE_HEIGHT, currentRow * TILE_WIDTH), texture);
 		}
 		currentRow++;
 		token.clear();
