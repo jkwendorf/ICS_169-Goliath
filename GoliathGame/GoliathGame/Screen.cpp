@@ -64,6 +64,8 @@ void Screen::LoadTileMap()
 	//AddTexture("Images/Blank.png", "Blank");
 
 	token.clear();
+	int ratioX = SCREEN_WIDTH / width;
+	int ratioY = SCREEN_HEIGHT / height;
 
 	while(!ifs.eof()) 
 	{
@@ -76,7 +78,7 @@ void Screen::LoadTileMap()
 			std::vector <std::string> tileToken;
 			Tokenize(token[i], tileToken, ",");
 			
-			tiles[currentRow] = GroundTile(atoi(tileToken[0].c_str()), sf::Vector2i(i * TILE_HEIGHT, currentRow * TILE_WIDTH), texture);
+			tiles[currentRow] = GroundTile(atoi(tileToken[0].c_str()), sf::Vector2i(atoi(tileToken[1].c_str()) * ratioX, atoi(tileToken[2].c_str()) * ratioY), texture);
 		}
 		currentRow++;
 		token.clear();
