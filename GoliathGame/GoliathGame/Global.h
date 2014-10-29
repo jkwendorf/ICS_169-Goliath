@@ -6,3 +6,8 @@
 #define SCREEN_HEIGHT 600
 
 #define FPS 30
+
+#define TILE_WIDTH 100
+#define TILE_HEIGHT 100
+#define TileSheetRows 5
+#define TileSheetCols 5
