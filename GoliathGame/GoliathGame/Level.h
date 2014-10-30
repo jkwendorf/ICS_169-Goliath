@@ -4,6 +4,8 @@
 
 class Level
 {
+private:
+	Screen* screenList;
 
 
 

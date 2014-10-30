@@ -38,14 +38,16 @@ void Screen::draw(sf::RenderWindow& w)
 
 void Screen::LoadTileMap()
 {
-	int currentRow = 0;
+	
 	std::ifstream ifs;
-	ifs.open("test.txt");
+	ifs.open("media/levels/" + pathToText + ".txt");
 	std::string str;
 
 	if(!ifs.good())
+	{
 		std::cout << "Level text file did not load!" << std::endl; 
 		return;
+	}
 		
 	std::getline(ifs, str);
 	std::vector <std::string> token;
@@ -53,19 +55,22 @@ void Screen::LoadTileMap()
 
 	//Sets up the txtWidth, txtHeight, and tileSheet with the 
 	// values in the level.txt
-	std::cout << "Token[2]" << token[3] << std::endl; 
+	//std::cout << "Token[2] " << token[2] << std::endl; 
 	width = atoi(token[0].c_str());
 	height = atoi(token[1].c_str());
 	numOfTiles = atoi(token[2].c_str());
 	sf::Texture* texture = TextureManager::GetInstance().retrieveTexture(token[3]);
+	//std::cout << "Token[3] " << token[3] << std::endl; 
 	
 	tiles = new GroundTile[numOfTiles];
+	int current = 0;
 	//*TextureManager::GetInstance().retrieveTexture(token[6], "Tiles");	
 	//AddTexture("Images/Blank.png", "Blank");
 
 	token.clear();
 	int ratioX = SCREEN_WIDTH / width;
 	int ratioY = SCREEN_HEIGHT / height;
+	//std::cout << "RatioX: " << ratioX << " RatioY: " << ratioY << std::endl; 
 
 	while(!ifs.eof()) 
 	{
@@ -74,13 +79,12 @@ void Screen::LoadTileMap()
 		
 		for(int i = 0; i < token.size(); i++)
 		{
-			std::string singleTile;
 			std::vector <std::string> tileToken;
 			Tokenize(token[i], tileToken, ",");
+			//std::cout << "Tiletype: " << atoi(tileToken[0].c_str()) << ". X: " << atoi(tileToken[2].c_str()) << ". Y: " << atoi(tileToken[1].c_str()) << std::endl; 
 			
-			tiles[currentRow] = GroundTile(atoi(tileToken[0].c_str()), sf::Vector2i(atoi(tileToken[1].c_str()) * ratioX, atoi(tileToken[2].c_str()) * ratioY), texture);
+			tiles[current++] = GroundTile(atoi(tileToken[0].c_str()), sf::Vector2i(atoi(tileToken[2].c_str()) * ratioX, atoi(tileToken[1].c_str()) * ratioY), sf::Vector2i(ratioX, ratioY), texture);
 		}
-		currentRow++;
 		token.clear();
 	}
 	ifs.close();
