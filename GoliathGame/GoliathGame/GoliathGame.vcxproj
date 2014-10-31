@@ -84,6 +84,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BaseObject.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="EndGameState.cpp" />
     <ClCompile Include="GameState.cpp" />
@@ -93,7 +94,8 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainMenuState.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Screen.cpp" />
+    <ClCompile Include="Section.cpp" />
+    <ClCompile Include="StartTile.cpp" />
     <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="TextureManager.cpp" />
   </ItemGroup>
@@ -110,7 +112,7 @@
     <ClInclude Include="Level.h" />
     <ClInclude Include="PlatformTile.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="Screen.h" />
+    <ClInclude Include="Section.h" />
     <ClInclude Include="StartTile.h" />
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="MainMenuState.h" />

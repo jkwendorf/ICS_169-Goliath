@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Screen.h"
+#include "Section.h"
 
 class Level
 {
 private:
-	Screen* screenList;
+	Section* screenList;
 
 
 

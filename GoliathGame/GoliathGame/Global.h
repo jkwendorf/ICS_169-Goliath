@@ -8,7 +8,8 @@
 
 #define FPS 30
 
-#define TILE_WIDTH 100
-#define TILE_HEIGHT 100
+#define	EDITOR_TILE_WIDTH 100
+#define EDITOR_TILE_HEIGHT 100
+#define GAME_TILE_WIDTH 50
 #define TileSheetRows 5
 #define TileSheetCols 5

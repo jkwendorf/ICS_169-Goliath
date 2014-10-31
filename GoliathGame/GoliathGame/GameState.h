@@ -2,7 +2,7 @@
 #include "State.h"
 #include "InputManager.h"
 #include "Player.h"
-#include "Screen.h"
+#include "Section.h"
 
 class GameState : public State
 {
@@ -20,6 +20,6 @@ public:
 
 private:
 	InputManager inputManager;
-	Screen s;
+	Section s;
 };
 
