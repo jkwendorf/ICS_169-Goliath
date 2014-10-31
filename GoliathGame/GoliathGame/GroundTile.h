@@ -6,10 +6,12 @@
 class GroundTile : public BaseObject
 {
 private:
-	GroundTile();
+	sf::Vector2i offSet;
 public:
-	GroundTile(int tileNum, sf::Vector2i pos, int tileSheetRows, int tileSheetCols, sf::Texture* texture);
+	GroundTile();
+	GroundTile(int tileNum, sf::Vector2i pos, sf::Vector2i screenOffSet, sf::Vector2f scale, sf::Texture* texture);
 	~GroundTile();
+	void SetOffSet(int offSetX, int offSetY);
 	sf::Sprite getSprite();
 	void draw(sf::RenderWindow& window);
 };

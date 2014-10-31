@@ -5,6 +5,9 @@
 class BaseObject
 {
 public:
-	virtual void draw(sf::RenderWindow& window) = 0;
+	BaseObject();
+	~BaseObject();
+	void update(float deltaTime);
+	void draw(sf::RenderWindow& window);
 	sf::Sprite sprite;
 };

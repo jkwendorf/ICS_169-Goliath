@@ -54,7 +54,13 @@
     <ClCompile Include="GroundTile.cpp">
       <Filter>Source Files\Tile Stuff</Filter>
     </ClCompile>
-    <ClCompile Include="Screen.cpp">
+    <ClCompile Include="Section.cpp">
+      <Filter>Source Files\Tile Stuff</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StartTile.cpp">
       <Filter>Source Files\Tile Stuff</Filter>
     </ClCompile>
   </ItemGroup>
@@ -98,13 +104,22 @@
     <ClInclude Include="Weapon.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Screen.h">
-      <Filter>Header Files\Tile Stuff</Filter>
-    </ClInclude>
     <ClInclude Include="Level.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GroundTile.h">
+      <Filter>Header Files\Tile Stuff</Filter>
+    </ClInclude>
+    <ClInclude Include="StartTile.h">
+      <Filter>Header Files\Tile Stuff</Filter>
+    </ClInclude>
+    <ClInclude Include="EndTile.h">
+      <Filter>Header Files\Tile Stuff</Filter>
+    </ClInclude>
+    <ClInclude Include="PlatformTile.h">
+      <Filter>Header Files\Tile Stuff</Filter>
+    </ClInclude>
+    <ClInclude Include="Section.h">
       <Filter>Header Files\Tile Stuff</Filter>
     </ClInclude>
   </ItemGroup>

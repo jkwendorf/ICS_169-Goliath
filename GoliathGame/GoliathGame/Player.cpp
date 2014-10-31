@@ -52,7 +52,7 @@ void Player::move(float x, float y)
 
 void Player::draw(sf::RenderWindow& window)
 {
-	window.draw(sprite);
+	BaseObject::draw(window);
 	window.draw(hShot.sprite);
 
 	/* //TESTING CIRCLE

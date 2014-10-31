@@ -1,6 +1,7 @@
 #include "GameState.h"
 
 GameState::GameState(void)
+	:s("test", sf::Vector2i(0,0))
 {
 	//s.setTexture(*TextureManager::GetInstance().retrieveTexture("blah"));
 
@@ -49,7 +50,9 @@ void GameState::update(float deltaTime)
 void GameState::draw(sf::RenderWindow& window)
 {
 	//window.draw(r);
+	s.draw(window);
 	p.draw(window);
+	
 }
 
 void GameState::handleEvent(sf::Event event)
