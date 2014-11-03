@@ -63,6 +63,9 @@
     <ClCompile Include="StartTile.cpp">
       <Filter>Source Files\Tile Stuff</Filter>
     </ClCompile>
+    <ClCompile Include="Global.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="State.h">
