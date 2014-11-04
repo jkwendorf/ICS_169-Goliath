@@ -88,10 +88,10 @@
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="EndGameState.cpp" />
     <ClCompile Include="GameState.cpp" />
-    <ClCompile Include="Global.cpp" />
     <ClCompile Include="GroundTile.cpp" />
     <ClCompile Include="HookShot.cpp" />
     <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="Level.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainMenuState.cpp" />
     <ClCompile Include="Player.cpp" />
