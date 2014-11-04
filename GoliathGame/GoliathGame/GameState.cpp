@@ -1,7 +1,8 @@
 #include "GameState.h"
 
 GameState::GameState(void)
-	:s("LongLevel", sf::Vector2i(0,0))
+	:s(0,3)
+	//:s(0, sf::Vector2i(0,0))
 {
 	//s.setTexture(*TextureManager::GetInstance().retrieveTexture("blah"));
 

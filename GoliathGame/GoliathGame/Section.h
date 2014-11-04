@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Global.h"
 #include <fstream>
 #include "GroundTile.h"
 #include "TextureManager.h"
