@@ -1,6 +1,12 @@
 #include "Section.h"
 // include more tiles
 
+
+Section::Section()
+{
+
+}
+
 Section::Section(std::string s, sf::Vector2i sectionOffSet)
 	: pathToText(s), sOffSet(sectionOffSet)
 {
@@ -13,18 +19,18 @@ Section::~Section()
 }
 
 //Screen height is how many cols of tiles are in the screen * the width of the tiles
-int Section::getScreenWidth()
+int Section::getSectionWidth()
 {
-	return width /** TILE_WIDTH*/;
+	return width * GAME_TILE_WIDTH;
 }
 
 //Screen height is how many rows of tiles are in the screen * the height of the tiles
-int Section::getScreenHeight()
+int Section::getSectionHeight()
 {
-	return height /** TILE_HEIGHT*/;
+	return height /** EDITOR_TILE_HEIGHT*/;
 }
 
-bool Section::inWindow(int offSetX, int offSetY)
+bool Section::inWindow()
 {
 	/*
 	if(sOffSet- screenOffSet <= screenWidth && sectionOffSet + width - screenOffSet >= 0)
@@ -34,6 +40,19 @@ bool Section::inWindow(int offSetX, int offSetY)
 	return false;
 	*/
 	return true;
+}
+
+std::vector<GroundTile> Section::GetNearTiles(sf::Vector2f pos)
+{
+	std::vector<GroundTile> temp;
+	for(int i = 0; i < numOfTiles; i++)
+	{
+		if(CheckNear(i, pos))
+		{
+			temp.push_back(tiles[i]);
+		}
+	}
+	return temp;
 }
 
 void Section::update(float deltaTime)
@@ -47,6 +66,18 @@ void Section::draw(sf::RenderWindow& w)
 	{
 		tiles[i].draw(w);
 	}
+}
+
+bool Section::CheckNear(int tileNum, sf::Vector2f pos)
+{
+	float dist = std::sqrt(std::pow((double)tiles[tileNum].getSprite().getPosition().x - pos.x, 2.0) + std::pow((double)tiles[tileNum].getSprite().getPosition().y - pos.y, 2.0 ));
+	//std::cout << tiles[tileNum].getSprite().getPosition().x << ". Y: " << tiles[tileNum].getSprite().getPosition().y << std::endl;
+	if(dist <= 100.0) //Need to change possibly to somthing like 2 * Player width or height
+	{
+		//std::cout << "True: " << tileNum << std::endl;
+		return true;
+	}
+	return false;
 }
 
 //Loading is the text file from the given file path

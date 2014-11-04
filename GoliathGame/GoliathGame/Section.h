@@ -15,18 +15,20 @@ private:
 	
 	GroundTile* tiles;
 
-	Section();
+	bool CheckNear(int tileNum, sf::Vector2f pos);
 	void LoadTileMap();
 	void Tokenize(const std::string& str,
                       std::vector<std::string>& tokens,
                       const std::string& delimiters = " ");
 
 public:
+	Section();
 	Section(std::string s, sf::Vector2i sectionOffSet);
 	~Section();
-	int getScreenWidth();
-	int getScreenHeight();
-	bool inWindow(int offSetX, int offSetY);
+	int getSectionWidth();
+	int getSectionHeight();
+	bool inWindow();
+	std::vector<GroundTile> Section::GetNearTiles(sf::Vector2f pos);
 	void update(float deltaTime);
 	void draw(sf::RenderWindow& w);
 };

@@ -91,6 +91,7 @@
     <ClCompile Include="GroundTile.cpp" />
     <ClCompile Include="HookShot.cpp" />
     <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="Level.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainMenuState.cpp" />
     <ClCompile Include="Player.cpp" />
