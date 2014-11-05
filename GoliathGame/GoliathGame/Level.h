@@ -12,7 +12,7 @@ private:
 	void LoadLevel();
 	bool CheckSectionOnScreen(int sectionNum);
 public:
-	Level(int levelNumber, int numOfSections);
+	Level(int levelNumber);
 	~Level();
 	std::vector<BaseObject> Level::GetNearTiles(const sf::Vector2f& pos);
 	void update(float deltaTime);

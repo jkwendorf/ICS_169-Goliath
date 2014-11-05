@@ -11,14 +11,11 @@ Section::Section(std::string& s, const sf::Vector2i& sectionOffSet)
 	: pathToText(s), sOffSet(sectionOffSet)
 {
 	LoadTileMap();
-	
-	//Global::ParseLevelSizes();
-	Global::GetInstance().ParseLevelSizes();
 }
 
 Section::~Section()
 {
-	delete[] tiles;
+	//delete[] tiles;
 }
 
 //Screen height is how many cols of tiles are in the screen * the width of the tiles

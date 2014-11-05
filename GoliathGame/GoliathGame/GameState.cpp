@@ -1,9 +1,10 @@
 #include "GameState.h"
 
 GameState::GameState(void)
-	:s(0,3)
+	:s(1)
 	//:s(0, sf::Vector2i(0,0))
 {
+	
 	//s.setTexture(*TextureManager::GetInstance().retrieveTexture("blah"));
 
 	//r.setFillColor(sf::Color::Green);

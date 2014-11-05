@@ -1,9 +1,10 @@
 
 #include "Level.h"
 
-Level::Level(int levelNumber, int numOfSections)
-	:levelNum(levelNumber), numSections(numOfSections)
+Level::Level(int levelNumber)
+	:levelNum(levelNumber), numSections(Global::GetInstance().levelSizes.at("Level " + std::to_string(levelNumber)))
 {
+	
 	LoadLevel();
 }
 
