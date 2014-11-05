@@ -1,7 +1,8 @@
 #include "GameState.h"
 
 GameState::GameState(void)
-	:s(0, 3)
+	:s(0,3)
+	//:s(0, sf::Vector2i(0,0))
 {
 	//s.setTexture(*TextureManager::GetInstance().retrieveTexture("blah"));
 
@@ -42,6 +43,7 @@ void GameState::update(float deltaTime)
 		//r.move(100*deltaTime, 0.f);
 		s.move(100*deltaTime, 0.f);
 	}*/
+	
 	std::vector<BaseObject> temp = s.GetNearTiles(p.sprite.getPosition());
 	inputManager.update(p, deltaTime);
 	p.update(deltaTime);

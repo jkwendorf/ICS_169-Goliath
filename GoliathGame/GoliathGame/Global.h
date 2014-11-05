@@ -1,6 +1,9 @@
 #pragma once
 
+#include <string>
 #include <iostream>
+#include <fstream>
+#include <map>
 // JW: In the future, we might want to make Global a static class so we can alter values
 
 #define SCREEN_WIDTH 800
@@ -25,6 +28,9 @@ public :
 		return instance;
 	}
 
+	std::map<std::string, int> levelSizes;
+
+	void ParseLevelSizes();
 	void setScreenSize(int w, int h);
 	void setFPS(int f);
 	void calculateOffset(); //Calculates offset and sets it using current screen size

@@ -11,6 +11,9 @@ Section::Section(std::string& s, const sf::Vector2i& sectionOffSet)
 	: pathToText(s), sOffSet(sectionOffSet)
 {
 	LoadTileMap();
+	
+	//Global::ParseLevelSizes();
+	Global::GetInstance().ParseLevelSizes();
 }
 
 Section::~Section()
