@@ -14,7 +14,7 @@ private:
 public:
 	Level(int levelNumber, int numOfSections);
 	~Level();
-	std::vector<GroundTile> Level::GetNearTiles(sf::Vector2f pos);
+	std::vector<BaseObject> Level::GetNearTiles(const sf::Vector2f& pos);
 	void update(float deltaTime);
 	void draw(sf::RenderWindow& w);
 

@@ -2,6 +2,13 @@
 #include "BaseObject.h"
 
 BaseObject::BaseObject()
+	:collidable(false)
+{
+
+}
+
+BaseObject::BaseObject(bool canCollide)
+	:collidable(canCollide)
 {
 
 }

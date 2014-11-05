@@ -5,8 +5,8 @@ GroundTile::GroundTile()
 {
 }
 
-GroundTile::GroundTile(int tileNum, sf::Vector2i pos, sf::Vector2i screenOffSet, sf::Vector2f scale, sf::Texture* texture)
-	:offSet(screenOffSet)
+GroundTile::GroundTile(int tileNum, const sf::Vector2i& pos, const sf::Vector2i& screenOffSet, const sf::Vector2f& scale, sf::Texture* texture)
+	:BaseObject(true), offSet(screenOffSet)
 {
 	sprite.setTexture(*texture);
 	sf::IntRect temp = sf::IntRect(EDITOR_TILE_HEIGHT * (tileNum % TileSheetRows),
@@ -22,11 +22,6 @@ GroundTile::GroundTile(int tileNum, sf::Vector2i pos, sf::Vector2i screenOffSet,
 GroundTile::~GroundTile()
 {
 
-}
-
-sf::Sprite GroundTile::getSprite()
-{
-	return sprite;
 }
 
 void GroundTile::draw(sf::RenderWindow& window)

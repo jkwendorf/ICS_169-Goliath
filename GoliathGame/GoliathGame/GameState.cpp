@@ -42,7 +42,7 @@ void GameState::update(float deltaTime)
 		//r.move(100*deltaTime, 0.f);
 		s.move(100*deltaTime, 0.f);
 	}*/
-	std::vector<GroundTile> temp = s.GetNearTiles(p.sprite.getPosition());
+	std::vector<BaseObject> temp = s.GetNearTiles(p.sprite.getPosition());
 	inputManager.update(p, deltaTime);
 	p.update(deltaTime);
 }
