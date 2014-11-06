@@ -33,15 +33,16 @@ public :
 	void ParseLevelSizes();
 	void setScreenSize(int w, int h);
 	void setFPS(int f);
-	void calculateOffset(); //Calculates offset and sets it using current screen size
 
-private:
-	int screenHeight;
-	int screenWidth;
+	int x;
+	int y;
 	int fps;
-	//int xOffset;
-	//int yOffset;
+	int xOffset;
+	int yOffset;
 
 	Global();
 	~Global();
+
+private:
+	void calculateOffset(); //Calculates offset and sets it using current screen size
 };

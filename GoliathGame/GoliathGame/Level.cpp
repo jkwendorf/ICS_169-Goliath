@@ -1,9 +1,10 @@
 
 #include "Level.h"
 
-Level::Level(int levelNumber, int numOfSections)
-	:levelNum(levelNumber), numSections(numOfSections)
+Level::Level(int levelNumber)
+	:levelNum(levelNumber), numSections(Global::GetInstance().levelSizes.at("Level " + std::to_string(levelNumber)))
 {
+	
 	LoadLevel();
 }
 
@@ -33,15 +34,15 @@ bool Level::CheckSectionOnScreen(int sectionNum)
 	return sectionList[sectionNum].inWindow();
 }
 
-std::vector<GroundTile> Level::GetNearTiles(sf::Vector2f pos)
+std::vector<BaseObject> Level::GetNearTiles(const sf::Vector2f& pos)
 {
 	bool lastChecked;
-	std::vector<GroundTile> final;
+	std::vector<BaseObject> final;
 	for (int i = 0; i < numSections; i++)
 	{
 		if(CheckSectionOnScreen(i))
 		{
-			std::vector<GroundTile> temp = sectionList[i].GetNearTiles(pos);
+			std::vector<BaseObject> temp = sectionList[i].GetNearTiles(pos);
 			final.insert(final.end(), temp.begin(), temp.end());
 		}
 	}

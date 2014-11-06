@@ -112,10 +112,9 @@
     <ClInclude Include="HookShot.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Level.h" />
-    <ClInclude Include="PlatformTile.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Section.h" />
-    <ClInclude Include="StartTile.h" />
+    <ClInclude Include="Start.h" />
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="MainMenuState.h" />
     <ClInclude Include="State.h" />

@@ -14,9 +14,9 @@ private:
 	int numOfTiles;
 	std::string pathToText;
 	
-	GroundTile* tiles;
+	BaseObject * tiles;
 
-	bool CheckNear(int tileNum, sf::Vector2f pos);
+	bool CheckNear(int tileNum, const sf::Vector2f& pos);
 	void LoadTileMap();
 	void Tokenize(const std::string& str,
                       std::vector<std::string>& tokens,
@@ -24,12 +24,12 @@ private:
 
 public:
 	Section();
-	Section(std::string s, sf::Vector2i sectionOffSet);
+	Section(std::string& s, const sf::Vector2i& sectionOffSet);
 	~Section();
 	int getSectionWidth();
 	int getSectionHeight();
 	bool inWindow();
-	std::vector<GroundTile> Section::GetNearTiles(sf::Vector2f pos);
+	std::vector<BaseObject> Section::GetNearTiles(const sf::Vector2f& pos);
 	void update(float deltaTime);
 	void draw(sf::RenderWindow& w);
 };

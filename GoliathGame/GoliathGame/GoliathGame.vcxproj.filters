@@ -116,16 +116,13 @@
     <ClInclude Include="GroundTile.h">
       <Filter>Header Files\Tile Stuff</Filter>
     </ClInclude>
-    <ClInclude Include="StartTile.h">
-      <Filter>Header Files\Tile Stuff</Filter>
-    </ClInclude>
     <ClInclude Include="EndTile.h">
       <Filter>Header Files\Tile Stuff</Filter>
     </ClInclude>
-    <ClInclude Include="PlatformTile.h">
+    <ClInclude Include="Section.h">
       <Filter>Header Files\Tile Stuff</Filter>
     </ClInclude>
-    <ClInclude Include="Section.h">
+    <ClInclude Include="Start.h">
       <Filter>Header Files\Tile Stuff</Filter>
     </ClInclude>
   </ItemGroup>

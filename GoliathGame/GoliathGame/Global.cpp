@@ -43,8 +43,9 @@ void Global::ParseLevelSizes()
 
 void Global::setScreenSize(int w, int h)
 {
-	screenHeight = h;
-	screenWidth = w;
+	y = h;
+	x = w;
+	calculateOffset();
 }
 
 void Global::setFPS(int f)
@@ -54,5 +55,5 @@ void Global::setFPS(int f)
 
 void Global::calculateOffset()
 {
-	
+	//grab height and width and calculate that offset
 }

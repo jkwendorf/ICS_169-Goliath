@@ -3,11 +3,15 @@
 
 int main()
 {
+	Global::GetInstance().ParseLevelSizes();
 	// JW: Our window is set to 200x200, these should be set by global variables
-    sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Goliath Game");
+	Global::GetInstance().setFPS(30);
+	Global::GetInstance().setScreenSize(1280, 720);
+	static sf::RenderWindow window(sf::VideoMode(Global::GetInstance().x, Global::GetInstance().y), "Goliath Game");
 	// JW: Setting the framerate to 30, but this should be set by a global variable
-	window.setFramerateLimit(FPS);
+	window.setFramerateLimit(Global::GetInstance().fps);
 	StateManager sM;
+	
 
 	sf::Clock deltaTimer;
     while (window.isOpen())
