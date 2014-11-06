@@ -3,6 +3,7 @@
 #include "InputManager.h"
 #include "Player.h"
 #include "Section.h"
+#include "Global.h"
 
 class GameState : public State
 {
@@ -21,5 +22,9 @@ public:
 private:
 	InputManager inputManager;
 	Section s;
+	sf::View view;
+	sf::RenderWindow win;
+	sf::Vector2f playerPos;
+	void viewCheck();
 };
 
