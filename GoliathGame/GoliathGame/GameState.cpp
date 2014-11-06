@@ -1,8 +1,14 @@
 #include "GameState.h"
 
 GameState::GameState(void)
+<<<<<<< HEAD
 	:s("LongLevel", sf::Vector2i(0,0))
+=======
+	:s(1)
+	//:s(0, sf::Vector2i(0,0))
+>>>>>>> 819790a0b5f26e4b8bfd7f7e8e91a2ee419ec3d3
 {
+	
 	//s.setTexture(*TextureManager::GetInstance().retrieveTexture("blah"));
 
 	//r.setFillColor(sf::Color::Green);
@@ -44,8 +50,13 @@ void GameState::update(float deltaTime)
 		//r.move(100*deltaTime, 0.f);
 		s.move(100*deltaTime, 0.f);
 	}*/
+<<<<<<< HEAD
 
 	viewCheck();
+=======
+	
+	std::vector<BaseObject> temp = s.GetNearTiles(p.sprite.getPosition());
+>>>>>>> 819790a0b5f26e4b8bfd7f7e8e91a2ee419ec3d3
 	inputManager.update(p, deltaTime);
 	p.update(deltaTime);
 	//p.sprite.getPosition();

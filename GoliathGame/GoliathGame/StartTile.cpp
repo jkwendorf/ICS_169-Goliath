@@ -1,12 +1,12 @@
 
-#include "StartTile.h"
+#include "Start.h"
 
-StartTile::StartTile(sf::Vector2i pos, sf::Vector2i screenOffSet)
+Start::Start(sf::Vector2i pos, sf::Vector2i screenOffSet)
 {
 
 }
 
-StartTile::~StartTile()
+Start::~Start()
 {
 
 }
