@@ -3,6 +3,7 @@
 
 int main()
 {
+	Global::GetInstance().ParseLevelSizes();
 	// JW: Our window is set to 200x200, these should be set by global variables
 	Global::GetInstance().setFPS(30);
 	Global::GetInstance().setScreenSize(1280, 720);
@@ -10,6 +11,7 @@ int main()
 	// JW: Setting the framerate to 30, but this should be set by a global variable
 	window.setFramerateLimit(Global::GetInstance().fps);
 	StateManager sM;
+	
 
 	sf::Clock deltaTimer;
     while (window.isOpen())

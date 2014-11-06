@@ -1,7 +1,13 @@
 #include "Section.h"
 // include more tiles
 
-Section::Section(std::string s, sf::Vector2i sectionOffSet)
+
+Section::Section()
+{
+
+}
+
+Section::Section(std::string& s, const sf::Vector2i& sectionOffSet)
 	: pathToText(s), sOffSet(sectionOffSet)
 {
 	LoadTileMap();
@@ -9,22 +15,22 @@ Section::Section(std::string s, sf::Vector2i sectionOffSet)
 
 Section::~Section()
 {
-
+	//delete[] tiles;
 }
 
 //Screen height is how many cols of tiles are in the screen * the width of the tiles
-int Section::getScreenWidth()
+int Section::getSectionWidth()
 {
-	return width /** TILE_WIDTH*/;
+	return width * GAME_TILE_WIDTH;
 }
 
 //Screen height is how many rows of tiles are in the screen * the height of the tiles
-int Section::getScreenHeight()
+int Section::getSectionHeight()
 {
-	return height /** TILE_HEIGHT*/;
+	return height /** EDITOR_TILE_HEIGHT*/;
 }
 
-bool Section::inWindow(int offSetX, int offSetY)
+bool Section::inWindow()
 {
 	/*
 	if(sOffSet- screenOffSet <= screenWidth && sectionOffSet + width - screenOffSet >= 0)
@@ -34,6 +40,22 @@ bool Section::inWindow(int offSetX, int offSetY)
 	return false;
 	*/
 	return true;
+}
+
+std::vector<BaseObject> Section::GetNearTiles(const sf::Vector2f& pos)
+{
+	std::vector<BaseObject> temp;
+	for(int i = 0; i < numOfTiles; i++)
+	{
+		if(tiles[i].collidable)
+		{
+			if(CheckNear(i, pos))
+			{
+				temp.push_back(tiles[i]);
+			}
+		}
+	}
+	return temp;
 }
 
 void Section::update(float deltaTime)
@@ -47,6 +69,18 @@ void Section::draw(sf::RenderWindow& w)
 	{
 		tiles[i].draw(w);
 	}
+}
+
+bool Section::CheckNear(int tileNum, const sf::Vector2f& pos)
+{
+	float dist = std::sqrt(std::pow((double)tiles[tileNum].sprite.getPosition().x - pos.x, 2.0) + std::pow((double)tiles[tileNum].sprite.getPosition().y - pos.y, 2.0 ));
+	//std::cout << tiles[tileNum].getSprite().getPosition().x << ". Y: " << tiles[tileNum].getSprite().getPosition().y << std::endl;
+	if(dist <= 100.0) //Need to change possibly to somthing like 2 * Player width or height
+	{
+		//std::cout << "True: " << tileNum << std::endl;
+		return true;
+	}
+	return false;
 }
 
 //Loading is the text file from the given file path
@@ -78,7 +112,16 @@ void Section::LoadTileMap()
 	sf::Texture* texture = TextureManager::GetInstance().retrieveTexture(token[3]);
 	//std::cout << "Token[3] " << token[3] << std::endl; 
 	
-	tiles = new GroundTile[numOfTiles];
+	try
+	{
+		tiles = new BaseObject[numOfTiles];
+	} 
+	catch(std::bad_alloc ex)
+	{
+		std::cout << "Allocation Failure" << std::endl;
+		return;
+	}
+
 	int current = 0;
 	//*TextureManager::GetInstance().retrieveTexture(token[6], "Tiles");	
 	//AddTexture("Images/Blank.png", "Blank");
@@ -98,8 +141,18 @@ void Section::LoadTileMap()
 			std::vector <std::string> tileToken;
 			Tokenize(token[i], tileToken, ",");
 			//std::cout << "Tiletype: " << atoi(tileToken[0].c_str()) << ". X: " << atoi(tileToken[2].c_str()) << ". Y: " << atoi(tileToken[1].c_str()) << std::endl; 
-			
-			tiles[current++] = GroundTile(atoi(tileToken[0].c_str()), sf::Vector2i(atoi(tileToken[2].c_str()) * GAME_TILE_WIDTH, atoi(tileToken[1].c_str()) * ((SCREEN_HEIGHT / width))), sOffSet, sf::Vector2f(ratioX, ratioY), texture);
+			int tileType = atoi(tileToken[0].c_str());
+			switch(tileType)
+			{
+			case 5:
+			case 6:
+				//These will be Enemy
+				tiles[current++] = GroundTile(tileType, sf::Vector2i(atoi(tileToken[2].c_str()) * GAME_TILE_WIDTH, atoi(tileToken[1].c_str()) * ((SCREEN_HEIGHT / width))), sOffSet, sf::Vector2f(ratioX, ratioY), texture);
+				break;
+
+			default:
+				tiles[current++] = GroundTile(tileType, sf::Vector2i(atoi(tileToken[2].c_str()) * GAME_TILE_WIDTH, atoi(tileToken[1].c_str()) * ((SCREEN_HEIGHT / width))), sOffSet, sf::Vector2f(ratioX, ratioY), texture);
+			}
 		}
 		token.clear();
 	}
