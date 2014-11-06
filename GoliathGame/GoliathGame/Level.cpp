@@ -25,7 +25,7 @@ void Level::LoadLevel()
 		if(i==0)
 			sectionList[i] = Section(temp, sf::Vector2i(0,0));
 		else
-			sectionList[i] = Section(temp, sf::Vector2i(sectionList[i-1].getSectionWidth(), 0));
+			sectionList[i] = Section(temp, sf::Vector2i(i*sectionList[i-1].getSectionWidth(), 0));
 	}
 }
 
