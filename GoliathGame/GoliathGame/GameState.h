@@ -22,7 +22,7 @@ public:
 
 private:
 	InputManager inputManager;
-	Section s;
+	//Section s;
 	sf::View view;
 	sf::RenderWindow win;
 	sf::Vector2f playerPos;

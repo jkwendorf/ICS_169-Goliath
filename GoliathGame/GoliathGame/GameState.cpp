@@ -1,7 +1,7 @@
 #include "GameState.h"
 
 GameState::GameState(void)
-	:s(0, sf::Vector2i(0,0))
+	:s(1)
 	//:s(0, sf::Vector2i(0,0))
 {
 	
@@ -47,9 +47,11 @@ void GameState::update(float deltaTime)
 		s.move(100*deltaTime, 0.f);
 	}*/
 
+
 	viewCheck();
 	
 	std::vector<BaseObject> temp = s.GetNearTiles(p.sprite.getPosition());
+
 	inputManager.update(p, deltaTime);
 	p.update(deltaTime);
 	//p.sprite.getPosition();
