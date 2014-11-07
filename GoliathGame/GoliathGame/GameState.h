@@ -25,7 +25,7 @@ private:
 	//Section s;
 	sf::View view;
 	sf::RenderWindow win;
-	sf::Vector2f playerPos;
+	sf::Vector2f topLeft;
 	void viewCheck();
 	Level s;
 };

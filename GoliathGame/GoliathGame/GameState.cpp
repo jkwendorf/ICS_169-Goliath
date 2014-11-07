@@ -82,17 +82,28 @@ void GameState::unloadContent()
 
 void GameState::viewCheck()
 {
-	playerPos.x = p.sprite.getPosition().x + 100 - (Global::GetInstance().x / 2);
-	playerPos.y = p.sprite.getPosition().y + 100 - (Global::GetInstance().y / 2);
-
-	if(playerPos.x < 0)
+	if(p.facingRight)
 	{
-		playerPos.x = 0;
+
+		if(p.sprite.getPosition().x > Global::GetInstance().x - Global::GetInstance().xOffset + topLeft.x)
+		{
+			topLeft.x = p.sprite.getPosition().x - Global::GetInstance().x + Global::GetInstance().xOffset;
+		}
 	}
-	if(playerPos.y < 0)
+	else
 	{
-		playerPos.y = 0;
+		if(p.sprite.getPosition().x < topLeft.x + Global::GetInstance().xOffset)
+		{
+			topLeft.x = p.sprite.getPosition().x - Global::GetInstance().xOffset;
+		}
 	}
 
-	view.reset(sf::FloatRect(playerPos.x, playerPos.y, (float) Global::GetInstance().x, (float) Global::GetInstance().y));
+	if(topLeft.x < 0)
+	{
+		topLeft.x = 0;
+	}
+
+	//ND: Vertical will be implemented once I have a test file for that
+
+	view.reset(sf::FloatRect(topLeft.x, topLeft.y, (float) Global::GetInstance().x, (float) Global::GetInstance().y));
 }
