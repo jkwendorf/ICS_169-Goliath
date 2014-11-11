@@ -22,11 +22,11 @@ public:
 	void update(float deltaTime);
 	void attack();
 	void move(float x, float y);
+	void move(sf::Vector2f& dist);
 	void grapple();
 	void draw(sf::RenderWindow& window);
 
 	// VARIABLES
-	sf::Vector2f vel;
 	float stamina;
 	float health;
 	float weaponCooldown;

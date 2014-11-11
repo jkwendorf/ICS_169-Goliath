@@ -50,8 +50,8 @@ void GameState::update(float deltaTime)
 
 	viewCheck();
 	
-	std::vector<BaseObject> temp = s.GetNearTiles(p.sprite.getPosition());
-
+	collisionManager.setNearByTiles(s.GetNearTiles(p.sprite.getPosition()));
+	p.isFalling = !collisionManager.playerCollisionDetection(p);
 	inputManager.update(p, deltaTime);
 	p.update(deltaTime);
 	//p.sprite.getPosition();

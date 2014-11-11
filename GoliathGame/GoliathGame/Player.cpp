@@ -2,6 +2,7 @@
 #include "Global.h"
 
 Player::Player() 
+	: BaseObject(), grappleInProgress(false), facingRight(true)
 {
 	vel = sf::Vector2f(0.0,0.0);
 	
@@ -12,8 +13,7 @@ Player::Player()
 	weapon = HOOKSHOT;
 	weaponCooldown = 2.0f;
 	currentCooldown = 0.0f;
-	grappleInProgress = false;
-	facingRight = true;
+	isFalling = false;
 }
 
 Player::~Player() 
@@ -48,6 +48,11 @@ void Player::attack()
 void Player::move(float x, float y)
 {
 	sprite.move(x, y);
+}
+
+void Player::move(sf::Vector2f& distance)
+{
+	sprite.move(distance);
 }
 
 void Player::draw(sf::RenderWindow& window)
