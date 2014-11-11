@@ -56,4 +56,8 @@ void Global::setFPS(int f)
 void Global::calculateOffset()
 {
 	//grab height and width and calculate that offset
+
+	xOffset = x / 5;
+	yOffset = y / 9;
+
 }
