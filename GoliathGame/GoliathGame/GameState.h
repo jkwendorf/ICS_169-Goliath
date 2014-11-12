@@ -5,6 +5,7 @@
 #include "Section.h"
 #include "Global.h"
 #include "Level.h"
+#include "CollisionManager.h"
 
 class GameState : public State
 {
@@ -25,8 +26,9 @@ private:
 	//Section s;
 	sf::View view;
 	sf::RenderWindow win;
-	sf::Vector2f playerPos;
+	sf::Vector2f topLeft;
 	void viewCheck();
 	Level s;
+	CollisionManager collisionManager;
 };
 

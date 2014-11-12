@@ -1,4 +1,5 @@
 #include "InputManager.h"
+#include "PhysicsManager.h"
 
 InputManager::InputManager()
 {
@@ -39,15 +40,14 @@ void InputManager::update(Player& s, float deltaTime)
 
 
 	utility[0] = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift);
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && !utility[1])
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && !s.isFalling)
 	{
-		utility[1] = true;
-		s.vel.y = -5.0;
+	//	utility[1] = true;
+	//	s.vel.y = -5.0
+		jump(s);
 	}
 	utility[2] = sf::Mouse::isButtonPressed(sf::Mouse::Right) && !utility[2] ? true : false;
 	utility[3] = sf::Mouse::isButtonPressed(sf::Mouse::Left) && !utility[3] ? true : false;
-
-
 
 	playerMove(s, deltaTime);
 }
@@ -75,7 +75,7 @@ void InputManager::playerMove(Player& player, float deltaTime)
 		player.vel.x = 100 * speed * deltaTime;
 		player.facingRight = true;
 	}
-	if(utility[1])
+	/*if(utility[1])
 	{
 	    if(player.vel.y != 0)
 			player.vel.y += 5.0 *deltaTime;
@@ -85,7 +85,10 @@ void InputManager::playerMove(Player& player, float deltaTime)
 			player.vel.y = 0.0;
 			utility[1] = false;
 		}
-	}
+	}*/
+
+	player.move(moveDistance(player, deltaTime));
+
 	if(utility[2])
 	{
 		if(!player.grappleInProgress)
