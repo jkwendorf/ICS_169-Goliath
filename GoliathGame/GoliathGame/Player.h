@@ -1,7 +1,7 @@
 #pragma once
-
 #include "BaseObject.h"
 #include "HookShot.h"
+#include "Projectile.h"
 //#include "Sword.h"
 //#include "CrossBow.h"
 
@@ -35,4 +35,5 @@ public:
 	HookShot hShot;
 
 	bool grappleInProgress, facingRight;
+	Projectile ammo[3];
 };

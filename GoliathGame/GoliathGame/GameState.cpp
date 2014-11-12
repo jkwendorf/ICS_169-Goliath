@@ -32,36 +32,12 @@ void GameState::DeleteState()
 
 void GameState::update(float deltaTime)
 {
-	//Update for Player still needs to be fleshed out
-	//p.update();
-
-	/*if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-	{
-		//r.move(0.f, -100*deltaTime);
-		s.move(0.f, -100*deltaTime);
-	}
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-	{
-		//r.move(0.f, 100*deltaTime);
-		s.move(0.f, 100*deltaTime);
-	}
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-	{
-		//r.move(-100*deltaTime, 0.f);
-		s.move(-100*deltaTime, 0.f);
-	}
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-	{
-		//r.move(100*deltaTime, 0.f);
-		s.move(100*deltaTime, 0.f);
-	}*/
-
-
 	viewCheck();
-	
+
 	collisionManager->setNearByTiles(level->GetNearTiles(sf::IntRect(
 				sf::Vector2i(p.sprite.getPosition().x - PLAYER_DIM/2, p.sprite.getPosition().y - PLAYER_DIM/2), sf::Vector2i(PLAYER_DIM, PLAYER_DIM))));
 	p.isFalling = !collisionManager->playerCollisionDetection(p);
+	p.hShot.hookedOnSomething = collisionManager.hookCollisionDetection(p.hShot);
 	inputManager.update(p, deltaTime);
 	p.update(deltaTime);
 	//p.sprite.getPosition();
