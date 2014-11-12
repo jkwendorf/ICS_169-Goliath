@@ -4,7 +4,6 @@
 class HookShot : public Weapon
 {
 public:
-	sf::Vector2f vel;
 	sf::Vector2f grappleLocation;
 
 	HookShot();
@@ -14,4 +13,5 @@ public:
 	void draw(sf::RenderWindow& window);
 	void attack();
 	void grappleToLocation(sf::Vector2f location);
+	bool hookedOnSomething;
 };

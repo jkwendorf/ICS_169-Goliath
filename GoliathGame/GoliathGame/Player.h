@@ -1,7 +1,7 @@
 #pragma once
-
 #include "BaseObject.h"
 #include "HookShot.h"
+#include "Projectile.h"
 //#include "Sword.h"
 //#include "CrossBow.h"
 
@@ -22,11 +22,11 @@ public:
 	void update(float deltaTime);
 	void attack();
 	void move(float x, float y);
+	void move(sf::Vector2f& dist);
 	void grapple();
 	void draw(sf::RenderWindow& window);
 
 	// VARIABLES
-	sf::Vector2f vel;
 	float stamina;
 	float health;
 	float weaponCooldown;
@@ -35,4 +35,5 @@ public:
 	HookShot hShot;
 
 	bool grappleInProgress, facingRight;
+	Projectile ammo[3];
 };

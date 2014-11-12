@@ -53,7 +53,18 @@ void Global::setFPS(int f)
 	fps = f;
 }
 
+bool Global::checkPoint(const sf::Vector2i& p, const sf::IntRect& r)
+{
+	if (p.x >= r.left && p.x < r.left + r.width && p.y >= r.top && p.y <= r.top + r.height)
+		return true;
+	return false;
+}
+
 void Global::calculateOffset()
 {
 	//grab height and width and calculate that offset
+
+	xOffset = x / 5;
+	yOffset = y / 9;
+
 }

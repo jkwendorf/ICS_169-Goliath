@@ -8,6 +8,11 @@ MainMenuState::~MainMenuState(void)
 {
 }
 
+void MainMenuState::DeleteState()
+{
+
+}
+
 void MainMenuState::update(float deltaTime)
 {
 

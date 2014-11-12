@@ -1,4 +1,5 @@
 #include "InputManager.h"
+#include "PhysicsManager.h"
 
 InputManager::InputManager()
 {
@@ -39,15 +40,12 @@ void InputManager::update(Player& s, float deltaTime)
 
 
 	utility[0] = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift);
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && !utility[1])
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && !s.isFalling)
 	{
-		utility[1] = true;
-		s.vel.y = -5.0;
+		jump(s);
 	}
 	utility[2] = sf::Mouse::isButtonPressed(sf::Mouse::Right) && !utility[2] ? true : false;
 	utility[3] = sf::Mouse::isButtonPressed(sf::Mouse::Left) && !utility[3] ? true : false;
-
-
 
 	playerMove(s, deltaTime);
 }
@@ -75,17 +73,10 @@ void InputManager::playerMove(Player& player, float deltaTime)
 		player.vel.x = 100 * speed * deltaTime;
 		player.facingRight = true;
 	}
-	if(utility[1])
-	{
-	    if(player.vel.y != 0)
-			player.vel.y += 5.0 *deltaTime;
-		if(player.sprite.getPosition().y > SCREEN_HEIGHT / 2.0)
-		{
-			player.sprite.setPosition(player.sprite.getPosition().x, SCREEN_HEIGHT / 2.0);
-			player.vel.y = 0.0;
-			utility[1] = false;
-		}
-	}
+	
+
+	player.move(moveDistance(player, deltaTime));
+
 	if(utility[2])
 	{
 		if(!player.grappleInProgress)
@@ -98,7 +89,10 @@ void InputManager::playerMove(Player& player, float deltaTime)
 		player.attack();
 		player.currentCooldown += deltaTime;
 		if(player.currentCooldown >= player.weaponCooldown)
+		{
 			utility[3] = false;
+			player.currentCooldown = 0.0;
+		}
 	}
 	player.sprite.move(player.vel);
 	player.vel.x = 0.0;

@@ -1,7 +1,7 @@
 #include "GameState.h"
 
 GameState::GameState(void)
-	:s(1)
+	:level(new Level(1)), collisionManager(new CollisionManager())
 	//:s(0, sf::Vector2i(0,0))
 {
 	
@@ -19,39 +19,25 @@ GameState::GameState(void)
 
 GameState::~GameState(void)
 {
+	delete level;
+	delete collisionManager;
+}
+
+void GameState::DeleteState()
+{
+	std::cout << "Calling GameState destructor" << std::endl;
+	delete collisionManager;
+	delete level;
 }
 
 void GameState::update(float deltaTime)
 {
-	//Update for Player still needs to be fleshed out
-	//p.update();
-
-	/*if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-	{
-		//r.move(0.f, -100*deltaTime);
-		s.move(0.f, -100*deltaTime);
-	}
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-	{
-		//r.move(0.f, 100*deltaTime);
-		s.move(0.f, 100*deltaTime);
-	}
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-	{
-		//r.move(-100*deltaTime, 0.f);
-		s.move(-100*deltaTime, 0.f);
-	}
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-	{
-		//r.move(100*deltaTime, 0.f);
-		s.move(100*deltaTime, 0.f);
-	}*/
-
-
 	viewCheck();
-	
-	std::vector<BaseObject> temp = s.GetNearTiles(p.sprite.getPosition());
 
+	collisionManager->setNearByTiles(level->GetNearTiles(sf::IntRect(
+				sf::Vector2i(p.sprite.getPosition().x - PLAYER_DIM/2, p.sprite.getPosition().y - PLAYER_DIM/2), sf::Vector2i(PLAYER_DIM, PLAYER_DIM))));
+	p.isFalling = !collisionManager->playerCollisionDetection(p);
+	p.hShot.hookedOnSomething = collisionManager->hookCollisionDetection(p.hShot);
 	inputManager.update(p, deltaTime);
 	p.update(deltaTime);
 	//p.sprite.getPosition();
@@ -60,7 +46,7 @@ void GameState::update(float deltaTime)
 void GameState::draw(sf::RenderWindow& window)
 {
 	//window.draw(r);
-	s.draw(window);
+	level->draw(window);
 	p.draw(window);
 	window.setView(view);
 }
@@ -82,17 +68,28 @@ void GameState::unloadContent()
 
 void GameState::viewCheck()
 {
-	playerPos.x = p.sprite.getPosition().x + 100 - (Global::GetInstance().x / 2);
-	playerPos.y = p.sprite.getPosition().y + 100 - (Global::GetInstance().y / 2);
-
-	if(playerPos.x < 0)
+	if(p.facingRight)
 	{
-		playerPos.x = 0;
+
+		if(p.sprite.getPosition().x > Global::GetInstance().x - Global::GetInstance().xOffset + topLeft.x)
+		{
+			topLeft.x = p.sprite.getPosition().x - Global::GetInstance().x + Global::GetInstance().xOffset;
+		}
 	}
-	if(playerPos.y < 0)
+	else
 	{
-		playerPos.y = 0;
+		if(p.sprite.getPosition().x < topLeft.x + Global::GetInstance().xOffset)
+		{
+			topLeft.x = p.sprite.getPosition().x - Global::GetInstance().xOffset;
+		}
 	}
 
-	view.reset(sf::FloatRect(playerPos.x, playerPos.y, (float) Global::GetInstance().x, (float) Global::GetInstance().y));
+	if(topLeft.x < 0)
+	{
+		topLeft.x = 0;
+	}
+
+	//ND: Vertical will be implemented once I have a test file for that
+
+	view.reset(sf::FloatRect(topLeft.x, topLeft.y, (float) Global::GetInstance().x, (float) Global::GetInstance().y));
 }
