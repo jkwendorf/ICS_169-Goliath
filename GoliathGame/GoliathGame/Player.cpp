@@ -53,10 +53,16 @@ void Player::attack()
 {
 	if(weapon == CROSSBOW)
 	{
+		float xSpeed;
 		for(int x = 0; x < 3; x++)
 			if(!ammo[x].moving)
 			{
-				ammo[x].setVelocity(sf::Vector2f(10.0,0.0));
+				if(facingRight)
+					xSpeed = 10.0;
+				else
+					xSpeed = -10.0;
+				
+				ammo[x].setVelocity(sf::Vector2f(xSpeed,0.0));
 				ammo[x].moving = true;
 				break;
 			}

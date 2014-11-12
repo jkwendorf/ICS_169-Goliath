@@ -89,7 +89,10 @@ void InputManager::playerMove(Player& player, float deltaTime)
 		player.attack();
 		player.currentCooldown += deltaTime;
 		if(player.currentCooldown >= player.weaponCooldown)
+		{
 			utility[3] = false;
+			player.currentCooldown = 0.0;
+		}
 	}
 	player.sprite.move(player.vel);
 	player.vel.x = 0.0;
