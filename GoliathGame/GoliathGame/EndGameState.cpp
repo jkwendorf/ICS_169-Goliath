@@ -8,6 +8,11 @@ EndGameState::~EndGameState(void)
 {
 }
 
+void EndGameState::DeleteState()
+{
+
+}
+
 void EndGameState::update(float deltaTime)
 {
 

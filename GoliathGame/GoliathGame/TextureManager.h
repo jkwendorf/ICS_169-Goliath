@@ -16,7 +16,8 @@ public:
 
 private:
 	TextureManager() {};
-	~TextureManager() {};
+	~TextureManager();
+
 	TextureManager(const TextureManager&);
 	TextureManager& operator =(const TextureManager&);
 

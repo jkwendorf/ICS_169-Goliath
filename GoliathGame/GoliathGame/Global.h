@@ -4,14 +4,17 @@
 #include <iostream>
 #include <fstream>
 #include <map>
+#include <SFML/Graphics.hpp>
 // JW: In the future, we might want to make Global a static class so we can alter values
 
-#define SCREEN_WIDTH 800
-#define SCREEN_HEIGHT 600
+#define SCREEN_WIDTH 1280
+#define SCREEN_HEIGHT 720
 #define FPS 30
 #define	EDITOR_TILE_WIDTH 100
 #define EDITOR_TILE_HEIGHT 100
-#define GAME_TILE_WIDTH 50
+#define GAME_TILE_DIM 64
+#define PLAYER_DIM 128
+#define PLAYER_SPRITE_DIM 128
 #define TileSheetRows 5
 #define TileSheetCols 5
 
@@ -33,6 +36,7 @@ public :
 	void ParseLevelSizes();
 	void setScreenSize(int w, int h);
 	void setFPS(int f);
+	bool checkPoint(const sf::Vector2i& p, const sf::IntRect& r);
 
 	int x;
 	int y;

@@ -5,6 +5,7 @@
 class State
 {
 public:
+	virtual void DeleteState() = 0;
 	virtual void update(float deltaTime) = 0;
 	virtual void draw(sf::RenderWindow& window) = 0;
 	virtual void handleEvent(sf::Event event) = 0;
