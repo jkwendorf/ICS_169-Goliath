@@ -10,6 +10,7 @@ public:
 	~CollisionManager();
 	bool playerCollisionDetection(Player p);
 	bool enemyCollision();
+	bool hookCollisionDetection(HookShot hs);
 	void setNearByTiles(std::vector<BaseObject> tiles);
 	BaseObject* getCollidedTile(Player p);
 

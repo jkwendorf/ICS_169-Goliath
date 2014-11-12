@@ -42,8 +42,6 @@ void InputManager::update(Player& s, float deltaTime)
 	utility[0] = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift);
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && !s.isFalling)
 	{
-	//	utility[1] = true;
-	//	s.vel.y = -5.0
 		jump(s);
 	}
 	utility[2] = sf::Mouse::isButtonPressed(sf::Mouse::Right) && !utility[2] ? true : false;
@@ -75,17 +73,7 @@ void InputManager::playerMove(Player& player, float deltaTime)
 		player.vel.x = 100 * speed * deltaTime;
 		player.facingRight = true;
 	}
-	/*if(utility[1])
-	{
-	    if(player.vel.y != 0)
-			player.vel.y += 5.0 *deltaTime;
-		if(player.sprite.getPosition().y > SCREEN_HEIGHT / 2.0)
-		{
-			player.sprite.setPosition(player.sprite.getPosition().x, SCREEN_HEIGHT / 2.0);
-			player.vel.y = 0.0;
-			utility[1] = false;
-		}
-	}*/
+	
 
 	player.move(moveDistance(player, deltaTime));
 

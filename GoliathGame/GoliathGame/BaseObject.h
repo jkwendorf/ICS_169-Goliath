@@ -1,5 +1,5 @@
 #pragma once
-
+#include "TextureManager.h"
 #include <SFML/Graphics.hpp>
 
 class BaseObject

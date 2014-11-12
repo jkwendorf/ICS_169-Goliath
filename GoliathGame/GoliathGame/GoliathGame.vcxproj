@@ -97,6 +97,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainMenuState.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="Section.cpp" />
     <ClCompile Include="StartTile.cpp" />
     <ClCompile Include="StateManager.cpp" />
@@ -116,6 +117,7 @@
     <ClInclude Include="Level.h" />
     <ClInclude Include="PhysicsManager.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Projectile.h" />
     <ClInclude Include="Section.h" />
     <ClInclude Include="Start.h" />
     <ClInclude Include="TextureManager.h" />
