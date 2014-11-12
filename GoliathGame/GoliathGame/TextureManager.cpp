@@ -1,5 +1,17 @@
 #include "TextureManager.h"
 #include <sstream>
+#include <iostream>
+
+
+TextureManager::~TextureManager()
+{
+	std::cout << "Deleting textures" << std::endl;
+	for(std::map<std::string, sf::Texture*>::iterator iterator = texManager.begin(); iterator != texManager.end(); iterator++) 
+	{
+		delete iterator->second;
+	}
+}
+
 
 sf::Texture* TextureManager::retrieveTexture(std::string tex)
 {
