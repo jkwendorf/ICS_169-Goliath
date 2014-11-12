@@ -20,7 +20,7 @@ void HookShot::draw(sf::RenderWindow& window)
 
 void HookShot::update(float deltaTime)
 {
-	if(!hookedOnSomething);
+	if(!hookedOnSomething)
 		sprite.move((grappleLocation.x - sprite.getPosition().x)*5*deltaTime, (grappleLocation.y - sprite.getPosition().y)*5*deltaTime);
 }
 

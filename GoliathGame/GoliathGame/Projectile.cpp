@@ -47,5 +47,6 @@ void Projectile::setLocation(sf::Vector2f pos)
 
 void Projectile::setVelocity(sf::Vector2f vel)
 {
-	velocity = vel;
+	if(!moving)
+		velocity = vel;
 }

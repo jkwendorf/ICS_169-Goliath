@@ -7,8 +7,9 @@ Player::Player()
 	vel = sf::Vector2f(0.0,0.0);
 	
 	sprite.setTexture(*TextureManager::GetInstance().retrieveTexture("blah"));
-	sprite.setPosition(SCREEN_WIDTH / 2.0, SCREEN_HEIGHT / 2.0);
-	sprite.setScale(0.2, 0.2);
+	//sprite.setPosition(64, 560);
+	sprite.setPosition(64, 0);
+	sprite.setScale( (PLAYER_DIM / (float)sprite.getTexture()->getSize().x), (PLAYER_DIM / (float)sprite.getTexture()->getSize().y));
 	sprite.setOrigin(sprite.getLocalBounds().width/2, sprite.getLocalBounds().height/2);
 	weapon = CROSSBOW;
 	weaponCooldown = 2.0f;
@@ -53,10 +54,16 @@ void Player::attack()
 {
 	if(weapon == CROSSBOW)
 	{
+		float xSpeed;
 		for(int x = 0; x < 3; x++)
 			if(!ammo[x].moving)
 			{
-				ammo[x].setVelocity(sf::Vector2f(10.0,0.0));
+				if(facingRight)
+					xSpeed = 10.0;
+				else
+					xSpeed = -10.0;
+				
+				ammo[x].setVelocity(sf::Vector2f(xSpeed,0.0));
 				ammo[x].moving = true;
 				break;
 			}

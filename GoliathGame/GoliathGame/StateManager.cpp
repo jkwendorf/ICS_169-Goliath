@@ -9,9 +9,15 @@ StateManager::StateManager(void)
 StateManager::~StateManager(void)
 {
 	if(currentState != NULL)
+	{
+		currentState->DeleteState();
 		delete currentState;
+	}
 	if(nextState != NULL)
+	{
+		nextState->DeleteState();
 		delete nextState;
+	}
 }
 
 void StateManager::changeToState(StateEnum state)

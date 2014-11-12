@@ -1,7 +1,7 @@
 #include "GameState.h"
 
 GameState::GameState(void)
-	:s(1)
+	:level(new Level(1)), collisionManager(new CollisionManager())
 	//:s(0, sf::Vector2i(0,0))
 {
 	
@@ -19,16 +19,25 @@ GameState::GameState(void)
 
 GameState::~GameState(void)
 {
+	delete level;
+	delete collisionManager;
+}
 
+void GameState::DeleteState()
+{
+	std::cout << "Calling GameState destructor" << std::endl;
+	delete collisionManager;
+	delete level;
 }
 
 void GameState::update(float deltaTime)
 {
 	viewCheck();
 
-	collisionManager.setNearByTiles(s.GetNearTiles(p.sprite.getPosition()));
-	p.isFalling = !collisionManager.playerCollisionDetection(p);
-	p.hShot.hookedOnSomething = collisionManager.hookCollisionDetection(p.hShot);
+	collisionManager->setNearByTiles(level->GetNearTiles(sf::IntRect(
+				sf::Vector2i(p.sprite.getPosition().x - PLAYER_DIM/2, p.sprite.getPosition().y - PLAYER_DIM/2), sf::Vector2i(PLAYER_DIM, PLAYER_DIM))));
+	p.isFalling = !collisionManager->playerCollisionDetection(p);
+	p.hShot.hookedOnSomething = collisionManager->hookCollisionDetection(p.hShot);
 	inputManager.update(p, deltaTime);
 	p.update(deltaTime);
 	//p.sprite.getPosition();
@@ -37,7 +46,7 @@ void GameState::update(float deltaTime)
 void GameState::draw(sf::RenderWindow& window)
 {
 	//window.draw(r);
-	s.draw(window);
+	level->draw(window);
 	p.draw(window);
 	window.setView(view);
 }

@@ -51,19 +51,10 @@
     <ClCompile Include="InputManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GroundTile.cpp">
-      <Filter>Source Files\Tile Stuff</Filter>
-    </ClCompile>
     <ClCompile Include="Section.cpp">
       <Filter>Source Files\Tile Stuff</Filter>
     </ClCompile>
     <ClCompile Include="BaseObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="StartTile.cpp">
-      <Filter>Source Files\Tile Stuff</Filter>
-    </ClCompile>
-    <ClCompile Include="Level.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Global.cpp">
@@ -72,7 +63,7 @@
     <ClCompile Include="CollisionManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Projectile.cpp">
+    <ClCompile Include="Level.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -116,19 +107,7 @@
     <ClInclude Include="Weapon.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Level.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GroundTile.h">
-      <Filter>Header Files\Tile Stuff</Filter>
-    </ClInclude>
-    <ClInclude Include="EndTile.h">
-      <Filter>Header Files\Tile Stuff</Filter>
-    </ClInclude>
     <ClInclude Include="Section.h">
-      <Filter>Header Files\Tile Stuff</Filter>
-    </ClInclude>
-    <ClInclude Include="Start.h">
       <Filter>Header Files\Tile Stuff</Filter>
     </ClInclude>
     <ClInclude Include="PhysicsManager.h">
@@ -137,7 +116,10 @@
     <ClInclude Include="CollisionManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Projectile.h">
+    <ClInclude Include="Tile.h">
+      <Filter>Header Files\Tile Stuff</Filter>
+    </ClInclude>
+    <ClInclude Include="Level.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
