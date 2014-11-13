@@ -41,17 +41,6 @@ void Global::ParseLevelSizes()
 	ifs.close();
 }
 
-void Global::setScreenSize(int w, int h)
-{
-	y = h;
-	x = w;
-	calculateOffset();
-}
-
-void Global::setFPS(int f)
-{
-	fps = f;
-}
 
 bool Global::checkPoint(const sf::Vector2i& p, const sf::IntRect& r)
 {
@@ -64,7 +53,7 @@ void Global::calculateOffset()
 {
 	//grab height and width and calculate that offset
 
-	xOffset = x / 5;
-	yOffset = y / 9;
+	xOffset = SCREEN_WIDTH / 5;
+	yOffset = SCREEN_HEIGHT / 9;
 
 }
