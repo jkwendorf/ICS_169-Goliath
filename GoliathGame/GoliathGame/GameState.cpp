@@ -88,7 +88,11 @@ void GameState::viewCheck()
 		Global::GetInstance().topLeft.x = 0;
 	}
 
-	//ND: Vertical will be implemented once I have a test file for that
+	if(level->getLevelWidth() - Global::GetInstance().xOffset < p.sprite.getPosition().x)
+	{
+		Global::GetInstance().topLeft.x = level->getLevelWidth() - SCREEN_WIDTH;
+	}
+
 
 	if(p.sprite.getPosition().y - (PLAYER_DIM / 2) < 0 + Global::GetInstance().yOffset)
 	{

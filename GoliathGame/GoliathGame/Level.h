@@ -8,7 +8,7 @@ class Level
 {
 private:
 	Section** sectList;
-	int numSect, levelNum;;
+	int numSect, levelNum, levelWidth;;
 	sf::Vector2i firstGrid;
 	sf::Vector2i firstGridDim;
 	sf::Vector2i secGrid;
@@ -29,4 +29,5 @@ public:
 	void update(float deltaTime);
 	void draw(sf::RenderWindow& w);
 	void print();
+	int getLevelWidth();
 };
