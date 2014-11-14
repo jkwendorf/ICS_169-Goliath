@@ -54,6 +54,6 @@ void Global::calculateOffset()
 	//grab height and width and calculate that offset
 
 	xOffset = SCREEN_WIDTH / 5;
-	yOffset = SCREEN_HEIGHT / 9;
+	yOffset = SCREEN_HEIGHT / 5;
 
 }
