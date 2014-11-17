@@ -43,13 +43,12 @@ int Section::getGridNum()
 
 bool Section::inWindow()
 {
-	std::cout << Global::GetInstance().x << std::endl;
-	if(offset.x <= Global::GetInstance().x + SCREEN_WIDTH || offset.x + getWidth() >= Global::GetInstance().x)
-	{
-		return true;
-	}
-	return false;
-
+	//std::cout << Global::GetInstance().x << std::endl;
+	//if(offset.x <= Global::GetInstance().x + SCREEN_WIDTH || offset.x + getWidth() >= Global::GetInstance().x)
+	//{
+	//	return true;
+	//}
+	return true;
 }
 
 bool Section::checkPlayerInGrid(const BaseObject& player)

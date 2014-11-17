@@ -2,7 +2,8 @@
 #include "Level.h"
 
 Level::Level(int levelNumber)
-	:levelNum(levelNumber), numSect(Global::GetInstance().levelSizes.at("Level " + std::to_string(levelNumber)))
+	:levelNum(levelNumber), numSect(Global::GetInstance().levelSizes.at("Level " + std::to_string(levelNumber))),
+	levelWidth(0)
 {
 	LoadLevel();
 }
@@ -27,6 +28,7 @@ void Level::LoadLevel()
 			sectList[i] = new Section(i, temp, sf::Vector2i(0,0));
 		else
 			sectList[i] = new Section(i, temp, sf::Vector2i(i*sectList[i-1]->getWidth(), 0));
+		levelWidth = levelWidth + sectList[i]->getWidth();
 	}
 }
 
@@ -168,4 +170,9 @@ std::vector<BaseObject*> Level::checkUpperLeftFirstCol(int currentGrid, sf::IntR
 	//If not in the last col 
 	else
 		return sectList[currentGrid]->surroundingRects(topLeft - sectList[currentGrid]->getOffset(), botRight - sectList[currentGrid]->getOffset());
+}
+
+int Level::getLevelWidth()
+{
+	return levelWidth;
 }

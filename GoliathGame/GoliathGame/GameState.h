@@ -27,7 +27,6 @@ private:
 	Level* level;
 	sf::View view;
 	sf::RenderWindow win;
-	sf::Vector2f topLeft;
 	void viewCheck();
 	CollisionManager* collisionManager;
 };
