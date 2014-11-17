@@ -34,8 +34,7 @@ void GameState::update(float deltaTime)
 {
 	viewCheck();
 
-	collisionManager->setNearByTiles(level->GetNearTiles(sf::IntRect(
-				sf::Vector2i(p.sprite.getPosition().x - PLAYER_DIM/2, p.sprite.getPosition().y - PLAYER_DIM/2), sf::Vector2i(PLAYER_DIM, PLAYER_DIM))));
+	collisionManager->setNearByTiles(level->GetCollidableTiles(p));
 	p.isFalling = !collisionManager->playerCollisionDetection(p);
 	p.hShot.hookedOnSomething = collisionManager->hookCollisionDetection(p.hShot);
 	inputManager.update(p, deltaTime);

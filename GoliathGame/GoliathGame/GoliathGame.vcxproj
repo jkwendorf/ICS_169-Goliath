@@ -121,7 +121,6 @@
     <ClInclude Include="MainMenuState.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateManager.h" />
-    <ClInclude Include="Tile.h" />
     <ClInclude Include="Weapon.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
