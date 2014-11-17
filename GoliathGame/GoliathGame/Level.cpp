@@ -103,7 +103,7 @@ void Level::draw(sf::RenderWindow& w)
 	}
 }
 
-std::vector<BaseObject*> Level::checkUpperLeftSameGrid(int currentGrid, sf::IntRect& rect, const sf::Vector2i topLeft, const sf::Vector2i botRight, bool checkBoxOnly, bool grapple)
+std::vector<BaseObject*> Level::checkUpperLeftSameGrid(int currentGrid, sf::IntRect& rect, const sf::Vector2i& topLeft, const sf::Vector2i& botRight, bool checkBoxOnly, bool grapple)
 {
 	Global g = Global::GetInstance();
 	if(g.checkPoint(topLeft, sf::IntRect(sectList[currentGrid]->getOffset(), sf::Vector2i(sectList[currentGrid]->getWidth(), sectList[currentGrid]->getHeight()))))
@@ -145,7 +145,7 @@ std::vector<BaseObject*> Level::checkUpperLeftSameGrid(int currentGrid, sf::IntR
 	return std::vector<BaseObject*>();
 }
 
-std::vector<BaseObject*> Level::checkLowerRightNextGrid(int currentGrid, sf::IntRect& rect, const sf::Vector2i topLeft, const sf::Vector2i botRight, bool checkBoxOnly, bool grapple)
+std::vector<BaseObject*> Level::checkLowerRightNextGrid(int currentGrid, sf::IntRect& rect, const sf::Vector2i& topLeft, const sf::Vector2i& botRight, bool checkBoxOnly, bool grapple)
 {
 	Global g = Global::GetInstance();
 	if(g.checkPoint(botRight, sf::IntRect(sectList[currentGrid+1]->getOffset(), sf::Vector2i(sectList[currentGrid+1]->getWidth(), sectList[currentGrid+1]->getHeight()))))
@@ -181,7 +181,7 @@ std::vector<BaseObject*> Level::checkLowerRightNextGrid(int currentGrid, sf::Int
 	return std::vector<BaseObject*>();
 }
 
-std::vector<BaseObject*> Level::checkLowerRightLastCol(int currentGrid, sf::IntRect& rect, const sf::Vector2i topLeft, const sf::Vector2i botRight)
+std::vector<BaseObject*> Level::checkLowerRightLastCol(int currentGrid, sf::IntRect& rect, const sf::Vector2i& topLeft, const sf::Vector2i& botRight)
 {
 	if ((rect.left + rect.width - sectList[currentGrid]->getOffset().x)/ GAME_TILE_DIM == sectList[currentGrid]->getGridDim().x-1) 
 	{
@@ -199,7 +199,7 @@ std::vector<BaseObject*> Level::checkLowerRightLastCol(int currentGrid, sf::IntR
 }
 
 
-std::vector<BaseObject*> Level::checkUpperLeftFirstCol(int currentGrid, sf::IntRect& rect, const sf::Vector2i topLeft, const sf::Vector2i botRight)
+std::vector<BaseObject*> Level::checkUpperLeftFirstCol(int currentGrid, sf::IntRect& rect, const sf::Vector2i& topLeft, const sf::Vector2i& botRight)
 {
 	if ((rect.left - sectList[currentGrid]->getOffset().x) / GAME_TILE_DIM < 1) 
 	{
