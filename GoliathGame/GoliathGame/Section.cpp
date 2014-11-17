@@ -43,14 +43,13 @@ int Section::getGridNum()
 
 bool Section::inWindow()
 {
-	/*
-	if(sOffSet- screenOffSet <= screenWidth && sectionOffSet + width - screenOffSet >= 0)
+	std::cout << Global::GetInstance().x << std::endl;
+	if(offset.x <= Global::GetInstance().x + SCREEN_WIDTH || offset.x + getWidth() >= Global::GetInstance().x)
 	{
 		return true;
 	}
 	return false;
-	*/
-	return true;
+
 }
 
 bool Section::checkPlayerInGrid(const BaseObject& player)
@@ -91,7 +90,7 @@ std::vector<sf::Vector2i*> Section::getIntersectPoints(const sf::Vector2i& p1, c
 	return temp;
 }
 
-std::vector<BaseObject*> Section::surroundingRects(const sf::Vector2i& p1, const sf::Vector2i& p2, bool checkHorz)
+std::vector<BaseObject*> Section::surroundingRects(const sf::Vector2i& p1, const sf::Vector2i& p2, bool checkHorz, bool checkVert)
 {
 	std::vector<BaseObject*> temp;
 	sf::Vector2i p3 = sf::Vector2i(p1.x / GAME_TILE_DIM, p1.y / GAME_TILE_DIM);
@@ -104,16 +103,36 @@ std::vector<BaseObject*> Section::surroundingRects(const sf::Vector2i& p1, const
 		if (p4.x < gDim.y-1)
 			p4.x++;
 	}
-	if (p3.y >= 1)
-			p3.y--;
-	if (p4.y < gDim.x-1)
-			p4.y++;
+	if (checkVert)
+	{
+		if (p3.y >= 1)
+				p3.y--;
+		if (p4.y < gDim.x-1)
+				p4.y++;
+	}
 
 	for(int i = p3.x; i <= p4.x; i++)
 	{
 		for (int j = p3.y; j <= p4.y; j++)
 		{
 			if(grid[(j*gDim.y) + i]->collidable)
+				temp.push_back(grid[(j*gDim.y) + i]);
+		}
+	}
+	return temp;
+}
+
+std::vector<BaseObject*> Section::checkGrapple(const sf::Vector2i& p1, const sf::Vector2i& p2)
+{
+	std::vector<BaseObject*> temp;
+	sf::Vector2i p3 = sf::Vector2i(p1.x / GAME_TILE_DIM, p1.y / GAME_TILE_DIM);
+	sf::Vector2i p4 = sf::Vector2i(p2.x / GAME_TILE_DIM, p2.y / GAME_TILE_DIM);
+
+	for(int i = p3.x; i <= p4.x; i++)
+	{
+		for (int j = p3.y; j <= p4.y; j++)
+		{
+			if(grid[(j*gDim.y) + i]->collidable || grid[(j*gDim.y) + i]->grappleable )
 				temp.push_back(grid[(j*gDim.y) + i]);
 		}
 	}
@@ -213,8 +232,9 @@ void Section::LoadTileMap()
 			{
 			case 5:
 			case 6:
-				//These will be Enemy
-				grid[(y*gDim.y) + x] = new BaseObject((y*gDim.y) + x, tileType, sf::Vector2i(x * GAME_TILE_DIM, y * GAME_TILE_DIM), offset, ratio, texture);
+			case 7:
+				//Grappleable
+				grid[(y*gDim.y) + x] = new BaseObject((y*gDim.y) + x, tileType, sf::Vector2i(x * GAME_TILE_DIM, y * GAME_TILE_DIM), offset, ratio, texture, false, true);
 				break;
 			default:
 				grid[(y*gDim.y) + x] = new BaseObject((y*gDim.y) + x, tileType, sf::Vector2i(x * GAME_TILE_DIM, y * GAME_TILE_DIM), offset, ratio, texture);
