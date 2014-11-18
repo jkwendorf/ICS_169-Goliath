@@ -35,12 +35,6 @@ void GameState::update(float deltaTime)
 {
 	viewCheck();
 	std::vector<BaseObject*> grapple = level->GetGrapplableTiles(p);
-	//std::vector<BaseObject*> player = level->GetGrapplableTiles(p);
-
-	//for(int i = 0; i < player.size(); i++)
-	//{
-	//	player.at(i)->print();
-	//}
 
 	for(int i = 0; i < grapple.size(); i++)
 	{

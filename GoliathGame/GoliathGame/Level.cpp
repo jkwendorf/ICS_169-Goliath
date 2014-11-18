@@ -52,7 +52,7 @@ std::vector<BaseObject*> Level::GetInteractableTiles(Player& player)
 
 std::vector<BaseObject*> Level::GetGrapplableTiles(Player& player)
 {
-	std::cout << player.sprite.getPosition().y - PLAYER_DIM/2 << std::endl;
+	//std::cout << player.sprite.getPosition().y - PLAYER_DIM/2 << std::endl;
 	//std::cout << player.hShot.grappleLength << std::endl;
 	if(player.sprite.getPosition().y - PLAYER_DIM/2 - player.hShot.grappleLength >= 0)
 	{
@@ -168,9 +168,9 @@ std::vector<BaseObject*> Level::checkUpperLeftSameGrid(int currentGrid, sf::IntR
 std::vector<BaseObject*> Level::checkLowerRightNextGrid(int currentGrid, sf::IntRect& rect, const sf::Vector2i& topLeft, const sf::Vector2i& botRight, bool checkBoxOnly, bool grapple)
 {
 	Global g = Global::GetInstance();
-	if(g.checkPoint(botRight, sf::IntRect(sectList[currentGrid+1]->getOffset(), sf::Vector2i(sectList[currentGrid+1]->getWidth(), sectList[currentGrid+1]->getHeight()))))
+	if(currentGrid + 1 < numSect)
 	{
-		if(currentGrid + 1 < numSect)
+		if(g.checkPoint(botRight, sf::IntRect(sectList[currentGrid+1]->getOffset(), sf::Vector2i(sectList[currentGrid+1]->getWidth(), sectList[currentGrid+1]->getHeight()))))
 		{
 			if(!checkBoxOnly)
 			{
