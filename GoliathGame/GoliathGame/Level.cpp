@@ -51,17 +51,38 @@ std::vector<BaseObject*> Level::GetInteractableTiles(Player& player)
 
 std::vector<BaseObject*> Level::GetGrapplableTiles(Player& player)
 {
-	if(player.sprite.getPosition().y - PLAYER_DIM/2 - player.hShot.grappleLength > 0)
+	std::cout << player.sprite.getPosition().y - PLAYER_DIM/2 << std::endl;
+	//std::cout << player.hShot.grappleLength << std::endl;
+	if(player.sprite.getPosition().y - PLAYER_DIM/2 - player.hShot.grappleLength >= 0)
 	{
-		sf::IntRect rect(sf::Vector2i(player.sprite.getPosition().x + PLAYER_DIM/2, player.sprite.getPosition().y - PLAYER_DIM/2 - player.hShot.grappleLength),
-			sf::Vector2i(player.hShot.grappleLength, player.hShot.grappleLength));
-		return GetNearTiles(rect, true, true);
+		if (!player.facingRight)
+		{
+			sf::IntRect rect(sf::Vector2i(player.sprite.getPosition().x - PLAYER_DIM/2 - player.hShot.grappleLength, player.sprite.getPosition().y - PLAYER_DIM/2 - player.hShot.grappleLength),
+				sf::Vector2i(player.hShot.grappleLength, player.hShot.grappleLength));
+			return GetNearTiles(rect, true, true);
+		}
+		else
+		{
+			sf::IntRect rect(sf::Vector2i(player.sprite.getPosition().x + PLAYER_DIM/2, player.sprite.getPosition().y - PLAYER_DIM/2 - player.hShot.grappleLength),
+				sf::Vector2i(player.hShot.grappleLength, player.hShot.grappleLength));
+			return GetNearTiles(rect, true, true);
+		}
 	}
 	else
 	{
-		sf::IntRect rect(sf::Vector2i(player.sprite.getPosition().x + PLAYER_DIM/2, player.sprite.getPosition().y - PLAYER_DIM/2),
-			sf::Vector2i(player.hShot.grappleLength, player.hShot.grappleLength));
-		return GetNearTiles(rect, true, true);
+		if (!player.facingRight)
+		{
+			sf::IntRect rect(sf::Vector2i(player.sprite.getPosition().x - PLAYER_DIM/2 - player.hShot.grappleLength, player.sprite.getPosition().y - PLAYER_DIM/2),
+				sf::Vector2i(player.hShot.grappleLength, 0));
+			return GetNearTiles(rect, true, true);
+		}
+		else
+		{
+			sf::IntRect rect(sf::Vector2i(player.sprite.getPosition().x + PLAYER_DIM/2, player.sprite.getPosition().y - PLAYER_DIM/2),
+				sf::Vector2i(player.hShot.grappleLength, 0));
+			return GetNearTiles(rect, true, true);
+		}
+		
 	}
 }
 
@@ -150,31 +171,34 @@ std::vector<BaseObject*> Level::checkLowerRightNextGrid(int currentGrid, sf::Int
 	Global g = Global::GetInstance();
 	if(g.checkPoint(botRight, sf::IntRect(sectList[currentGrid+1]->getOffset(), sf::Vector2i(sectList[currentGrid+1]->getWidth(), sectList[currentGrid+1]->getHeight()))))
 	{
-		if(!checkBoxOnly)
+		if(currentGrid + 1 < numSect)
 		{
-			std::vector<BaseObject*> nearRects = sectList[currentGrid]->surroundingRects(topLeft - sectList[currentGrid]->getOffset(), sf::Vector2i(sectList[currentGrid]->getWidth()-1, rect.top + rect.height));
-			std::vector<BaseObject*> t1 = sectList[currentGrid+1]->surroundingRects(sf::Vector2i(0, rect.top), 
-						sf::Vector2i(rect.left + rect.width - sectList[currentGrid+1]->getOffset().x, rect.top + rect.height));
-			nearRects.insert(nearRects.end(), t1.begin(), t1.end());
-			return nearRects;
-		}
-		else
-		{
-			if (grapple)
+			if(!checkBoxOnly)
 			{
-				std::vector<BaseObject*> nearRects = sectList[currentGrid]->checkGrapple(topLeft - sectList[currentGrid]->getOffset(), sf::Vector2i(sectList[currentGrid]->getWidth()-1, rect.top + rect.height));
-				std::vector<BaseObject*> t1 = sectList[currentGrid+1]->checkGrapple(sf::Vector2i(0, rect.top), 
+				std::vector<BaseObject*> nearRects = sectList[currentGrid]->surroundingRects(topLeft - sectList[currentGrid]->getOffset(), sf::Vector2i(sectList[currentGrid]->getWidth()-1, rect.top + rect.height));
+				std::vector<BaseObject*> t1 = sectList[currentGrid+1]->surroundingRects(sf::Vector2i(0, rect.top), 
 							sf::Vector2i(rect.left + rect.width - sectList[currentGrid+1]->getOffset().x, rect.top + rect.height));
 				nearRects.insert(nearRects.end(), t1.begin(), t1.end());
 				return nearRects;
 			}
 			else
 			{
-				std::vector<BaseObject*> nearRects = sectList[currentGrid]->surroundingRects(topLeft - sectList[currentGrid]->getOffset(), sf::Vector2i(sectList[currentGrid]->getWidth()-1, rect.top + rect.height), false, false);
-				std::vector<BaseObject*> t1 = sectList[currentGrid+1]->surroundingRects(sf::Vector2i(0, rect.top), 
-							sf::Vector2i(rect.left + rect.width - sectList[currentGrid+1]->getOffset().x, rect.top + rect.height), false, false);
-				nearRects.insert(nearRects.end(), t1.begin(), t1.end());
-				return nearRects;
+				if (grapple)
+				{
+					std::vector<BaseObject*> nearRects = sectList[currentGrid]->checkGrapple(topLeft - sectList[currentGrid]->getOffset(), sf::Vector2i(sectList[currentGrid]->getWidth()-1, rect.top + rect.height));
+					std::vector<BaseObject*> t1 = sectList[currentGrid+1]->checkGrapple(sf::Vector2i(0, rect.top), 
+								sf::Vector2i(rect.left + rect.width - sectList[currentGrid+1]->getOffset().x, rect.top + rect.height));
+					nearRects.insert(nearRects.end(), t1.begin(), t1.end());
+					return nearRects;
+				}
+				else
+				{
+					std::vector<BaseObject*> nearRects = sectList[currentGrid]->surroundingRects(topLeft - sectList[currentGrid]->getOffset(), sf::Vector2i(sectList[currentGrid]->getWidth()-1, rect.top + rect.height), false, false);
+					std::vector<BaseObject*> t1 = sectList[currentGrid+1]->surroundingRects(sf::Vector2i(0, rect.top), 
+								sf::Vector2i(rect.left + rect.width - sectList[currentGrid+1]->getOffset().x, rect.top + rect.height), false, false);
+					nearRects.insert(nearRects.end(), t1.begin(), t1.end());
+					return nearRects;
+				}
 			}
 		}
 	}
