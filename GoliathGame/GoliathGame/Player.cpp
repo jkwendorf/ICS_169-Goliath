@@ -8,13 +8,13 @@ Player::Player()
 	
 	sprite.setTexture(*TextureManager::GetInstance().retrieveTexture("blah"));
 	//sprite.setPosition(64, 560);
-	sprite.setPosition(64, 0);
+	sprite.setPosition(64, 64);
 	sprite.setScale( (PLAYER_DIM / (float)sprite.getTexture()->getSize().x), (PLAYER_DIM / (float)sprite.getTexture()->getSize().y));
 	sprite.setOrigin(sprite.getLocalBounds().width/2, sprite.getLocalBounds().height/2);
 	weapon = CROSSBOW;
 	weaponCooldown = 2.0f;
 	currentCooldown = 0.0f;
-	isFalling = false;
+	isFalling = true;
 	for(int x = 0; x < 3; x++)
 		ammo[x] = Projectile(sprite.getPosition(), sf::Vector2f(0.0,0.0));
 }

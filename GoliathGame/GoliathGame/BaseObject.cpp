@@ -2,13 +2,13 @@
 #include "BaseObject.h"
 
 BaseObject::BaseObject()
-	:collidable(false), isFalling(false), objectNum(-999), testingNum(-1)
+	:collidable(false), isFalling(false), objectNum(-999), testingNum(-1), grappleable(false)
 {
 
 }
 
 BaseObject::BaseObject(bool canCollide)
-	:collidable(canCollide), isFalling(false), objectNum(-999)
+	:collidable(canCollide), isFalling(false), objectNum(-999), grappleable(false)
 {
 	
 }

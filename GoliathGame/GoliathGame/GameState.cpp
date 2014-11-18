@@ -1,4 +1,5 @@
 #include "GameState.h"
+#include "PhysicsManager.h"
 
 GameState::GameState(void)
 	:level(new Level(1)), collisionManager(new CollisionManager())
@@ -33,11 +34,24 @@ void GameState::DeleteState()
 void GameState::update(float deltaTime)
 {
 	viewCheck();
+	std::vector<BaseObject*> grapple = level->GetGrapplableTiles(p);
+	//std::vector<BaseObject*> player = level->GetGrapplableTiles(p);
+
+	//for(int i = 0; i < player.size(); i++)
+	//{
+	//	player.at(i)->print();
+	//}
+
+	for(int i = 0; i < grapple.size(); i++)
+	{
+		grapple.at(i)->print();
+	}
 
 	collisionManager->setNearByTiles(level->GetCollidableTiles(p));
-	p.isFalling = !collisionManager->playerCollisionDetection(p);
 	p.hShot.hookedOnSomething = collisionManager->hookCollisionDetection(p.hShot);
-	inputManager.update(p, deltaTime);
+	inputManager.update(p, collisionManager, deltaTime);
+
+	//p.isFalling = !collisionManager->playerCollisionDetection(p);
 	p.update(deltaTime);
 	//p.sprite.getPosition();
 }
