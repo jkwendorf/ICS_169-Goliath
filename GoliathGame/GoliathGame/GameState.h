@@ -28,6 +28,7 @@ private:
 	sf::View view;
 	sf::RenderWindow win;
 	void viewCheck();
+	void playerCheck();
 	CollisionManager* collisionManager;
 };
 
