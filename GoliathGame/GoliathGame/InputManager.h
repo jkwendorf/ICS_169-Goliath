@@ -3,6 +3,7 @@
 #include <SFML\Graphics.hpp>
 #include "Global.h"
 #include "Player.h"
+#include "CollisionManager.h"
 
 class InputManager
 {
@@ -28,8 +29,8 @@ public:
 	//controller[2] = keyboard only
 	bool controller[3];
 
-	void update(Player& s, float deltaTime);
-	void playerMove(Player& s, float deltaTime);
+	void update(Player& s, CollisionManager* cM, float deltaTime);
+	void playerMove(Player& s, CollisionManager* cM, float deltaTime);
 
 
 

@@ -1,7 +1,7 @@
 #include "HookShot.h"
 
 HookShot::HookShot() : 
-	hookedOnSomething(false)
+	hookedOnSomething(false), grappleLength(320)
 {
 	sprite.setTexture(*TextureManager::GetInstance().retrieveTexture("blah"));
 	sprite.setScale(0.05,0.05);
