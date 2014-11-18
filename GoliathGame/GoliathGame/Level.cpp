@@ -40,6 +40,7 @@ bool Level::CheckSectionOnScreen(int sectionNum)
 std::vector<BaseObject*> Level::GetCollidableTiles(Player& player)
 {
 	sf::IntRect rect(sf::Vector2i(player.sprite.getPosition().x - PLAYER_DIM/2, player.sprite.getPosition().y - PLAYER_DIM/2), sf::Vector2i(PLAYER_DIM, PLAYER_DIM));
+	
 	return GetNearTiles(rect);
 }
 
@@ -67,10 +68,8 @@ std::vector<BaseObject*> Level::GetGrapplableTiles(Player& player)
 
 std::vector<BaseObject*> Level::GetNearTiles(sf::IntRect& rect, bool checkBoxOnly, bool grapple)
 {
-	//sf::IntRect rect(sf::Vector2i(player.sprite.getPosition().x - PLAYER_DIM/2, player.sprite.getPosition().y - PLAYER_DIM/2), sf::Vector2i(PLAYER_DIM, PLAYER_DIM));
 	sf::Vector2i topLeft = sf::Vector2i(rect.left, rect.top);
 	sf::Vector2i botRight = sf::Vector2i(rect.left + rect.width, rect.top + rect.height);
-	//Global g = Global::GetInstance();
 
 	for (int i = 0; i < numSect; i++)
 	{
