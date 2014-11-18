@@ -35,12 +35,6 @@ void GameState::update(float deltaTime)
 {
 	viewCheck();
 	std::vector<BaseObject*> grapple = level->GetGrapplableTiles(p);
-	//std::vector<BaseObject*> player = level->GetGrapplableTiles(p);
-
-	//for(int i = 0; i < player.size(); i++)
-	//{
-	//	player.at(i)->print();
-	//}
 
 	for(int i = 0; i < grapple.size(); i++)
 	{
@@ -53,6 +47,7 @@ void GameState::update(float deltaTime)
 
 	//p.isFalling = !collisionManager->playerCollisionDetection(p);
 	p.update(deltaTime);
+	playerCheck();
 	//p.sprite.getPosition();
 }
 
@@ -113,4 +108,23 @@ void GameState::viewCheck()
 	}
 
 	view.reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y, SCREEN_WIDTH, SCREEN_HEIGHT));
+}
+
+void GameState::playerCheck()
+{
+	if(Global::GetInstance().topLeft.x == 0)
+	{
+		if((p.sprite.getPosition().x - (PLAYER_DIM / 2)) < 0)
+		{
+			p.sprite.setPosition((0 + PLAYER_DIM /2), p.sprite.getPosition().y);
+		}
+	}
+	else if(Global::GetInstance().topLeft.x == (level->getLevelWidth() - SCREEN_WIDTH))
+	{
+		if((p.sprite.getPosition().x + (PLAYER_DIM / 2)) > (level->getLevelWidth() - 1))
+		{
+			p.sprite.setPosition((level->getLevelWidth() - 1 - (PLAYER_DIM / 2)), p.sprite.getPosition().y);
+		}
+
+	}
 }
