@@ -1,62 +1,143 @@
 #include "Section.h"
 // include more tiles
 
-
-Section::Section()
-{
-
-}
-
-Section::Section(std::string& s, const sf::Vector2i& sectionOffSet)
-	: pathToText(s), sOffSet(sectionOffSet)
+Section::Section(int sectionNumber, std::string& s, const sf::Vector2i& offset)
+	:sectionNum(sectionNumber), pathToText(s), offset(offset)
 {
 	LoadTileMap();
 }
 
 Section::~Section()
 {
-	//delete[] tiles;
+	for (int i = 0; i < gDim.x * gDim.y; i++)
+	{
+		delete grid[i];
+	}
+	delete[] grid;
 }
 
-//Screen height is how many cols of tiles are in the screen * the width of the tiles
-int Section::getSectionWidth()
+sf::Vector2i Section::getOffset()
 {
-	return width * GAME_TILE_WIDTH;
+	return offset;
 }
 
-//Screen height is how many rows of tiles are in the screen * the height of the tiles
-int Section::getSectionHeight()
+sf::Vector2i Section::getGridDim()
 {
-	return height /** EDITOR_TILE_HEIGHT*/;
+	return gDim;
+}
+
+int Section::getWidth()
+{
+	return gDim.y * GAME_TILE_DIM;
+}
+
+int Section::getHeight()
+{
+	return gDim.x * GAME_TILE_DIM;
+}
+
+int Section::getGridNum()
+{
+	return sectionNum;
 }
 
 bool Section::inWindow()
 {
-	/*
-	if(sOffSet- screenOffSet <= screenWidth && sectionOffSet + width - screenOffSet >= 0)
-	{
-		return true;
-	}
-	return false;
-	*/
+	//std::cout << Global::GetInstance().x << std::endl;
+	//if(offset.x <= Global::GetInstance().x + SCREEN_WIDTH || offset.x + getWidth() >= Global::GetInstance().x)
+	//{
+	//	return true;
+	//}
 	return true;
 }
 
-std::vector<BaseObject> Section::GetNearTiles(const sf::Vector2f& pos)
+bool Section::checkPlayerInGrid(const BaseObject& player)
 {
-	std::vector<BaseObject> temp;
-	for(int i = 0; i < numOfTiles; i++)
+	return false;
+}
+
+std::vector<sf::Vector2i*> Section::getIntersectPoints(const BaseObject& rect)
+{
+	std::vector<sf::Vector2i*> temp;
+	//If this is not the top left corner these calculations will not work
+	sf::Vector2i p1 = sf::Vector2i(rect.sprite.getPosition().x / GAME_TILE_DIM, rect.sprite.getPosition().y / GAME_TILE_DIM);
+	sf::Vector2i p2 = sf::Vector2i((rect.sprite.getPosition().x + GAME_TILE_DIM) / GAME_TILE_DIM, (rect.sprite.getPosition().y + GAME_TILE_DIM) / GAME_TILE_DIM);
+
+	for(int i = p1.x; i <= p2.x; i++)
 	{
-		if(tiles[i].collidable)
+		for (int j = p1.y; j <= p2.y; j++)
 		{
-			if(CheckNear(i, pos))
-			{
-				temp.push_back(tiles[i]);
-			}
+			temp.push_back(new sf::Vector2i(j, i));
 		}
 	}
 	return temp;
 }
+
+std::vector<sf::Vector2i*> Section::getIntersectPoints(const sf::Vector2i& p1, const sf::Vector2i& p2)
+{
+	std::vector<sf::Vector2i*> temp;
+	sf::Vector2i p3 = sf::Vector2i(p1.x / GAME_TILE_DIM, p1.y / GAME_TILE_DIM);
+	sf::Vector2i p4 = sf::Vector2i(p2.x / GAME_TILE_DIM, p2.y / GAME_TILE_DIM);
+
+	for(int i = p3.x; i <= p4.x; i++)
+	{
+		for (int j = p3.y; j <= p4.y; j++)
+		{
+			temp.push_back(new sf::Vector2i(j, i));
+		}
+	}
+	return temp;
+}
+
+std::vector<BaseObject*> Section::surroundingRects(const sf::Vector2i& p1, const sf::Vector2i& p2, bool checkHorz, bool checkVert)
+{
+	std::vector<BaseObject*> temp;
+	sf::Vector2i p3 = sf::Vector2i(p1.x / GAME_TILE_DIM, p1.y / GAME_TILE_DIM);
+	sf::Vector2i p4 = sf::Vector2i(p2.x / GAME_TILE_DIM, p2.y / GAME_TILE_DIM);
+
+	if(checkHorz)
+	{
+		if (p3.x >= 1)
+			p3.x--;
+		if (p4.x < gDim.y-1)
+			p4.x++;
+	}
+	if (checkVert)
+	{
+		if (p3.y >= 1)
+				p3.y--;
+		if (p4.y < gDim.x-1)
+				p4.y++;
+	}
+
+	for(int i = p3.x; i <= p4.x; i++)
+	{
+		for (int j = p3.y; j <= p4.y; j++)
+		{
+			if(grid[(j*gDim.y) + i]->collidable)
+				temp.push_back(grid[(j*gDim.y) + i]);
+		}
+	}
+	return temp;
+}
+
+std::vector<BaseObject*> Section::checkGrapple(const sf::Vector2i& p1, const sf::Vector2i& p2)
+{
+	std::vector<BaseObject*> temp;
+	sf::Vector2i p3 = sf::Vector2i(p1.x / GAME_TILE_DIM, p1.y / GAME_TILE_DIM);
+	sf::Vector2i p4 = sf::Vector2i(p2.x / GAME_TILE_DIM, p2.y / GAME_TILE_DIM);
+
+	for(int i = p3.x; i <= p4.x; i++)
+	{
+		for (int j = p3.y; j <= p4.y; j++)
+		{
+			if(grid[(j*gDim.y) + i]->collidable || grid[(j*gDim.y) + i]->grappleable )
+				temp.push_back(grid[(j*gDim.y) + i]);
+		}
+	}
+	return temp;
+}
+
 
 void Section::update(float deltaTime)
 {
@@ -65,23 +146,21 @@ void Section::update(float deltaTime)
 
 void Section::draw(sf::RenderWindow& w)
 {
-	for(int i = 0; i < numOfTiles; i++)
+	for(int i = 0; i < gDim.x * gDim.y; i++)
 	{
-		tiles[i].draw(w);
+		if(grid[i]->objectNum != -999)
+			grid[i]->draw(w);
 	}
 }
 
-bool Section::CheckNear(int tileNum, const sf::Vector2f& pos)
+void Section::print()
 {
-	float dist = std::sqrt(std::pow((double)tiles[tileNum].sprite.getPosition().x - pos.x, 2.0) + std::pow((double)tiles[tileNum].sprite.getPosition().y - pos.y, 2.0 ));
-	//std::cout << tiles[tileNum].getSprite().getPosition().x << ". Y: " << tiles[tileNum].getSprite().getPosition().y << std::endl;
-	if(dist <= 100.0) //Need to change possibly to somthing like 2 * Player width or height
+	for(int i = 0; i < gDim.x * gDim.y; i++)
 	{
-		//std::cout << "True: " << tileNum << std::endl;
-		return true;
+		grid[i]->print();
 	}
-	return false;
 }
+
 
 //Loading is the text file from the given file path
 //Parses the first line of the file to get information about the rest of the file.
@@ -106,15 +185,19 @@ void Section::LoadTileMap()
 	//Sets up the txtWidth, txtHeight, and tileSheet with the 
 	// values in the level.txt
 	//std::cout << "Token[2] " << token[2] << std::endl; 
-	width = atoi(token[0].c_str());
-	height = atoi(token[1].c_str());
+	gDim = sf::Vector2i(atoi(token[0].c_str()), atoi(token[1].c_str()));
+
 	numOfTiles = atoi(token[2].c_str());
 	sf::Texture* texture = TextureManager::GetInstance().retrieveTexture(token[3]);
 	//std::cout << "Token[3] " << token[3] << std::endl; 
 	
 	try
 	{
-		tiles = new BaseObject[numOfTiles];
+		grid = new BaseObject*[gDim.x * gDim.y];
+		for (int i = 0; i < gDim.x * gDim.y; i++)
+		{
+			grid[i] = new BaseObject();
+		}
 	} 
 	catch(std::bad_alloc ex)
 	{
@@ -122,13 +205,11 @@ void Section::LoadTileMap()
 		return;
 	}
 
-	int current = 0;
 	//*TextureManager::GetInstance().retrieveTexture(token[6], "Tiles");	
 	//AddTexture("Images/Blank.png", "Blank");
 
 	token.clear();
-	float ratioX = (float)GAME_TILE_WIDTH / 100;
-	float ratioY = SCREEN_HEIGHT / width;
+	float ratio = (float)GAME_TILE_DIM / 100;
 	//std::cout << "RatioX: " << ratioX << " RatioY: " << ratioY << std::endl; 
 
 	while(!ifs.eof()) 
@@ -140,18 +221,22 @@ void Section::LoadTileMap()
 		{
 			std::vector <std::string> tileToken;
 			Tokenize(token[i], tileToken, ",");
+			
 			//std::cout << "Tiletype: " << atoi(tileToken[0].c_str()) << ". X: " << atoi(tileToken[2].c_str()) << ". Y: " << atoi(tileToken[1].c_str()) << std::endl; 
 			int tileType = atoi(tileToken[0].c_str());
+			int x = atoi(tileToken[2].c_str());
+			int y = atoi(tileToken[1].c_str());
+			delete grid[(y*gDim.y) + x];
 			switch(tileType)
 			{
 			case 5:
 			case 6:
-				//These will be Enemy
-				tiles[current++] = GroundTile(tileType, sf::Vector2i(atoi(tileToken[2].c_str()) * GAME_TILE_WIDTH, atoi(tileToken[1].c_str()) * ((SCREEN_HEIGHT / width))), sOffSet, sf::Vector2f(ratioX, ratioY), texture);
+			case 7:
+				//Grappleable
+				grid[(y*gDim.y) + x] = new BaseObject((y*gDim.y) + x, tileType, sf::Vector2i(x * GAME_TILE_DIM, y * GAME_TILE_DIM), offset, ratio, texture, false, true);
 				break;
-
 			default:
-				tiles[current++] = GroundTile(tileType, sf::Vector2i(atoi(tileToken[2].c_str()) * GAME_TILE_WIDTH, atoi(tileToken[1].c_str()) * ((SCREEN_HEIGHT / width))), sOffSet, sf::Vector2f(ratioX, ratioY), texture);
+				grid[(y*gDim.y) + x] = new BaseObject((y*gDim.y) + x, tileType, sf::Vector2i(x * GAME_TILE_DIM, y * GAME_TILE_DIM), offset, ratio, texture);
 			}
 		}
 		token.clear();

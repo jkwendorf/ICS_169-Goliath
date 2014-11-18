@@ -88,9 +88,9 @@
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="EndGameState.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="Global.cpp" />
-    <ClCompile Include="GroundTile.cpp" />
     <ClCompile Include="HookShot.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Level.cpp" />
@@ -99,7 +99,6 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="Section.cpp" />
-    <ClCompile Include="StartTile.cpp" />
     <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="TextureManager.cpp" />
   </ItemGroup>
@@ -108,10 +107,9 @@
     <ClInclude Include="Button.h" />
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="EndGameState.h" />
-    <ClInclude Include="EndTile.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="Global.h" />
-    <ClInclude Include="GroundTile.h" />
     <ClInclude Include="HookShot.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Level.h" />
@@ -119,7 +117,6 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="Section.h" />
-    <ClInclude Include="Start.h" />
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="MainMenuState.h" />
     <ClInclude Include="State.h" />

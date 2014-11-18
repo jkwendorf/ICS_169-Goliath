@@ -7,12 +7,13 @@
 #include "Level.h"
 #include "CollisionManager.h"
 
+
 class GameState : public State
 {
 public:
 	GameState(void);
 	~GameState(void);
-
+	void DeleteState();
 	void update(float deltaTime);
 	void draw(sf::RenderWindow& window);
 	void handleEvent(sf::Event event);
@@ -23,12 +24,10 @@ public:
 
 private:
 	InputManager inputManager;
-	//Section s;
+	Level* level;
 	sf::View view;
 	sf::RenderWindow win;
-	sf::Vector2f topLeft;
 	void viewCheck();
-	Level s;
-	CollisionManager collisionManager;
+	CollisionManager* collisionManager;
 };
 

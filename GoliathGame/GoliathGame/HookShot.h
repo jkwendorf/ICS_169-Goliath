@@ -5,6 +5,7 @@ class HookShot : public Weapon
 {
 public:
 	sf::Vector2f grappleLocation;
+	int grappleLength;
 
 	HookShot();
 	~HookShot();

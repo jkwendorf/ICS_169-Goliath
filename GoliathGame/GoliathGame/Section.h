@@ -1,35 +1,40 @@
 #pragma once
 
+#include "BaseObject.h"
 #include "Global.h"
 #include <fstream>
-#include "GroundTile.h"
 #include "TextureManager.h"
+#include <vector>
 
 class Section 
 {
 private:
-	int screenNum;
-	int width, height;
-	sf::Vector2i sOffSet;
-	int numOfTiles;
+	int sectionNum, numOfTiles;
+	BaseObject** grid;
+	sf::Vector2i gDim, offset;
 	std::string pathToText;
-	
-	BaseObject * tiles;
 
-	bool CheckNear(int tileNum, const sf::Vector2f& pos);
+	Section();
 	void LoadTileMap();
 	void Tokenize(const std::string& str,
                       std::vector<std::string>& tokens,
                       const std::string& delimiters = " ");
-
 public:
-	Section();
-	Section(std::string& s, const sf::Vector2i& sectionOffSet);
+	Section(int sectionNumber, std::string& s, const sf::Vector2i& offset);
 	~Section();
-	int getSectionWidth();
-	int getSectionHeight();
+	sf::Vector2i getOffset();
+	sf::Vector2i getGridDim();
+	int getWidth();
+	int getHeight();
+	int getGridNum();
 	bool inWindow();
-	std::vector<BaseObject> Section::GetNearTiles(const sf::Vector2f& pos);
+	bool checkPlayerInGrid(const BaseObject& player);
+	std::vector<sf::Vector2i*> getIntersectPoints(const BaseObject& rect);
+	std::vector<sf::Vector2i*> getIntersectPoints(const sf::Vector2i& p1, const sf::Vector2i& p2);
+	std::vector<BaseObject*> surroundingRects(const sf::Vector2i& p1, const sf::Vector2i& p2, bool checkHorz = true, bool checkVert = true);
+	std::vector<BaseObject*> checkGrapple(const sf::Vector2i& p1, const sf::Vector2i& p2);
 	void update(float deltaTime);
 	void draw(sf::RenderWindow& w);
+	void print();
+
 };
