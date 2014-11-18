@@ -14,7 +14,7 @@ Player::Player()
 	weapon = CROSSBOW;
 	weaponCooldown = 2.0f;
 	currentCooldown = 0.0f;
-	isFalling = false;
+	isFalling = true;
 	for(int x = 0; x < 3; x++)
 		ammo[x] = Projectile(sprite.getPosition(), sf::Vector2f(0.0,0.0));
 }
