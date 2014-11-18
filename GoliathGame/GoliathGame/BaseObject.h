@@ -9,7 +9,7 @@ public:
 	// METHODS AND FUNCTIONS
 	BaseObject();
 	BaseObject(bool canCollide);
-	BaseObject(int testing, int objectNum, const sf::Vector2i& pos, const sf::Vector2i& sectionOffSet, float scale, sf::Texture* texture, bool canCollide = true);
+	BaseObject(int testing, int objectNum, const sf::Vector2i& pos, const sf::Vector2i& sectionOffSet, float scale, sf::Texture* texture, bool canCollide = true, bool grappleable = false);
 	~BaseObject();
 	void update(float deltaTime);
 	void draw(sf::RenderWindow& window);
@@ -20,5 +20,6 @@ public:
 	sf::Vector2f vel;
 	bool isFalling;
 	bool collidable;
+	bool grappleable;
 	int objectNum, testingNum;
 };

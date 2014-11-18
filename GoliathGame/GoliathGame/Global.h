@@ -34,12 +34,9 @@ public :
 	std::map<std::string, int> levelSizes;
 
 	void ParseLevelSizes();
-	void setScreenSize(int w, int h);
-	void setFPS(int f);
 	bool checkPoint(const sf::Vector2i& p, const sf::IntRect& r);
 
-	int x;
-	int y;
+	sf::Vector2f topLeft;
 	int fps;
 	int xOffset;
 	int yOffset;
@@ -47,6 +44,5 @@ public :
 	Global();
 	~Global();
 
-private:
 	void calculateOffset(); //Calculates offset and sets it using current screen size
 };
