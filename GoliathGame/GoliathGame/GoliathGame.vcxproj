@@ -93,6 +93,7 @@
     <ClCompile Include="Global.cpp" />
     <ClCompile Include="HookShot.cpp" />
     <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="Interactable.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainMenuState.cpp" />
@@ -112,6 +113,7 @@
     <ClInclude Include="Global.h" />
     <ClInclude Include="HookShot.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="Interactable.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="PhysicsManager.h" />
     <ClInclude Include="Player.h" />

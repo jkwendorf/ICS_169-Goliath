@@ -6,9 +6,9 @@ Player::Player()
 {
 	vel = sf::Vector2f(0.0,0.0);
 	
-	sprite.setTexture(*TextureManager::GetInstance().retrieveTexture("blah"));
+	sprite.setTexture(*TextureManager::GetInstance().retrieveTexture("Test2"));
 	//sprite.setPosition(64, 560);
-	sprite.setPosition(64, 0);
+	sprite.setPosition(150, 64);
 	sprite.setScale( (PLAYER_DIM / (float)sprite.getTexture()->getSize().x), (PLAYER_DIM / (float)sprite.getTexture()->getSize().y));
 	sprite.setOrigin(sprite.getLocalBounds().width/2, sprite.getLocalBounds().height/2);
 	weapon = CROSSBOW;
@@ -29,7 +29,7 @@ Player::~Player()
 
 void Player::update(float deltaTime)
 {
-	if(!grappleInProgress)
+	if(!hShot.grappleInProgress)
 		if(facingRight)
 			hShot.update(sf::Vector2f(sprite.getPosition().x + 60, sprite.getPosition().y - 15));
 		else
@@ -37,11 +37,10 @@ void Player::update(float deltaTime)
 	else
 	{
 		hShot.update(deltaTime);
-		if(std::abs(hShot.grappleLocation.x - hShot.sprite.getPosition().x) <= 15 && 
-			std::abs(hShot.grappleLocation.x - hShot.sprite.getPosition().x) <= 15)
+		if(sqrt(pow((std::abs(hShot.sprite.getPosition().x - sprite.getPosition().x)),2) + 
+			pow((std::abs(hShot.sprite.getPosition().y - sprite.getPosition().y)),2)) >= 300)
 		{
-			//Check to see if it hit something, but for now reset the grapple
-			grappleInProgress = false;
+			hShot.grappleInProgress = false;
 		}
 	}
 
@@ -95,8 +94,8 @@ void Player::draw(sf::RenderWindow& window)
 {
 	BaseObject::draw(window);
 	window.draw(hShot.sprite);
-	for(int x = 0; x < 3; x++)
-		ammo[x].draw(window);
+	//for(int x = 0; x < 3; x++)
+	//	ammo[x].draw(window);
 	/* //TESTING CIRCLE
 	sf::CircleShape circle = sf::CircleShape(5.0);
 	circle.setPosition(sprite.getPosition());
@@ -108,10 +107,17 @@ void Player::draw(sf::RenderWindow& window)
 
 void Player::grapple()
 {
-	grappleInProgress = true;
+	hShot.grappleInProgress = true;
+	
 	if(facingRight)
+	{
+		hShot.startLocation = sf::Vector2f(sprite.getPosition().x + 60, sprite.getPosition().y - 15);
 		hShot.grappleToLocation(sf::Vector2f(sprite.getPosition().x + 300 , sprite.getPosition().y - 175));
+	}
 	else
+	{
+		hShot.startLocation = sf::Vector2f(sprite.getPosition().x - 60, sprite.getPosition().y - 15);
 		hShot.grappleToLocation(sf::Vector2f(sprite.getPosition().x - 300 , sprite.getPosition().y - 175));
+	}
 
 }

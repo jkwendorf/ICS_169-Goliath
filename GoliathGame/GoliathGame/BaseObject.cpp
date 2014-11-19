@@ -2,19 +2,19 @@
 #include "BaseObject.h"
 
 BaseObject::BaseObject()
-	:collidable(false), isFalling(false), objectNum(-999), testingNum(-1)
+	:collidable(false), isFalling(false), objectNum(-999), testingNum(-1), grappleable(false), interactable(false)
 {
 
 }
 
 BaseObject::BaseObject(bool canCollide)
-	:collidable(canCollide), isFalling(false), objectNum(-999)
+	:collidable(canCollide), isFalling(false), objectNum(-999), grappleable(false), interactable(false)
 {
 	
 }
 
-BaseObject::BaseObject(int testing, int objectNum, const sf::Vector2i& pos, const sf::Vector2i& sectionOffSet, float scale, sf::Texture* texture, bool canCollide,  bool grappleable)
-	:collidable(canCollide), isFalling(false), objectNum(objectNum), testingNum(testing), grappleable(grappleable)
+BaseObject::BaseObject(int testing, int objectNum, const sf::Vector2i& pos, const sf::Vector2i& sectionOffSet, float scale, sf::Texture* texture, bool canCollide,  bool grappleable, bool interactable)
+	:collidable(canCollide), isFalling(false), objectNum(objectNum), testingNum(testing), grappleable(grappleable), interactable(interactable)
 {
 	sprite.setTexture(*texture);
 	sf::IntRect temp = sf::IntRect(EDITOR_TILE_HEIGHT * (objectNum % TileSheetRows),
@@ -44,5 +44,5 @@ void BaseObject::draw(sf::RenderWindow& window)
 
 void BaseObject::print()
 {
-	std::cout << "(" << testingNum << ")";
+	std::cout << "(" << objectNum << ")";
 }

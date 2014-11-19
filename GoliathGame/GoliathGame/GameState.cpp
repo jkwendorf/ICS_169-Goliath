@@ -34,14 +34,23 @@ void GameState::DeleteState()
 void GameState::update(float deltaTime)
 {
 	viewCheck();
+	std::vector<BaseObject*> nearTiles, nearTiles2;
+	level->GetGrapplableTiles(p, nearTiles2);
+	//for (int i =0; i< nearTiles2.size(); i++)
+	//{
+		//nearTiles2.at(i)->print();
+	//}
+	std::cout << std::endl;
 
-	collisionManager->setNearByTiles(level->GetCollidableTiles(p));
-	collisionManager->setGrapplableTiles(level->GetGrapplableTiles(p));
+	level->GetCollidableTiles(p, nearTiles);
+	collisionManager->setNearByTiles(nearTiles);
+	collisionManager->setGrapplableTiles(nearTiles2);
 	p.hShot.hookedOnSomething = collisionManager->hookCollisionDetection(p.hShot);
 	inputManager.update(p, collisionManager, deltaTime);
 
 	//p.isFalling = !collisionManager->playerCollisionDetection(p);
 	p.update(deltaTime);
+	playerCheck();
 	//p.sprite.getPosition();
 }
 
@@ -60,12 +69,13 @@ void GameState::handleEvent(sf::Event event)
 
 void GameState::loadContent()
 {
-
+	//level = new Level(levelNum);
 }
 
 void GameState::unloadContent()
 {
-
+	//Level* temp = level;
+	//delete temp;
 }
 
 void GameState::viewCheck()
@@ -102,4 +112,23 @@ void GameState::viewCheck()
 	}
 
 	view.reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y, SCREEN_WIDTH, SCREEN_HEIGHT));
+}
+
+void GameState::playerCheck()
+{
+	if(Global::GetInstance().topLeft.x == 0)
+	{
+		if((p.sprite.getPosition().x - (PLAYER_DIM / 2)) < 0)
+		{
+			p.sprite.setPosition((0 + PLAYER_DIM /2), p.sprite.getPosition().y);
+		}
+	}
+	else if(Global::GetInstance().topLeft.x == (level->getLevelWidth() - SCREEN_WIDTH))
+	{
+		if((p.sprite.getPosition().x + (PLAYER_DIM / 2)) > (level->getLevelWidth() - 1))
+		{
+			p.sprite.setPosition((level->getLevelWidth() - 1 - (PLAYER_DIM / 2)), p.sprite.getPosition().y);
+		}
+
+	}
 }

@@ -13,7 +13,7 @@ bool CollisionManager::hookCollisionDetection(HookShot hs)
 {
 	for(BaseObject* b : grapplableTileList)
 	{
-		b->sprite.setColor(sf::Color::Red);
+		//b->sprite.setColor(sf::Color::Red);
 		if(b->sprite.getGlobalBounds().intersects(hs.sprite.getGlobalBounds()))
 			return true;
 	}
