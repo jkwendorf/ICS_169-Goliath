@@ -36,7 +36,7 @@ void GameState::update(float deltaTime)
 	viewCheck();
 
 	collisionManager->setNearByTiles(level->GetCollidableTiles(p));
-	collisionManager->setHookableTiles(level->GetGrapplableTiles(p));
+	collisionManager->setGrapplableTiles(level->GetGrapplableTiles(p));
 	p.hShot.hookedOnSomething = collisionManager->hookCollisionDetection(p.hShot);
 	inputManager.update(p, collisionManager, deltaTime);
 
