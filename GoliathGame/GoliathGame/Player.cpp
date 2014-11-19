@@ -6,7 +6,7 @@ Player::Player()
 {
 	vel = sf::Vector2f(0.0,0.0);
 	
-	sprite.setTexture(*TextureManager::GetInstance().retrieveTexture("blah"));
+	sprite.setTexture(*TextureManager::GetInstance().retrieveTexture("Test2"));
 	//sprite.setPosition(64, 560);
 	sprite.setPosition(64, 64);
 	sprite.setScale( (PLAYER_DIM / (float)sprite.getTexture()->getSize().x), (PLAYER_DIM / (float)sprite.getTexture()->getSize().y));
@@ -92,8 +92,8 @@ void Player::draw(sf::RenderWindow& window)
 {
 	BaseObject::draw(window);
 	window.draw(hShot.sprite);
-	for(int x = 0; x < 3; x++)
-		ammo[x].draw(window);
+	//for(int x = 0; x < 3; x++)
+	//	ammo[x].draw(window);
 	/* //TESTING CIRCLE
 	sf::CircleShape circle = sf::CircleShape(5.0);
 	circle.setPosition(sprite.getPosition());
