@@ -11,6 +11,7 @@ class Section
 private:
 	int sectionNum, numOfTiles;
 	BaseObject** grid;
+	
 	sf::Vector2i gDim, offset;
 	std::string pathToText;
 
@@ -31,8 +32,10 @@ public:
 	bool checkPlayerInGrid(const BaseObject& player);
 	std::vector<sf::Vector2i*> getIntersectPoints(const BaseObject& rect);
 	std::vector<sf::Vector2i*> getIntersectPoints(const sf::Vector2i& p1, const sf::Vector2i& p2);
-	std::vector<BaseObject*> surroundingRects(const sf::Vector2i& p1, const sf::Vector2i& p2, bool checkHorz = true, bool checkVert = true);
-	std::vector<BaseObject*> checkGrapple(const sf::Vector2i& p1, const sf::Vector2i& p2);
+	void surroundingRects(const sf::Vector2i& p1, const sf::Vector2i& p2, std::vector<BaseObject*>& nearTiles,
+		bool checkHorz = true, bool checkVert = true);
+	void checkGrapple(const sf::Vector2i& p1, const sf::Vector2i& p2, std::vector<BaseObject*>& nearTiles);
+	void checkInteractable(const sf::Vector2i& p1, const sf::Vector2i& p2, std::vector<BaseObject*>& nearTiles);
 	void update(float deltaTime);
 	void draw(sf::RenderWindow& w);
 	void print();
