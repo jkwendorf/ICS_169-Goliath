@@ -1,4 +1,5 @@
 #include "GameState.h"
+#include "PhysicsManager.h"
 
 GameState::GameState(void)
 	:level(new Level(1)), collisionManager(new CollisionManager())
@@ -35,9 +36,11 @@ void GameState::update(float deltaTime)
 	viewCheck();
 
 	collisionManager->setNearByTiles(level->GetCollidableTiles(p));
-	p.isFalling = !collisionManager->playerCollisionDetection(p);
+	collisionManager->setHookableTiles(level->GetGrapplableTiles(p));
 	p.hShot.hookedOnSomething = collisionManager->hookCollisionDetection(p.hShot);
-	inputManager.update(p, deltaTime);
+	inputManager.update(p, collisionManager, deltaTime);
+
+	//p.isFalling = !collisionManager->playerCollisionDetection(p);
 	p.update(deltaTime);
 	//p.sprite.getPosition();
 }

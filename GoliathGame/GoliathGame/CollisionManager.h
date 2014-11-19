@@ -12,10 +12,12 @@ public:
 	bool enemyCollision();
 	
 	void setNearByTiles(std::vector<BaseObject*> tiles);
+	void setHookableTiles(std::vector<BaseObject*> tiles);
 	bool hookCollisionDetection(HookShot hs);
-	void setNearByTiles(std::vector<BaseObject> tiles);
+	
 	BaseObject* getCollidedTile(Player p);
 
 private:
 	std::vector<BaseObject*> tileList;
+	std::vector<BaseObject*> grapplableTileList;
 };

@@ -11,7 +11,7 @@ CollisionManager::~CollisionManager()
 
 bool CollisionManager::hookCollisionDetection(HookShot hs)
 {
-	for(BaseObject* b : tileList)
+	for(BaseObject* b : grapplableTileList)
 		if(b->sprite.getGlobalBounds().intersects(hs.sprite.getGlobalBounds()))
 			return true;
 	return false;
@@ -42,4 +42,9 @@ BaseObject* CollisionManager::getCollidedTile(Player p)
 void CollisionManager::setNearByTiles(std::vector<BaseObject*> tiles)
 {
 	tileList = tiles;
+}
+
+void CollisionManager::setHookableTiles(std::vector<BaseObject*> tiles)
+{
+	grapplableTileList = tiles;
 }
