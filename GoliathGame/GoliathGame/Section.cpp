@@ -89,9 +89,8 @@ std::vector<sf::Vector2i*> Section::getIntersectPoints(const sf::Vector2i& p1, c
 	return temp;
 }
 
-std::vector<BaseObject*> Section::surroundingRects(const sf::Vector2i& p1, const sf::Vector2i& p2, bool checkHorz, bool checkVert)
+void Section::surroundingRects(const sf::Vector2i& p1, const sf::Vector2i& p2, std::vector<BaseObject*>& nearTiles, bool checkHorz, bool checkVert)
 {
-	std::vector<BaseObject*> temp;
 	sf::Vector2i p3 = sf::Vector2i(p1.x / GAME_TILE_DIM, p1.y / GAME_TILE_DIM);
 	sf::Vector2i p4 = sf::Vector2i(p2.x / GAME_TILE_DIM, p2.y / GAME_TILE_DIM);
 
@@ -115,15 +114,14 @@ std::vector<BaseObject*> Section::surroundingRects(const sf::Vector2i& p1, const
 		for (int j = p3.y; j <= p4.y; j++)
 		{
 			if(grid[(j*gDim.y) + i]->collidable)
-				temp.push_back(grid[(j*gDim.y) + i]);
+				nearTiles.push_back(grid[(j*gDim.y) + i]);
 		}
 	}
-	return temp;
+
 }
 
-std::vector<BaseObject*> Section::checkGrapple(const sf::Vector2i& p1, const sf::Vector2i& p2)
+void Section::checkGrapple(const sf::Vector2i& p1, const sf::Vector2i& p2, std::vector<BaseObject*>& nearTiles)
 {
-	std::vector<BaseObject*> temp;
 	sf::Vector2i p3 = sf::Vector2i(p1.x / GAME_TILE_DIM, p1.y / GAME_TILE_DIM);
 	sf::Vector2i p4 = sf::Vector2i(p2.x / GAME_TILE_DIM, p2.y / GAME_TILE_DIM);
 
@@ -132,10 +130,9 @@ std::vector<BaseObject*> Section::checkGrapple(const sf::Vector2i& p1, const sf:
 		for (int j = p3.y; j <= p4.y; j++)
 		{
 			if(grid[(j*gDim.y) + i]->collidable || grid[(j*gDim.y) + i]->grappleable )
-				temp.push_back(grid[(j*gDim.y) + i]);
+				nearTiles.push_back(grid[(j*gDim.y) + i]);
 		}
 	}
-	return temp;
 }
 
 
@@ -167,7 +164,6 @@ void Section::print()
 //Continues through the file until it hits the end of the file and creates tiles based off information parsed in
 void Section::LoadTileMap()
 {
-	
 	std::ifstream ifs;
 	ifs.open("media/levels/" + pathToText + ".txt");
 	std::string str;
@@ -234,6 +230,10 @@ void Section::LoadTileMap()
 			case 7:
 				//Grappleable
 				grid[(y*gDim.y) + x] = new BaseObject((y*gDim.y) + x, tileType, sf::Vector2i(x * GAME_TILE_DIM, y * GAME_TILE_DIM), offset, ratio, texture, false, true);
+				break;
+			case 18:
+			case 19:
+				//Interactable
 				break;
 			default:
 				grid[(y*gDim.y) + x] = new BaseObject((y*gDim.y) + x, tileType, sf::Vector2i(x * GAME_TILE_DIM, y * GAME_TILE_DIM), offset, ratio, texture);

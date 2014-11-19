@@ -36,11 +36,6 @@ void GameState::update(float deltaTime)
 	viewCheck();
 	std::vector<BaseObject*> grapple = level->GetGrapplableTiles(p);
 
-	for(int i = 0; i < grapple.size(); i++)
-	{
-		grapple.at(i)->print();
-	}
-
 	collisionManager->setNearByTiles(level->GetCollidableTiles(p));
 	p.hShot.hookedOnSomething = collisionManager->hookCollisionDetection(p.hShot);
 	inputManager.update(p, collisionManager, deltaTime);
@@ -65,12 +60,13 @@ void GameState::handleEvent(sf::Event event)
 
 void GameState::loadContent()
 {
-
+	//level = new Level(levelNum);
 }
 
 void GameState::unloadContent()
 {
-
+	//Level* temp = level;
+	//delete temp;
 }
 
 void GameState::viewCheck()

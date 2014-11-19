@@ -2,6 +2,7 @@
 #include "State.h"
 #include "InputManager.h"
 #include "Player.h"
+#include "Enemy.h"
 #include "Section.h"
 #include "Global.h"
 #include "Level.h"
@@ -21,6 +22,7 @@ public:
 	void unloadContent();
 
 	Player p;
+	std::vector<Enemy*> enemyList;
 
 private:
 	InputManager inputManager;
