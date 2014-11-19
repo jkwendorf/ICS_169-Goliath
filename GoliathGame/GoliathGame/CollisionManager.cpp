@@ -11,9 +11,12 @@ CollisionManager::~CollisionManager()
 
 bool CollisionManager::hookCollisionDetection(HookShot hs)
 {
-	for(BaseObject* b : tileList)
+	for(BaseObject* b : grapplableTileList)
+	{
+		//b->sprite.setColor(sf::Color::Red);
 		if(b->sprite.getGlobalBounds().intersects(hs.sprite.getGlobalBounds()))
 			return true;
+	}
 	return false;
 }
 
@@ -23,7 +26,7 @@ bool CollisionManager::playerCollisionDetection(Player p)
 	{
 		//std::cout << "(" << b->sprite.getGlobalBounds().left << "," << b->sprite.getGlobalBounds().top << ")";
 		//std::cout << "(" << p.sprite.getGlobalBounds().left << "," << p.sprite.getGlobalBounds().top << ")" << std::endl;
-		
+		//b->sprite.setColor(sf::Color::Red);
 		if(b->sprite.getGlobalBounds().intersects(p.sprite.getGlobalBounds()))
 			return true;
 	}
@@ -42,4 +45,9 @@ BaseObject* CollisionManager::getCollidedTile(Player p)
 void CollisionManager::setNearByTiles(std::vector<BaseObject*> tiles)
 {
 	tileList = tiles;
+}
+
+void CollisionManager::setGrapplableTiles(std::vector<BaseObject*> tiles)
+{
+	grapplableTileList = tiles;
 }

@@ -35,6 +35,7 @@ public:
 	void surroundingRects(const sf::Vector2i& p1, const sf::Vector2i& p2, std::vector<BaseObject*>& nearTiles,
 		bool checkHorz = true, bool checkVert = true);
 	void checkGrapple(const sf::Vector2i& p1, const sf::Vector2i& p2, std::vector<BaseObject*>& nearTiles);
+	void checkInteractable(const sf::Vector2i& p1, const sf::Vector2i& p2, std::vector<BaseObject*>& nearTiles);
 	void update(float deltaTime);
 	void draw(sf::RenderWindow& w);
 	void print();

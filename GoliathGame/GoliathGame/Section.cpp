@@ -135,6 +135,21 @@ void Section::checkGrapple(const sf::Vector2i& p1, const sf::Vector2i& p2, std::
 	}
 }
 
+void Section::checkInteractable(const sf::Vector2i& p1, const sf::Vector2i& p2, std::vector<BaseObject*>& nearTiles)
+{
+	sf::Vector2i p3 = sf::Vector2i(p1.x / GAME_TILE_DIM, p1.y / GAME_TILE_DIM);
+	sf::Vector2i p4 = sf::Vector2i(p2.x / GAME_TILE_DIM, p2.y / GAME_TILE_DIM);
+
+	for(int i = p3.x; i <= p4.x; i++)
+	{
+		for (int j = p3.y; j <= p4.y; j++)
+		{
+			if(grid[(j*gDim.y) + i]->interactable)
+				nearTiles.push_back(grid[(j*gDim.y) + i]);
+		}
+	}
+}
+
 
 void Section::update(float deltaTime)
 {
@@ -234,6 +249,7 @@ void Section::LoadTileMap()
 			case 18:
 			case 19:
 				//Interactable
+				grid[(y*gDim.y) + x] = new BaseObject((y*gDim.y) + x, tileType, sf::Vector2i(x * GAME_TILE_DIM, y * GAME_TILE_DIM), offset, ratio, texture, false, false, true);
 				break;
 			default:
 				grid[(y*gDim.y) + x] = new BaseObject((y*gDim.y) + x, tileType, sf::Vector2i(x * GAME_TILE_DIM, y * GAME_TILE_DIM), offset, ratio, texture);
