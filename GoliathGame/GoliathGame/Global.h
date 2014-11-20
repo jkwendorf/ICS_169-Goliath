@@ -13,7 +13,7 @@
 #define	EDITOR_TILE_WIDTH 100
 #define EDITOR_TILE_HEIGHT 100
 #define GAME_TILE_DIM 32
-#define PLAYER_DIM 64
+#define PLAYER_DIM 128
 #define PLAYER_SPRITE_DIM 256
 #define TileSheetRows 5
 #define TileSheetCols 5
