@@ -29,6 +29,7 @@ private:
 	Level* level;
 	sf::View view;
 	sf::RenderWindow win;
+	sf::Sprite background;
 	void viewCheck();
 	void playerCheck();
 	CollisionManager* collisionManager;
