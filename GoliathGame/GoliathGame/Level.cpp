@@ -3,7 +3,7 @@
 
 Level::Level(int levelNumber)
 	:levelNum(levelNumber), numSect(Global::GetInstance().levelSizes.at("Level " + std::to_string(levelNumber))),
-	levelWidth(0), loadedTitles(false)
+	levelWidth(0), levelHeight(0), loadedTitles(false)
 {
 	LoadLevel();
 }
@@ -29,6 +29,9 @@ void Level::LoadLevel()
 		else
 			sectList[i] = new Section(i, temp, sf::Vector2i(i*sectList[i-1]->getWidth(), 0));
 		levelWidth = levelWidth + sectList[i]->getWidth();
+
+		if(levelHeight < sectList[i]->getHeight())
+			levelHeight = sectList[i]->getHeight();
 	}
 	
 	sf::Texture* texture = TextureManager::GetInstance().retrieveTexture(Global::GetInstance().levelTileSheets.at("Level " + std::to_string(levelNum)));
@@ -275,4 +278,9 @@ void Level::checkUpperLeftFirstCol(int currentGrid, sf::IntRect& rect, const sf:
 int Level::getLevelWidth()
 {
 	return levelWidth;
+}
+
+int Level::getLevelHeight()
+{
+	return levelHeight;
 }
