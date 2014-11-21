@@ -17,8 +17,8 @@ BaseObject::BaseObject(int testing, int objectNum, const sf::Vector2i& pos, cons
 	:collidable(canCollide), isFalling(false), objectNum(objectNum), testingNum(testing), grappleable(grappleable), interactable(interactable)
 {
 	sprite.setTexture(*texture);
-	sf::IntRect temp = sf::IntRect(EDITOR_TILE_HEIGHT * (objectNum % TileSheetRows),
-				EDITOR_TILE_WIDTH * (objectNum / TileSheetRows),EDITOR_TILE_WIDTH, EDITOR_TILE_HEIGHT);
+	sf::IntRect temp = sf::IntRect(EDITOR_TILE_WIDTH * (objectNum % TileSheetCols),
+				EDITOR_TILE_HEIGHT * (objectNum / TileSheetCols),EDITOR_TILE_WIDTH, EDITOR_TILE_HEIGHT);
 	//std::cout << "Pos x: " <<  temp.left << ". Pos Y: " << temp.top << std::endl;
 	sprite.setTextureRect(temp);
 	//std::cout << "Pos x: " <<  pos.x << ". Pos Y: " << pos.y << std::endl;

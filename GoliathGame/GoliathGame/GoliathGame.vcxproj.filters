@@ -75,6 +75,9 @@
     <ClCompile Include="Interactable.cpp">
       <Filter>Source Files\Tile Stuff</Filter>
     </ClCompile>
+    <ClCompile Include="Tile.cpp">
+      <Filter>Source Files\Tile Stuff</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="State.h">
@@ -135,6 +138,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Interactable.h">
+      <Filter>Header Files\Tile Stuff</Filter>
+    </ClInclude>
+    <ClInclude Include="Tile.h">
       <Filter>Header Files\Tile Stuff</Filter>
     </ClInclude>
   </ItemGroup>
