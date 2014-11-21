@@ -36,13 +36,13 @@ void GameState::DeleteState()
 void GameState::update(float deltaTime)
 {
 	viewCheck();
-	std::vector<BaseObject*> nearTiles, nearTiles2;
+	std::vector<Tile*> nearTiles, nearTiles2;
 	level->GetGrapplableTiles(p, nearTiles2);
 	//for (int i =0; i< nearTiles2.size(); i++)
 	//{
 		//nearTiles2.at(i)->print();
 	//}
-	std::cout << std::endl;
+	//std::cout << std::endl;
 
 	level->GetCollidableTiles(p, nearTiles);
 	collisionManager->setNearByTiles(nearTiles);

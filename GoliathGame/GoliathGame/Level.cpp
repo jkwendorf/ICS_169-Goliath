@@ -3,7 +3,7 @@
 
 Level::Level(int levelNumber)
 	:levelNum(levelNumber), numSect(Global::GetInstance().levelSizes.at("Level " + std::to_string(levelNumber))),
-	levelWidth(0)
+	levelWidth(0), loadedTitles(false)
 {
 	LoadLevel();
 }
@@ -30,6 +30,9 @@ void Level::LoadLevel()
 			sectList[i] = new Section(i, temp, sf::Vector2i(i*sectList[i-1]->getWidth(), 0));
 		levelWidth = levelWidth + sectList[i]->getWidth();
 	}
+	
+	sf::Texture* texture = TextureManager::GetInstance().retrieveTexture(Global::GetInstance().levelTileSheets.at("Level " + std::to_string(levelNum)));
+	Global::GetInstance().SetUpTileSheet(texture);
 }
 
 bool Level::CheckSectionOnScreen(int sectionNum)
@@ -37,14 +40,14 @@ bool Level::CheckSectionOnScreen(int sectionNum)
 	return sectList[sectionNum]->inWindow();
 }
 
-void Level::GetCollidableTiles(Player& player, std::vector<BaseObject*>& nearTiles)
+void Level::GetCollidableTiles(Player& player, std::vector<Tile*>& nearTiles)
 {
 	sf::IntRect rect(sf::Vector2i(player.sprite.getPosition().x - PLAYER_DIM_X/2, player.sprite.getPosition().y - PLAYER_DIM_Y/2), sf::Vector2i(PLAYER_DIM_X, PLAYER_DIM_Y));
 	GetNearTiles(rect, nearTiles);
 	return;
 }
 
-bool Level::NearInteractableTiles(Player& player, std::vector<BaseObject*>& nearTiles)
+bool Level::NearInteractableTiles(Player& player, std::vector<Tile*>& nearTiles)
 {
 	sf::IntRect rect(sf::Vector2i(player.sprite.getPosition().x - PLAYER_DIM_X/2, player.sprite.getPosition().y - PLAYER_DIM_Y/2), sf::Vector2i(PLAYER_DIM_X, PLAYER_DIM_Y));
 	GetNearTiles(rect, nearTiles, true);
@@ -53,7 +56,7 @@ bool Level::NearInteractableTiles(Player& player, std::vector<BaseObject*>& near
 	return false; 
 }
 
-void Level::GetGrapplableTiles(Player& player, std::vector<BaseObject*>& nearTiles)
+void Level::GetGrapplableTiles(Player& player, std::vector<Tile*>& nearTiles)
 {
 	//std::cout << player.sprite.getPosition().y - PLAYER_DIM/2 << std::endl;
 	//std::cout << player.hShot.grappleLength << std::endl;
@@ -94,7 +97,7 @@ void Level::GetGrapplableTiles(Player& player, std::vector<BaseObject*>& nearTil
 	}
 }
 
-void Level::GetNearTiles(sf::IntRect& rect, std::vector<BaseObject*>& nearTiles, bool checkBoxOnly, bool grapple)
+void Level::GetNearTiles(sf::IntRect& rect, std::vector<Tile*>& nearTiles, bool checkBoxOnly, bool grapple)
 {
 	sf::Vector2i topLeft = sf::Vector2i(rect.left, rect.top);
 	sf::Vector2i botRight = sf::Vector2i(rect.left + rect.width, rect.top + rect.height);
@@ -132,7 +135,7 @@ void Level::draw(sf::RenderWindow& w)
 }
 
 void Level::checkUpperLeftSameGrid(int currentGrid, sf::IntRect& rect, const sf::Vector2i& topLeft, 
-													   const sf::Vector2i& botRight, std::vector<BaseObject*>& nearTiles, 
+													   const sf::Vector2i& botRight, std::vector<Tile*>& nearTiles, 
 													   bool checkBoxOnly, bool grapple)
 {
 	Global g = Global::GetInstance();
@@ -183,7 +186,7 @@ void Level::checkUpperLeftSameGrid(int currentGrid, sf::IntRect& rect, const sf:
 }
 
 void Level::checkLowerRightNextGrid(int currentGrid, sf::IntRect& rect, const sf::Vector2i& topLeft, 
-														const sf::Vector2i& botRight, std::vector<BaseObject*>& nearTiles,
+														const sf::Vector2i& botRight, std::vector<Tile*>& nearTiles,
 														bool checkBoxOnly, bool grapple)
 {
 	Global g = Global::GetInstance();
@@ -194,7 +197,7 @@ void Level::checkLowerRightNextGrid(int currentGrid, sf::IntRect& rect, const sf
 			if(!checkBoxOnly)
 			{
 				sectList[currentGrid]->surroundingRects(topLeft - sectList[currentGrid]->getOffset(), sf::Vector2i(sectList[currentGrid]->getWidth()-1, rect.top + rect.height), nearTiles);
-				std::vector<BaseObject*> t1;
+				std::vector<Tile*> t1;
 				sectList[currentGrid+1]->surroundingRects(sf::Vector2i(0, rect.top), 
 							sf::Vector2i(rect.left + rect.width - sectList[currentGrid+1]->getOffset().x, rect.top + rect.height), t1);
 				nearTiles.insert(nearTiles.end(), t1.begin(), t1.end());
@@ -205,7 +208,7 @@ void Level::checkLowerRightNextGrid(int currentGrid, sf::IntRect& rect, const sf
 				if (grapple)
 				{
 					sectList[currentGrid]->checkGrapple(topLeft - sectList[currentGrid]->getOffset(), sf::Vector2i(sectList[currentGrid]->getWidth()-1, rect.top + rect.height), nearTiles);
-					std::vector<BaseObject*> t1;
+					std::vector<Tile*> t1;
 					sectList[currentGrid+1]->checkGrapple(sf::Vector2i(0, rect.top), 
 								sf::Vector2i(rect.left + rect.width - sectList[currentGrid+1]->getOffset().x, rect.top + rect.height), t1);
 					nearTiles.insert(nearTiles.end(), t1.begin(), t1.end());
@@ -214,7 +217,7 @@ void Level::checkLowerRightNextGrid(int currentGrid, sf::IntRect& rect, const sf
 				else
 				{
 					sectList[currentGrid]->checkInteractable(topLeft - sectList[currentGrid]->getOffset(), sf::Vector2i(sectList[currentGrid]->getWidth()-1, rect.top + rect.height), nearTiles);
-					std::vector<BaseObject*> t1;
+					std::vector<Tile*> t1;
 					sectList[currentGrid+1]->checkInteractable(sf::Vector2i(0, rect.top), 
 								sf::Vector2i(rect.left + rect.width - sectList[currentGrid+1]->getOffset().x, rect.top + rect.height), t1);
 					nearTiles.insert(nearTiles.end(), t1.begin(), t1.end());
@@ -226,14 +229,14 @@ void Level::checkLowerRightNextGrid(int currentGrid, sf::IntRect& rect, const sf
 }
 
 void Level::checkLowerRightLastCol(int currentGrid, sf::IntRect& rect, const sf::Vector2i& topLeft, 
-													   const sf::Vector2i& botRight, std::vector<BaseObject*>& nearTiles)
+													   const sf::Vector2i& botRight, std::vector<Tile*>& nearTiles)
 {
 	if ((rect.left + rect.width - sectList[currentGrid]->getOffset().x)/ GAME_TILE_DIM == sectList[currentGrid]->getGridDim().x-1) 
 	{
 		sectList[currentGrid]->surroundingRects(topLeft - sectList[currentGrid]->getOffset(), 
 						botRight - sectList[currentGrid]->getOffset(), nearTiles);
 
-		std::vector<BaseObject*> t1;
+		std::vector<Tile*> t1;
 		sectList[currentGrid+1]->surroundingRects(sf::Vector2i(0, rect.top), sf::Vector2i(0, rect.top + rect.height), t1, false);
 		nearTiles.insert(nearTiles.end(), t1.begin(), t1.end());
 		return;
@@ -248,13 +251,13 @@ void Level::checkLowerRightLastCol(int currentGrid, sf::IntRect& rect, const sf:
 }
 
 void Level::checkUpperLeftFirstCol(int currentGrid, sf::IntRect& rect, const sf::Vector2i& topLeft, 
-													   const sf::Vector2i& botRight, std::vector<BaseObject*>& nearTiles)
+													   const sf::Vector2i& botRight, std::vector<Tile*>& nearTiles)
 {
 	if ((rect.left - sectList[currentGrid]->getOffset().x) / GAME_TILE_DIM < 1) 
 	{
 		sectList[currentGrid]->surroundingRects(topLeft- sectList[currentGrid]->getOffset(), 
 													botRight - sectList[currentGrid]->getOffset(), nearTiles);
-		std::vector<BaseObject*> t1;
+		std::vector<Tile*> t1;
 		sectList[currentGrid-1]->surroundingRects(sf::Vector2i(sectList[currentGrid-1]->getWidth()-1, rect.top), 
 					sf::Vector2i(sectList[currentGrid-1]->getWidth()-1, rect.top + rect.height), t1, false);
 		nearTiles.insert(nearTiles.end(), t1.begin(), t1.end());
