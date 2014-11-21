@@ -8,7 +8,7 @@ class Level
 {
 private:
 	Section** sectList;
-	int numSect, levelNum, levelWidth;
+	int numSect, levelNum, levelWidth, levelHeight;
 	bool loadedTitles;
 
 	Level();
@@ -40,4 +40,5 @@ public:
 	void draw(sf::RenderWindow& w);
 	void print();
 	int getLevelWidth();
+	int getLevelHeight();
 };
