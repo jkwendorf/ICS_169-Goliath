@@ -109,10 +109,15 @@ void GameState::viewCheck()
 	}
 
 
-	if(p.sprite.getPosition().y - (PLAYER_DIM / 2) < 0 + Global::GetInstance().yOffset)
+	if(p.sprite.getPosition().y - (PLAYER_DIM_Y / 2) < 0 + Global::GetInstance().yOffset)
 	{
-		Global::GetInstance().topLeft.y = p.sprite.getPosition().y - (PLAYER_DIM / 2) - Global::GetInstance().yOffset;
+		Global::GetInstance().topLeft.y = p.sprite.getPosition().y - (PLAYER_DIM_Y / 2) - Global::GetInstance().yOffset;
 	}
+	//Uncomment for bottom scrolling.
+	/*else if(p.sprite.getPosition().y + (PLAYER_DIM_Y / 2) > SCREEN_HEIGHT - Global::GetInstance().yOffset)
+	{
+		Global::GetInstance().topLeft.y = p.sprite.getPosition().y + (PLAYER_DIM_Y / 2) + Global::GetInstance().yOffset - SCREEN_HEIGHT;
+	}*/
 
 	view.reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y, SCREEN_WIDTH, SCREEN_HEIGHT));
 }
@@ -121,16 +126,16 @@ void GameState::playerCheck()
 {
 	if(Global::GetInstance().topLeft.x == 0)
 	{
-		if((p.sprite.getPosition().x - (PLAYER_DIM / 2)) < 0)
+		if((p.sprite.getPosition().x - (PLAYER_DIM_X / 2)) < 0)
 		{
-			p.sprite.setPosition((0 + PLAYER_DIM /2), p.sprite.getPosition().y);
+			p.sprite.setPosition((0 + PLAYER_DIM_X /2), p.sprite.getPosition().y);
 		}
 	}
 	else if(Global::GetInstance().topLeft.x == (level->getLevelWidth() - SCREEN_WIDTH))
 	{
-		if((p.sprite.getPosition().x + (PLAYER_DIM / 2)) > (level->getLevelWidth() - 1))
+		if((p.sprite.getPosition().x + (PLAYER_DIM_X / 2)) > (level->getLevelWidth() - 1))
 		{
-			p.sprite.setPosition((level->getLevelWidth() - 1 - (PLAYER_DIM / 2)), p.sprite.getPosition().y);
+			p.sprite.setPosition((level->getLevelWidth() - 1 - (PLAYER_DIM_X / 2)), p.sprite.getPosition().y);
 		}
 
 	}

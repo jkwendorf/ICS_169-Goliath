@@ -13,8 +13,12 @@
 #define	EDITOR_TILE_WIDTH 100
 #define EDITOR_TILE_HEIGHT 100
 #define GAME_TILE_DIM 32
-#define PLAYER_DIM 128
-#define PLAYER_SPRITE_DIM 256
+#define PLAYER_DIM 64
+#define PLAYER_DIM_X 64
+#define PLAYER_DIM_Y PLAYER_DIM_X * 2
+//Player sprite dim never used...
+#define PLAYER_SPRITE_DIM 1000
+
 #define TileSheetRows 5
 #define TileSheetCols 5
 
