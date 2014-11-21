@@ -114,10 +114,15 @@ void GameState::viewCheck()
 		Global::GetInstance().topLeft.y = p.sprite.getPosition().y - (PLAYER_DIM_Y / 2) - Global::GetInstance().yOffset;
 	}
 	//Uncomment for bottom scrolling.
-	/*else if(p.sprite.getPosition().y + (PLAYER_DIM_Y / 2) > SCREEN_HEIGHT - Global::GetInstance().yOffset)
+	else if(p.sprite.getPosition().y + (PLAYER_DIM_Y / 2) > SCREEN_HEIGHT - Global::GetInstance().yOffset)
 	{
 		Global::GetInstance().topLeft.y = p.sprite.getPosition().y + (PLAYER_DIM_Y / 2) + Global::GetInstance().yOffset - SCREEN_HEIGHT;
-	}*/
+	}
+
+	if(Global::GetInstance().topLeft.y > level->getLevelHeight() - SCREEN_HEIGHT)
+	{
+		Global::GetInstance().topLeft.y = level->getLevelHeight() - SCREEN_HEIGHT;
+	}
 
 	view.reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y, SCREEN_WIDTH, SCREEN_HEIGHT));
 }

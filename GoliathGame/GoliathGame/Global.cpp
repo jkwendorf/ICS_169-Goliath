@@ -87,9 +87,8 @@ bool Global::checkPoint(const sf::Vector2i& p, const sf::IntRect& r)
 void Global::calculateOffset()
 {
 	//grab height and width and calculate that offset
-
 	xOffset = SCREEN_WIDTH / 5;
-	yOffset = SCREEN_HEIGHT / 5;
+	yOffset = SCREEN_HEIGHT / 8;
 
 }
 

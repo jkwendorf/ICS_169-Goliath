@@ -12,7 +12,7 @@
 #define FPS 30
 #define	EDITOR_TILE_WIDTH 100
 #define EDITOR_TILE_HEIGHT 100
-#define GAME_TILE_DIM 32
+#define GAME_TILE_DIM 64
 #define PLAYER_DIM 64
 #define PLAYER_DIM_X 64
 #define PLAYER_DIM_Y PLAYER_DIM_X * 2
