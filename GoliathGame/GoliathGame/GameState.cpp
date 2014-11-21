@@ -14,6 +14,8 @@ GameState::GameState(void)
 
 	//Code for player draw
 	//p.draw(TextureManager::GetInstance().retrieveTexture("player"), 40, 23);
+	background.setTexture(*TextureManager::GetInstance().retrieveTexture("bandit canyon level"));
+	background.setPosition(0,-100);
 	view.reset(sf::FloatRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
 	view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
 }
@@ -57,6 +59,7 @@ void GameState::update(float deltaTime)
 void GameState::draw(sf::RenderWindow& window)
 {
 	//window.draw(r);
+	window.draw(background);
 	level->draw(window);
 	p.draw(window);
 	window.setView(view);
