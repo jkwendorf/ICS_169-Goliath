@@ -42,14 +42,14 @@ bool Level::CheckSectionOnScreen(int sectionNum)
 
 void Level::GetCollidableTiles(Player& player, std::vector<Tile*>& nearTiles)
 {
-	sf::IntRect rect(sf::Vector2i(player.sprite.getPosition().x - PLAYER_DIM/2, player.sprite.getPosition().y - PLAYER_DIM/2), sf::Vector2i(PLAYER_DIM, PLAYER_DIM));
+	sf::IntRect rect(sf::Vector2i(player.sprite.getPosition().x - PLAYER_DIM_X/2, player.sprite.getPosition().y - PLAYER_DIM_Y/2), sf::Vector2i(PLAYER_DIM_X, PLAYER_DIM_Y));
 	GetNearTiles(rect, nearTiles);
 	return;
 }
 
 bool Level::NearInteractableTiles(Player& player, std::vector<Tile*>& nearTiles)
 {
-	sf::IntRect rect(sf::Vector2i(player.sprite.getPosition().x - PLAYER_DIM/2, player.sprite.getPosition().y - PLAYER_DIM/2), sf::Vector2i(PLAYER_DIM, PLAYER_DIM));
+	sf::IntRect rect(sf::Vector2i(player.sprite.getPosition().x - PLAYER_DIM_X/2, player.sprite.getPosition().y - PLAYER_DIM_Y/2), sf::Vector2i(PLAYER_DIM_X, PLAYER_DIM_Y));
 	GetNearTiles(rect, nearTiles, true);
 	if(nearTiles.size() > 0)
 		return true;
@@ -60,18 +60,18 @@ void Level::GetGrapplableTiles(Player& player, std::vector<Tile*>& nearTiles)
 {
 	//std::cout << player.sprite.getPosition().y - PLAYER_DIM/2 << std::endl;
 	//std::cout << player.hShot.grappleLength << std::endl;
-	if(player.sprite.getPosition().y - PLAYER_DIM/2 - player.hShot.grappleLength >= 0)
+	if(player.sprite.getPosition().y - PLAYER_DIM_Y/2 - player.hShot.grappleLength >= 0)
 	{
 		if (!player.facingRight)
 		{
-			sf::IntRect rect(sf::Vector2i(player.sprite.getPosition().x - PLAYER_DIM/2 - player.hShot.grappleLength, player.sprite.getPosition().y - PLAYER_DIM/2 - player.hShot.grappleLength),
+			sf::IntRect rect(sf::Vector2i(player.sprite.getPosition().x - PLAYER_DIM_X/2 - player.hShot.grappleLength, player.sprite.getPosition().y - PLAYER_DIM_Y/2 - player.hShot.grappleLength),
 				sf::Vector2i(player.hShot.grappleLength, player.hShot.grappleLength));
 			GetNearTiles(rect, nearTiles, true, true);
 			return;
 		}
 		else
 		{
-			sf::IntRect rect(sf::Vector2i(player.sprite.getPosition().x + PLAYER_DIM/2, player.sprite.getPosition().y - PLAYER_DIM/2 - player.hShot.grappleLength),
+			sf::IntRect rect(sf::Vector2i(player.sprite.getPosition().x + PLAYER_DIM_X/2, player.sprite.getPosition().y - PLAYER_DIM_Y/2 - player.hShot.grappleLength),
 				sf::Vector2i(player.hShot.grappleLength, player.hShot.grappleLength));
 			GetNearTiles(rect, nearTiles, true, true);
 			return;
@@ -81,14 +81,14 @@ void Level::GetGrapplableTiles(Player& player, std::vector<Tile*>& nearTiles)
 	{
 		if (!player.facingRight)
 		{
-			sf::IntRect rect(sf::Vector2i(player.sprite.getPosition().x - PLAYER_DIM/2 - player.hShot.grappleLength, player.sprite.getPosition().y - PLAYER_DIM/2),
+			sf::IntRect rect(sf::Vector2i(player.sprite.getPosition().x - PLAYER_DIM_X/2 - player.hShot.grappleLength, player.sprite.getPosition().y - PLAYER_DIM_Y/2),
 				sf::Vector2i(player.hShot.grappleLength, 0));
 			GetNearTiles(rect, nearTiles, true, true);
 			return;
 		}
 		else
 		{
-			sf::IntRect rect(sf::Vector2i(player.sprite.getPosition().x + PLAYER_DIM/2, player.sprite.getPosition().y - PLAYER_DIM/2),
+			sf::IntRect rect(sf::Vector2i(player.sprite.getPosition().x + PLAYER_DIM_X/2, player.sprite.getPosition().y - PLAYER_DIM_Y/2),
 				sf::Vector2i(player.hShot.grappleLength, 0));
 			GetNearTiles(rect, nearTiles, true, true);
 			return;
