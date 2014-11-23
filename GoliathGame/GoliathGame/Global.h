@@ -36,9 +36,10 @@ public :
 	}
 
 	std::map<std::string, int> levelSizes;
+	std::map<std::string, int> roomSizes;
 	std::map<std::string, std::string> levelTileSheets;
 
-	void ParseLevelSizes();
+	void ParseLevelSizes(std::map<std::string, int>& mapToUpdate, std::string& fileName);
 	void ParseLevelTileSheets();
 	bool checkPoint(const sf::Vector2i& p, const sf::IntRect& r);
 

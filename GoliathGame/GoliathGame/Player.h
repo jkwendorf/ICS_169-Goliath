@@ -24,6 +24,7 @@ public:
 	void move(float x, float y);
 	void move(sf::Vector2f& dist);
 	void grapple();
+	void resetPosition(sf::Vector2f& newPos);
 	void draw(sf::RenderWindow& window);
 
 	// VARIABLES
