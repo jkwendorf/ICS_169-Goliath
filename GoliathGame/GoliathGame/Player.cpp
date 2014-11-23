@@ -121,3 +121,9 @@ void Player::grapple()
 	}
 
 }
+
+void Player::resetPosition(sf::Vector2f& newPos)
+{
+	sprite.setPosition(newPos);
+}
+

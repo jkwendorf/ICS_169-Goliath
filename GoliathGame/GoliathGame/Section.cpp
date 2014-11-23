@@ -2,7 +2,7 @@
 // include more tiles
 
 Section::Section(int sectionNumber, std::string& s, const sf::Vector2i& offset)
-	:sectionNum(sectionNumber), pathToText(s), offset(offset)
+	:sectionNum(sectionNumber), pathToText(s), offset(offset), startPos(-999.0, -999.0)
 {
 	LoadTileMap();
 }
@@ -41,14 +41,22 @@ int Section::getGridNum()
 	return sectionNum;
 }
 
+sf::Vector2f Section::getStartPos()
+{
+	return startPos;
+}
+
 bool Section::inWindow()
 {
-	//std::cout << Global::GetInstance().x << std::endl;
-	//if(offset.x <= Global::GetInstance().x + SCREEN_WIDTH || offset.x + getWidth() >= Global::GetInstance().x)
-	//{
-	//	return true;
-	//}
-	return true;
+	//std::cout << Global::GetInstance().topLeft.x << std::endl;
+	if((offset.x <= Global::GetInstance().topLeft.x && offset.x + getWidth() >= Global::GetInstance().topLeft.x) || 
+		(offset.x <= Global::GetInstance().topLeft.x + SCREEN_WIDTH && offset.x + getWidth() >= Global::GetInstance().topLeft.x + SCREEN_WIDTH)||
+		(offset.x >= Global::GetInstance().topLeft.x && offset.x + getWidth() <= Global::GetInstance().topLeft.x + SCREEN_WIDTH))
+	{
+		//std::cout << sectionNum << std::endl;
+		return true;
+	}
+	return false;
 }
 
 bool Section::checkPlayerInGrid(const BaseObject& player)
@@ -166,7 +174,7 @@ void Section::draw(sf::RenderWindow& w)
 	Global g = Global::GetInstance();
 	for(int i = 0; i < gDim.x * gDim.y; i++)
 	{
-		if(grid1[i][0] != -999)
+		if(grid1[i][0] >= 0)
 		{
 			g.currentTileSheet[grid1[i][0]]->setPosition(GAME_TILE_DIM * (grid1[i][1] % gDim.y) + offset.x,
 				GAME_TILE_DIM * (grid1[i][1] / gDim.y)+ offset.y);
@@ -259,6 +267,12 @@ void Section::LoadTileMap()
 			grid1[(y*gDim.y) + x][1] = (y*gDim.y) + x;
 			switch(tileType)
 			{
+			case -1:
+				startPos = sf::Vector2f(x * GAME_TILE_DIM + offset.x, y * GAME_TILE_DIM + offset.y);
+				grid1[(y*gDim.y) + x][2] = 0;
+				grid1[(y*gDim.y) + x][3] = 0;
+				grid1[(y*gDim.y) + x][4] = 0;
+				break;
 			case 5:
 			case 6:
 			case 7:

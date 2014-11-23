@@ -14,6 +14,7 @@ private:
 	int ** grid1;
 	
 	sf::Vector2i gDim, offset;
+	sf::Vector2f startPos;
 	std::string pathToText;
 
 	Section();
@@ -29,6 +30,7 @@ public:
 	int getWidth();
 	int getHeight();
 	int getGridNum();
+	sf::Vector2f getStartPos();
 
 	bool inWindow();
 	bool checkPlayerInGrid(const BaseObject& player);
