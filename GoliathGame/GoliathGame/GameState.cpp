@@ -2,7 +2,7 @@
 #include "PhysicsManager.h"
 
 GameState::GameState(void)
-	:level(new Level(1)), collisionManager(new CollisionManager())
+	:currentRoom(new Room(1,2)), collisionManager(new CollisionManager())
 	//:s(0, sf::Vector2i(0,0))
 {
 	
@@ -14,16 +14,15 @@ GameState::GameState(void)
 
 	//Code for player draw
 	//p.draw(TextureManager::GetInstance().retrieveTexture("player"), 40, 23);
+	background.setTexture(*TextureManager::GetInstance().retrieveTexture("bandit canyon level"));
+	background.setPosition(0,-100);
 	view.reset(sf::FloatRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
 	view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
-
-	enemyList.push_back(new Enemy("test2", 300.0, 300.0));
-
 }
 
 GameState::~GameState(void)
 {
-	delete level;
+	delete currentRoom;
 	delete collisionManager;
 }
 
@@ -31,23 +30,25 @@ void GameState::DeleteState()
 {
 	std::cout << "Calling GameState destructor" << std::endl;
 	delete collisionManager;
-	delete level;
-	for(int x =0; x < enemyList.size(); x++)
-		delete enemyList[x];
+	delete currentRoom;
 }
 
 void GameState::update(float deltaTime)
 {
 	viewCheck();
-	std::vector<BaseObject*> nearTiles, nearTiles2;
-	level->GetGrapplableTiles(p, nearTiles2);
+	std::vector<Tile*> nearTiles, nearTiles2;
+	currentRoom->GetGrapplableTiles(p, nearTiles2);
+	if(currentRoom->NearInteractableTiles(p))
+	{
+		changeRoom();
+	}
 	//for (int i =0; i< nearTiles2.size(); i++)
 	//{
 		//nearTiles2.at(i)->print();
 	//}
-	std::cout << std::endl;
+	std::cout << p.sprite.getPosition().x << ", " << p.sprite.getPosition().y <<  std::endl;
 
-	level->GetCollidableTiles(p, nearTiles);
+	currentRoom->GetCollidableTiles(p, sf::Vector2i(PLAYER_DIM_X, PLAYER_DIM_Y), nearTiles);
 	collisionManager->setNearByTiles(nearTiles);
 	collisionManager->setGrapplableTiles(nearTiles2);
 	p.hShot.hookedOnSomething = collisionManager->hookCollisionDetection(p.hShot);
@@ -57,18 +58,14 @@ void GameState::update(float deltaTime)
 	p.update(deltaTime);
 	playerCheck();
 	//p.sprite.getPosition();
-
-	for(int x = 0; x < enemyList.size(); x++)
-		enemyList[x]->update(deltaTime);
 }
 
 void GameState::draw(sf::RenderWindow& window)
 {
 	//window.draw(r);
-	level->draw(window);
+	window.draw(background);
+	currentRoom->draw(window);
 	p.draw(window);
-	for(int x = 0; x < enemyList.size(); x++)
-		enemyList[x]->draw(window);
 	window.setView(view);
 }
 
@@ -79,12 +76,12 @@ void GameState::handleEvent(sf::Event event)
 
 void GameState::loadContent()
 {
-	//level = new Level(levelNum);
+	//currentRoom = new currentRoom(roomNum);
 }
 
 void GameState::unloadContent()
 {
-	//Level* temp = level;
+	//currentRoom* temp = currentRoom;
 	//delete temp;
 }
 
@@ -110,15 +107,32 @@ void GameState::viewCheck()
 		Global::GetInstance().topLeft.x = 0;
 	}
 
-	if(level->getLevelWidth() - Global::GetInstance().xOffset < p.sprite.getPosition().x)
+	if(currentRoom->getroomWidth() - Global::GetInstance().xOffset < p.sprite.getPosition().x)
 	{
-		Global::GetInstance().topLeft.x = level->getLevelWidth() - SCREEN_WIDTH;
+		Global::GetInstance().topLeft.x = currentRoom->getroomWidth() - SCREEN_WIDTH;
+		if(currentRoom->getroomWidth() % SCREEN_WIDTH > 0)
+		{
+			Global::GetInstance().topLeft.x = (currentRoom->getroomWidth() / SCREEN_WIDTH) * SCREEN_WIDTH
+				- SCREEN_WIDTH + (currentRoom->getroomWidth() % SCREEN_WIDTH);
+		}
+	}
+	
+
+
+
+	if(p.sprite.getPosition().y - (PLAYER_DIM_Y / 2) < 0 + Global::GetInstance().yOffset)
+	{
+		Global::GetInstance().topLeft.y = p.sprite.getPosition().y - (PLAYER_DIM_Y / 2) - Global::GetInstance().yOffset;
+	}
+	//Uncomment for bottom scrolling.
+	else if(p.sprite.getPosition().y + (PLAYER_DIM_Y / 2) > SCREEN_HEIGHT - Global::GetInstance().yOffset)
+	{
+		Global::GetInstance().topLeft.y = p.sprite.getPosition().y + (PLAYER_DIM_Y / 2) + Global::GetInstance().yOffset - SCREEN_HEIGHT;
 	}
 
-
-	if(p.sprite.getPosition().y - (PLAYER_DIM / 2) < 0 + Global::GetInstance().yOffset)
+	if(Global::GetInstance().topLeft.y > currentRoom->getroomHeight() - SCREEN_HEIGHT)
 	{
-		Global::GetInstance().topLeft.y = p.sprite.getPosition().y - (PLAYER_DIM / 2) - Global::GetInstance().yOffset;
+		Global::GetInstance().topLeft.y = currentRoom->getroomHeight() - SCREEN_HEIGHT;
 	}
 
 	view.reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y, SCREEN_WIDTH, SCREEN_HEIGHT));
@@ -128,17 +142,26 @@ void GameState::playerCheck()
 {
 	if(Global::GetInstance().topLeft.x == 0)
 	{
-		if((p.sprite.getPosition().x - (PLAYER_DIM / 2)) < 0)
+		if((p.sprite.getPosition().x - (PLAYER_DIM_X / 2)) < 0)
 		{
-			p.sprite.setPosition((0 + PLAYER_DIM /2), p.sprite.getPosition().y);
+			p.sprite.setPosition((0 + PLAYER_DIM_X /2), p.sprite.getPosition().y);
 		}
 	}
-	else if(Global::GetInstance().topLeft.x == (level->getLevelWidth() - SCREEN_WIDTH))
+	else if(Global::GetInstance().topLeft.x == (currentRoom->getroomWidth() - SCREEN_WIDTH))
 	{
-		if((p.sprite.getPosition().x + (PLAYER_DIM / 2)) > (level->getLevelWidth() - 1))
+		if((p.sprite.getPosition().x + (PLAYER_DIM_X / 2)) > (currentRoom->getroomWidth() - 1))
 		{
-			p.sprite.setPosition((level->getLevelWidth() - 1 - (PLAYER_DIM / 2)), p.sprite.getPosition().y);
+			p.sprite.setPosition((currentRoom->getroomWidth() - 1 - (PLAYER_DIM_X / 2)), p.sprite.getPosition().y);
 		}
 
 	}
+}
+
+void GameState::changeRoom()
+{
+	int roomNum = currentRoom->getRoomNumber();
+	delete currentRoom;
+	currentRoom = new Room(1, ++roomNum);
+	//Move player to the start pos in new room
+	p.resetPosition(currentRoom->getStartPos());
 }

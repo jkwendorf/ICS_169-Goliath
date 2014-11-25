@@ -2,18 +2,18 @@
 // include more tiles
 
 Section::Section(int sectionNumber, std::string& s, const sf::Vector2i& offset)
-	:sectionNum(sectionNumber), pathToText(s), offset(offset)
+	:sectionNum(sectionNumber), pathToText(s), offset(offset), startPos(-999.0, -999.0)
 {
 	LoadTileMap();
 }
 
 Section::~Section()
 {
-	for (int i = 0; i < gDim.x * gDim.y; i++)
+	for ( int j = 0; j < gDim.x * gDim.y; j++)
 	{
-		delete grid[i];
+		delete[] grid1[j];
 	}
-	delete[] grid;
+	delete[] grid1;
 }
 
 sf::Vector2i Section::getOffset()
@@ -41,14 +41,22 @@ int Section::getGridNum()
 	return sectionNum;
 }
 
+sf::Vector2f Section::getStartPos()
+{
+	return startPos;
+}
+
 bool Section::inWindow()
 {
-	//std::cout << Global::GetInstance().x << std::endl;
-	//if(offset.x <= Global::GetInstance().x + SCREEN_WIDTH || offset.x + getWidth() >= Global::GetInstance().x)
-	//{
-	//	return true;
-	//}
-	return true;
+	//std::cout << Global::GetInstance().topLeft.x << std::endl;
+	if((offset.x <= Global::GetInstance().topLeft.x && offset.x + getWidth() >= Global::GetInstance().topLeft.x) || 
+		(offset.x <= Global::GetInstance().topLeft.x + SCREEN_WIDTH && offset.x + getWidth() >= Global::GetInstance().topLeft.x + SCREEN_WIDTH)||
+		(offset.x >= Global::GetInstance().topLeft.x && offset.x + getWidth() <= Global::GetInstance().topLeft.x + SCREEN_WIDTH))
+	{
+		//std::cout << sectionNum << std::endl;
+		return true;
+	}
+	return false;
 }
 
 bool Section::checkPlayerInGrid(const BaseObject& player)
@@ -89,7 +97,7 @@ std::vector<sf::Vector2i*> Section::getIntersectPoints(const sf::Vector2i& p1, c
 	return temp;
 }
 
-void Section::surroundingRects(const sf::Vector2i& p1, const sf::Vector2i& p2, std::vector<BaseObject*>& nearTiles, bool checkHorz, bool checkVert)
+void Section::surroundingRects(const sf::Vector2i& p1, const sf::Vector2i& p2, std::vector<Tile*>& nearTiles, bool checkHorz, bool checkVert)
 {
 	sf::Vector2i p3 = sf::Vector2i(p1.x / GAME_TILE_DIM, p1.y / GAME_TILE_DIM);
 	sf::Vector2i p4 = sf::Vector2i(p2.x / GAME_TILE_DIM, p2.y / GAME_TILE_DIM);
@@ -113,14 +121,17 @@ void Section::surroundingRects(const sf::Vector2i& p1, const sf::Vector2i& p2, s
 	{
 		for (int j = p3.y; j <= p4.y; j++)
 		{
-			if(grid[(j*gDim.y) + i]->collidable)
-				nearTiles.push_back(grid[(j*gDim.y) + i]);
+			if(grid1[(j*gDim.y) + i][2] == 1)
+			{
+				nearTiles.push_back(new Tile(sf::Vector2f(GAME_TILE_DIM * (grid1[(j*gDim.y) + i][1] % gDim.y) + offset.x, GAME_TILE_DIM * (grid1[(j*gDim.y) + i][1] / gDim.y)+ offset.y), 
+								sf::Vector2f(GAME_TILE_DIM, GAME_TILE_DIM), grid1[(j*gDim.y) + i][0], grid1[(j*gDim.y) + i][2], grid1[(j*gDim.y) + i][3], grid1[(j*gDim.y) + i][4]));
+			}
 		}
 	}
 
 }
 
-void Section::checkGrapple(const sf::Vector2i& p1, const sf::Vector2i& p2, std::vector<BaseObject*>& nearTiles)
+void Section::checkGrapple(const sf::Vector2i& p1, const sf::Vector2i& p2, std::vector<Tile*>& nearTiles)
 {
 	sf::Vector2i p3 = sf::Vector2i(p1.x / GAME_TILE_DIM, p1.y / GAME_TILE_DIM);
 	sf::Vector2i p4 = sf::Vector2i(p2.x / GAME_TILE_DIM, p2.y / GAME_TILE_DIM);
@@ -129,13 +140,14 @@ void Section::checkGrapple(const sf::Vector2i& p1, const sf::Vector2i& p2, std::
 	{
 		for (int j = p3.y; j <= p4.y; j++)
 		{
-			if(grid[(j*gDim.y) + i]->collidable || grid[(j*gDim.y) + i]->grappleable )
-				nearTiles.push_back(grid[(j*gDim.y) + i]);
+			if(grid1[(j*gDim.y) + i][2] == 1 || grid1[(j*gDim.y) + i][3] == 1 )
+				nearTiles.push_back(new Tile(sf::Vector2f(GAME_TILE_DIM * (grid1[(j*gDim.y) + i][1] % gDim.y) + offset.x, GAME_TILE_DIM * (grid1[(j*gDim.y) + i][1] / gDim.y)+ offset.y), 
+								sf::Vector2f(GAME_TILE_DIM, GAME_TILE_DIM), grid1[(j*gDim.y) + i][0], grid1[(j*gDim.y) + i][2], grid1[(j*gDim.y) + i][3], grid1[(j*gDim.y) + i][4]));
 		}
 	}
 }
 
-void Section::checkInteractable(const sf::Vector2i& p1, const sf::Vector2i& p2, std::vector<BaseObject*>& nearTiles)
+void Section::checkInteractable(const sf::Vector2i& p1, const sf::Vector2i& p2, std::vector<Tile*>& nearTiles)
 {
 	sf::Vector2i p3 = sf::Vector2i(p1.x / GAME_TILE_DIM, p1.y / GAME_TILE_DIM);
 	sf::Vector2i p4 = sf::Vector2i(p2.x / GAME_TILE_DIM, p2.y / GAME_TILE_DIM);
@@ -144,8 +156,9 @@ void Section::checkInteractable(const sf::Vector2i& p1, const sf::Vector2i& p2, 
 	{
 		for (int j = p3.y; j <= p4.y; j++)
 		{
-			if(grid[(j*gDim.y) + i]->interactable)
-				nearTiles.push_back(grid[(j*gDim.y) + i]);
+			if(grid1[(j*gDim.y) + i][4] == 1)
+				nearTiles.push_back(new Tile(sf::Vector2f(GAME_TILE_DIM * (grid1[(j*gDim.y) + i][1] % gDim.y) + offset.x, GAME_TILE_DIM * (grid1[(j*gDim.y) + i][1] / gDim.y)+ offset.y), 
+								sf::Vector2f(GAME_TILE_DIM, GAME_TILE_DIM), grid1[(j*gDim.y) + i][0], grid1[(j*gDim.y) + i][2], grid1[(j*gDim.y) + i][3], grid1[(j*gDim.y) + i][4]));
 		}
 	}
 }
@@ -158,10 +171,17 @@ void Section::update(float deltaTime)
 
 void Section::draw(sf::RenderWindow& w)
 {
+	Global g = Global::GetInstance();
 	for(int i = 0; i < gDim.x * gDim.y; i++)
 	{
-		if(grid[i]->objectNum != -999)
-			grid[i]->draw(w);
+		if(grid1[i][0] >= 0)
+		{
+			g.currentTileSheet[grid1[i][0]]->setPosition(GAME_TILE_DIM * (grid1[i][1] % gDim.y) + offset.x,
+				GAME_TILE_DIM * (grid1[i][1] / gDim.y)+ offset.y);
+			w.draw(*g.currentTileSheet[grid1[i][0]]);
+		}
+		//if(grid[i]->objectNum != -999)
+		//	grid[i]->draw(w);
 	}
 }
 
@@ -169,7 +189,7 @@ void Section::print()
 {
 	for(int i = 0; i < gDim.x * gDim.y; i++)
 	{
-		grid[i]->print();
+		std::cout << grid1[i][0] << std::endl;
 	}
 }
 
@@ -204,10 +224,15 @@ void Section::LoadTileMap()
 	
 	try
 	{
-		grid = new BaseObject*[gDim.x * gDim.y];
+		grid1 = new int*[gDim.x * gDim.y];
 		for (int i = 0; i < gDim.x * gDim.y; i++)
 		{
-			grid[i] = new BaseObject();
+			int* t = new int[5];
+			for (int j = 0; j < 5; j++)
+			{
+				t[j] = -999;
+			}
+			grid1[i] = t;
 		}
 	} 
 	catch(std::bad_alloc ex)
@@ -216,12 +241,13 @@ void Section::LoadTileMap()
 		return;
 	}
 
+
 	//*TextureManager::GetInstance().retrieveTexture(token[6], "Tiles");	
 	//AddTexture("Images/Blank.png", "Blank");
 
 	token.clear();
 	float ratio = (float)GAME_TILE_DIM / 100;
-	//std::cout << "RatioX: " << ratioX << " RatioY: " << ratioY << std::endl; 
+	//std::cout << "RatioX: " << ratioX << " RatioY: " << ratioY << std::endl;
 
 	while(!ifs.eof()) 
 	{
@@ -237,22 +263,35 @@ void Section::LoadTileMap()
 			int tileType = atoi(tileToken[0].c_str());
 			int x = atoi(tileToken[2].c_str());
 			int y = atoi(tileToken[1].c_str());
-			delete grid[(y*gDim.y) + x];
+			grid1[(y*gDim.y) + x][0] = tileType;
+			grid1[(y*gDim.y) + x][1] = (y*gDim.y) + x;
 			switch(tileType)
 			{
+			case -1:
+				startPos = sf::Vector2f(x * GAME_TILE_DIM + offset.x, y * GAME_TILE_DIM + offset.y);
+				grid1[(y*gDim.y) + x][2] = 0;
+				grid1[(y*gDim.y) + x][3] = 0;
+				grid1[(y*gDim.y) + x][4] = 0;
+				break;
 			case 5:
 			case 6:
 			case 7:
 				//Grappleable
-				grid[(y*gDim.y) + x] = new BaseObject((y*gDim.y) + x, tileType, sf::Vector2i(x * GAME_TILE_DIM, y * GAME_TILE_DIM), offset, ratio, texture, false, true);
+				grid1[(y*gDim.y) + x][2] = 0;
+				grid1[(y*gDim.y) + x][3] = 1;
+				grid1[(y*gDim.y) + x][4] = 0;
 				break;
 			case 18:
 			case 19:
 				//Interactable
-				grid[(y*gDim.y) + x] = new BaseObject((y*gDim.y) + x, tileType, sf::Vector2i(x * GAME_TILE_DIM, y * GAME_TILE_DIM), offset, ratio, texture, false, false, true);
+				grid1[(y*gDim.y) + x][2] = 0;
+				grid1[(y*gDim.y) + x][3] = 0;
+				grid1[(y*gDim.y) + x][4] = 1;
 				break;
 			default:
-				grid[(y*gDim.y) + x] = new BaseObject((y*gDim.y) + x, tileType, sf::Vector2i(x * GAME_TILE_DIM, y * GAME_TILE_DIM), offset, ratio, texture);
+				grid1[(y*gDim.y) + x][2] = 1;
+				grid1[(y*gDim.y) + x][3] = 0;
+				grid1[(y*gDim.y) + x][4] = 0;
 			}
 		}
 		token.clear();

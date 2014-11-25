@@ -6,10 +6,10 @@ Player::Player()
 {
 	vel = sf::Vector2f(0.0,0.0);
 	
-	sprite.setTexture(*TextureManager::GetInstance().retrieveTexture("Test2"));
+	sprite.setTexture(*TextureManager::GetInstance().retrieveTexture("Test"));
 	//sprite.setPosition(64, 560);
 	sprite.setPosition(150, 64);
-	sprite.setScale( (PLAYER_DIM / (float)sprite.getTexture()->getSize().x), (PLAYER_DIM / (float)sprite.getTexture()->getSize().y));
+	sprite.setScale( (PLAYER_DIM_X / (float)sprite.getTexture()->getSize().x), (PLAYER_DIM_Y / (float)sprite.getTexture()->getSize().y));
 	sprite.setOrigin(sprite.getLocalBounds().width/2, sprite.getLocalBounds().height/2);
 	weapon = CROSSBOW;
 	weaponCooldown = 2.0f;
@@ -121,3 +121,9 @@ void Player::grapple()
 	}
 
 }
+
+void Player::resetPosition(sf::Vector2f& newPos)
+{
+	sprite.setPosition(newPos);
+}
+

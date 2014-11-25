@@ -11,10 +11,10 @@ CollisionManager::~CollisionManager()
 
 bool CollisionManager::hookCollisionDetection(HookShot hs)
 {
-	for(BaseObject* b : grapplableTileList)
+	for(Tile* b : grapplableTileList)
 	{
 		//b->sprite.setColor(sf::Color::Red);
-		if(b->sprite.getGlobalBounds().intersects(hs.sprite.getGlobalBounds()) && b->grappleable)
+		if(b->intersects(hs.sprite.getGlobalBounds()) && b->getGrappleable())
 			return true;
 	}
 	return false;
@@ -22,32 +22,32 @@ bool CollisionManager::hookCollisionDetection(HookShot hs)
 
 bool CollisionManager::playerCollisionDetection(Player p)
 {
-	for(BaseObject* b : tileList)
+	for(Tile* b : tileList)
 	{
 		//std::cout << "(" << b->sprite.getGlobalBounds().left << "," << b->sprite.getGlobalBounds().top << ")";
 		//std::cout << "(" << p.sprite.getGlobalBounds().left << "," << p.sprite.getGlobalBounds().top << ")" << std::endl;
 		//b->sprite.setColor(sf::Color::Red);
-		if(b->sprite.getGlobalBounds().intersects(p.sprite.getGlobalBounds()))
+		if(b->intersects(p.sprite.getGlobalBounds()))
 			return true;
 	}
 	//std::cout << "\n\n\n\n";
 	return false;
 }
 
-BaseObject* CollisionManager::getCollidedTile(Player p)
+Tile* CollisionManager::getCollidedTile(Player p)
 {
-	for(BaseObject* b : tileList)
-		if(b->sprite.getGlobalBounds().intersects(p.sprite.getGlobalBounds()))
+	for(Tile* b : tileList)
+		if(b->intersects(p.sprite.getGlobalBounds()))
 			return b;
 	return NULL;
 }
 
-void CollisionManager::setNearByTiles(std::vector<BaseObject*> tiles)
+void CollisionManager::setNearByTiles(std::vector<Tile*> tiles)
 {
 	tileList = tiles;
 }
 
-void CollisionManager::setGrapplableTiles(std::vector<BaseObject*> tiles)
+void CollisionManager::setGrapplableTiles(std::vector<Tile*> tiles)
 {
 	grapplableTileList = tiles;
 }

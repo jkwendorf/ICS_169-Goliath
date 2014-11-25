@@ -34,6 +34,8 @@ public:
 	//Player player;
 	Level(int levelNumber);
 	~Level();
+
+	int getLevelNumber();
 	
 	void GetCollidableTiles(Player& player, std::vector<BaseObject*>& nearTiles);
 	bool NearInteractableTiles(Player& player, std::vector<BaseObject*>& nearTiles);
