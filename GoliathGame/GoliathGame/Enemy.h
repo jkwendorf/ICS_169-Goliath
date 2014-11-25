@@ -18,4 +18,5 @@ public:
 	float health;
 	int weapon;
 	float weaponCooldown;
+	bool movingRight;
 };
