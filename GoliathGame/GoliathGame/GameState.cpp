@@ -110,6 +110,11 @@ void GameState::viewCheck()
 	if(currentRoom->getroomWidth() - Global::GetInstance().xOffset < p.sprite.getPosition().x)
 	{
 		Global::GetInstance().topLeft.x = currentRoom->getroomWidth() - SCREEN_WIDTH;
+		if(currentRoom->getroomWidth() % SCREEN_WIDTH > 0)
+		{
+			Global::GetInstance().topLeft.x = (currentRoom->getroomWidth() / SCREEN_WIDTH) * SCREEN_WIDTH
+				- SCREEN_WIDTH + (currentRoom->getroomWidth() % SCREEN_WIDTH);
+		}
 	}
 
 
