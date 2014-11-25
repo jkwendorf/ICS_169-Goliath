@@ -34,9 +34,17 @@ void GameState::DeleteState()
 void GameState::update(float deltaTime)
 {
 	viewCheck();
-	std::vector<BaseObject*> grapple = level->GetGrapplableTiles(p);
+	std::vector<BaseObject*> nearTiles, nearTiles2;
+	level->GetGrapplableTiles(p, nearTiles2);
+	//for (int i =0; i< nearTiles2.size(); i++)
+	//{
+		//nearTiles2.at(i)->print();
+	//}
+	std::cout << std::endl;
 
-	collisionManager->setNearByTiles(level->GetCollidableTiles(p));
+	level->GetCollidableTiles(p, nearTiles);
+	collisionManager->setNearByTiles(nearTiles);
+	collisionManager->setGrapplableTiles(nearTiles2);
 	p.hShot.hookedOnSomething = collisionManager->hookCollisionDetection(p.hShot);
 	inputManager.update(p, collisionManager, deltaTime);
 
@@ -123,4 +131,14 @@ void GameState::playerCheck()
 		}
 
 	}
+}
+
+void GameState::setUpEnemies(std::vector<int[3]>& enemySpots)
+{
+	for (int i = 0; i < enemySpots.size(); i++)
+	{
+		enemyList.push_back(new Enemy("enemy" + std::to_string(enemySpots.at(i)[0]) + "level" + std::to_string(level->getLevelNumber()), 
+			enemySpots.at(i)[1], enemySpots.at(i)[2])); 
+	}
+
 }

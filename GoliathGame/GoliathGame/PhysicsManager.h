@@ -5,9 +5,9 @@
 #include "BaseObject.h"
 #include "CollisionManager.h"
 
-#define TERMINAL_VELOCITY 200
-#define JUMP_SPEED -200
-#define GRAVITY 150
+#define TERMINAL_VELOCITY 1000
+#define JUMP_SPEED -450
+#define GRAVITY 500
 #define SPEED 100
 #define BOOST 4
 

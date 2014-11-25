@@ -56,39 +56,6 @@ bool Section::checkPlayerInGrid(const BaseObject& player)
 	return false;
 }
 
-std::vector<sf::Vector2i*> Section::getIntersectPoints(const BaseObject& rect)
-{
-	std::vector<sf::Vector2i*> temp;
-	//If this is not the top left corner these calculations will not work
-	sf::Vector2i p1 = sf::Vector2i(rect.sprite.getPosition().x / GAME_TILE_DIM, rect.sprite.getPosition().y / GAME_TILE_DIM);
-	sf::Vector2i p2 = sf::Vector2i((rect.sprite.getPosition().x + GAME_TILE_DIM) / GAME_TILE_DIM, (rect.sprite.getPosition().y + GAME_TILE_DIM) / GAME_TILE_DIM);
-
-	for(int i = p1.x; i <= p2.x; i++)
-	{
-		for (int j = p1.y; j <= p2.y; j++)
-		{
-			temp.push_back(new sf::Vector2i(j, i));
-		}
-	}
-	return temp;
-}
-
-std::vector<sf::Vector2i*> Section::getIntersectPoints(const sf::Vector2i& p1, const sf::Vector2i& p2)
-{
-	std::vector<sf::Vector2i*> temp;
-	sf::Vector2i p3 = sf::Vector2i(p1.x / GAME_TILE_DIM, p1.y / GAME_TILE_DIM);
-	sf::Vector2i p4 = sf::Vector2i(p2.x / GAME_TILE_DIM, p2.y / GAME_TILE_DIM);
-
-	for(int i = p3.x; i <= p4.x; i++)
-	{
-		for (int j = p3.y; j <= p4.y; j++)
-		{
-			temp.push_back(new sf::Vector2i(j, i));
-		}
-	}
-	return temp;
-}
-
 void Section::surroundingRects(const sf::Vector2i& p1, const sf::Vector2i& p2, std::vector<BaseObject*>& nearTiles, bool checkHorz, bool checkVert)
 {
 	sf::Vector2i p3 = sf::Vector2i(p1.x / GAME_TILE_DIM, p1.y / GAME_TILE_DIM);
@@ -130,6 +97,21 @@ void Section::checkGrapple(const sf::Vector2i& p1, const sf::Vector2i& p2, std::
 		for (int j = p3.y; j <= p4.y; j++)
 		{
 			if(grid[(j*gDim.y) + i]->collidable || grid[(j*gDim.y) + i]->grappleable )
+				nearTiles.push_back(grid[(j*gDim.y) + i]);
+		}
+	}
+}
+
+void Section::checkInteractable(const sf::Vector2i& p1, const sf::Vector2i& p2, std::vector<BaseObject*>& nearTiles)
+{
+	sf::Vector2i p3 = sf::Vector2i(p1.x / GAME_TILE_DIM, p1.y / GAME_TILE_DIM);
+	sf::Vector2i p4 = sf::Vector2i(p2.x / GAME_TILE_DIM, p2.y / GAME_TILE_DIM);
+
+	for(int i = p3.x; i <= p4.x; i++)
+	{
+		for (int j = p3.y; j <= p4.y; j++)
+		{
+			if(grid[(j*gDim.y) + i]->interactable)
 				nearTiles.push_back(grid[(j*gDim.y) + i]);
 		}
 	}
@@ -225,6 +207,10 @@ void Section::LoadTileMap()
 			delete grid[(y*gDim.y) + x];
 			switch(tileType)
 			{
+			case (-3):
+				//int temp[3] = {tileType, x, y};
+				//enemys.push_back(temp);
+				break;
 			case 5:
 			case 6:
 			case 7:
@@ -234,6 +220,7 @@ void Section::LoadTileMap()
 			case 18:
 			case 19:
 				//Interactable
+				grid[(y*gDim.y) + x] = new BaseObject((y*gDim.y) + x, tileType, sf::Vector2i(x * GAME_TILE_DIM, y * GAME_TILE_DIM), offset, ratio, texture, false, false, true);
 				break;
 			default:
 				grid[(y*gDim.y) + x] = new BaseObject((y*gDim.y) + x, tileType, sf::Vector2i(x * GAME_TILE_DIM, y * GAME_TILE_DIM), offset, ratio, texture);

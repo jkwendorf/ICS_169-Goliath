@@ -28,16 +28,18 @@ private:
 		std::vector<BaseObject*>& nearTiles);
 	void checkUpperLeftFirstCol(int currentGrid, sf::IntRect& rect, const sf::Vector2i& topLeft, const sf::Vector2i& botRight,
 		std::vector<BaseObject*>& nearTiles);
-	std::vector<BaseObject*> GetNearTiles(sf::IntRect& player, bool checkBoxOnly = false, bool grapple = false);
+	void GetNearTiles(sf::IntRect& player, std::vector<BaseObject*>& nearTiles, bool checkBoxOnly = false, bool grapple = false);
 
 public:
 	//Player player;
 	Level(int levelNumber);
 	~Level();
+
+	int getLevelNumber();
 	
-	std::vector<BaseObject*> GetCollidableTiles(Player& player);
-	std::vector<BaseObject*> GetInteractableTiles(Player& player);
-	std::vector<BaseObject*> GetGrapplableTiles(Player& player);
+	void GetCollidableTiles(Player& player, std::vector<BaseObject*>& nearTiles);
+	bool NearInteractableTiles(Player& player, std::vector<BaseObject*>& nearTiles);
+	void GetGrapplableTiles(Player& player, std::vector<BaseObject*>& nearTiles);
 
 	void update(float deltaTime);
 	void draw(sf::RenderWindow& w);

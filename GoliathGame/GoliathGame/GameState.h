@@ -31,6 +31,7 @@ private:
 	sf::RenderWindow win;
 	void viewCheck();
 	void playerCheck();
+	void setUpEnemies(std::vector<int[3]>& enemySpots);
 	CollisionManager* collisionManager;
 };
 
