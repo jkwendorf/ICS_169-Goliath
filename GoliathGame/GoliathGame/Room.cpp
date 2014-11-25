@@ -25,6 +25,7 @@ void Room::LoadRoom(int levelNumber)
 	for (int i = 0; i < numSect; i++)
 	{
 		std::string temp = "level" + std::to_string(levelNumber) + "room" + std::to_string(roomNum) + "section" + std::to_string(i);
+		std::cout << temp << std::endl;
 		if(i==0)
 		{
 			sectList[i] = new Section(i, temp, sf::Vector2i(0,0));
@@ -45,6 +46,7 @@ void Room::LoadRoom(int levelNumber)
 			roomHeight = sectList[i]->getHeight();
 	}
 	
+	//std::cout << Global::GetInstance().roomTileSheets. << std::endl;
 	sf::Texture* texture = TextureManager::GetInstance().retrieveTexture(Global::GetInstance().roomTileSheets.at("Room " + std::to_string(roomNum)));
 	Global::GetInstance().SetUpTileSheet(texture);
 }

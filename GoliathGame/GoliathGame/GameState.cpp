@@ -2,7 +2,7 @@
 #include "PhysicsManager.h"
 
 GameState::GameState(void)
-	:currentRoom(new Room(1,2)), collisionManager(new CollisionManager())
+	:currentRoom(new Room(1,1)), collisionManager(new CollisionManager())
 	//:s(0, sf::Vector2i(0,0))
 {
 	
@@ -18,6 +18,7 @@ GameState::GameState(void)
 	background.setPosition(0,-100);
 	view.reset(sf::FloatRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
 	view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
+	p.resetPosition(currentRoom->getStartPos());
 }
 
 GameState::~GameState(void)

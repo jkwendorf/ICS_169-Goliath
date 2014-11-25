@@ -94,6 +94,7 @@
     <ClCompile Include="HookShot.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Interactable.cpp" />
+    <ClCompile Include="pugixml.cpp" />
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainMenuState.cpp" />
@@ -115,6 +116,8 @@
     <ClInclude Include="HookShot.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Interactable.h" />
+    <ClInclude Include="pugiconfig.hpp" />
+    <ClInclude Include="pugixml.hpp" />
     <ClInclude Include="Room.h" />
     <ClInclude Include="PhysicsManager.h" />
     <ClInclude Include="Player.h" />
@@ -126,6 +129,9 @@
     <ClInclude Include="StateManager.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="Weapon.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="Levels.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
