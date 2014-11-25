@@ -33,7 +33,8 @@ public:
 	Room(int levelNumber, int roomNumber);
 	~Room();
 	
-	void GetCollidableTiles(BaseObject& obj, std::vector<Tile*>& nearTiles);
+	void GetCollidableTiles(BaseObject& obj, sf::Vector2i& dim, std::vector<Tile*>& nearTiles);
+	//These two functions only works for player 
 	bool NearInteractableTiles(BaseObject& obj);
 	void GetGrapplableTiles(Player& player, std::vector<Tile*>& nearTiles);
 

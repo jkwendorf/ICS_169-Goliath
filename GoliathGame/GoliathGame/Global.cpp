@@ -70,7 +70,7 @@ void Global::ParseLevelTileSheets()
 		std::string tileSheet = str.substr(pos+2, str.length() - pos).c_str();
 
 		//Insert it into the map.
-		levelTileSheets[levelName] = tileSheet;
+		roomTileSheets[levelName] = tileSheet;
 	}
 
 	ifs.close();

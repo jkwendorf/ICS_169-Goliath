@@ -2,7 +2,7 @@
 #include "PhysicsManager.h"
 
 GameState::GameState(void)
-	:currentRoom(new Room(1,1)), collisionManager(new CollisionManager())
+	:currentRoom(new Room(1,2)), collisionManager(new CollisionManager())
 	//:s(0, sf::Vector2i(0,0))
 {
 	
@@ -46,9 +46,9 @@ void GameState::update(float deltaTime)
 	//{
 		//nearTiles2.at(i)->print();
 	//}
-	//std::cout << std::endl;
+	std::cout << p.sprite.getPosition().x << ", " << p.sprite.getPosition().y <<  std::endl;
 
-	currentRoom->GetCollidableTiles(p, nearTiles);
+	currentRoom->GetCollidableTiles(p, sf::Vector2i(PLAYER_DIM_X, PLAYER_DIM_Y), nearTiles);
 	collisionManager->setNearByTiles(nearTiles);
 	collisionManager->setGrapplableTiles(nearTiles2);
 	p.hShot.hookedOnSomething = collisionManager->hookCollisionDetection(p.hShot);

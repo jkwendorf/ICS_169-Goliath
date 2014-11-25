@@ -124,7 +124,7 @@ void Section::surroundingRects(const sf::Vector2i& p1, const sf::Vector2i& p2, s
 			if(grid1[(j*gDim.y) + i][2] == 1)
 			{
 				nearTiles.push_back(new Tile(sf::Vector2f(GAME_TILE_DIM * (grid1[(j*gDim.y) + i][1] % gDim.y) + offset.x, GAME_TILE_DIM * (grid1[(j*gDim.y) + i][1] / gDim.y)+ offset.y), 
-								sf::Vector2f(GAME_TILE_DIM, GAME_TILE_DIM), grid1[(j*gDim.y) + i][2], grid1[(j*gDim.y) + i][3], grid1[(j*gDim.y) + i][4]));
+								sf::Vector2f(GAME_TILE_DIM, GAME_TILE_DIM), grid1[(j*gDim.y) + i][0], grid1[(j*gDim.y) + i][2], grid1[(j*gDim.y) + i][3], grid1[(j*gDim.y) + i][4]));
 			}
 		}
 	}
@@ -142,7 +142,7 @@ void Section::checkGrapple(const sf::Vector2i& p1, const sf::Vector2i& p2, std::
 		{
 			if(grid1[(j*gDim.y) + i][2] == 1 || grid1[(j*gDim.y) + i][3] == 1 )
 				nearTiles.push_back(new Tile(sf::Vector2f(GAME_TILE_DIM * (grid1[(j*gDim.y) + i][1] % gDim.y) + offset.x, GAME_TILE_DIM * (grid1[(j*gDim.y) + i][1] / gDim.y)+ offset.y), 
-								sf::Vector2f(GAME_TILE_DIM, GAME_TILE_DIM), grid1[(j*gDim.y) + i][2], grid1[(j*gDim.y) + i][3], grid1[(j*gDim.y) + i][4]));
+								sf::Vector2f(GAME_TILE_DIM, GAME_TILE_DIM), grid1[(j*gDim.y) + i][0], grid1[(j*gDim.y) + i][2], grid1[(j*gDim.y) + i][3], grid1[(j*gDim.y) + i][4]));
 		}
 	}
 }
@@ -158,7 +158,7 @@ void Section::checkInteractable(const sf::Vector2i& p1, const sf::Vector2i& p2, 
 		{
 			if(grid1[(j*gDim.y) + i][4] == 1)
 				nearTiles.push_back(new Tile(sf::Vector2f(GAME_TILE_DIM * (grid1[(j*gDim.y) + i][1] % gDim.y) + offset.x, GAME_TILE_DIM * (grid1[(j*gDim.y) + i][1] / gDim.y)+ offset.y), 
-								sf::Vector2f(GAME_TILE_DIM, GAME_TILE_DIM), grid1[(j*gDim.y) + i][2], grid1[(j*gDim.y) + i][3], grid1[(j*gDim.y) + i][4]));
+								sf::Vector2f(GAME_TILE_DIM, GAME_TILE_DIM), grid1[(j*gDim.y) + i][0], grid1[(j*gDim.y) + i][2], grid1[(j*gDim.y) + i][3], grid1[(j*gDim.y) + i][4]));
 		}
 	}
 }
