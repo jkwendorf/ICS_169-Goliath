@@ -116,6 +116,8 @@ void GameState::viewCheck()
 				- SCREEN_WIDTH + (currentRoom->getroomWidth() % SCREEN_WIDTH);
 		}
 	}
+	
+
 
 
 	if(p.sprite.getPosition().y - (PLAYER_DIM_Y / 2) < 0 + Global::GetInstance().yOffset)
