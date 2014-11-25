@@ -5,7 +5,7 @@
 #include "Enemy.h"
 #include "Section.h"
 #include "Global.h"
-#include "Level.h"
+#include "Room.h"
 #include "CollisionManager.h"
 
 
@@ -25,13 +25,15 @@ public:
 	std::vector<Enemy*> enemyList;
 
 private:
+	int levelNum, maxRooms;
 	InputManager inputManager;
-	Level* level;
+	Room* currentRoom;
 	sf::View view;
 	sf::RenderWindow win;
+	sf::Sprite background;
 	void viewCheck();
 	void playerCheck();
-	void setUpEnemies(std::vector<int[3]>& enemySpots);
+	void changeRoom();
 	CollisionManager* collisionManager;
 };
 

@@ -5,15 +5,16 @@
 #include <fstream>
 #include "TextureManager.h"
 #include <vector>
+#include "Tile.h"
 
 class Section 
 {
 private:
 	int sectionNum, numOfTiles;
-	BaseObject** grid;
-	//std::vector<int*> enemys;
+	int ** grid1;
 	
 	sf::Vector2i gDim, offset;
+	sf::Vector2f startPos;
 	std::string pathToText;
 
 	Section();
@@ -29,15 +30,17 @@ public:
 	int getWidth();
 	int getHeight();
 	int getGridNum();
-	//void getEnemySpots(std::vector<int[3]>& enemySpots);
+	sf::Vector2f getStartPos();
+
 	bool inWindow();
 	bool checkPlayerInGrid(const BaseObject& player);
-	
-	void surroundingRects(const sf::Vector2i& p1, const sf::Vector2i& p2, std::vector<BaseObject*>& nearTiles,
-		bool checkHorz = true, bool checkVert = true);
-	void checkGrapple(const sf::Vector2i& p1, const sf::Vector2i& p2, std::vector<BaseObject*>& nearTiles);
-	void checkInteractable(const sf::Vector2i& p1, const sf::Vector2i& p2, std::vector<BaseObject*>& nearTiles);
 
+	std::vector<sf::Vector2i*> getIntersectPoints(const BaseObject& rect);
+	std::vector<sf::Vector2i*> getIntersectPoints(const sf::Vector2i& p1, const sf::Vector2i& p2);
+	void surroundingRects(const sf::Vector2i& p1, const sf::Vector2i& p2, std::vector<Tile*>& nearTiles,
+		bool checkHorz = true, bool checkVert = true);
+	void checkGrapple(const sf::Vector2i& p1, const sf::Vector2i& p2, std::vector<Tile*>& nearTiles);
+	void checkInteractable(const sf::Vector2i& p1, const sf::Vector2i& p2, std::vector<Tile*>& nearTiles);
 	void update(float deltaTime);
 	void draw(sf::RenderWindow& w);
 	void print();

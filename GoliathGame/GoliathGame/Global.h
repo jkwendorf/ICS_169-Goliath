@@ -12,10 +12,14 @@
 #define FPS 30
 #define	EDITOR_TILE_WIDTH 100
 #define EDITOR_TILE_HEIGHT 100
-#define GAME_TILE_DIM 32
-#define PLAYER_DIM 128
-#define PLAYER_SPRITE_DIM 256
-#define TileSheetRows 5
+#define GAME_TILE_DIM 64
+#define PLAYER_DIM 64
+#define PLAYER_DIM_X 64
+#define PLAYER_DIM_Y PLAYER_DIM_X * 2
+//Player sprite dim never used...
+#define PLAYER_SPRITE_DIM 1000
+
+#define TileSheetRows 4
 #define TileSheetCols 5
 
 //ND: Offset initially set with define. Will figure out method function for proper calculation
@@ -32,17 +36,22 @@ public :
 	}
 
 	std::map<std::string, int> levelSizes;
+	std::map<std::string, int> roomSizes;
+	std::map<std::string, std::string> levelTileSheets;
 
-	void ParseLevelSizes();
+	void ParseLevelSizes(std::map<std::string, int>& mapToUpdate, std::string& fileName);
+	void ParseLevelTileSheets();
 	bool checkPoint(const sf::Vector2i& p, const sf::IntRect& r);
 
 	sf::Vector2f topLeft;
 	int fps;
 	int xOffset;
 	int yOffset;
+	sf::Sprite* currentTileSheet[20];
 
 	Global();
 	~Global();
 
 	void calculateOffset(); //Calculates offset and sets it using current screen size
+	void SetUpTileSheet(sf::Texture* texture);
 };
