@@ -16,6 +16,9 @@ GameState::GameState(void)
 	//p.draw(TextureManager::GetInstance().retrieveTexture("player"), 40, 23);
 	view.reset(sf::FloatRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
 	view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
+
+	enemyList.push_back(new Enemy("test2", 300.0, 300.0));
+
 }
 
 GameState::~GameState(void)
@@ -29,6 +32,8 @@ void GameState::DeleteState()
 	std::cout << "Calling GameState destructor" << std::endl;
 	delete collisionManager;
 	delete level;
+	for(int x =0; x < enemyList.size(); x++)
+		delete enemyList[x];
 }
 
 void GameState::update(float deltaTime)
@@ -52,6 +57,9 @@ void GameState::update(float deltaTime)
 	p.update(deltaTime);
 	playerCheck();
 	//p.sprite.getPosition();
+
+	for(int x = 0; x < enemyList.size(); x++)
+		enemyList[x]->update(deltaTime);
 }
 
 void GameState::draw(sf::RenderWindow& window)
@@ -59,6 +67,8 @@ void GameState::draw(sf::RenderWindow& window)
 	//window.draw(r);
 	level->draw(window);
 	p.draw(window);
+	for(int x = 0; x < enemyList.size(); x++)
+		enemyList[x]->draw(window);
 	window.setView(view);
 }
 

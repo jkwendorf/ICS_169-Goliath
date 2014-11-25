@@ -23,7 +23,16 @@ Enemy::~Enemy()
 
 void Enemy::update(float deltaTime)
 {
+	if(sprite.getPosition().x > 1000 || sprite.getPosition().x < 100)
+		movingRight = !movingRight;
 
+	//More complex movement once the physics manager is good to go
+	//Use this method to detect if the player is near by or is in vision.
+
+	if(movingRight)
+		move(100*deltaTime, 0*deltaTime);
+	else
+		move(-100*deltaTime, 0*deltaTime);
 }
 
 void Enemy::draw(sf::RenderWindow& window)
