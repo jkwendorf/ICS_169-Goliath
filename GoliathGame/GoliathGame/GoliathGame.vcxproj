@@ -93,7 +93,7 @@
     <ClCompile Include="Global.cpp" />
     <ClCompile Include="HookShot.cpp" />
     <ClCompile Include="InputManager.cpp" />
-    <ClCompile Include="Interactable.cpp" />
+    <ClCompile Include="Level.cpp" />
     <ClCompile Include="pugixml.cpp" />
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="main.cpp" />
@@ -106,6 +106,7 @@
     <ClCompile Include="Tile.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BaseGameScreen.h" />
     <ClInclude Include="BaseObject.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="CollisionManager.h" />
@@ -115,7 +116,7 @@
     <ClInclude Include="Global.h" />
     <ClInclude Include="HookShot.h" />
     <ClInclude Include="InputManager.h" />
-    <ClInclude Include="Interactable.h" />
+    <ClInclude Include="Level.h" />
     <ClInclude Include="pugiconfig.hpp" />
     <ClInclude Include="pugixml.hpp" />
     <ClInclude Include="Room.h" />
