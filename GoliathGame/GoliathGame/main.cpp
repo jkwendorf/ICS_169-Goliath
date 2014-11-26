@@ -1,14 +1,10 @@
 #include "StateManager.h"
 #include "Global.h"
-//#include "vld.h"
+#include <vld.h>
 
 int main()
 {
 	Global::GetInstance().ParseLevelXML();
-	//Global::GetInstance().ParseLevelSizes(Global::GetInstance().levelSizes, std::string("media/levels/levelSizes.txt"));
-	//Global::GetInstance().ParseLevelSizes(Global::GetInstance().roomSizes, std::string("media/levels/roomSizes.txt"));
-	//Global::GetInstance().ParseLevelTileSheets();
-	// JW: Our window is set to 200x200, these should be set by global variables
 	Global::GetInstance().calculateOffset();
 	sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Goliath Game");
 	// JW: Setting the framerate to 30, but this should be set by a global variable
@@ -22,7 +18,7 @@ int main()
         sf::Event event;
         while (window.pollEvent(event))
         {
-            if (event.type == sf::Event::Closed || event.key.code == sf::Keyboard::Escape)
+            if (event.type == sf::Event::Closed |u| event.key.code == sf::Keyboard::Escape)
                 window.close();
 
 			sM->handleEvent(event);
