@@ -1,6 +1,7 @@
 #pragma once
 
 #include "BaseObject.h"
+#include "CollisionManager.h"
 
 class Enemy : public BaseObject
 {
@@ -14,7 +15,9 @@ public:
 	void move(float x, float y);
 	void move(sf::Vector2f& distance);
 	void destroy();
+	void enemyUpdate(CollisionManager* cM, float deltaTime, sf::Vector2i lSize);
 
+private:
 	float health;
 	int weapon;
 	float weaponCooldown;

@@ -24,7 +24,7 @@ void Room::LoadRoom(int levelNumber)
 	int totalWidth = 0;
 	for (int i = 0; i < numSect; i++)
 	{
-		std::string temp = "level" + std::to_string(levelNumber) + "room" + std::to_string(roomNum) + "section" + std::to_string(i);
+		std::string temp = "level" + std::to_string(levelNumber) + "room" + std::to_string(roomNum) + "section" + std::to_string(i+1);
 		std::cout << temp << std::endl;
 		if(i==0)
 		{
