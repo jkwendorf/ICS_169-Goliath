@@ -26,6 +26,7 @@ void GameState::DeleteState()
 void GameState::update(float deltaTime)
 {
 	currentScreen->update(deltaTime);
+
 }
 
 void GameState::draw(sf::RenderWindow& window)

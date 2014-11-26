@@ -136,7 +136,7 @@ void Level::update(float deltaTime)
 		}
 
 
-		e->enemyUpdate(collisionManager, deltaTime);
+		e->enemyUpdate(collisionManager, deltaTime, sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()));
 	}
 }
 
