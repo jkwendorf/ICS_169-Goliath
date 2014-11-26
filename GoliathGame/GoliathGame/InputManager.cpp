@@ -41,13 +41,8 @@ void InputManager::update(Player& s, CollisionManager* cM, float deltaTime)
 	utility[0] = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift);
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && !s.isFalling)
 	{
-		jump(s);
+		s.jump();
 	}
-	//if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-	//{
-	//	s.move(0.f, -5.f);
-	//	s.isFalling = false;
-	//}
 	utility[2] = sf::Mouse::isButtonPressed(sf::Mouse::Right) && !utility[2] ? true : false;
 	utility[3] = sf::Mouse::isButtonPressed(sf::Mouse::Left) && !utility[3] ? true : false;
 
@@ -81,10 +76,11 @@ void InputManager::playerMove(Player& player, CollisionManager* cM, float deltaT
 	/* HANDLE VERTICAL MOTION */
 	player.move(moveVertically(player, deltaTime));
 	if(cM->playerCollisionDetection(&player))
+
 		player.move(moveOutOfTileVertically(player, cM->getCollidedTile(player)));
 	// If there isn't anything below the player, fall
-	else if(!player.isFalling)
-		player.isFalling = true;
+	//else if(!player.isFalling)
+		//player.isFalling = true;
 	/* HANDLE LEFT AND RIGHT MOTION*/
 	if(movement[0])
 	{

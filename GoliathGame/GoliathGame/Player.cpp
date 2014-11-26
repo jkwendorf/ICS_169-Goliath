@@ -1,5 +1,7 @@
 #include "Player.h"
 #include "Global.h"
+#include "Utility.h"
+#include "PhysicsManager.h"
 
 Player::Player() 
 	: BaseObject(), grappleInProgress(false), facingRight(true)
@@ -20,6 +22,7 @@ Player::Player()
 		ammo[x] = Projectile(sprite.getPosition(), sf::Vector2f(0.0,0.0));
 		ammo[x].sprite.setColor(sf::Color(x*50 + 150, 0, 0));
 	}
+	grappleDir.y = 100;
 }
 
 Player::~Player() 
@@ -41,6 +44,25 @@ void Player::update(float deltaTime)
 			pow((std::abs(hShot.sprite.getPosition().y - sprite.getPosition().y)),2)) >= 300)
 		{
 			hShot.grappleInProgress = false;
+		}
+
+		// If we're hooked onto something, grapple to point
+		if(hShot.hookedOnSomething)
+		{
+			// If the direction isn't set, set it
+			direction(hShot.grappleLocation, sprite.getPosition(), grappleDir);
+			// Move to the point and do stuff
+			grappleHookMove(*this, deltaTime);
+
+			// If were at the point, end grappling and reset the direction
+			std::cout << distance(hShot.grappleLocation, sprite.getPosition()) << std::endl;
+			if(distance(hShot.grappleLocation, sprite.getPosition()) < 5.f)
+			{
+				hShot.hookedOnSomething = false;
+				hShot.grappleInProgress = false;
+				isFalling = true;
+				grappleDir.y = 100;
+			}
 		}
 	}
 
@@ -127,3 +149,22 @@ void Player::resetPosition(sf::Vector2f& newPos)
 	sprite.setPosition(newPos);
 }
 
+void Player::jump()
+{
+	vel.y = JUMP_SPEED;
+	isFalling = true;
+}
+
+/*void Player::accelerate(MovementDirection dir)
+{
+	if(dir != STILL)
+	{
+		float maxSpeed = SPEED;
+		vel.x = MOVE_ACCEL*dir;
+		vel.x = min(vel.x, maxSpeed);
+	}
+	else
+	{
+
+	}
+}*/
