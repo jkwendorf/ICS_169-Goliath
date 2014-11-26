@@ -19,6 +19,7 @@ GameState::GameState(void)
 	view.reset(sf::FloatRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
 	view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
 	enemyList.push_back(new Enemy("Test", 1000, 700));
+	p.resetPosition(currentRoom->getStartPos());
 }
 
 GameState::~GameState(void)
@@ -37,6 +38,7 @@ void GameState::DeleteState()
 void GameState::update(float deltaTime)
 {
 	viewCheck();
+
 	std::vector<Tile*> nearTiles, nearTiles2, enemyTiles;
 	currentRoom->GetGrapplableTiles(p, nearTiles2);
 	if(currentRoom->NearInteractableTiles(p))

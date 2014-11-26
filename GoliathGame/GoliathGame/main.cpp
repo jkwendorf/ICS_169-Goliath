@@ -4,9 +4,10 @@
 
 int main()
 {
-	Global::GetInstance().ParseLevelSizes(Global::GetInstance().levelSizes, std::string("media/levels/levelSizes.txt"));
-	Global::GetInstance().ParseLevelSizes(Global::GetInstance().roomSizes, std::string("media/levels/roomSizes.txt"));
-	Global::GetInstance().ParseLevelTileSheets();
+	Global::GetInstance().ParseLevelXML();
+	//Global::GetInstance().ParseLevelSizes(Global::GetInstance().levelSizes, std::string("media/levels/levelSizes.txt"));
+	//Global::GetInstance().ParseLevelSizes(Global::GetInstance().roomSizes, std::string("media/levels/roomSizes.txt"));
+	//Global::GetInstance().ParseLevelTileSheets();
 	// JW: Our window is set to 200x200, these should be set by global variables
 	Global::GetInstance().calculateOffset();
 	sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Goliath Game");

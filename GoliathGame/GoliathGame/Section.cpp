@@ -219,7 +219,6 @@ void Section::LoadTileMap()
 	gDim = sf::Vector2i(atoi(token[0].c_str()), atoi(token[1].c_str()));
 
 	numOfTiles = atoi(token[2].c_str());
-	sf::Texture* texture = TextureManager::GetInstance().retrieveTexture(token[3]);
 	//std::cout << "Token[3] " << token[3] << std::endl; 
 	
 	try
