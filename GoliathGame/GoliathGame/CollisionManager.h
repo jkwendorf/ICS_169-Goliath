@@ -4,19 +4,19 @@
 #include "Player.h"
 #include "Tile.h"
 
+
 class CollisionManager
 {
 public:
 	CollisionManager();
 	~CollisionManager();
-	bool playerCollisionDetection(Player p);
-	bool enemyCollision();
+	bool playerCollisionDetection(BaseObject* p);
 	
 	void setNearByTiles(std::vector<Tile*> tiles);
 	void setGrapplableTiles(std::vector<Tile*> tiles);
 	bool hookCollisionDetection(HookShot hs);
 	
-	Tile* getCollidedTile(Player p);
+	Tile* getCollidedTile(BaseObject p);
 
 private:
 	std::vector<Tile*> tileList;

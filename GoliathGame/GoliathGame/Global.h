@@ -1,5 +1,6 @@
 #pragma once
 
+#include "pugixml.hpp"
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -37,8 +38,9 @@ public :
 
 	std::map<std::string, int> levelSizes;
 	std::map<std::string, int> roomSizes;
-	std::map<std::string, std::string> levelTileSheets;
+	std::map<std::string, std::string> roomTileSheets;
 
+	void ParseLevelXML();
 	void ParseLevelSizes(std::map<std::string, int>& mapToUpdate, std::string& fileName);
 	void ParseLevelTileSheets();
 	bool checkPoint(const sf::Vector2i& p, const sf::IntRect& r);

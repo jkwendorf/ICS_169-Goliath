@@ -13,6 +13,38 @@ Global::~Global()
 	//delete[] currentTileSheet;
 }
 
+void Global::ParseLevelXML() {
+	pugi::xml_document doc;
+
+	pugi::xml_parse_result result = doc.load_file("Levels.xml");
+	std::cout << result.description() << std::endl;
+
+	pugi::xml_node gameNode = doc.child("Game");
+
+	for(pugi::xml_node level = gameNode.child("Level"); level; level = level.next_sibling("Level")) {
+		std::cout << "Level Number: " << level.attribute("number").value() << std::endl;
+		//std::string str = "Level ";st
+		std::string levelNumber = level.attribute("number").as_string();
+		std::string str = "Level " + levelNumber;
+		std::string tilesheetName = level.attribute("tilesheet").as_string();
+		//str += levelNumber;
+		
+		int levelSize = level.attribute("size").as_int();
+		levelSizes[str] = levelSize;
+		//std::cout << str << std::endl;
+		for (pugi::xml_node room = level.child("Room"); room; room = room.next_sibling("Room")) {
+			std::cout << "Room Number: " << room.attribute("number").value() << std::endl;
+			std::string roomNumber = room.attribute("number").as_string();
+			std::string str2 = "Room " + roomNumber;
+			int roomSize = room.attribute("size").as_int();
+			roomSizes[str2] = roomSize;
+			roomTileSheets[str2] = tilesheetName;
+			//std::cout << std::endl;
+		}
+	}
+
+}
+
 //Call this before handling levels.
 void Global::ParseLevelSizes(std::map<std::string, int>& mapToUpdate, std::string& fileName)
 {
@@ -38,6 +70,7 @@ void Global::ParseLevelSizes(std::map<std::string, int>& mapToUpdate, std::strin
 		std::string levelName = str.substr(0, pos);
 		int size = atoi(str.substr(pos+2, str.length() - pos).c_str());
 
+		std::cout << levelName << std::endl;
 		//Insert it into the map.
 		mapToUpdate[levelName] = size;
 	}
@@ -70,7 +103,7 @@ void Global::ParseLevelTileSheets()
 		std::string tileSheet = str.substr(pos+2, str.length() - pos).c_str();
 
 		//Insert it into the map.
-		levelTileSheets[levelName] = tileSheet;
+		roomTileSheets[levelName] = tileSheet;
 	}
 
 	ifs.close();

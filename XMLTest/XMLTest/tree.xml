@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Parent name="ChildOfRoot" size="4">
+  <Child attribute="Yes">Herp</Child>
+  <Child>Derp</Child>
+  <Child attribute="Yes">Lerp</Child>
+  <Child>Ferp</Child>
+</Parent>
+<?include somedata?>

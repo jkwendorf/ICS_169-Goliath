@@ -1,48 +1,35 @@
 #pragma once
 
-#include "Section.h"
-#include "Player.h"
+#include "CollisionManager.h"
+#include "PhysicsManager.h"
+#include "InputManager.h"
 #include "Global.h"
+#include "BaseGameScreen.h"
+#include "Room.h"
+#include "Enemy.h"
 
-class Level
+class Level : public BaseGameScreen
 {
 private:
-	Section** sectList;
-	int numSect, levelNum, levelWidth;
-	sf::Vector2i firstGrid;
-	sf::Vector2i firstGridDim;
-	sf::Vector2i secGrid;
-	sf::Vector2i secGridDim;
+	int levelNum, maxRooms;
+	Player p;
+	std::vector<Enemy*> enemyList;
+	Room* currentRoom;
+	sf::View view;
+	sf::RenderWindow win;
+	sf::Sprite background;
 
-	Level();
-	void LoadLevel();
-	bool CheckSectionOnScreen(int sectionNum);
-	std::vector<BaseObject*> checkBotRight(int i, sf::IntRect& rect);
-	std::vector<sf::Vector2i*> inSameGrid(const sf::Vector2i& p1, const sf::Vector2i& p2);
-	std::vector<sf::Vector2i*> inDifferentGrid(const sf::Vector2i& p1, const sf::Vector2i& p2, const sf::Vector2i& p3, const sf::Vector2i& p4);
-	void checkUpperLeftSameGrid(int currentGrid, sf::IntRect& rect, const sf::Vector2i& topLeft, 
-		const sf::Vector2i& botRight, std::vector<BaseObject*>& nearTiles, bool checkBoxOnly, bool grapple = false);
-	void checkLowerRightNextGrid(int currentGrid, sf::IntRect& rect, const sf::Vector2i& topLeft, 
-		const sf::Vector2i& botRight, std::vector<BaseObject*>& nearTiles, bool checkBoxOnly, bool grapple = false);
-	void checkLowerRightLastCol(int currentGrid, sf::IntRect& rect, const sf::Vector2i& topLeft, const sf::Vector2i& botRight,
-		std::vector<BaseObject*>& nearTiles);
-	void checkUpperLeftFirstCol(int currentGrid, sf::IntRect& rect, const sf::Vector2i& topLeft, const sf::Vector2i& botRight,
-		std::vector<BaseObject*>& nearTiles);
-	void GetNearTiles(sf::IntRect& player, std::vector<BaseObject*>& nearTiles, bool checkBoxOnly = false, bool grapple = false);
+	CollisionManager* collisionManager;
+	InputManager* inputManager;
 
+	void viewCheck();
+	void playerCheck();
+	void changeRoom();
 public:
-	//Player player;
+	Level();
 	Level(int levelNumber);
-	~Level();
-
-	int getLevelNumber();
-	
-	void GetCollidableTiles(Player& player, std::vector<BaseObject*>& nearTiles);
-	bool NearInteractableTiles(Player& player, std::vector<BaseObject*>& nearTiles);
-	void GetGrapplableTiles(Player& player, std::vector<BaseObject*>& nearTiles);
-
+	~Level(void);
 	void update(float deltaTime);
-	void draw(sf::RenderWindow& w);
-	void print();
-	int getLevelWidth();
+	void draw(sf::RenderWindow& window);
+
 };

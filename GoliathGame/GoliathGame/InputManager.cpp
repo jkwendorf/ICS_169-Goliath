@@ -75,8 +75,8 @@ void InputManager::playerMove(Player& player, CollisionManager* cM, float deltaT
 
 	/* HANDLE VERTICAL MOTION */
 	player.move(moveVertically(player, deltaTime));
-	// If I collide with something, move out of it
-	if(cM->playerCollisionDetection(player))
+	if(cM->playerCollisionDetection(&player))
+
 		player.move(moveOutOfTileVertically(player, cM->getCollidedTile(player)));
 	// If there isn't anything below the player, fall
 	//else if(!player.isFalling)
@@ -86,7 +86,7 @@ void InputManager::playerMove(Player& player, CollisionManager* cM, float deltaT
 	{
 		player.move(moveHorizontally(player, LEFT, utility[0], deltaTime));
 		
-		if(cM->playerCollisionDetection(player))
+		if(cM->playerCollisionDetection(&player))
 			player.move(moveOutOfTileHorizontally(player, cM->getCollidedTile(player)));
 		
 		player.facingRight = false;
@@ -95,7 +95,7 @@ void InputManager::playerMove(Player& player, CollisionManager* cM, float deltaT
 	{
 		player.move(moveHorizontally(player, RIGHT, utility[0], deltaTime));
 
-		if(cM->playerCollisionDetection(player))
+		if(cM->playerCollisionDetection(&player))
 			player.move(moveOutOfTileHorizontally(player, cM->getCollidedTile(player)));
 
 		player.facingRight = true;

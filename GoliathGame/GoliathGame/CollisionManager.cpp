@@ -20,21 +20,22 @@ bool CollisionManager::hookCollisionDetection(HookShot hs)
 	return false;
 }
 
-bool CollisionManager::playerCollisionDetection(Player p)
+bool CollisionManager::playerCollisionDetection(BaseObject* p)
 {
 	for(Tile* b : tileList)
 	{
 		//std::cout << "(" << b->sprite.getGlobalBounds().left << "," << b->sprite.getGlobalBounds().top << ")";
 		//std::cout << "(" << p.sprite.getGlobalBounds().left << "," << p.sprite.getGlobalBounds().top << ")" << std::endl;
 		//b->sprite.setColor(sf::Color::Red);
-		if(b->intersects(p.sprite.getGlobalBounds()))
+		if(b->intersects(p->sprite.getGlobalBounds()))
 			return true;
 	}
 	//std::cout << "\n\n\n\n";
 	return false;
 }
 
-Tile* CollisionManager::getCollidedTile(Player p)
+
+Tile* CollisionManager::getCollidedTile(BaseObject p)
 {
 	for(Tile* b : tileList)
 		if(b->intersects(p.sprite.getGlobalBounds()))
