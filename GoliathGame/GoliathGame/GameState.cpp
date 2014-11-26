@@ -70,8 +70,8 @@ void GameState::update(float deltaTime)
 			collisionManager->setNearByTiles(enemyTiles);
 		}
 
-
-		e->enemyUpdate(collisionManager, deltaTime);
+		sf::Vector2i lSize(currentRoom->getroomWidth(), currentRoom->getroomHeight());
+		e->enemyUpdate(collisionManager, deltaTime, lSize);
 	}
 	//p.sprite.getPosition();
 }

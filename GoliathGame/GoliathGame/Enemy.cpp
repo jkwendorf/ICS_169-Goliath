@@ -47,10 +47,8 @@ void Enemy::destroy()
 	//allows the enemy to be taken off the screen
 }
 
-void Enemy::enemyUpdate(CollisionManager* cM, float deltaTime)
+void Enemy::enemyUpdate(CollisionManager* cM, float deltaTime, sf::Vector2i lSize)
 {
-	//CAN'T GET COLLISION OF TILES WITH ENEMY 
-
 	move(moveVertically(*this, deltaTime));
 	if(cM->playerCollisionDetection(this))
 	{
@@ -69,6 +67,11 @@ void Enemy::enemyUpdate(CollisionManager* cM, float deltaTime)
 			move(moveOutOfTileHorizontally(*this, cM->getCollidedTile(*this)));
 			movingRight = false;
 		}
+		else if ((sprite.getPosition().x + (PLAYER_DIM_X / 2)) > lSize.x)
+		{
+			sprite.setPosition((lSize.x - (PLAYER_DIM_X / 2)), sprite.getPosition().y);
+			movingRight = false;
+		}
 	}
 	else
 	{
@@ -76,6 +79,11 @@ void Enemy::enemyUpdate(CollisionManager* cM, float deltaTime)
 		if(cM->playerCollisionDetection(this))
 		{
 			move(moveOutOfTileHorizontally(*this, cM->getCollidedTile(*this)));
+			movingRight = true;
+		}
+		else if ((sprite.getPosition().x - (PLAYER_DIM_X / 2)) < 0)
+		{
+			sprite.setPosition((PLAYER_DIM_X / 2), sprite.getPosition().y);
 			movingRight = true;
 		}
 	}

@@ -15,7 +15,7 @@ public:
 	void move(float x, float y);
 	void move(sf::Vector2f& distance);
 	void destroy();
-	void enemyUpdate(CollisionManager* cM, float deltaTime);
+	void enemyUpdate(CollisionManager* cM, float deltaTime, sf::Vector2i lSize);
 
 private:
 	float health;
