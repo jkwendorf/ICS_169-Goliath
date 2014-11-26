@@ -5,12 +5,16 @@
 #include "BaseObject.h"
 #include "CollisionManager.h"
 #include "Tile.h"
+#include "Player.h"
+#include "HookShot.h"
 
 #define TERMINAL_VELOCITY 1000
 #define JUMP_SPEED -450
 #define GRAVITY 500
 #define SPEED 100
+#define MOVE_ACCEL 50
 #define BOOST 4
+#define GRAPPLE_SPEED 550
 
 enum MovementDirection
 {
@@ -91,8 +95,7 @@ inline sf::Vector2f moveOutOfTileHorizontally(BaseObject& p, Tile* t)
 	return newPos;
 }
 
-inline void jump(BaseObject& b)
+inline void grappleHookMove(Player& p, float& deltaTime)
 {
-	b.vel.y = JUMP_SPEED;
-	b.isFalling = true;
+	p.move(p.grappleDir*(deltaTime*GRAPPLE_SPEED));
 }
