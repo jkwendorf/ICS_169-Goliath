@@ -18,6 +18,7 @@ GameState::GameState(void)
 	background.setPosition(0,-100);
 	view.reset(sf::FloatRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
 	view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
+	enemyList.push_back(new Enemy("Test", 1000, 700));
 }
 
 GameState::~GameState(void)
@@ -36,7 +37,7 @@ void GameState::DeleteState()
 void GameState::update(float deltaTime)
 {
 	viewCheck();
-	std::vector<Tile*> nearTiles, nearTiles2;
+	std::vector<Tile*> nearTiles, nearTiles2, enemyTiles;
 	currentRoom->GetGrapplableTiles(p, nearTiles2);
 	if(currentRoom->NearInteractableTiles(p))
 	{
@@ -49,6 +50,7 @@ void GameState::update(float deltaTime)
 	std::cout << p.sprite.getPosition().x << ", " << p.sprite.getPosition().y <<  std::endl;
 
 	currentRoom->GetCollidableTiles(p, sf::Vector2i(PLAYER_DIM_X, PLAYER_DIM_Y), nearTiles);
+
 	collisionManager->setNearByTiles(nearTiles);
 	collisionManager->setGrapplableTiles(nearTiles2);
 	p.hShot.hookedOnSomething = collisionManager->hookCollisionDetection(p.hShot);
@@ -57,6 +59,18 @@ void GameState::update(float deltaTime)
 	//p.isFalling = !collisionManager->playerCollisionDetection(p);
 	p.update(deltaTime);
 	playerCheck();
+
+	for (Enemy* e : enemyList)
+	{
+		currentRoom->GetCollidableTiles(*e, sf::Vector2i(PLAYER_DIM_X, PLAYER_DIM_Y), enemyTiles);
+		if(enemyTiles.size() > 0)
+		{
+			collisionManager->setNearByTiles(enemyTiles);
+		}
+
+
+		e->enemyUpdate(collisionManager, deltaTime);
+	}
 	//p.sprite.getPosition();
 }
 
@@ -66,6 +80,10 @@ void GameState::draw(sf::RenderWindow& window)
 	window.draw(background);
 	currentRoom->draw(window);
 	p.draw(window);
+	for(Enemy* e : enemyList)
+	{
+		e->draw(window);
+	}
 	window.setView(view);
 }
 
@@ -117,8 +135,6 @@ void GameState::viewCheck()
 		}
 	}
 	
-
-
 
 	if(p.sprite.getPosition().y - (PLAYER_DIM_Y / 2) < 0 + Global::GetInstance().yOffset)
 	{
