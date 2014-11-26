@@ -1,6 +1,6 @@
 #include "StateManager.h"
 #include "Global.h"
-#include <vld.h>
+//#include <vld.h>
 
 int main()
 {
@@ -18,7 +18,7 @@ int main()
         sf::Event event;
         while (window.pollEvent(event))
         {
-            if (event.type == sf::Event::Closed |u| event.key.code == sf::Keyboard::Escape)
+            if (event.type == sf::Event::Closed || event.key.code == sf::Keyboard::Escape)
                 window.close();
 
 			sM->handleEvent(event);
