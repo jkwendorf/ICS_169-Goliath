@@ -7,6 +7,7 @@
 #include "Tile.h"
 #include "Player.h"
 #include "HookShot.h"
+#include "Utility.h"
 
 #define TERMINAL_VELOCITY 1000
 #define JUMP_SPEED -450
@@ -97,5 +98,13 @@ inline sf::Vector2f moveOutOfTileHorizontally(BaseObject& p, Tile* t)
 
 inline void grappleHookMove(Player& p, float& deltaTime)
 {
-	p.move(p.grappleDir*(deltaTime*GRAPPLE_SPEED));
+	sf::Vector2f moveAmount(p.grappleDir*(deltaTime*GRAPPLE_SPEED));
+	
+	float length, maxDistance = distance(p.hShot.grappleLocation, p.sprite.getPosition());
+	norm(moveAmount, length);
+
+	if(min(length, maxDistance) != length)
+		moveAmount = p.hShot.grappleLocation - p.sprite.getPosition();
+
+	p.move(moveAmount);
 }

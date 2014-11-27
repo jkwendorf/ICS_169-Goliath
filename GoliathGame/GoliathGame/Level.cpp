@@ -114,7 +114,7 @@ void Level::update(float deltaTime)
 	//{
 		//nearTiles2.at(i)->print();
 	//}
-	std::cout << p.sprite.getPosition().x << ", " << p.sprite.getPosition().y <<  std::endl;
+//std::cout << p.sprite.getPosition().x << ", " << p.sprite.getPosition().y <<  std::endl;
 
 	currentRoom->GetCollidableTiles(p, sf::Vector2i(PLAYER_DIM_X, PLAYER_DIM_Y), nearTiles);
 

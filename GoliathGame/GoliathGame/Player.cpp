@@ -1,6 +1,5 @@
 #include "Player.h"
 #include "Global.h"
-#include "Utility.h"
 #include "PhysicsManager.h"
 
 Player::Player() 
@@ -55,7 +54,6 @@ void Player::update(float deltaTime)
 			grappleHookMove(*this, deltaTime);
 
 			// If were at the point, end grappling and reset the direction
-			std::cout << distance(hShot.grappleLocation, sprite.getPosition()) << std::endl;
 			if(distance(hShot.grappleLocation, sprite.getPosition()) < 5.f)
 			{
 				hShot.hookedOnSomething = false;
