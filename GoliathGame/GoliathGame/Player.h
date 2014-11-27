@@ -35,6 +35,7 @@ public:
 	void grapple();
 	void resetPosition(sf::Vector2f& newPos);
 	void draw(sf::RenderWindow& window);
+	void playerUpdate(sf::View* view, sf::Vector2i roomSize, float deltaTime);
 
 	// VARIABLES
 	float stamina;
@@ -47,4 +48,7 @@ public:
 
 	bool grappleInProgress, facingRight;
 	Projectile ammo[3];
+
+private:
+	void viewCheck(sf::View* view, int width, int height);
 };

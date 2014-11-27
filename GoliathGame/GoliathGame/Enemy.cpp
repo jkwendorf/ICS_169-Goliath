@@ -7,7 +7,8 @@ Enemy::Enemy() : BaseObject()
 }
 
 //Probably still need to work on some more overloads
-Enemy::Enemy(sf::String body, float x, float y)
+Enemy::Enemy(sf::String body, float x, float y) :
+	BaseObject()
 {
 	sprite.setTexture(*TextureManager::GetInstance().retrieveTexture(body));
 	sprite.setPosition(x, y);
@@ -29,7 +30,13 @@ void Enemy::update(float deltaTime)
 
 void Enemy::draw(sf::RenderWindow& window)
 {
-	BaseObject::draw(window);
+	//UNCOMMENT TO TEST ENEMY APPEARENCE
+	if(isInScreen())
+	{
+		BaseObject::draw(window);
+	//	std::cout << " is in screen" << std::endl;
+	}
+	//else std::cout << " not in screen" << std::endl;
 }
 
 void Enemy::move(float x, float y)
@@ -47,7 +54,7 @@ void Enemy::destroy()
 	//allows the enemy to be taken off the screen
 }
 
-void Enemy::enemyUpdate(CollisionManager* cM, float deltaTime, sf::Vector2i lSize)
+void Enemy::enemyUpdate(CollisionManager* cM, float deltaTime, sf::Vector2i roomSize)
 {
 	move(moveVertically(*this, deltaTime));
 	if(cM->playerCollisionDetection(this))
@@ -67,9 +74,9 @@ void Enemy::enemyUpdate(CollisionManager* cM, float deltaTime, sf::Vector2i lSiz
 			move(moveOutOfTileHorizontally(*this, cM->getCollidedTile(*this)));
 			movingRight = false;
 		}
-		else if ((sprite.getPosition().x + (PLAYER_DIM_X / 2)) > lSize.x)
+		else if ((sprite.getPosition().x + (PLAYER_DIM_X / 2)) > roomSize.x)
 		{
-			sprite.setPosition((lSize.x - (PLAYER_DIM_X / 2)), sprite.getPosition().y);
+			sprite.setPosition((roomSize.x - (PLAYER_DIM_X / 2)), sprite.getPosition().y);
 			movingRight = false;
 		}
 	}
@@ -87,4 +94,18 @@ void Enemy::enemyUpdate(CollisionManager* cM, float deltaTime, sf::Vector2i lSiz
 			movingRight = true;
 		}
 	}
+
+	update(deltaTime);
+}
+
+bool Enemy::isInScreen()
+{
+	if(sprite.getPosition().x > Global::GetInstance().topLeft.x - Global::GetInstance().xOffset &&
+		sprite.getPosition().x < Global::GetInstance().topLeft.x + SCREEN_WIDTH +  Global::GetInstance().xOffset && 
+		sprite.getPosition().y > Global::GetInstance().topLeft.y - Global::GetInstance().yOffset &&
+		sprite.getPosition().y < Global::GetInstance().topLeft.y + SCREEN_HEIGHT + Global::GetInstance().yOffset)
+	{
+		return true;
+	}
+	else return false;
 }

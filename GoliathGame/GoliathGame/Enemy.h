@@ -15,11 +15,12 @@ public:
 	void move(float x, float y);
 	void move(sf::Vector2f& distance);
 	void destroy();
-	void enemyUpdate(CollisionManager* cM, float deltaTime, sf::Vector2i lSize);
+	void enemyUpdate(CollisionManager* cM, float deltaTime, sf::Vector2i roomSize);
 
 private:
 	float health;
 	int weapon;
 	float weaponCooldown;
 	bool movingRight;
+	bool isInScreen();
 };
