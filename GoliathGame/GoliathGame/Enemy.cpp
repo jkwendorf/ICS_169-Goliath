@@ -54,7 +54,24 @@ void Enemy::destroy()
 	//allows the enemy to be taken off the screen
 }
 
-void Enemy::enemyUpdate(CollisionManager* cM, float deltaTime, sf::Vector2i roomSize)
+void Enemy::enemyUpdate(CollisionManager* cM, float deltaTime, sf::Vector2i roomSize, sf::Vector2f pPosition)
+{
+	//if enemy isn't in range of player, handle normally
+	if(inRange(pPosition))
+	{
+
+	}
+	else
+	{
+		normalMove(cM, deltaTime);
+	}
+
+	enemyCheck(roomSize);
+
+	update(deltaTime);
+}
+
+void Enemy::normalMove(CollisionManager* cM, float deltaTime)
 {
 	move(moveVertically(*this, deltaTime));
 	if(cM->playerCollisionDetection(this))
@@ -74,11 +91,7 @@ void Enemy::enemyUpdate(CollisionManager* cM, float deltaTime, sf::Vector2i room
 			move(moveOutOfTileHorizontally(*this, cM->getCollidedTile(*this)));
 			movingRight = false;
 		}
-		else if ((sprite.getPosition().x + (PLAYER_DIM_X / 2)) > roomSize.x)
-		{
-			sprite.setPosition((roomSize.x - (PLAYER_DIM_X / 2)), sprite.getPosition().y);
-			movingRight = false;
-		}
+
 	}
 	else
 	{
@@ -88,14 +101,31 @@ void Enemy::enemyUpdate(CollisionManager* cM, float deltaTime, sf::Vector2i room
 			move(moveOutOfTileHorizontally(*this, cM->getCollidedTile(*this)));
 			movingRight = true;
 		}
-		else if ((sprite.getPosition().x - (PLAYER_DIM_X / 2)) < 0)
-		{
-			sprite.setPosition((PLAYER_DIM_X / 2), sprite.getPosition().y);
-			movingRight = true;
-		}
+	}
+}
+
+bool Enemy::inRange(sf::Vector2f pPosition)
+{
+	if((sprite.getPosition().x + 400) < pPosition.x || (sprite.getPosition().y + 400) > pPosition.y)
+	{
+		return true;
+	}
+	else return false;
+}
+
+void Enemy::enemyCheck(sf::Vector2i roomSize)
+{
+	if ((sprite.getPosition().x - (PLAYER_DIM_X / 2)) < 0)
+	{
+		sprite.setPosition((PLAYER_DIM_X / 2), sprite.getPosition().y);
+		movingRight = true;
+	}
+	else if ((sprite.getPosition().x + (PLAYER_DIM_X / 2)) > roomSize.x)
+	{
+		sprite.setPosition((roomSize.x - (PLAYER_DIM_X / 2)), sprite.getPosition().y);
+		movingRight = false;
 	}
 
-	update(deltaTime);
 }
 
 bool Enemy::isInScreen()

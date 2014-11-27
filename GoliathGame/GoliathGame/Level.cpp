@@ -65,7 +65,7 @@ void Level::update(float deltaTime)
 		{
 			collisionManager->setNearByTiles(enemyTiles);
 		}
-		e->enemyUpdate(collisionManager, deltaTime, sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()));
+		e->enemyUpdate(collisionManager, deltaTime, sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()), p.sprite.getPosition());
 	}
 }
 
