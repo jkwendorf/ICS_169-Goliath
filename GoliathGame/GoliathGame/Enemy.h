@@ -26,5 +26,8 @@ private:
 	void normalMove(CollisionManager* cm, float deltaTime);
 	void enemyCheck(sf::Vector2i roomSize);
 	void moveToPlayer(CollisionManager* cm, sf::Vector2f pPosition, float deltaTime);
+	void gravity(CollisionManager* cM, float deltaTime);
 	bool inRange(sf::Vector2f pPosition);
+	bool destroyed; //NEED TO FIGURE OUT ENEMY DESTRUCTION
+	bool playerOnLeft(sf::Vector2f pPosition);
 };

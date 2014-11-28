@@ -56,10 +56,15 @@ void Enemy::destroy()
 
 void Enemy::enemyUpdate(CollisionManager* cM, float deltaTime, sf::Vector2i roomSize, sf::Vector2f pPosition)
 {
+	gravity(cM, deltaTime);
 	//if enemy isn't in range of player, handle normally
-	if(inRange(pPosition))
+	if((movingRight && sprite.getPosition().x - pPosition.x > 0) || (!movingRight && sprite.getPosition().x - pPosition.x < 0))
 	{
-
+		if(inRange(pPosition))
+		{
+			moveToPlayer(cM, pPosition, deltaTime);
+		}
+		else normalMove(cM, deltaTime);
 	}
 	else
 	{
@@ -71,7 +76,7 @@ void Enemy::enemyUpdate(CollisionManager* cM, float deltaTime, sf::Vector2i room
 	update(deltaTime);
 }
 
-void Enemy::normalMove(CollisionManager* cM, float deltaTime)
+void Enemy::gravity(CollisionManager* cM, float deltaTime)
 {
 	move(moveVertically(*this, deltaTime));
 	if(cM->playerCollisionDetection(this))
@@ -82,7 +87,10 @@ void Enemy::normalMove(CollisionManager* cM, float deltaTime)
 	{
 		isFalling = true;
 	}
+}
 
+void Enemy::normalMove(CollisionManager* cM, float deltaTime)
+{
 	if(movingRight)
 	{
 		move(moveHorizontally(*this, RIGHT, false, deltaTime)); 
@@ -104,9 +112,56 @@ void Enemy::normalMove(CollisionManager* cM, float deltaTime)
 	}
 }
 
+void Enemy::moveToPlayer(CollisionManager* cM, sf::Vector2f pPosition, float deltaTime)
+{
+	//move towards player
+
+
+	//A* Search
+	//	Heuristic is distance
+	//	Restrictions are tiles
+	//	Figure out how to convert screen Position to distance
+	//	Figure out how to check screen position in terms of tiles
+	//	Store bunch of coordinates
+	//	if Player position is not that
+	//		keep moving
+	//		once you reach that next destination
+	//		keep on going
+	if(sprite.getPosition().x != pPosition.x)
+	{
+		if(playerOnLeft(pPosition))
+		{
+			movingRight = false;
+			move(moveHorizontally(*this, LEFT, false, deltaTime)); 
+		}
+		else 
+		{
+			movingRight = true;
+			move(moveHorizontally(*this, RIGHT, false, deltaTime)); 
+		}
+	}
+	//if you come across a wall, jump
+	if(cM->playerCollisionDetection(this))
+	{
+		move(moveOutOfTileHorizontally(*this, cM->getCollidedTile(*this)));
+		vel.y = JUMP_SPEED;
+		isFalling = true;
+	}
+	
+}
+
+bool Enemy::playerOnLeft(sf::Vector2f pPosition)
+{
+	if(sprite.getPosition().x > pPosition.x)
+	{
+		return true;
+	}
+	else return false;
+}
+
 bool Enemy::inRange(sf::Vector2f pPosition)
 {
-	if((sprite.getPosition().x + 400) < pPosition.x || (sprite.getPosition().y + 400) > pPosition.y)
+	if((sprite.getPosition().x + (GAME_TILE_DIM * 6)) > pPosition.x && (sprite.getPosition().x - (GAME_TILE_DIM * 6)) < pPosition.x)
 	{
 		return true;
 	}
@@ -120,12 +175,11 @@ void Enemy::enemyCheck(sf::Vector2i roomSize)
 		sprite.setPosition((PLAYER_DIM_X / 2), sprite.getPosition().y);
 		movingRight = true;
 	}
-	else if ((sprite.getPosition().x + (PLAYER_DIM_X / 2)) > roomSize.x)
+	else if ((sprite.getPosition().x + (PLAYER_DIM_X / 2)) > roomSize.x - 1)
 	{
-		sprite.setPosition((roomSize.x - (PLAYER_DIM_X / 2)), sprite.getPosition().y);
+		sprite.setPosition((roomSize.x - 1 - (PLAYER_DIM_X / 2)), sprite.getPosition().y);
 		movingRight = false;
 	}
-
 }
 
 bool Enemy::isInScreen()
