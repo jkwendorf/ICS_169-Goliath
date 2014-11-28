@@ -11,10 +11,12 @@ int main()
 	window.setFramerateLimit(FPS);
 	StateManager* sM = new StateManager();
 	
-
+	float maxTime = 1.f/FPS;
 	sf::Clock deltaTimer;
     while (window.isOpen())
     {
+		float deltaTime = deltaTimer.restart().asSeconds();
+
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -23,7 +25,9 @@ int main()
 
 			sM->handleEvent(event);
         }
-		sM->update(deltaTimer.restart().asSeconds());
+		deltaTime = min(deltaTime, maxTime);
+		std::cout<< deltaTime << std::endl;
+		sM->update(deltaTime);
 
         window.clear();
 		sM->draw(window);
