@@ -15,7 +15,7 @@ public:
 	void move(float x, float y);
 	void move(sf::Vector2f& distance);
 	void destroy();
-	void enemyUpdate(CollisionManager* cM, float deltaTime, sf::Vector2i roomSize);
+	void enemyUpdate(CollisionManager* cM, float deltaTime, sf::Vector2i roomSize, sf::Vector2f pPosition);
 
 private:
 	float health;
@@ -23,4 +23,11 @@ private:
 	float weaponCooldown;
 	bool movingRight;
 	bool isInScreen();
+	void normalMove(CollisionManager* cm, float deltaTime);
+	void enemyCheck(sf::Vector2i roomSize);
+	void moveToPlayer(CollisionManager* cm, sf::Vector2f pPosition, float deltaTime);
+	void gravity(CollisionManager* cM, float deltaTime);
+	bool inRange(sf::Vector2f pPosition);
+	bool destroyed; //NEED TO FIGURE OUT ENEMY DESTRUCTION
+	bool playerOnLeft(sf::Vector2f pPosition);
 };

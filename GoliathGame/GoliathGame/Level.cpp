@@ -13,7 +13,7 @@ Level::Level(int levelNumber)
 	view.reset(sf::FloatRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
 	view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
 	p.resetPosition(currentRoom->getStartPos());
-	enemyList.push_back(new Enemy("Test", 700, 1000));
+	enemyList.push_back(new Enemy("Test", 1000, 1000));
 	enemyList.push_back(new Enemy("Test", 700, 400));
 }
 
@@ -65,7 +65,7 @@ void Level::update(float deltaTime)
 		{
 			collisionManager->setNearByTiles(enemyTiles);
 		}
-		e->enemyUpdate(collisionManager, deltaTime, sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()));
+		e->enemyUpdate(collisionManager, deltaTime, sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()), p.sprite.getPosition());
 	}
 }
 
