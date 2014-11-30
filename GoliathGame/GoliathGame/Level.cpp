@@ -22,6 +22,10 @@ Level::~Level(void)
 	delete currentRoom;
 	delete inputManager;
 	delete collisionManager;
+	for(Enemy* e : enemyList)
+	{
+		delete e;
+	}
 }
 
 void Level::changeRoom()

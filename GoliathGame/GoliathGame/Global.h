@@ -17,6 +17,8 @@
 #define PLAYER_DIM 64
 #define PLAYER_DIM_X 64
 #define PLAYER_DIM_Y PLAYER_DIM_X * 2
+#define ENEMY_ATTACK_LOW_THRESHOLD 100
+#define ENEMY_ATTACK_HIGH_THRESHOLD 400
 //Player sprite dim never used...
 #define PLAYER_SPRITE_DIM 1000
 
