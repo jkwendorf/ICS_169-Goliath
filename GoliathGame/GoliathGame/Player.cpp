@@ -74,6 +74,7 @@ void Player::update(float deltaTime)
 
 void Player::attack()
 {
+
 	if(weapon == CROSSBOW)
 	{
 		float xSpeed;
@@ -87,7 +88,7 @@ void Player::attack()
 				
 				ammo[x].setVelocity(sf::Vector2f(xSpeed,0.0));
 				ammo[x].moving = true;
-				break;
+				//break;
 			}
 		/*
 		if(ammo[0].velocity.x == 0)

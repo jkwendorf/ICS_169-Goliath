@@ -3,6 +3,7 @@
 #include "Section.h"
 #include "Player.h"
 #include "Global.h"
+#include "Enemy.h"
 
 class Room
 {
@@ -13,7 +14,7 @@ private:
 	sf::Vector2f startPos;
 
 	Room();
-	void LoadRoom(int levelNumber);
+	void LoadRoom(int levelNumber, std::vector<Enemy*> &enemyList);
 	bool CheckSectionOnScreen(int sectionNum);
 	std::vector<Tile*> checkBotRight(int i, sf::IntRect& rect);
 	std::vector<sf::Vector2i*> inSameGrid(const sf::Vector2i& p1, const sf::Vector2i& p2);
@@ -30,7 +31,7 @@ private:
 
 public:
 	//Player player;
-	Room(int levelNumber, int roomNumber);
+	Room(int levelNumber, int roomNumber, std::vector<Enemy*> &enemyList);
 	~Room();
 	
 	void GetCollidableTiles(BaseObject& obj, sf::Vector2i& dim, std::vector<Tile*>& nearTiles);

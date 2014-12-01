@@ -6,6 +6,7 @@
 #include "TextureManager.h"
 #include <vector>
 #include "Tile.h"
+#include "Enemy.h"
 
 class Section 
 {
@@ -18,12 +19,12 @@ private:
 	std::string pathToText;
 
 	Section();
-	void LoadTileMap();
+	void LoadTileMap(std::vector<Enemy*> &enemyList);
 	void Tokenize(const std::string& str,
                       std::vector<std::string>& tokens,
                       const std::string& delimiters = " ");
 public:
-	Section(int sectionNumber, std::string& s, const sf::Vector2i& offset);
+	Section(int sectionNumber, std::string& s, sf::Vector2i& offset, std::vector<Enemy*> &enemyList);
 	~Section();
 	sf::Vector2i getOffset();
 	sf::Vector2i getGridDim();

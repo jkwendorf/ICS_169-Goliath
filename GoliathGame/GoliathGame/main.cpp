@@ -26,7 +26,7 @@ int main()
 			sM->handleEvent(event);
         }
 		deltaTime = min(deltaTime, maxTime);
-		std::cout<< deltaTime << std::endl;
+		//std::cout<< deltaTime << std::endl;
 		sM->update(deltaTime);
 
         window.clear();
