@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "Global.h"
+#include "PhysicsManager.h"
 
 Player::Player() 
 	: BaseObject(), grappleInProgress(false), facingRight(true)
@@ -20,6 +21,7 @@ Player::Player()
 		ammo[x] = Projectile(sprite.getPosition(), sf::Vector2f(0.0,0.0));
 		ammo[x].sprite.setColor(sf::Color(x*50 + 150, 0, 0));
 	}
+	grappleDir.y = 100;
 }
 
 Player::~Player() 
@@ -42,6 +44,24 @@ void Player::update(float deltaTime)
 		{
 			hShot.grappleInProgress = false;
 		}
+
+		// If we're hooked onto something, grapple to point
+		if(hShot.hookedOnSomething)
+		{
+			// If the direction isn't set, set it
+			direction(hShot.grappleLocation, sprite.getPosition(), grappleDir);
+			// Move to the point and do stuff
+			grappleHookMove(*this, deltaTime);
+
+			// If were at the point, end grappling and reset the direction
+			if(distance(hShot.grappleLocation, sprite.getPosition()) < 5.f)
+			{
+				hShot.hookedOnSomething = false;
+				hShot.grappleInProgress = false;
+				isFalling = true;
+				grappleDir.y = 100;
+			}
+		}
 	}
 
 	for(int x = 0; x < 3; x++)
@@ -54,6 +74,7 @@ void Player::update(float deltaTime)
 
 void Player::attack()
 {
+
 	if(weapon == CROSSBOW)
 	{
 		float xSpeed;
@@ -67,7 +88,7 @@ void Player::attack()
 				
 				ammo[x].setVelocity(sf::Vector2f(xSpeed,0.0));
 				ammo[x].moving = true;
-				break;
+				//break;
 			}
 		/*
 		if(ammo[0].velocity.x == 0)
@@ -127,3 +148,91 @@ void Player::resetPosition(sf::Vector2f& newPos)
 	sprite.setPosition(newPos);
 }
 
+void Player::jump()
+{
+	vel.y = JUMP_SPEED;
+	isFalling = true;
+}
+
+void Player::playerUpdate(sf::View* view, sf::Vector2i roomSize, float deltaTime)
+{
+	viewCheck(view, roomSize.x, roomSize.y);
+	update(deltaTime);
+}
+
+void Player::viewCheck(sf::View* view, int width, int height)
+{
+	if(facingRight)
+	{
+		if(sprite.getPosition().x > SCREEN_WIDTH - Global::GetInstance().xOffset + Global::GetInstance().topLeft.x)
+		{
+			Global::GetInstance().topLeft.x = sprite.getPosition().x - SCREEN_WIDTH + Global::GetInstance().xOffset;
+		}
+	}
+	else
+	{
+		if(sprite.getPosition().x < Global::GetInstance().topLeft.x + Global::GetInstance().xOffset)
+		{
+			Global::GetInstance().topLeft.x = sprite.getPosition().x - Global::GetInstance().xOffset;
+		}
+	}
+
+	if(Global::GetInstance().topLeft.x < 0)
+	{
+		Global::GetInstance().topLeft.x = 0;
+	}
+
+	if(width - Global::GetInstance().xOffset < sprite.getPosition().x)
+	{
+		Global::GetInstance().topLeft.x = width - SCREEN_WIDTH;
+		if(width % SCREEN_WIDTH > 0)
+		{
+			Global::GetInstance().topLeft.x = (width / SCREEN_WIDTH) * SCREEN_WIDTH
+				- SCREEN_WIDTH + (width % SCREEN_WIDTH);
+		}
+	}
+
+	if(sprite.getPosition().y - (PLAYER_DIM_Y / 2) < 0 + Global::GetInstance().yOffset)
+	{
+		Global::GetInstance().topLeft.y = sprite.getPosition().y - (PLAYER_DIM_Y / 2) - Global::GetInstance().yOffset;
+	}
+	else if(sprite.getPosition().y + (PLAYER_DIM_Y / 2) > SCREEN_HEIGHT - Global::GetInstance().yOffset)
+	{
+		Global::GetInstance().topLeft.y = sprite.getPosition().y + (PLAYER_DIM_Y / 2) + Global::GetInstance().yOffset - SCREEN_HEIGHT;
+	}
+
+	if(Global::GetInstance().topLeft.y > height - SCREEN_HEIGHT)
+	{
+		Global::GetInstance().topLeft.y = height - SCREEN_HEIGHT;
+	}
+		
+	if(Global::GetInstance().topLeft.x == 0)
+	{
+		if((sprite.getPosition().x - (PLAYER_DIM_X / 2)) < 0)
+		{
+			sprite.setPosition((0 + PLAYER_DIM_X /2), sprite.getPosition().y);
+		}
+	}
+	else if(Global::GetInstance().topLeft.x == (width - SCREEN_WIDTH))
+	{
+		if((sprite.getPosition().x + (PLAYER_DIM_X / 2)) > (width - 1))
+		{
+			sprite.setPosition((width - 1 - (PLAYER_DIM_X / 2)), sprite.getPosition().y);
+		}
+	}
+
+	view->reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y, SCREEN_WIDTH, SCREEN_HEIGHT));
+}
+/*void Player::accelerate(MovementDirection dir)
+{
+	if(dir != STILL)
+	{
+		float maxSpeed = SPEED;
+		vel.x = MOVE_ACCEL*dir;
+		vel.x = min(vel.x, maxSpeed);
+	}
+	else
+	{
+
+	}
+}*/

@@ -13,10 +13,10 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\Tile Stuff">
+    <Filter Include="Header Files\Level Stuff">
       <UniqueIdentifier>{ecf400ec-2a32-4326-b82a-e9e31d332e38}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Tile Stuff">
+    <Filter Include="Source Files\Level Stuff">
       <UniqueIdentifier>{d7f8a588-3436-4d9a-bb09-3dc61038b37c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -52,7 +52,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Section.cpp">
-      <Filter>Source Files\Tile Stuff</Filter>
+      <Filter>Source Files\Level Stuff</Filter>
     </ClCompile>
     <ClCompile Include="BaseObject.cpp">
       <Filter>Source Files</Filter>
@@ -69,14 +69,17 @@
     <ClCompile Include="Enemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Interactable.cpp">
-      <Filter>Source Files\Tile Stuff</Filter>
-    </ClCompile>
     <ClCompile Include="Tile.cpp">
-      <Filter>Source Files\Tile Stuff</Filter>
+      <Filter>Source Files\Level Stuff</Filter>
     </ClCompile>
     <ClCompile Include="Room.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pugixml.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Level.cpp">
+      <Filter>Source Files\Level Stuff</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -120,7 +123,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Section.h">
-      <Filter>Header Files\Tile Stuff</Filter>
+      <Filter>Header Files\Level Stuff</Filter>
     </ClInclude>
     <ClInclude Include="PhysicsManager.h">
       <Filter>Header Files</Filter>
@@ -134,14 +137,28 @@
     <ClInclude Include="Enemy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Interactable.h">
-      <Filter>Header Files\Tile Stuff</Filter>
-    </ClInclude>
     <ClInclude Include="Tile.h">
-      <Filter>Header Files\Tile Stuff</Filter>
+      <Filter>Header Files\Level Stuff</Filter>
     </ClInclude>
     <ClInclude Include="Room.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="pugiconfig.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pugixml.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseGameScreen.h">
+      <Filter>Header Files\Level Stuff</Filter>
+    </ClInclude>
+    <ClInclude Include="Level.h">
+      <Filter>Header Files\Level Stuff</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="Levels.xml">
+      <Filter>Resource Files</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

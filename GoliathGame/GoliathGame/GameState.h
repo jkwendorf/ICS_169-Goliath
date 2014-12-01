@@ -7,6 +7,8 @@
 #include "Global.h"
 #include "Room.h"
 #include "CollisionManager.h"
+#include "Level.h"
+#include "BaseGameScreen.h"
 
 
 class GameState : public State
@@ -21,19 +23,8 @@ public:
 	void loadContent();
 	void unloadContent();
 
-	Player p;
-	std::vector<Enemy*> enemyList;
-
 private:
-	int levelNum, maxRooms;
-	InputManager inputManager;
-	Room* currentRoom;
-	sf::View view;
-	sf::RenderWindow win;
-	sf::Sprite background;
-	void viewCheck();
-	void playerCheck();
-	void changeRoom();
-	CollisionManager* collisionManager;
+	BaseGameScreen* currentScreen;
+
 };
 

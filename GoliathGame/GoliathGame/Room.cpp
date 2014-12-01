@@ -21,9 +21,11 @@ Room::Room()
 void Room::LoadRoom(int levelNumber)
 {
 	sectList = new Section*[numSect];
+	int totalWidth = 0;
 	for (int i = 0; i < numSect; i++)
 	{
-		std::string temp = "level" + std::to_string(levelNumber) + "room" + std::to_string(roomNum) + "section" + std::to_string(i);
+		std::string temp = "level" + std::to_string(levelNumber) + "room" + std::to_string(roomNum) + "section" + std::to_string(i+1);
+		std::cout << temp << std::endl;
 		if(i==0)
 		{
 			sectList[i] = new Section(i, temp, sf::Vector2i(0,0));
@@ -32,17 +34,20 @@ void Room::LoadRoom(int levelNumber)
 		}
 		else
 		{
-			sectList[i] = new Section(i, temp, sf::Vector2i(i*sectList[i-1]->getWidth(), 0));
+			sectList[i] = new Section(i, temp, sf::Vector2i(totalWidth, 0));
+			std::cout << totalWidth << std::endl;
 			if(sectList[i]->getStartPos().x != -999)
 				startPos = sectList[i]->getStartPos();
 		}
 		roomWidth = roomWidth + sectList[i]->getWidth();
+		totalWidth += sectList[i]->getWidth();
 
 		if(roomHeight < sectList[i]->getHeight())
 			roomHeight = sectList[i]->getHeight();
 	}
 	
-	sf::Texture* texture = TextureManager::GetInstance().retrieveTexture(Global::GetInstance().levelTileSheets.at("Level " + std::to_string(roomNum)));
+	//std::cout << Global::GetInstance().roomTileSheets. << std::endl;
+	sf::Texture* texture = TextureManager::GetInstance().retrieveTexture(Global::GetInstance().roomTileSheets.at("Room " + std::to_string(roomNum)));
 	Global::GetInstance().SetUpTileSheet(texture);
 }
 
@@ -51,17 +56,17 @@ bool Room::CheckSectionOnScreen(int sectionNum)
 	return sectList[sectionNum]->inWindow();
 }
 
-void Room::GetCollidableTiles(Player& player, std::vector<Tile*>& nearTiles)
+void Room::GetCollidableTiles(BaseObject& obj, sf::Vector2i& dim, std::vector<Tile*>& nearTiles)
 {
-	sf::IntRect rect(sf::Vector2i(player.sprite.getPosition().x - PLAYER_DIM_X/2, player.sprite.getPosition().y - PLAYER_DIM_Y/2), sf::Vector2i(PLAYER_DIM_X, PLAYER_DIM_Y));
+	sf::IntRect rect(sf::Vector2i(obj.sprite.getPosition().x - dim.x/2, obj.sprite.getPosition().y - dim.y/2), sf::Vector2i(dim.x, dim.y));
 	GetNearTiles(rect, nearTiles);
 	return;
 }
 
-bool Room::NearInteractableTiles(Player& player)
+bool Room::NearInteractableTiles(BaseObject& obj)
 {
 	std::vector<Tile*> nearTiles;
-	sf::IntRect rect(sf::Vector2i(player.sprite.getPosition().x - PLAYER_DIM_X/2, player.sprite.getPosition().y - PLAYER_DIM_Y/2), sf::Vector2i(PLAYER_DIM_X, PLAYER_DIM_Y));
+	sf::IntRect rect(sf::Vector2i(obj.sprite.getPosition().x - PLAYER_DIM_X/2, obj.sprite.getPosition().y - PLAYER_DIM_Y/2), sf::Vector2i(PLAYER_DIM_X, PLAYER_DIM_Y));
 	GetNearTiles(rect, nearTiles, true);
 	if(nearTiles.size() > 0)
 		return true;

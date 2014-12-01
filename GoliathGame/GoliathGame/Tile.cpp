@@ -1,14 +1,19 @@
 
 #include "Tile.h"
 
-Tile::Tile(sf::Vector2f pos, sf::Vector2f dim, bool canCollide, bool grappleable, bool interactable)
-	:sf::FloatRect(pos, dim), collidable(canCollide), grappleable(grappleable), interactable(interactable)
+Tile::Tile(sf::Vector2f pos, sf::Vector2f dim, int tileNum, bool canCollide, bool grappleable, bool interactable)
+	:sf::FloatRect(pos, dim), tileNum(tileNum), collidable(canCollide), grappleable(grappleable), interactable(interactable)
 {
 
 }
 Tile::~Tile()
 {
 	
+}
+
+int Tile::getTileNum()
+{
+	return tileNum;
 }
 
 bool Tile::getCollidable()
