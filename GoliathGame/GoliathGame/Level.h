@@ -7,13 +7,14 @@
 #include "BaseGameScreen.h"
 #include "Room.h"
 #include "Enemy.h"
+#include <memory>
 
 class Level : public BaseGameScreen
 {
 private:
 	int levelNum, maxRooms;
 	Player p;
-	std::vector<Enemy*> enemyList;
+	std::vector<std::unique_ptr<Enemy>> enemyList;
 	Room* currentRoom;
 	sf::View view;
 	sf::RenderWindow win;
@@ -25,11 +26,13 @@ private:
 	void viewCheck();
 	void playerCheck();
 	void changeRoom();
+	void CleanUp();
 public:
 	Level();
 	Level(int levelNumber);
 	~Level(void);
 	void update(float deltaTime);
 	void draw(sf::RenderWindow& window);
+	void DeleteLevel();
 
 };

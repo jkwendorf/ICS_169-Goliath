@@ -1,7 +1,7 @@
 #include "Section.h"
 // include more tiles
 
-Section::Section(int sectionNumber, std::string& s, sf::Vector2i& offset, std::vector<Enemy*> &enemyList)
+Section::Section(int sectionNumber, std::string& s, sf::Vector2i& offset, std::vector<std::unique_ptr<Enemy>> &enemyList)
 	:sectionNum(sectionNumber), pathToText(s), offset(offset), startPos(-999.0, -999.0)
 {
 	LoadTileMap(enemyList);
@@ -9,6 +9,7 @@ Section::Section(int sectionNumber, std::string& s, sf::Vector2i& offset, std::v
 
 Section::~Section()
 {
+	std::cout << "Deleting the section" << std::endl;
 	for ( int j = 0; j < gDim.x * gDim.y; j++)
 	{
 		delete[] grid1[j];
@@ -197,7 +198,7 @@ void Section::print()
 //Loading is the text file from the given file path
 //Parses the first line of the file to get information about the rest of the file.
 //Continues through the file until it hits the end of the file and creates tiles based off information parsed in
-void Section::LoadTileMap(std::vector<Enemy*> &enemyList)
+void Section::LoadTileMap(std::vector<std::unique_ptr<Enemy>> &enemyList)
 {
 	std::ifstream ifs;
 	ifs.open("media/levels/" + pathToText + ".txt");
@@ -232,6 +233,7 @@ void Section::LoadTileMap(std::vector<Enemy*> &enemyList)
 				t[j] = -999;
 			}
 			grid1[i] = t;
+			//delete t;
 		}
 	} 
 	catch(std::bad_alloc ex)
@@ -268,10 +270,17 @@ void Section::LoadTileMap(std::vector<Enemy*> &enemyList)
 			{
 			//Ranged enemy
 			case -4:
-				enemyList.push_back(new Enemy("Test", x * GAME_TILE_DIM + offset.x, y * GAME_TILE_DIM + offset.y, 10));
+				enemyList.push_back(std::unique_ptr<Enemy>(new Enemy("Test", x * GAME_TILE_DIM + offset.x, y * GAME_TILE_DIM + offset.y, 10)));
 				break;
 			case -3:
-				enemyList.push_back(new Enemy("Test", x * GAME_TILE_DIM + offset.x, y * GAME_TILE_DIM + offset.y));
+				try
+				{
+					enemyList.push_back(std::unique_ptr<Enemy>(new Enemy("Test", x * GAME_TILE_DIM + offset.x, y * GAME_TILE_DIM + offset.y)));
+				}
+				catch(const std::exception& ex)
+				{
+					std::cout << "Problem" << std::endl;
+				}
 				break;
 			case -1:
 				startPos = sf::Vector2f(x * GAME_TILE_DIM + offset.x, y * GAME_TILE_DIM + offset.y);
