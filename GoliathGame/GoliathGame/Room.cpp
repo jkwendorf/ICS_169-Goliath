@@ -1,7 +1,7 @@
 
 #include "Room.h"
 
-Room::Room(int levelNumber, int roomNumber, std::vector<Enemy*> &enemyList)
+Room::Room(int levelNumber, int roomNumber, std::vector<std::unique_ptr<Enemy>> &enemyList)
 	:roomNum(roomNumber), numSect(Global::GetInstance().roomSizes.at("Room " + std::to_string(roomNumber))),
 	roomWidth(0), roomHeight(0), loadedTitles(false)
 {
@@ -10,6 +10,7 @@ Room::Room(int levelNumber, int roomNumber, std::vector<Enemy*> &enemyList)
 
 Room::~Room()
 {
+	std::cout << "Deleting the room" << std::endl;
 	for (int i = 0; i < numSect; i++)
 		delete sectList[i];
 	delete[] sectList;
@@ -18,7 +19,7 @@ Room::~Room()
 Room::Room()
 {}
 	
-void Room::LoadRoom(int levelNumber, std::vector<Enemy*> &enemyList)
+void Room::LoadRoom(int levelNumber, std::vector<std::unique_ptr<Enemy>> &enemyList)
 {
 	sectList = new Section*[numSect];
 	int totalWidth = 0;
@@ -119,7 +120,6 @@ void Room::GetNearTiles(sf::IntRect& rect, std::vector<Tile*>& nearTiles, bool c
 	sf::Vector2i topLeft = sf::Vector2i(rect.left, rect.top);
 	sf::Vector2i botRight = sf::Vector2i(rect.left + rect.width, rect.top + rect.height);
 	
-
 	for (int i = 0; i < numSect; i++)
 	{
 		if (sectList[i]->inWindow())

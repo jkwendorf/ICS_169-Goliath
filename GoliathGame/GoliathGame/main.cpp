@@ -36,6 +36,7 @@ int main()
 
 	window.close();
 	delete sM;
+	Global::GetInstance().CleanUp();
 	//std::cout << "\n Press ENTER to continue...";
 	//std::cin.ignore( std::numeric_limits<std::streamsize>::max(), '\n' );
 

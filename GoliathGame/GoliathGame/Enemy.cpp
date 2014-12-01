@@ -49,7 +49,7 @@ Enemy::Enemy(sf::String body, float x, float y, float range) :
 
 Enemy::~Enemy()
 {
-
+	//delete[] ammo;
 }
 
 void Enemy::update(float deltaTime)

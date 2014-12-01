@@ -6,10 +6,12 @@ Level::Level(void)
 }
 
 Level::Level(int levelNumber)
-	:levelNum(levelNumber), currentRoom(new Room(levelNumber, 1, enemyList)), p(Player()), collisionManager(new CollisionManager()), inputManager(new InputManager())
+	:levelNum(levelNumber), p(Player()), collisionManager(new CollisionManager()), inputManager(new InputManager())
 {
+	currentRoom = new Room(levelNumber, 1, enemyList);
 	background.setTexture(*TextureManager::GetInstance().retrieveTexture("bandit canyon level"));
 	background.setPosition(0,-100);
+	background.scale(1.0, (float)(GAME_TILE_DIM * 22 + 100) / background.getTexture()->getSize().y);
 	view.reset(sf::FloatRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
 	view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
 	p.resetPosition(currentRoom->getStartPos());
@@ -20,13 +22,18 @@ Level::Level(int levelNumber)
 
 Level::~Level(void)
 {
+	//std::cout << "Deleting the level" << std::endl;
 	delete currentRoom;
 	delete inputManager;
 	delete collisionManager;
-	for(Enemy* e : enemyList)
-	{
-		delete e;
-	}
+}
+
+void Level::DeleteLevel()
+{
+	std::cout << "Deleting the level" << std::endl;
+	delete currentRoom;
+	delete inputManager;
+	delete collisionManager;
 }
 
 void Level::changeRoom()
@@ -47,11 +54,6 @@ void Level::update(float deltaTime)
 	{
 		changeRoom();
 	}
-	//for (int i =0; i< nearTiles2.size(); i++)
-	//{
-		//nearTiles2.at(i)->print();
-	//}
-//	std::cout << p.sprite.getPosition().x << ", " << p.sprite.getPosition().y <<  std::endl;
 
 	currentRoom->GetCollidableTiles(p, sf::Vector2i(PLAYER_DIM_X, PLAYER_DIM_Y), nearTiles);
 
@@ -64,7 +66,7 @@ void Level::update(float deltaTime)
 	//p.update(deltaTime);
 	p.playerUpdate(&view, sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()), deltaTime);
 
-	for (Enemy* e : enemyList)
+	for (auto& e : enemyList)
 	{
 		currentRoom->GetCollidableTiles(*e, sf::Vector2i(PLAYER_DIM_X, PLAYER_DIM_Y), enemyTiles);
 		if(enemyTiles.size() > 0)
@@ -73,6 +75,19 @@ void Level::update(float deltaTime)
 		}
 		e->enemyUpdate(collisionManager, deltaTime, sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()), p.sprite.getPosition());
 	}
+	for(Tile* t : nearTiles)
+	{
+		delete t;
+	}
+	for(Tile* t : nearTiles2)
+	{
+		delete t;
+	}
+	for(Tile* t : enemyTiles)
+	{
+		delete t;
+	}
+
 }
 
 void Level::draw(sf::RenderWindow& window)
@@ -84,12 +99,16 @@ void Level::draw(sf::RenderWindow& window)
 	//UNCOMMENT FOR TESTING
 	//ALSO, UNCOMMENT CODE IN Enemy.update TO FINISH TEST OUTPUT
 	//int enemyNum = 0;
-	for(Enemy* e : enemyList)
+	for(auto& e : enemyList)
 	{
 		e->draw(window);
 	//	enemyNum++;
 	//	std::cout << "Enemy #" << enemyNum;
 	}
 	window.setView(view);
+}
+
+void Level::CleanUp()
+{
 }
 
