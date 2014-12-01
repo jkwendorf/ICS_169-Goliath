@@ -6,15 +6,16 @@ Level::Level(void)
 }
 
 Level::Level(int levelNumber)
-	:levelNum(levelNumber), currentRoom(new Room(levelNumber, 1)), p(Player()), collisionManager(new CollisionManager()), inputManager(new InputManager())
+	:levelNum(levelNumber), currentRoom(new Room(levelNumber, 1, enemyList)), p(Player()), collisionManager(new CollisionManager()), inputManager(new InputManager())
 {
 	background.setTexture(*TextureManager::GetInstance().retrieveTexture("bandit canyon level"));
 	background.setPosition(0,-100);
 	view.reset(sf::FloatRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
 	view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
 	p.resetPosition(currentRoom->getStartPos());
-	enemyList.push_back(new Enemy("Test", 1000, 1000));
-	enemyList.push_back(new Enemy("Test", 700, 400));
+
+	//enemyList.push_back(new Enemy("Test", 1000, 1000));
+	//enemyList.push_back(new Enemy("Test", 700, 400));
 }
 
 Level::~Level(void)
@@ -32,7 +33,8 @@ void Level::changeRoom()
 {
 	int roomNum = currentRoom->getRoomNumber();
 	delete currentRoom;
-	currentRoom = new Room(levelNum, ++roomNum);
+	enemyList.clear();
+	currentRoom = new Room(levelNum, ++roomNum, enemyList);
 	//Move player to the start pos in new room
 	p.resetPosition(currentRoom->getStartPos());
 }

@@ -1,11 +1,11 @@
 
 #include "Room.h"
 
-Room::Room(int levelNumber, int roomNumber)
+Room::Room(int levelNumber, int roomNumber, std::vector<Enemy*> &enemyList)
 	:roomNum(roomNumber), numSect(Global::GetInstance().roomSizes.at("Room " + std::to_string(roomNumber))),
 	roomWidth(0), roomHeight(0), loadedTitles(false)
 {
-	LoadRoom(levelNumber);
+	LoadRoom(levelNumber, enemyList);
 }
 
 Room::~Room()
@@ -18,7 +18,7 @@ Room::~Room()
 Room::Room()
 {}
 	
-void Room::LoadRoom(int levelNumber)
+void Room::LoadRoom(int levelNumber, std::vector<Enemy*> &enemyList)
 {
 	sectList = new Section*[numSect];
 	int totalWidth = 0;
@@ -28,13 +28,13 @@ void Room::LoadRoom(int levelNumber)
 		std::cout << temp << std::endl;
 		if(i==0)
 		{
-			sectList[i] = new Section(i, temp, sf::Vector2i(0,0));
+			sectList[i] = new Section(i, temp, sf::Vector2i(0,0), enemyList);
 			if(sectList[i]->getStartPos().x != -999)
 				startPos = sectList[i]->getStartPos();
 		}
 		else
 		{
-			sectList[i] = new Section(i, temp, sf::Vector2i(totalWidth, 0));
+			sectList[i] = new Section(i, temp, sf::Vector2i(totalWidth, 0), enemyList);
 			std::cout << totalWidth << std::endl;
 			if(sectList[i]->getStartPos().x != -999)
 				startPos = sectList[i]->getStartPos();

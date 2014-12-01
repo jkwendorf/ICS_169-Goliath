@@ -1,10 +1,10 @@
 #include "Section.h"
 // include more tiles
 
-Section::Section(int sectionNumber, std::string& s, const sf::Vector2i& offset)
+Section::Section(int sectionNumber, std::string& s, sf::Vector2i& offset, std::vector<Enemy*> &enemyList)
 	:sectionNum(sectionNumber), pathToText(s), offset(offset), startPos(-999.0, -999.0)
 {
-	LoadTileMap();
+	LoadTileMap(enemyList);
 }
 
 Section::~Section()
@@ -197,7 +197,7 @@ void Section::print()
 //Loading is the text file from the given file path
 //Parses the first line of the file to get information about the rest of the file.
 //Continues through the file until it hits the end of the file and creates tiles based off information parsed in
-void Section::LoadTileMap()
+void Section::LoadTileMap(std::vector<Enemy*> &enemyList)
 {
 	std::ifstream ifs;
 	ifs.open("media/levels/" + pathToText + ".txt");
@@ -266,6 +266,13 @@ void Section::LoadTileMap()
 			grid1[(y*gDim.y) + x][1] = (y*gDim.y) + x;
 			switch(tileType)
 			{
+			//Ranged enemy
+			case -4:
+				enemyList.push_back(new Enemy("Test", x * GAME_TILE_DIM + offset.x, y * GAME_TILE_DIM + offset.y, 10));
+				break;
+			case -3:
+				enemyList.push_back(new Enemy("Test", x * GAME_TILE_DIM + offset.x, y * GAME_TILE_DIM + offset.y));
+				break;
 			case -1:
 				startPos = sf::Vector2f(x * GAME_TILE_DIM + offset.x, y * GAME_TILE_DIM + offset.y);
 				grid1[(y*gDim.y) + x][2] = 0;
