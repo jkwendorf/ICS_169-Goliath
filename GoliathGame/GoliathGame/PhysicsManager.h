@@ -13,9 +13,12 @@
 #define JUMP_SPEED -450
 #define GRAVITY 500
 #define SPEED 100
-#define MOVE_ACCEL 50
+#define MOVE_ACCEL 400
 #define BOOST 4
 #define GRAPPLE_SPEED 550
+
+#ifndef MOVE_DIR
+#define MOVE_DIR
 
 enum MovementDirection
 {
@@ -23,6 +26,8 @@ enum MovementDirection
 	RIGHT = 1,
 	STILL = 0
 };
+
+#endif // MOVE_DIR
 
 inline sf::Vector2f moveVertically(BaseObject& b, float deltaTime)
 {
@@ -67,7 +72,7 @@ inline sf::Vector2f moveOutOfTileVertically(BaseObject& p, Tile* t)
 	{
 		p.isFalling = false;
 		p.vel.y = 0.f;
-		newPos.y = t->top - p.sprite.getPosition().y - p.sprite.getGlobalBounds().height/2.f;
+		newPos.y = t->top - p.sprite.getPosition().y - p.sprite.getGlobalBounds().height/2.f -0.1f;
 	}
 	// If colliding from below
 	else if(t->top < p.sprite.getPosition().y)
@@ -83,7 +88,7 @@ inline sf::Vector2f moveOutOfTileVertically(BaseObject& p, Tile* t)
 
 inline sf::Vector2f moveOutOfTileHorizontally(BaseObject& p, Tile* t)
 {
-	sf::Vector2f newPos;
+ 	sf::Vector2f newPos;
 	// If the player is colliding with the left side of the tile
 	if(p.sprite.getPosition().x < t->left)
 		newPos.x = t->left - (p.sprite.getPosition().x + p.sprite.getGlobalBounds().width/2);
@@ -91,6 +96,7 @@ inline sf::Vector2f moveOutOfTileHorizontally(BaseObject& p, Tile* t)
 	else if(p.sprite.getPosition().x > t->left + t->width)
 		newPos.x = (t->left + t->width) - (p.sprite.getPosition().x - p.sprite.getGlobalBounds().width/2);
 
+	p.vel.x = 0;
 	//return sf::Vector2f(0.f, 0.f);
 
 	return newPos;

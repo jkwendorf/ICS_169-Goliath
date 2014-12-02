@@ -38,7 +38,8 @@ void InputManager::update(Player& s, CollisionManager* cM, float deltaTime)
 	movement[0] = sf::Keyboard::isKeyPressed(sf::Keyboard::A);
 	movement[1] = sf::Keyboard::isKeyPressed(sf::Keyboard::D);
 
-	utility[0] = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift);
+	//utility[0] = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift);
+	s.running = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift);
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && !s.isFalling)
 	{
 		s.jump();
@@ -73,32 +74,13 @@ void InputManager::playerMove(Player& player, CollisionManager* cM, float deltaT
 		player.facingRight = true;
 	}*/
 
-	/* HANDLE VERTICAL MOTION */
-	player.move(moveVertically(player, deltaTime));
-	if(cM->playerCollisionDetection(&player))
-		player.move(moveOutOfTileVertically(player, cM->getCollidedTile(player)));
-	// If there isn't anything below the player, fall
-	else if(!player.isFalling && !player.hShot.hookedOnSomething)
-		player.isFalling = true;
 	/* HANDLE LEFT AND RIGHT MOTION*/
 	if(movement[0])
-	{
-		player.move(moveHorizontally(player, LEFT, utility[0], deltaTime));
-		
-		if(cM->playerCollisionDetection(&player))
-			player.move(moveOutOfTileHorizontally(player, cM->getCollidedTile(player)));
-		
-		player.facingRight = false;
-	}
+		player.horizontalAcceleration(LEFT, deltaTime);
 	else if(movement[1])
-	{
-		player.move(moveHorizontally(player, RIGHT, utility[0], deltaTime));
-
-		if(cM->playerCollisionDetection(&player))
-			player.move(moveOutOfTileHorizontally(player, cM->getCollidedTile(player)));
-
-		player.facingRight = true;
-	}
+		player.horizontalAcceleration(RIGHT, deltaTime);
+	else
+		player.horizontalAcceleration(STILL, deltaTime);
 
 	if(utility[2])
 	{

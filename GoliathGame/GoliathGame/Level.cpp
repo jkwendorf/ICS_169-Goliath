@@ -57,7 +57,7 @@ void Level::update(float deltaTime)
 	{
 		changeRoom();
 	}
-	std::cout << "Player Position: " << p.sprite.getPosition().x << std::endl;
+	std::cout << "Player Position: " << p.sprite.getPosition().x  << std::endl;
 
 	currentRoom->GetCollidableTiles(p, sf::Vector2i(PLAYER_DIM_X, PLAYER_DIM_Y), nearTiles);
 
@@ -69,6 +69,25 @@ void Level::update(float deltaTime)
 	//p.isFalling = !collisionManager->playerCollisionDetection(p);
 	//p.update(deltaTime);
 	p.playerUpdate(&view, sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()), deltaTime);
+
+	if(p.isFalling)
+	{
+		while(collisionManager->playerCollisionDetection(&p) && p.isFalling)
+		{
+			p.moveOutOfTile(collisionManager->getCollidedTile(p));
+		}
+	}
+	else if(!collisionManager->tileBelowCharacter(&p) && !p.hShot.hookedOnSomething)
+	{
+		p.isFalling = true;
+	}
+	else if(collisionManager->tileBelowCharacter(&p))
+	{
+		if(collisionManager->wallBlockingCharacter(&p))
+		{
+			p.move(moveOutOfTileHorizontally(p, collisionManager->getCollidedTile(p)));
+		}
+	}
 
 	for (auto& e : enemyList)
 	{

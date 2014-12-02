@@ -17,6 +17,9 @@ public:
 	bool hookCollisionDetection(HookShot hs);
 	
 	Tile* getCollidedTile(BaseObject p);
+	bool tileBelowCharacter(BaseObject* p);
+	bool wallBlockingCharacter(BaseObject* p);
+	int numTilesNear(BaseObject p);
 
 private:
 	std::vector<Tile*> tileList;

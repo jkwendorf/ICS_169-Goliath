@@ -3,7 +3,7 @@
 #include "PhysicsManager.h"
 
 Player::Player() 
-	: BaseObject(), grappleInProgress(false), facingRight(true)
+	: BaseObject(), grappleInProgress(false), facingRight(true), running(false)
 {
 	vel = sf::Vector2f(0.0,0.0);
 	
@@ -33,10 +33,20 @@ void Player::update(float deltaTime)
 {
 	//std::cout << sprite.getPosition().x << " " << sprite.getPosition().y << std::endl;
 	if(!hShot.grappleInProgress)
+	{
+		// Move the player
+		verticalAcceleration(deltaTime);
+
+		if(running)
+			move(vel*deltaTime);
+		else
+			move(vel*deltaTime);
+
 		if(facingRight)
 			hShot.update(sf::Vector2f(sprite.getPosition().x + 60, sprite.getPosition().y - 15));
 		else
 			hShot.update(sf::Vector2f(sprite.getPosition().x - 60, sprite.getPosition().y - 15));
+	}
 	else
 	{
 		hShot.update(deltaTime);
@@ -229,16 +239,123 @@ void Player::viewCheck(sf::View* view, int width, int height)
 
 	view->reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y, SCREEN_WIDTH, SCREEN_HEIGHT));
 }
-/*void Player::accelerate(MovementDirection dir)
+
+void Player::horizontalAcceleration(MovementDirection dir, float& deltaTime)
 {
-	if(dir != STILL)
+	if(!hShot.hookedOnSomething)
 	{
-		float maxSpeed = SPEED;
-		vel.x = MOVE_ACCEL*dir;
-		vel.x = min(vel.x, maxSpeed);
+		if(dir != STILL)
+		{
+			float maxSpeed = SPEED;
+			if(dir == LEFT)
+			{ 
+				maxSpeed = -1.f*maxSpeed;
+				if(running)
+				{
+					maxSpeed *= BOOST;
+					vel.x += MOVE_ACCEL*BOOST*dir*deltaTime;
+				}
+				else
+					vel.x += MOVE_ACCEL*dir*deltaTime;
+
+				vel.x = max(vel.x, maxSpeed);
+			}
+			else
+			{
+				if(running)
+				{
+					maxSpeed *= BOOST;
+					vel.x += MOVE_ACCEL*BOOST*dir*deltaTime;
+				}
+				else
+					vel.x += MOVE_ACCEL*dir*deltaTime;
+
+				vel.x = min(vel.x, maxSpeed);
+			}
+		}
+		else
+		{
+			if(vel.x > 0.f)
+			{
+				vel.x -= MOVE_ACCEL*deltaTime;
+				if(vel.x <= 0.f)
+					vel.x = 0.f;
+			}
+			else if(vel.x < 0.f)
+			{
+				vel.x += MOVE_ACCEL*deltaTime;
+				if(vel.x >= 0.f)
+					vel.x = 0.f;
+			}
+		}
+	}
+}
+
+void Player::verticalAcceleration(float& deltaTime)
+{
+	if(isFalling)
+	{
+		if(vel.y >= TERMINAL_VELOCITY)
+			vel.y = TERMINAL_VELOCITY;
+		else
+			vel.y += GRAVITY * deltaTime;
+	}
+}
+
+void Player::moveOutOfTile(Tile* t)
+{
+	float left = (sprite.getPosition().x + sprite.getGlobalBounds().width/2) - t->left, 
+		right = (t->left + t->width) - (sprite.getPosition().x - sprite.getGlobalBounds().width/2), 
+		up = (sprite.getPosition().y + sprite.getGlobalBounds().height/2) - t->top, 
+		down = (t->top + t->height) - (sprite.getPosition().y - sprite.getGlobalBounds().height/2);
+
+	// Calculate shortest distance
+	if(sgn(vel.x) > 0)
+	{
+		if(sgn(vel.y) > 0)
+		{
+			if(up > left)
+				move(moveOutOfTileHorizontally(*this, t));
+			else
+				move(moveOutOfTileVertically(*this, t));
+		}
+		else if(sgn(vel.y) < 0)
+		{
+			if(down > left)
+				move(moveOutOfTileHorizontally(*this, t));
+			else
+				move(moveOutOfTileVertically(*this, t));
+		}
+		else
+		{
+			move(moveOutOfTileHorizontally(*this, t));
+		}
+	}
+	else if(sgn(vel.x) < 0)
+	{
+		if(sgn(vel.y) > 0)
+		{
+			if(up > right)
+				move(moveOutOfTileHorizontally(*this, t));
+			else
+				move(moveOutOfTileVertically(*this, t));
+		}
+		else if(sgn(vel.y) < 0)
+		{
+			if(down > right)
+				move(moveOutOfTileHorizontally(*this, t));
+			else
+				move(moveOutOfTileVertically(*this, t));
+		}
+		else
+		{
+			move(moveOutOfTileHorizontally(*this, t));
+		}
 	}
 	else
 	{
-
+		move(moveOutOfTileVertically(*this, t));
 	}
-}*/
+
+	// Move in direction of shortest distance
+}
