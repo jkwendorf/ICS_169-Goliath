@@ -16,6 +16,7 @@ Level::Level(int levelNumber)
 	view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
 	p.resetPosition(currentRoom->getStartPos());
 
+	std::cout << "Room Width: " << currentRoom->getroomWidth() << std::endl;
 	//enemyList.push_back(new Enemy("Test", 1000, 1000));
 	//enemyList.push_back(new Enemy("Test", 700, 400));
 }
@@ -44,6 +45,7 @@ void Level::changeRoom()
 	currentRoom = new Room(levelNum, ++roomNum, enemyList);
 	//Move player to the start pos in new room
 	p.resetPosition(currentRoom->getStartPos());
+	std::cout << Global::GetInstance().topLeft.x << std::endl;
 }
 
 void Level::update(float deltaTime)
@@ -54,6 +56,7 @@ void Level::update(float deltaTime)
 	{
 		changeRoom();
 	}
+	std::cout << "Player Position: " << p.sprite.getPosition().x << std::endl;
 
 	currentRoom->GetCollidableTiles(p, sf::Vector2i(PLAYER_DIM_X, PLAYER_DIM_Y), nearTiles);
 
