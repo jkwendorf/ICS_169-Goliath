@@ -62,6 +62,23 @@ void Level::update(float deltaTime)
 	//p.update(deltaTime);
 	p.playerUpdate(&view, sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()), deltaTime);
 
+	if(p.isFalling)
+	{
+		while(collisionManager->playerCollisionDetection(&p) && p.isFalling)
+		{
+			p.moveOutOfTile(collisionManager->getCollidedTile(p));
+		}
+	}
+	else if(!collisionManager->tileBelowCharacter(&p) && !p.hShot.hookedOnSomething)
+	{
+		p.isFalling = true;
+	}
+	else if(collisionManager->tileBelowCharacter(&p))
+	{
+		if(collisionManager->wallBlockingCharacter(&p))
+			p.move(moveOutOfTileHorizontally(p, collisionManager->getCollidedTile(p)));
+	}
+
 	for (Enemy* e : enemyList)
 	{
 		currentRoom->GetCollidableTiles(*e, sf::Vector2i(PLAYER_DIM_X, PLAYER_DIM_Y), enemyTiles);
