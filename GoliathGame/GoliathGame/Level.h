@@ -12,13 +12,14 @@
 class Level : public BaseGameScreen
 {
 private:
+	float loading;
 	int levelNum, maxRooms;
 	Player p;
 	std::vector<std::unique_ptr<Enemy>> enemyList;
 	Room* currentRoom;
 	sf::View view;
 	sf::RenderWindow win;
-	sf::Sprite background;
+	sf::Sprite background, loadingSprite;
 
 	CollisionManager* collisionManager;
 	InputManager* inputManager;
