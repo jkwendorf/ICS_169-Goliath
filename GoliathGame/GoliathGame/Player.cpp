@@ -3,10 +3,10 @@
 #include "PhysicsManager.h"
 
 Player::Player() 
-	: BaseObject(), grappleInProgress(false), facingRight(true), running(false)
+	: BaseObject(), grappleInProgress(false), facingRight(true),running(false),  health(100), stamina(50), ui(new UserInterface(health, stamina))
 {
 	vel = sf::Vector2f(0.0,0.0);
-	
+
 	sprite.setTexture(*TextureManager::GetInstance().retrieveTexture("David"));
 	//sprite.setPosition(64, 560);
 	sprite.setPosition(150, 64);
@@ -49,10 +49,12 @@ void Player::update(float deltaTime)
 		}
 	}
 
+
 	if(!hShot.hookedOnSomething || !hShot.grappleInProgress)
 	{	
 	// Move the player
 		verticalAcceleration(deltaTime);
+
 
 		if(running)
 			move(vel*deltaTime);
@@ -85,6 +87,8 @@ void Player::update(float deltaTime)
 			ammo[x].setLocation(sprite.getPosition());
 		ammo[x].update(deltaTime);
 	}
+
+	ui->update(health, stamina);
 }
 
 void Player::attack()
@@ -128,6 +132,7 @@ void Player::move(sf::Vector2f& distance)
 
 void Player::draw(sf::RenderWindow& window)
 {
+	ui->draw(window);
 	BaseObject::draw(window);
 	window.draw(hShot.sprite);
 	//for(int x = 0; x < 3; x++)
@@ -139,7 +144,6 @@ void Player::draw(sf::RenderWindow& window)
 	circle.setFillColor(sf::Color::Red);
 	window.draw(circle);
 	*/
-
 }
 
 void Player::grapple()
@@ -239,6 +243,7 @@ void Player::viewCheck(sf::View* view, int width, int height)
 	{
 		if((sprite.getPosition().x + (PLAYER_DIM_X / 2)) > (width - 1))
 		{
+
       		sprite.setPosition((width - 1 - (PLAYER_DIM_X / 2)), sprite.getPosition().y);
 			vel.x = 0.f;
 		}
@@ -247,10 +252,13 @@ void Player::viewCheck(sf::View* view, int width, int height)
 	view->reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y, SCREEN_WIDTH, SCREEN_HEIGHT));
 }
 
+
 void Player::horizontalAcceleration(MovementDirection dir, float& deltaTime)
 {
+
 	if(!hShot.hookedOnSomething)
 	{
+
 		if(dir != STILL)
 		{
 			float maxSpeed = SPEED;

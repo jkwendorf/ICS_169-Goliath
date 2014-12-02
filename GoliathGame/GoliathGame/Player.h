@@ -2,6 +2,7 @@
 #include "BaseObject.h"
 #include "HookShot.h"
 #include "Projectile.h"
+#include "UserInterface.h"
 #include "Tile.h"
 //#include "Sword.h"
 //#include "CrossBow.h"
@@ -14,6 +15,7 @@ enum MovementDirection
 	LEFT = -1,
 	RIGHT = 1,
 	STILL = 0
+
 };
 
 #endif // MOVE_DIR
@@ -61,6 +63,6 @@ public:
 	Projectile ammo[3];
 	void viewCheck(sf::View* view, int width, int height);
 
-private:
-	
+private:	
+	UserInterface* ui;
 };
