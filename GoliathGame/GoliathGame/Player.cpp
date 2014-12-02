@@ -230,7 +230,7 @@ void Player::viewCheck(sf::View* view, int width, int height)
 		}
 		else if((sprite.getPosition().x + (PLAYER_DIM_X / 2)) > (width - 1))
 		{
-      		sprite.setPosition((width - 1 - (PLAYER_DIM_X / 2)), sprite.getPosition().y);
+			sprite.setPosition((width - 1 - (PLAYER_DIM_X / 2)), sprite.getPosition().y);
 			vel.x = 0.f;
 		}
 	}

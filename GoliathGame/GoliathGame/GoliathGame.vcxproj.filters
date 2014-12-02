@@ -155,6 +155,9 @@
     <ClInclude Include="Level.h">
       <Filter>Header Files\Level Stuff</Filter>
     </ClInclude>
+    <ClInclude Include="Utility.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Levels.xml">
