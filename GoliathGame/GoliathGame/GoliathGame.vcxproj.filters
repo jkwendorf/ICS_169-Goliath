@@ -81,6 +81,9 @@
     <ClCompile Include="Level.cpp">
       <Filter>Source Files\Level Stuff</Filter>
     </ClCompile>
+    <ClCompile Include="UserInterface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="State.h">
@@ -154,6 +157,12 @@
     </ClInclude>
     <ClInclude Include="Level.h">
       <Filter>Header Files\Level Stuff</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

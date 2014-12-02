@@ -3,7 +3,7 @@
 #include "PhysicsManager.h"
 
 Player::Player() 
-	: BaseObject(), grappleInProgress(false), facingRight(true)
+	: BaseObject(), grappleInProgress(false), facingRight(true), health(100), stamina(50), ui(new UserInterface(health, stamina))
 {
 	vel = sf::Vector2f(0.0,0.0);
 	
@@ -70,6 +70,8 @@ void Player::update(float deltaTime)
 			ammo[x].setLocation(sprite.getPosition());
 		ammo[x].update(deltaTime);
 	}
+
+	ui->update(health, stamina);
 }
 
 void Player::attack()
@@ -113,6 +115,7 @@ void Player::move(sf::Vector2f& distance)
 
 void Player::draw(sf::RenderWindow& window)
 {
+	ui->draw(window);
 	BaseObject::draw(window);
 	window.draw(hShot.sprite);
 	//for(int x = 0; x < 3; x++)
@@ -123,7 +126,6 @@ void Player::draw(sf::RenderWindow& window)
 	circle.setFillColor(sf::Color::Red);
 	window.draw(circle);
 	*/
-
 }
 
 void Player::grapple()

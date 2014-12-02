@@ -2,6 +2,7 @@
 #include "BaseObject.h"
 #include "HookShot.h"
 #include "Projectile.h"
+#include "UserInterface.h"
 //#include "Sword.h"
 //#include "CrossBow.h"
 
@@ -51,4 +52,5 @@ public:
 
 private:
 	void viewCheck(sf::View* view, int width, int height);
+	UserInterface* ui;
 };
