@@ -73,7 +73,7 @@ void Level::update(float deltaTime)
 		{
 			changeRoom();
 		}
-	std::cout << "Player Position: " << p.sprite.getPosition().x  << std::endl;
+		std::cout << "Player Position: " << p.sprite.getPosition().x  << std::endl;
 
 		currentRoom->GetCollidableTiles(p, sf::Vector2i(PLAYER_DIM_X, PLAYER_DIM_Y), nearTiles);
 
@@ -86,36 +86,37 @@ void Level::update(float deltaTime)
 		//p.update(deltaTime);
 		p.playerUpdate(&view, sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()), deltaTime);
 
-	if(p.isFalling)
-	{
-		while(collisionManager->playerCollisionDetection(&p) && p.isFalling)
+		if(p.isFalling)
 		{
-			p.moveOutOfTile(collisionManager->getCollidedTile(p));
+			while(collisionManager->playerCollisionDetection(&p) && p.isFalling)
+			{
+				p.moveOutOfTile(collisionManager->getCollidedTile(p));
+			}
 		}
-	}
-	else if(!collisionManager->tileBelowCharacter(&p) && !p.hShot.hookedOnSomething)
-	{
-		p.isFalling = true;
-	}
-	else if(collisionManager->tileBelowCharacter(&p))
-	{
-		if(collisionManager->wallBlockingCharacter(&p))
+		else if(!collisionManager->tileBelowCharacter(&p) && !p.hShot.hookedOnSomething)
 		{
-			p.move(moveOutOfTileHorizontally(p, collisionManager->getCollidedTile(p)));
+			p.isFalling = true;
 		}
-	}
+		else if(collisionManager->tileBelowCharacter(&p))
+		{
+			if(collisionManager->wallBlockingCharacter(&p))
+			{
+				p.move(moveOutOfTileHorizontally(p, collisionManager->getCollidedTile(p)));
+			}
+		}
 
-	for (auto& e : enemyList)
-	{
-		currentRoom->GetCollidableTiles(*e, sf::Vector2i(PLAYER_DIM_X, PLAYER_DIM_Y), enemyTiles);
-		if(enemyTiles.size() > 0)
+		for (auto& e : enemyList)
 		{
 			currentRoom->GetCollidableTiles(*e, sf::Vector2i(PLAYER_DIM_X, PLAYER_DIM_Y), enemyTiles);
 			if(enemyTiles.size() > 0)
 			{
-				collisionManager->setNearByTiles(enemyTiles);
+				currentRoom->GetCollidableTiles(*e, sf::Vector2i(PLAYER_DIM_X, PLAYER_DIM_Y), enemyTiles);
+				if(enemyTiles.size() > 0)
+				{
+					collisionManager->setNearByTiles(enemyTiles);
+				}
+				e->enemyUpdate(collisionManager, deltaTime, sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()), p.sprite.getPosition());
 			}
-			e->enemyUpdate(collisionManager, deltaTime, sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()), p.sprite.getPosition());
 		}
 		for(Tile* t : nearTiles)
 		{
@@ -129,6 +130,7 @@ void Level::update(float deltaTime)
 		{
 			delete t;
 		}
+		
 	}
 	else
 	{
