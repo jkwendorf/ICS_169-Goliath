@@ -71,12 +71,13 @@ bool CollisionManager::tileBelowCharacter(BaseObject* p)
 
 bool CollisionManager::wallBlockingCharacter(BaseObject* p)
 {
+	float top = ceil(p->sprite.getPosition().y - p->sprite.getGlobalBounds().height/2);
 	for(Tile* b: tileList)
 	{
 		if(b->intersects(p->sprite.getGlobalBounds()))
 		{
-			if(b->top + b->height > p->sprite.getPosition().y - p->sprite.getGlobalBounds().height/2 + 0.1f)
-				return true;
+			if(b->top + b->height > top)
+ 				return true;
 		}
 	}
 	return false;

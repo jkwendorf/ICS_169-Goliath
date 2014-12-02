@@ -13,6 +13,15 @@ Global::~Global()
 	//delete[] currentTileSheet;
 }
 
+void Global::CleanUp()
+{
+	for(int i = 0; i < 20; i++)
+	{
+		delete currentTileSheet[i];
+	}
+	//delete[] currentTileSheet;
+}
+
 void Global::ParseLevelXML() {
 	pugi::xml_document doc;
 

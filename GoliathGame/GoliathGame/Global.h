@@ -55,6 +55,7 @@ public :
 
 	Global();
 	~Global();
+	void CleanUp();
 
 	void calculateOffset(); //Calculates offset and sets it using current screen size
 	void SetUpTileSheet(sf::Texture* texture);
