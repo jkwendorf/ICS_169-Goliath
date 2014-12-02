@@ -89,6 +89,7 @@
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="EndGameState.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemySpawn.cpp" />
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="Global.cpp" />
     <ClCompile Include="HookShot.cpp" />
@@ -112,6 +113,7 @@
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="EndGameState.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemySpawn.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="Global.h" />
     <ClInclude Include="HookShot.h" />
@@ -129,10 +131,13 @@
     <ClInclude Include="State.h" />
     <ClInclude Include="StateManager.h" />
     <ClInclude Include="Tile.h" />
+    <ClInclude Include="Utility.h" />
     <ClInclude Include="Weapon.h" />
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="Levels.xml" />
+    <Xml Include="Levels.xml">
+      <SubType>Designer</SubType>
+    </Xml>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

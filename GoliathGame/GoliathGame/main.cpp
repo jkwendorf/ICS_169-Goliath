@@ -1,24 +1,22 @@
 #include "StateManager.h"
 #include "Global.h"
-//#include "vld.h"
+//#include <vld.h>
 
 int main()
 {
 	Global::GetInstance().ParseLevelXML();
-	//Global::GetInstance().ParseLevelSizes(Global::GetInstance().levelSizes, std::string("media/levels/levelSizes.txt"));
-	//Global::GetInstance().ParseLevelSizes(Global::GetInstance().roomSizes, std::string("media/levels/roomSizes.txt"));
-	//Global::GetInstance().ParseLevelTileSheets();
-	// JW: Our window is set to 200x200, these should be set by global variables
 	Global::GetInstance().calculateOffset();
 	sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Goliath Game");
 	// JW: Setting the framerate to 30, but this should be set by a global variable
 	window.setFramerateLimit(FPS);
 	StateManager* sM = new StateManager();
 	
-
+	float maxTime = 1.f/FPS;
 	sf::Clock deltaTimer;
     while (window.isOpen())
     {
+		float deltaTime = deltaTimer.restart().asSeconds();
+
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -27,7 +25,9 @@ int main()
 
 			sM->handleEvent(event);
         }
-		sM->update(deltaTimer.restart().asSeconds());
+		deltaTime = min(deltaTime, maxTime);
+		std::cout<< deltaTime << std::endl;
+		sM->update(deltaTime);
 
         window.clear();
 		sM->draw(window);

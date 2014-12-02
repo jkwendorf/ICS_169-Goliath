@@ -13,6 +13,8 @@ Level::Level(int levelNumber)
 	view.reset(sf::FloatRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
 	view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
 	p.resetPosition(currentRoom->getStartPos());
+	enemyList.push_back(new Enemy("Test", 1000, 1000));
+	enemyList.push_back(new Enemy("Test", 700, 400));
 }
 
 Level::~Level(void)
@@ -20,75 +22,6 @@ Level::~Level(void)
 	delete currentRoom;
 	delete inputManager;
 	delete collisionManager;
-}
-
-void Level::viewCheck()
-{
-	if(p.facingRight)
-	{
-		if(p.sprite.getPosition().x > SCREEN_WIDTH - Global::GetInstance().xOffset + Global::GetInstance().topLeft.x)
-		{
-			Global::GetInstance().topLeft.x = p.sprite.getPosition().x - SCREEN_WIDTH + Global::GetInstance().xOffset;
-		}
-	}
-	else
-	{
-		if(p.sprite.getPosition().x < Global::GetInstance().topLeft.x + Global::GetInstance().xOffset)
-		{
-			Global::GetInstance().topLeft.x = p.sprite.getPosition().x - Global::GetInstance().xOffset;
-		}
-	}
-
-	if(Global::GetInstance().topLeft.x < 0)
-	{
-		Global::GetInstance().topLeft.x = 0;
-	}
-
-	if(currentRoom->getroomWidth() - Global::GetInstance().xOffset < p.sprite.getPosition().x)
-	{
-		Global::GetInstance().topLeft.x = currentRoom->getroomWidth() - SCREEN_WIDTH;
-		if(currentRoom->getroomWidth() % SCREEN_WIDTH > 0)
-		{
-			Global::GetInstance().topLeft.x = (currentRoom->getroomWidth() / SCREEN_WIDTH) * SCREEN_WIDTH
-				- SCREEN_WIDTH + (currentRoom->getroomWidth() % SCREEN_WIDTH);
-		}
-	}
-
-	if(p.sprite.getPosition().y - (PLAYER_DIM_Y / 2) < 0 + Global::GetInstance().yOffset)
-	{
-		Global::GetInstance().topLeft.y = p.sprite.getPosition().y - (PLAYER_DIM_Y / 2) - Global::GetInstance().yOffset;
-	}
-	//Uncomment for bottom scrolling.
-	else if(p.sprite.getPosition().y + (PLAYER_DIM_Y / 2) > SCREEN_HEIGHT - Global::GetInstance().yOffset)
-	{
-		Global::GetInstance().topLeft.y = p.sprite.getPosition().y + (PLAYER_DIM_Y / 2) + Global::GetInstance().yOffset - SCREEN_HEIGHT;
-	}
-
-	if(Global::GetInstance().topLeft.y > currentRoom->getroomHeight() - SCREEN_HEIGHT)
-	{
-		Global::GetInstance().topLeft.y = currentRoom->getroomHeight() - SCREEN_HEIGHT;
-	}
-
-	view.reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y, SCREEN_WIDTH, SCREEN_HEIGHT));
-}
-
-void Level::playerCheck()
-{
-	if(Global::GetInstance().topLeft.x == 0)
-	{
-		if((p.sprite.getPosition().x - (PLAYER_DIM_X / 2)) < 0)
-		{
-			p.sprite.setPosition((0 + PLAYER_DIM_X /2), p.sprite.getPosition().y);
-		}
-	}
-	else if(Global::GetInstance().topLeft.x == (currentRoom->getroomWidth() - SCREEN_WIDTH))
-	{
-		if((p.sprite.getPosition().x + (PLAYER_DIM_X / 2)) > (currentRoom->getroomWidth() - 1))
-		{
-			p.sprite.setPosition((currentRoom->getroomWidth() - 1 - (PLAYER_DIM_X / 2)), p.sprite.getPosition().y);
-		}
-
-	}
 }
 
 void Level::changeRoom()
@@ -102,8 +35,6 @@ void Level::changeRoom()
 
 void Level::update(float deltaTime)
 {
-	viewCheck();
-
 	std::vector<Tile*> nearTiles, nearTiles2, enemyTiles;
 	currentRoom->GetGrapplableTiles(p, nearTiles2);
 	if(currentRoom->NearInteractableTiles(p))
@@ -114,7 +45,7 @@ void Level::update(float deltaTime)
 	//{
 		//nearTiles2.at(i)->print();
 	//}
-	std::cout << p.sprite.getPosition().x << ", " << p.sprite.getPosition().y <<  std::endl;
+//	std::cout << p.sprite.getPosition().x << ", " << p.sprite.getPosition().y <<  std::endl;
 
 	currentRoom->GetCollidableTiles(p, sf::Vector2i(PLAYER_DIM_X, PLAYER_DIM_Y), nearTiles);
 
@@ -124,8 +55,8 @@ void Level::update(float deltaTime)
 	inputManager->update(p, collisionManager, deltaTime);
 
 	//p.isFalling = !collisionManager->playerCollisionDetection(p);
-	p.update(deltaTime);
-	playerCheck();
+	//p.update(deltaTime);
+	p.playerUpdate(&view, sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()), deltaTime);
 
 	for (Enemy* e : enemyList)
 	{
@@ -134,9 +65,7 @@ void Level::update(float deltaTime)
 		{
 			collisionManager->setNearByTiles(enemyTiles);
 		}
-
-
-		e->enemyUpdate(collisionManager, deltaTime, sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()));
+		e->enemyUpdate(collisionManager, deltaTime, sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()), p.sprite.getPosition());
 	}
 }
 
@@ -146,6 +75,15 @@ void Level::draw(sf::RenderWindow& window)
 	window.draw(background);
 	currentRoom->draw(window);
 	p.draw(window);
+	//UNCOMMENT FOR TESTING
+	//ALSO, UNCOMMENT CODE IN Enemy.update TO FINISH TEST OUTPUT
+	//int enemyNum = 0;
+	for(Enemy* e : enemyList)
+	{
+		e->draw(window);
+	//	enemyNum++;
+	//	std::cout << "Enemy #" << enemyNum;
+	}
 	window.setView(view);
 }
 

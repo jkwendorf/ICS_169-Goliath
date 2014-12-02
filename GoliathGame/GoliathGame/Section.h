@@ -6,6 +6,7 @@
 #include "TextureManager.h"
 #include <vector>
 #include "Tile.h"
+#include "EnemySpawn.h"
 
 class Section 
 {

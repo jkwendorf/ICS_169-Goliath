@@ -266,6 +266,8 @@ void Section::LoadTileMap()
 			grid1[(y*gDim.y) + x][1] = (y*gDim.y) + x;
 			switch(tileType)
 			{
+			case -3:
+				break;
 			case -1:
 				startPos = sf::Vector2f(x * GAME_TILE_DIM + offset.x, y * GAME_TILE_DIM + offset.y);
 				grid1[(y*gDim.y) + x][2] = 0;
