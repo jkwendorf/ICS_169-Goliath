@@ -60,6 +60,7 @@ void Level::changeRoom()
 	Global::GetInstance().topLeft.x = 0;
 	Global::GetInstance().topLeft.y = 0;
 	view.reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y, SCREEN_WIDTH, SCREEN_HEIGHT));
+	std::cout << Global::GetInstance().topLeft.x << std::endl;
 }
 
 void Level::update(float deltaTime)
@@ -72,6 +73,7 @@ void Level::update(float deltaTime)
 		{
 			changeRoom();
 		}
+	std::cout << "Player Position: " << p.sprite.getPosition().x  << std::endl;
 
 		currentRoom->GetCollidableTiles(p, sf::Vector2i(PLAYER_DIM_X, PLAYER_DIM_Y), nearTiles);
 
@@ -84,7 +86,29 @@ void Level::update(float deltaTime)
 		//p.update(deltaTime);
 		p.playerUpdate(&view, sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()), deltaTime);
 
-		for (auto& e : enemyList)
+	if(p.isFalling)
+	{
+		while(collisionManager->playerCollisionDetection(&p) && p.isFalling)
+		{
+			p.moveOutOfTile(collisionManager->getCollidedTile(p));
+		}
+	}
+	else if(!collisionManager->tileBelowCharacter(&p) && !p.hShot.hookedOnSomething)
+	{
+		p.isFalling = true;
+	}
+	else if(collisionManager->tileBelowCharacter(&p))
+	{
+		if(collisionManager->wallBlockingCharacter(&p))
+		{
+			p.move(moveOutOfTileHorizontally(p, collisionManager->getCollidedTile(p)));
+		}
+	}
+
+	for (auto& e : enemyList)
+	{
+		currentRoom->GetCollidableTiles(*e, sf::Vector2i(PLAYER_DIM_X, PLAYER_DIM_Y), enemyTiles);
+		if(enemyTiles.size() > 0)
 		{
 			currentRoom->GetCollidableTiles(*e, sf::Vector2i(PLAYER_DIM_X, PLAYER_DIM_Y), enemyTiles);
 			if(enemyTiles.size() > 0)
