@@ -106,6 +106,8 @@ inline void grappleHookMove(Player& p, float& deltaTime)
 {
 	sf::Vector2f moveAmount(p.grappleDir*(deltaTime*GRAPPLE_SPEED));
 	
+	std::cout << moveAmount.x << " , " << moveAmount.y << std::endl;
+
 	float length, maxDistance = distance(p.hShot.grappleLocation, p.sprite.getPosition());
 	norm(moveAmount, length);
 

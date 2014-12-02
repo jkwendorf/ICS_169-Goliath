@@ -33,14 +33,6 @@ void Player::update(float deltaTime)
 {
 	if(!hShot.grappleInProgress)
 	{
-		// Move the player
-		verticalAcceleration(deltaTime);
-
-		if(running)
-			move(vel*deltaTime);
-		else
-			move(vel*deltaTime);
-
 		if(facingRight)
 			hShot.update(sf::Vector2f(sprite.getPosition().x + 60, sprite.getPosition().y - 15));
 		else
@@ -54,25 +46,37 @@ void Player::update(float deltaTime)
 		{
 			hShot.grappleInProgress = false;
 		}
-
-		// If we're hooked onto something, grapple to point
-		if(hShot.hookedOnSomething)
-		{
-			// If the direction isn't set, set it
-			direction(hShot.grappleLocation, sprite.getPosition(), grappleDir);
-			// Move to the point and do stuff
-			grappleHookMove(*this, deltaTime);
-
-			// If were at the point, end grappling and reset the direction
-			if(distance(hShot.grappleLocation, sprite.getPosition()) < 5.f)
-			{
-				hShot.hookedOnSomething = false;
-				hShot.grappleInProgress = false;
-				isFalling = true;
-				grappleDir.y = 100;
-			}
-		}
 	}
+
+	if(!hShot.hookedOnSomething || !hShot.grappleInProgress)
+	{	
+	// Move the player
+		verticalAcceleration(deltaTime);
+
+		if(running)
+			move(vel*deltaTime);
+		else
+			move(vel*deltaTime);
+	}
+	else if(hShot.grappleInProgress)
+	{
+		vel.x = 0.f;
+		vel.y = 0.f;
+		// If the direction isn't set, set it
+		direction(hShot.grappleLocation, sprite.getPosition(), grappleDir);
+		// Move to the point and do stuff
+		grappleHookMove(*this, deltaTime);
+
+		// If were at the point, end grappling and reset the direction
+		if(distance(hShot.grappleLocation, sprite.getPosition()) < 5.f)
+		{
+			std::cout << "Ending move" << std::endl;
+			hShot.hookedOnSomething = false;
+			hShot.grappleInProgress = false;
+			isFalling = true;
+			grappleDir.y = 100;
+		}
+	}	
 
 	for(int x = 0; x < 3; x++)
 	{
@@ -222,10 +226,12 @@ void Player::viewCheck(sf::View* view, int width, int height)
 		if((sprite.getPosition().x - (PLAYER_DIM_X / 2)) < 0)
 		{
 			sprite.setPosition((0 + PLAYER_DIM_X /2), sprite.getPosition().y);
+			vel.x = 0.f;
 		}
 		else if((sprite.getPosition().x + (PLAYER_DIM_X / 2)) > (width - 1))
 		{
       		sprite.setPosition((width - 1 - (PLAYER_DIM_X / 2)), sprite.getPosition().y);
+			vel.x = 0.f;
 		}
 	}
 	else if(Global::GetInstance().topLeft.x == (width - SCREEN_WIDTH))
@@ -233,6 +239,7 @@ void Player::viewCheck(sf::View* view, int width, int height)
 		if((sprite.getPosition().x + (PLAYER_DIM_X / 2)) > (width - 1))
 		{
       		sprite.setPosition((width - 1 - (PLAYER_DIM_X / 2)), sprite.getPosition().y);
+			vel.x = 0.f;
 		}
 	}
 
@@ -313,14 +320,14 @@ void Player::moveOutOfTile(Tile* t)
 	{
 		if(sgn(vel.y) > 0)
 		{
-			if(up > left)
+			if(up >= left)
 				move(moveOutOfTileHorizontally(*this, t));
 			else
 				move(moveOutOfTileVertically(*this, t));
 		}
 		else if(sgn(vel.y) < 0)
 		{
-			if(down > left)
+			if(down >= left)
 				move(moveOutOfTileHorizontally(*this, t));
 			else
 				move(moveOutOfTileVertically(*this, t));
@@ -334,14 +341,14 @@ void Player::moveOutOfTile(Tile* t)
 	{
 		if(sgn(vel.y) > 0)
 		{
-			if(up > right)
+			if(up >= right)
 				move(moveOutOfTileHorizontally(*this, t));
 			else
 				move(moveOutOfTileVertically(*this, t));
 		}
 		else if(sgn(vel.y) < 0)
 		{
-			if(down > right)
+			if(down >= right)
 				move(moveOutOfTileHorizontally(*this, t));
 			else
 				move(moveOutOfTileVertically(*this, t));
