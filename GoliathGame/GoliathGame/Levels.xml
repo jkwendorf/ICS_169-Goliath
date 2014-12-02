@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Game>
-  <Level number="1" tilesheet="2x2Tiles" size="3">
+  <Level number="1" tilesheet="2x2Tiles" size="2">
     <Room number="1" size="1"></Room>
     <Room number="2" size="2"></Room>
     <Room number="3" size="2"></Room>

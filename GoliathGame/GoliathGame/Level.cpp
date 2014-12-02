@@ -9,8 +9,8 @@ Level::Level(int levelNumber)
 	:levelNum(levelNumber), p(Player()), collisionManager(new CollisionManager()), inputManager(new InputManager())
 {
 	currentRoom = new Room(levelNumber, 1, enemyList);
-	background.setTexture(*TextureManager::GetInstance().retrieveTexture("bandit canyon level"));
-	background.setPosition(0,-100);
+	background.setTexture(*TextureManager::GetInstance().retrieveTexture("banditCity"));
+	background.setPosition(-75,75);
 	background.scale(1.0, (float)(GAME_TILE_DIM * 22 + 100) / background.getTexture()->getSize().y);
 	view.reset(sf::FloatRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
 	view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
@@ -44,6 +44,7 @@ void Level::changeRoom()
 	currentRoom = new Room(levelNum, ++roomNum, enemyList);
 	//Move player to the start pos in new room
 	p.resetPosition(currentRoom->getStartPos());
+	//p.playerUpdate(&view, sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()), 0.5f);
 }
 
 void Level::update(float deltaTime)
