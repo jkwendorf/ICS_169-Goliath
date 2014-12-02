@@ -3,15 +3,22 @@
 #include "HookShot.h"
 #include "Projectile.h"
 #include "UserInterface.h"
+#include "Tile.h"
 //#include "Sword.h"
 //#include "CrossBow.h"
 
-/*enum MovementDirection
+#ifndef MOVE_DIR
+#define MOVE_DIR
+
+enum MovementDirection
 {
 	LEFT = -1,
 	RIGHT = 1,
 	STILL = 0
-};*/
+
+};
+
+#endif // MOVE_DIR
 
 enum WeaponEnum
 {
@@ -37,6 +44,11 @@ public:
 	void resetPosition(sf::Vector2f& newPos);
 	void draw(sf::RenderWindow& window);
 	void playerUpdate(sf::View* view, sf::Vector2i roomSize, float deltaTime);
+	
+	void playerMove(float& deltaTime);
+	void horizontalAcceleration(MovementDirection dir, float& deltaTime);
+	void verticalAcceleration(float& deltaTime);
+	void moveOutOfTile(Tile* t);
 
 	// VARIABLES
 	float stamina;
@@ -47,10 +59,10 @@ public:
 	HookShot hShot;
 	sf::Vector2f grappleDir;
 
-	bool grappleInProgress, facingRight;
+	bool grappleInProgress, facingRight, running;
 	Projectile ammo[3];
-
-private:
 	void viewCheck(sf::View* view, int width, int height);
+
+private:	
 	UserInterface* ui;
 };

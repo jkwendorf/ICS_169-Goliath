@@ -15,6 +15,8 @@ GameState::~GameState(void)
 
 void GameState::DeleteState()
 {
+	std::cout << "Deleting the state" << std::endl;
+	currentScreen->DeleteLevel();
 	delete currentScreen;
 	/*
 	std::cout << "Calling GameState destructor" << std::endl;
@@ -26,7 +28,6 @@ void GameState::DeleteState()
 void GameState::update(float deltaTime)
 {
 	currentScreen->update(deltaTime);
-
 }
 
 void GameState::draw(sf::RenderWindow& window)

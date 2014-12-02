@@ -30,6 +30,11 @@ inline int sgn(int& x)
 	return x > 0 ? 1 : (x < 0 ? -1 : 0);
 }
 
+inline float sgn(float& x)
+{
+	return x > 0.f ? 1.f : (x < 0.f ? -1.f : 0.f);
+}
+
 inline float min(float& val, float& min)
 {
 	return val > min ? min : val;
@@ -37,5 +42,5 @@ inline float min(float& val, float& min)
 
 inline float max(float& val, float& max)
 {
-	return val > max ? max : val;
+	return val > max ? val : max;
 }
