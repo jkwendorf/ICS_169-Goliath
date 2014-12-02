@@ -48,7 +48,8 @@ public:
 
 	bool grappleInProgress, facingRight;
 	Projectile ammo[3];
+	void viewCheck(sf::View* view, int width, int height);
 
 private:
-	void viewCheck(sf::View* view, int width, int height);
+	
 };

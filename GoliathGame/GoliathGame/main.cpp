@@ -26,7 +26,7 @@ int main()
 			sM->handleEvent(event);
         }
 		deltaTime = min(deltaTime, maxTime);
-		std::cout<< deltaTime << std::endl;
+		//std::cout<< deltaTime << std::endl;
 		sM->update(deltaTime);
 
         window.clear();
@@ -36,6 +36,7 @@ int main()
 
 	window.close();
 	delete sM;
+	Global::GetInstance().CleanUp();
 	//std::cout << "\n Press ENTER to continue...";
 	//std::cin.ignore( std::numeric_limits<std::streamsize>::max(), '\n' );
 

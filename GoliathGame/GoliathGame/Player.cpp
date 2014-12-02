@@ -7,7 +7,7 @@ Player::Player()
 {
 	vel = sf::Vector2f(0.0,0.0);
 	
-	sprite.setTexture(*TextureManager::GetInstance().retrieveTexture("Test"));
+	sprite.setTexture(*TextureManager::GetInstance().retrieveTexture("David"));
 	//sprite.setPosition(64, 560);
 	sprite.setPosition(150, 64);
 	sprite.setScale( (PLAYER_DIM_X / (float)sprite.getTexture()->getSize().x), (PLAYER_DIM_Y / (float)sprite.getTexture()->getSize().y));
@@ -74,6 +74,7 @@ void Player::update(float deltaTime)
 
 void Player::attack()
 {
+
 	if(weapon == CROSSBOW)
 	{
 		float xSpeed;
@@ -87,7 +88,7 @@ void Player::attack()
 				
 				ammo[x].setVelocity(sf::Vector2f(xSpeed,0.0));
 				ammo[x].moving = true;
-				break;
+				//break;
 			}
 		/*
 		if(ammo[0].velocity.x == 0)
@@ -116,6 +117,7 @@ void Player::draw(sf::RenderWindow& window)
 	window.draw(hShot.sprite);
 	//for(int x = 0; x < 3; x++)
 	//	ammo[x].draw(window);
+
 	/* //TESTING CIRCLE
 	sf::CircleShape circle = sf::CircleShape(5.0);
 	circle.setPosition(sprite.getPosition());
@@ -210,6 +212,10 @@ void Player::viewCheck(sf::View* view, int width, int height)
 		if((sprite.getPosition().x - (PLAYER_DIM_X / 2)) < 0)
 		{
 			sprite.setPosition((0 + PLAYER_DIM_X /2), sprite.getPosition().y);
+		}
+		else if((sprite.getPosition().x + (PLAYER_DIM_X / 2)) > (width - 1))
+		{
+			sprite.setPosition((width - 1 - (PLAYER_DIM_X / 2)), sprite.getPosition().y);
 		}
 	}
 	else if(Global::GetInstance().topLeft.x == (width - SCREEN_WIDTH))

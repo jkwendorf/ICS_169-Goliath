@@ -13,19 +13,53 @@ Enemy::Enemy(sf::String body, float x, float y) :
 	sprite.setTexture(*TextureManager::GetInstance().retrieveTexture(body));
 	sprite.setPosition(x, y);
 
+	//For testing
+	attackRange = 500;
+
+	weaponCooldown = 2.0f;
+	currentCooldown = 2.0f;
+
 	//ND: Change Player dimensions to whatever floats your boat
 	sprite.setScale( (PLAYER_DIM_X / (float)sprite.getTexture()->getSize().x), (PLAYER_DIM_Y / (float)sprite.getTexture()->getSize().y));
 	sprite.setOrigin(sprite.getLocalBounds().width/2, sprite.getLocalBounds().height/2);
+
+	for(int x = 0; x < 3; x++)
+	{
+		ammo[x] = Projectile(sprite.getPosition(), sf::Vector2f(0.0,0.0));
+		ammo[x].sprite.setColor(sf::Color(x*50 + 150, 0, 0));
+	}
+}
+
+Enemy::Enemy(sf::String body, float x, float y, float range) :
+	BaseObject(), attackRange(range)
+{
+	sprite.setTexture(*TextureManager::GetInstance().retrieveTexture(body));
+	sprite.setPosition(x, y);
+
+	//ND: Change Player dimensions to whatever floats your boat
+	sprite.setScale( (PLAYER_DIM_X / (float)sprite.getTexture()->getSize().x), (PLAYER_DIM_Y / (float)sprite.getTexture()->getSize().y));
+	sprite.setOrigin(sprite.getLocalBounds().width/2, sprite.getLocalBounds().height/2);
+
+	for(int x = 0; x < 3; x++)
+	{
+		ammo[x] = Projectile(sprite.getPosition(), sf::Vector2f(0.0,0.0));
+		ammo[x].sprite.setColor(sf::Color(x*50 + 150, 0, 0));
+	}
 }
 
 Enemy::~Enemy()
 {
-
+	//delete[] ammo;
 }
 
 void Enemy::update(float deltaTime)
 {
-
+	for(int x = 0; x < 3; x++)
+	{
+		if(!ammo[x].moving)
+			ammo[x].setLocation(sprite.getPosition());
+		ammo[x].update(deltaTime);
+	}
 }
 
 void Enemy::draw(sf::RenderWindow& window)
@@ -34,6 +68,13 @@ void Enemy::draw(sf::RenderWindow& window)
 	if(isInScreen())
 	{
 		BaseObject::draw(window);
+		for(int x = 0; x < 3; x++)
+		{
+			if(ammo[x].moving)
+			{
+				ammo[x].draw(window);
+			}
+		}
 	//	std::cout << " is in screen" << std::endl;
 	}
 	//else std::cout << " not in screen" << std::endl;
@@ -57,6 +98,7 @@ void Enemy::destroy()
 void Enemy::enemyUpdate(CollisionManager* cM, float deltaTime, sf::Vector2i roomSize, sf::Vector2f pPosition)
 {
 	gravity(cM, deltaTime);
+
 	//if enemy isn't in range of player, handle normally
 	if((movingRight && sprite.getPosition().x - pPosition.x > 0) || (!movingRight && sprite.getPosition().x - pPosition.x < 0))
 	{
@@ -69,6 +111,11 @@ void Enemy::enemyUpdate(CollisionManager* cM, float deltaTime, sf::Vector2i room
 	else
 	{
 		normalMove(cM, deltaTime);
+	}
+
+	if(inAttackRange(pPosition))
+	{
+		attack(pPosition, deltaTime);
 	}
 
 	enemyCheck(roomSize);
@@ -140,6 +187,7 @@ void Enemy::moveToPlayer(CollisionManager* cM, sf::Vector2f pPosition, float del
 			move(moveHorizontally(*this, RIGHT, false, deltaTime)); 
 		}
 	}
+
 	//if you come across a wall, jump
 	if(cM->playerCollisionDetection(this))
 	{
@@ -168,6 +216,18 @@ bool Enemy::inRange(sf::Vector2f pPosition)
 	else return false;
 }
 
+bool Enemy::inAttackRange(sf::Vector2f pPosition)
+{
+	if((sprite.getPosition().x + attackRange) > pPosition.x && (sprite.getPosition().x - attackRange) < pPosition.x)
+	{
+		if(sprite.getPosition().y == pPosition.y)
+		{
+			return true;
+		}
+	}
+	else return false;
+}
+
 void Enemy::enemyCheck(sf::Vector2i roomSize)
 {
 	if ((sprite.getPosition().x - (PLAYER_DIM_X / 2)) < 0)
@@ -180,6 +240,68 @@ void Enemy::enemyCheck(sf::Vector2i roomSize)
 		sprite.setPosition((roomSize.x - 1 - (PLAYER_DIM_X / 2)), sprite.getPosition().y);
 		movingRight = false;
 	}
+}
+
+void Enemy::attack(sf::Vector2f pPosition, float deltaTime)
+{
+	if(attackRange >= ENEMY_ATTACK_HIGH_THRESHOLD)
+	{
+		if(playerOnLeft(pPosition) && !movingRight)
+		{
+			rangeAttack(deltaTime);
+		}
+		else if (!playerOnLeft(pPosition) && movingRight)
+		{
+			rangeAttack(deltaTime);
+		}
+	}
+	else if(attackRange <= ENEMY_ATTACK_LOW_THRESHOLD)
+	{
+		if(playerOnLeft(pPosition) && !movingRight)
+		{
+			meleeAttack();
+		}
+		else if (!playerOnLeft(pPosition) && movingRight)
+		{
+			meleeAttack();
+		}
+	}
+
+}
+
+void Enemy::rangeAttack(float deltaTime)
+{
+	float xSpeed;
+	if(currentCooldown >= weaponCooldown)
+	{
+		for(int x = 0; x < 3; x++)
+		{
+			if(!ammo[x].moving)
+			{
+
+				if(movingRight)
+				{
+					xSpeed = 10.0;
+				}
+				else
+				{
+					xSpeed = -10.0;
+				}
+
+				ammo[x].setVelocity(sf::Vector2f(xSpeed,0.0));
+				ammo[x].moving = true;
+
+				currentCooldown = 0.0f;
+				break;
+			}
+		}
+	}
+	currentCooldown += deltaTime;
+}
+
+void Enemy::meleeAttack()
+{
+
 }
 
 bool Enemy::isInScreen()

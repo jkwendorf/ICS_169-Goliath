@@ -89,7 +89,6 @@
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="EndGameState.cpp" />
     <ClCompile Include="Enemy.cpp" />
-    <ClCompile Include="EnemySpawn.cpp" />
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="Global.cpp" />
     <ClCompile Include="HookShot.cpp" />
@@ -113,7 +112,6 @@
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="EndGameState.h" />
     <ClInclude Include="Enemy.h" />
-    <ClInclude Include="EnemySpawn.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="Global.h" />
     <ClInclude Include="HookShot.h" />
