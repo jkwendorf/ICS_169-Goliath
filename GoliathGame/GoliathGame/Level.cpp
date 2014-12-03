@@ -83,7 +83,16 @@ void Level::update(float deltaTime)
 	collisionManager->setNearByTiles(nearTiles);
 	collisionManager->setGrapplableTiles(nearTiles2);
 	
-	p.hShot.hookedOnSomething = collisionManager->hookCollisionDetection(p.hShot);
+	if(p.hShot.grappleInProgress)
+	{
+		if(!p.hShot.hookedOnSomething && collisionManager->hookCollisionDetection(p.hShot))
+		{
+			p.hShot.hookedOnSomething = true;
+			Tile* hookedTile = collisionManager->getHookedTile(p.hShot);
+			p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width/2, hookedTile->top + hookedTile->height));
+		}
+	}
+
 	//if(p.hShot.hookedOnSomething)
 		//std::cout << "hooked" << std::endl;
 	inputManager->update(p, collisionManager, deltaTime);
@@ -94,8 +103,10 @@ void Level::update(float deltaTime)
 
 	if(!p.hShot.hookedOnSomething || !p.hShot.grappleInProgress)
 	{
+		//std::cout << "Check Collision" << std::endl;
 		if(p.isFalling)
 		{
+			//std::cout << "Falling Collision" << std::endl;
 			while(collisionManager->playerCollisionDetection(&p))
 			{
 				p.moveOutOfTile(collisionManager->getCollidedTile(p));
@@ -103,10 +114,12 @@ void Level::update(float deltaTime)
 		}
 		else if(!collisionManager->tileBelowCharacter(&p))
 		{
+			//std::cout << "Start Falling" << std::endl;
 			p.isFalling = true;
 		}
 		else if(collisionManager->tileBelowCharacter(&p))
 		{
+			//std::cout << "Ground Collision" << std::endl;
 			if(collisionManager->wallBlockingCharacter(&p))
 			{
 				p.move(moveOutOfTileHorizontally(p, collisionManager->getCollidedTile(p)));

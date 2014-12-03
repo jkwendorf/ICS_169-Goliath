@@ -35,5 +35,4 @@ public:
 	void update(float deltaTime);
 	void draw(sf::RenderWindow& window);
 	void DeleteLevel();
-
 };

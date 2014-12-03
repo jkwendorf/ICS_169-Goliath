@@ -25,8 +25,8 @@ void HookShot::update(float deltaTime)
 		sprite.move((grappleLocation.x - sprite.getPosition().x)*5*deltaTime, (grappleLocation.y - sprite.getPosition().y)*5*deltaTime);
 		
 	}
-	else
-		grappleLocation = sprite.getPosition();
+	//else
+	//	grappleLocation = sprite.getPosition();
 }
 
 void HookShot::update(sf::Vector2f pos)
