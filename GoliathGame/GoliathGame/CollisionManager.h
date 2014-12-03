@@ -3,6 +3,8 @@
 #include "BaseObject.h"
 #include "Player.h"
 #include "Tile.h"
+#include "Enemy.h"
+#include <memory>
 
 
 class CollisionManager
@@ -21,6 +23,8 @@ public:
 	bool tileBelowCharacter(BaseObject* p);
 	bool wallBlockingCharacter(BaseObject* p);
 	int numTilesNear(BaseObject p);
+
+	void checkPlayerBulletToEnemies(Projectile p[], std::vector<std::unique_ptr<Enemy>> enemyList);
 
 private:
 	std::vector<Tile*> tileList;

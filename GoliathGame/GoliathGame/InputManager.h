@@ -21,7 +21,9 @@ public:
 	//utility[1] = jump
 	//utility[2] = grapple
 	//utility[3] = attack
-	bool utility[4];
+	//utility[4] = sword
+	//utility[5] = crossbow
+	bool utility[6];
 
 
 	//controller[0] = game pad

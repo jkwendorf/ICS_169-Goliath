@@ -97,3 +97,13 @@ Tile* CollisionManager::getHookedTile(HookShot hs)
 	}
 	return NULL;
 }
+
+/*
+void checkPlayerBulletToEnemies(Projectile p[], std::vector<std::unique_ptr<Enemy>> enemyList)
+{
+	for(int x = 0; x < 3; x++)
+		for(auto& e : enemyList)
+			if(p[x].sprite.getTextureRect().intersects(e.sprite.getTextureRect()))
+				e.health -= p[x].damage;
+}
+*/
