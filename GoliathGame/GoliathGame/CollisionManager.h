@@ -17,6 +17,7 @@ public:
 	void setNearByTiles(std::vector<Tile*> tiles);
 	void setGrapplableTiles(std::vector<Tile*> tiles);
 	bool hookCollisionDetection(HookShot hs);
+	Tile* getHookedTile(HookShot hs);
 	
 	Tile* getCollidedTile(BaseObject p);
 	bool tileBelowCharacter(BaseObject* p);

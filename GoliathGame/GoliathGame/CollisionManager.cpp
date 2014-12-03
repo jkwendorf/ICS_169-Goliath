@@ -61,10 +61,10 @@ bool CollisionManager::tileBelowCharacter(BaseObject* p)
 	for(Tile* b : tileList)
 	{
 		//if(b->intersects(p->sprite.getGlobalBounds()) && b->top >= p->sprite.getPosition().y)
-		if(b->top >= p->sprite.getPosition().y)
+		if(b->top >= p->sprite.getPosition().y + p->sprite.getGlobalBounds().height/2)
 			if((b->left <= left && b->left + b->width >= left) ||
 				(b->left <= right && b->left + b->width >= right))
-			return true;
+				return true;
 	}
 	return false;
 }
@@ -87,6 +87,17 @@ int CollisionManager::numTilesNear(BaseObject p)
 {
 	return tileList.size();
 }
+
+Tile* CollisionManager::getHookedTile(HookShot hs)
+{
+	for(Tile* b : grapplableTileList)
+	{
+		if(b->intersects(hs.sprite.getGlobalBounds()) && b->getGrappleable())
+			return b;
+	}
+	return NULL;
+}
+
 /*
 void checkPlayerBulletToEnemies(Projectile p[], std::vector<std::unique_ptr<Enemy>> enemyList)
 {

@@ -47,6 +47,7 @@ void Player::update(float deltaTime)
 			pow((std::abs(hShot.sprite.getPosition().y - sprite.getPosition().y)),2)) >= 300)
 		{
 			hShot.grappleInProgress = false;
+			hShot.hookedOnSomething = false;
 		}
 	}
 
@@ -62,7 +63,7 @@ void Player::update(float deltaTime)
 		else
 			move(vel*deltaTime);
 	}
-	else if(hShot.grappleInProgress)
+	else if(hShot.grappleInProgress && hShot.hookedOnSomething)
 	{
 		vel.x = 0.f;
 		vel.y = 0.f;
@@ -72,9 +73,8 @@ void Player::update(float deltaTime)
 		grappleHookMove(*this, deltaTime);
 
 		// If were at the point, end grappling and reset the direction
-		if(distance(hShot.grappleLocation, sprite.getPosition()) < 5.f)
+		if(hShot.grappleLocation == sprite.getPosition())
 		{
-			std::cout << "Ending move" << std::endl;
 			hShot.hookedOnSomething = false;
 			hShot.grappleInProgress = false;
 			isFalling = true;
@@ -161,19 +161,21 @@ void Player::draw(sf::RenderWindow& window)
 
 void Player::grapple()
 {
-	hShot.grappleInProgress = true;
+	if(!hShot.grappleInProgress)
+	{
+		hShot.grappleInProgress = true;
 	
-	if(facingRight)
-	{
-		hShot.startLocation = sf::Vector2f(sprite.getPosition().x + 60, sprite.getPosition().y - 15);
-		hShot.grappleToLocation(sf::Vector2f(sprite.getPosition().x + 300 , sprite.getPosition().y - 175));
+		if(facingRight)
+		{
+			hShot.startLocation = sf::Vector2f(sprite.getPosition().x + 60, sprite.getPosition().y - 15);
+			hShot.grappleToLocation(sf::Vector2f(sprite.getPosition().x + 300 , sprite.getPosition().y - 175));
+		}
+		else
+		{
+			hShot.startLocation = sf::Vector2f(sprite.getPosition().x - 60, sprite.getPosition().y - 15);
+			hShot.grappleToLocation(sf::Vector2f(sprite.getPosition().x - 300 , sprite.getPosition().y - 175));
+		}
 	}
-	else
-	{
-		hShot.startLocation = sf::Vector2f(sprite.getPosition().x - 60, sprite.getPosition().y - 15);
-		hShot.grappleToLocation(sf::Vector2f(sprite.getPosition().x - 300 , sprite.getPosition().y - 175));
-	}
-
 }
 
 void Player::resetPosition(sf::Vector2f& newPos)
@@ -269,9 +271,8 @@ void Player::viewCheck(sf::View* view, int width, int height)
 void Player::horizontalAcceleration(MovementDirection dir, float& deltaTime)
 {
 
-	if(!hShot.hookedOnSomething)
+	if(!hShot.hookedOnSomething || !hShot.grappleInProgress)
 	{
-
 		if(dir != STILL)
 		{
 			float maxSpeed = SPEED;

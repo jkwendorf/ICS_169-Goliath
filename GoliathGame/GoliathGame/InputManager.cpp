@@ -79,13 +79,19 @@ void InputManager::playerMove(Player& player, CollisionManager* cM, float deltaT
 	/* HANDLE LEFT AND RIGHT MOTION*/
 	if(movement[0])
 	{
-		player.horizontalAcceleration(LEFT, deltaTime);
-		player.facingRight = false;
+		if(!player.hShot.grappleInProgress || !player.hShot.hookedOnSomething)
+		{
+			player.horizontalAcceleration(LEFT, deltaTime);
+			player.facingRight = false;
+		}
 	}
 	else if(movement[1])
 	{
-		player.horizontalAcceleration(RIGHT, deltaTime);
-		player.facingRight = true;
+		 if(!player.hShot.grappleInProgress || !player.hShot.hookedOnSomething)
+		 {
+			player.horizontalAcceleration(RIGHT, deltaTime);
+			player.facingRight = true;
+		 }
 	}
 	else
 		player.horizontalAcceleration(STILL, deltaTime);
