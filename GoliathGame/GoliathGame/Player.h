@@ -50,6 +50,8 @@ public:
 	void verticalAcceleration(float& deltaTime);
 	void moveOutOfTile(Tile* t);
 
+	void drawUI(sf::RenderWindow& window);
+
 	// VARIABLES
 	float stamina;
 	float health;
