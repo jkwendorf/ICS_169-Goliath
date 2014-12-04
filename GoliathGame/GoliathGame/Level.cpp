@@ -1,12 +1,13 @@
 #include "Level.h"
 
 Level::Level(void)
+	:changeScreen(false)
 {
 
 }
 
 Level::Level(int levelNumber)
-	:levelNum(levelNumber), p(Player()), collisionManager(new CollisionManager()), inputManager(new InputManager()), 
+	:changeScreen(false), levelNum(levelNumber), p(Player()), collisionManager(new CollisionManager()), inputManager(new InputManager()), 
 	maxRooms(Global::GetInstance().levelSizes.at("Level " + std::to_string(levelNum))), loading(1.0)
 {
 	currentRoom = new Room(levelNumber, 1, enemyList);
@@ -57,9 +58,7 @@ void Level::changeRoom()
 	{
 		delete currentRoom;
 		enemyList.clear();
-		currentRoom = new Room(levelNum, 1, enemyList);
-		//Move player to the start pos in new room
-		p.resetPosition(currentRoom->getStartPos());
+		changeScreen = true;
 	}
 	Global::GetInstance().topLeft.x = 0;
 	Global::GetInstance().topLeft.y = 0;
@@ -165,6 +164,11 @@ void Level::draw(sf::RenderWindow& window)
 	//	std::cout << "Enemy #" << enemyNum;
 	}
 	window.setView(view);
+}
+
+bool Level::CheckChangeScreen()
+{
+	return changeScreen;
 }
 
 void Level::CleanUp()

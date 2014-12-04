@@ -12,6 +12,7 @@
 class Level : public BaseGameScreen
 {
 private:
+	bool changeScreen;
 	float loading;
 	int levelNum, maxRooms;
 	Player p;
@@ -35,4 +36,6 @@ public:
 	void update(float deltaTime);
 	void draw(sf::RenderWindow& window);
 	void DeleteLevel();
+	bool CheckChangeScreen();
+
 };

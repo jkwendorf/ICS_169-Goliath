@@ -10,6 +10,12 @@
 #include "Level.h"
 #include "BaseGameScreen.h"
 
+enum SCREENENUM
+{
+	TOWN,
+	LEVEL,
+	BOSS
+};
 
 class GameState : public State
 {
@@ -25,6 +31,7 @@ public:
 
 private:
 	BaseGameScreen* currentScreen;
+	SCREENENUM screen;
 
 };
 

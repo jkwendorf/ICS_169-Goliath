@@ -2,7 +2,7 @@
 #include "PhysicsManager.h"
 
 GameState::GameState(void)
-	:currentScreen(new Level(1))
+	:currentScreen(new Level(1)), screen(LEVEL)
 {
 
 }
@@ -28,6 +28,10 @@ void GameState::DeleteState()
 void GameState::update(float deltaTime)
 {
 	currentScreen->update(deltaTime);
+	if(currentScreen->CheckChangeScreen())
+	{
+		
+	}
 }
 
 void GameState::draw(sf::RenderWindow& window)
