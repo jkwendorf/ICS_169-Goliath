@@ -28,7 +28,7 @@ Player::Player()
 
 Player::~Player() 
 {
-
+	delete ui;
 }
 
 void Player::update(float deltaTime)

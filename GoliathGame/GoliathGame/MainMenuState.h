@@ -1,5 +1,8 @@
 #pragma once
 #include "State.h"
+#include "Button.h"
+#include "Global.h"
+#include "StateManager.h"
 
 class MainMenuState : public State
 {
@@ -15,5 +18,6 @@ public:
 	void unloadContent();
 
 private:
+	//Button* play, help, credits;
 };
 
