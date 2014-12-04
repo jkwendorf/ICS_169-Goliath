@@ -46,6 +46,8 @@ void InputManager::update(Player& s, CollisionManager* cM, float deltaTime)
 	}
 	utility[2] = sf::Mouse::isButtonPressed(sf::Mouse::Right) && !utility[2] ? true : false;
 	utility[3] = sf::Mouse::isButtonPressed(sf::Mouse::Left) && !utility[3] ? true : false;
+	utility[4] = sf::Keyboard::isKeyPressed(sf::Keyboard::Q) && !utility[4] ? true : false;
+	utility[5] = sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !utility[5] ? true : false;
 
 	playerMove(s, cM, deltaTime);
 }
@@ -77,13 +79,19 @@ void InputManager::playerMove(Player& player, CollisionManager* cM, float deltaT
 	/* HANDLE LEFT AND RIGHT MOTION*/
 	if(movement[0])
 	{
-		player.horizontalAcceleration(LEFT, deltaTime);
-		player.facingRight = false;
+		if(!player.hShot.grappleInProgress || !player.hShot.hookedOnSomething)
+		{
+			player.horizontalAcceleration(LEFT, deltaTime);
+			player.facingRight = false;
+		}
 	}
 	else if(movement[1])
 	{
-		player.horizontalAcceleration(RIGHT, deltaTime);
-		player.facingRight = true;
+		 if(!player.hShot.grappleInProgress || !player.hShot.hookedOnSomething)
+		 {
+			player.horizontalAcceleration(RIGHT, deltaTime);
+			player.facingRight = true;
+		 }
 	}
 	else
 		player.horizontalAcceleration(STILL, deltaTime);
@@ -104,6 +112,14 @@ void InputManager::playerMove(Player& player, CollisionManager* cM, float deltaT
 			utility[3] = false;
 			player.currentCooldown = 0.0;
 		}
+	}
+	if(utility[4])
+	{
+		player.weapon = SWORD;
+	}
+	if(utility[5])
+	{
+		player.weapon = CROSSBOW;
 	}
 	//player.sprite.move(player.vel);
 	//player.vel.x = 0.0;

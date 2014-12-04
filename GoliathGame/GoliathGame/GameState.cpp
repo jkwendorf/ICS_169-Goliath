@@ -2,7 +2,7 @@
 #include "PhysicsManager.h"
 
 GameState::GameState(void)
-	:currentScreen(new Level(1))
+	:currentScreen(new Level(1)), nextScreen(NULL), screen(LEVEL)
 {
 
 }
@@ -18,6 +18,7 @@ void GameState::DeleteState()
 	std::cout << "Deleting the state" << std::endl;
 	currentScreen->DeleteLevel();
 	delete currentScreen;
+	delete nextScreen;
 	/*
 	std::cout << "Calling GameState destructor" << std::endl;
 	delete collisionManager;
@@ -28,6 +29,13 @@ void GameState::DeleteState()
 void GameState::update(float deltaTime)
 {
 	currentScreen->update(deltaTime);
+	currentScreen->CheckChangeScreen(nextScreen);
+	if(nextScreen)
+	{
+		delete currentScreen;
+		currentScreen = nextScreen;
+		nextScreen = NULL;
+	}
 }
 
 void GameState::draw(sf::RenderWindow& window)
