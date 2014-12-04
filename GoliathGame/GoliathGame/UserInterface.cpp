@@ -13,6 +13,12 @@ UserInterface::UserInterface(float h, float s)
 	staminaBar.setPosition(Global::GetInstance().topLeft.x + 20, Global::GetInstance().topLeft.y + 90);
 }
 
+UserInterface::~UserInterface()
+{
+	//delete healthBar;
+	//delete staminaBar;
+}
+
 void UserInterface::draw(sf::RenderWindow& window)
 {
 	window.draw(healthBar);

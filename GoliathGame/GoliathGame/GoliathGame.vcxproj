@@ -130,6 +130,7 @@
     <ClInclude Include="State.h" />
     <ClInclude Include="StateManager.h" />
     <ClInclude Include="Tile.h" />
+    <ClInclude Include="Town.h" />
     <ClInclude Include="UserInterface.h" />
     <ClInclude Include="Utility.h" />
     <ClInclude Include="Weapon.h" />
