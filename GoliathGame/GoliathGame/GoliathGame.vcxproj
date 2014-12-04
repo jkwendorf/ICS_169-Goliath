@@ -89,6 +89,7 @@
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="EndGameState.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyAI.cpp" />
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="Global.cpp" />
     <ClCompile Include="HookShot.cpp" />
@@ -102,6 +103,7 @@
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="Section.cpp" />
     <ClCompile Include="StateManager.cpp" />
+    <ClCompile Include="Sword.cpp" />
     <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="Town.cpp" />
@@ -114,6 +116,7 @@
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="EndGameState.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyAI.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="Global.h" />
     <ClInclude Include="HookShot.h" />
@@ -126,6 +129,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="Section.h" />
+    <ClInclude Include="Sword.h" />
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="MainMenuState.h" />
     <ClInclude Include="State.h" />

@@ -12,7 +12,7 @@ Player::Player()
 	sprite.setPosition(150, 64);
 	sprite.setScale( (PLAYER_DIM_X / (float)sprite.getTexture()->getSize().x), (PLAYER_DIM_Y / (float)sprite.getTexture()->getSize().y));
 	sprite.setOrigin(sprite.getLocalBounds().width/2, sprite.getLocalBounds().height/2);
-	weapon = CROSSBOW;
+	weapon = SWORD;
 	weaponCooldown = 2.0f;
 	currentCooldown = 0.0f;
 	isFalling = true;
@@ -20,8 +20,10 @@ Player::Player()
 	{
 		ammo[x] = Projectile(sprite.getPosition(), sf::Vector2f(0.0,0.0));
 		ammo[x].sprite.setColor(sf::Color(x*50 + 150, 0, 0));
+		ammo[x].damage = 100.0f;
 	}
 	grappleDir.y = 100;
+	playerSword.damage = 100.0f;
 }
 
 Player::~Player() 
@@ -86,7 +88,7 @@ void Player::update(float deltaTime)
 			ammo[x].setLocation(sprite.getPosition());
 		ammo[x].update(deltaTime);
 	}
-
+	playerSword.update(deltaTime);
 	ui->update(health, stamina);
 }
 
@@ -106,16 +108,26 @@ void Player::attack()
 				
 				ammo[x].setVelocity(sf::Vector2f(xSpeed,0.0));
 				ammo[x].moving = true;
-				//break;
+				break;
 			}
-		/*
+
+		
 		if(ammo[0].velocity.x == 0)
 			ammo[0].velocity.x ? facingRight =  10.0 : -10.0;
 		else if(ammo[1].velocity.x == 0)
 			ammo[1].velocity.x ? facingRight =  10.0 : -10.0;
 		else if(ammo[2].velocity.x == 0)
 			ammo[2].velocity.x ? facingRight =  10.0 : -10.0;
-		*/
+		
+	}
+	else if (weapon == SWORD)
+	{
+		if(facingRight)
+			playerSword.hitBox.setPosition(sprite.getPosition().x + 20, sprite.getPosition().y - 60);
+		else
+			playerSword.hitBox.setPosition(sprite.getPosition().x - 60, sprite.getPosition().y - 60);
+		playerSword.attacking = true;
+		playerSword.currentCooldown = 0.0;
 	}
 }
 
@@ -134,8 +146,10 @@ void Player::draw(sf::RenderWindow& window)
 	ui->draw(window);
 	BaseObject::draw(window);
 	window.draw(hShot.sprite);
-	//for(int x = 0; x < 3; x++)
-	//	ammo[x].draw(window);
+	playerSword.draw(window);
+	for(int x = 0; x < 3; x++)
+		if(ammo[x].moving)
+			ammo[x].draw(window);
 
 	/* //TESTING CIRCLE
 	sf::CircleShape circle = sf::CircleShape(5.0);

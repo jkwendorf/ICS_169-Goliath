@@ -7,6 +7,7 @@
 #include "BaseGameScreen.h"
 #include "Room.h"
 #include "Enemy.h"
+#include "EnemyAI.h"
 #include <memory>
 
 class Level : public BaseGameScreen
@@ -24,6 +25,7 @@ private:
 
 	CollisionManager* collisionManager;
 	InputManager* inputManager;
+	EnemyAI* enemyAI;
 
 	void viewCheck();
 	void playerCheck();

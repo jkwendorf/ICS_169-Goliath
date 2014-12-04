@@ -7,8 +7,9 @@ Level::Level(void)
 }
 
 Level::Level(int levelNumber)
-	:changeScreen(false), levelNum(levelNumber), p(Player()), collisionManager(new CollisionManager()), inputManager(new InputManager()), 
-	maxRooms(Global::GetInstance().levelSizes.at("Level " + std::to_string(levelNum))), loading(1.0)
+	:changeScreen(false), levelNum(levelNumber), p(Player()), collisionManager(new CollisionManager()), inputManager(new InputManager()),
+	maxRooms(Global::GetInstance().levelSizes.at("Level " + std::to_string(levelNum))), loading(1.0),
+	enemyAI(new EnemyAI(collisionManager))
 {
 	currentRoom = new Room(levelNumber, 1, enemyList);
 	background.setTexture(*TextureManager::GetInstance().retrieveTexture("bandit canyon level"));
@@ -32,6 +33,7 @@ Level::~Level(void)
 	delete currentRoom;
 	delete inputManager;
 	delete collisionManager;
+	delete enemyAI;
 }
 
 void Level::DeleteLevel()
@@ -58,7 +60,10 @@ void Level::changeRoom()
 	{
 		delete currentRoom;
 		enemyList.clear();
-		changeScreen = true;
+		currentRoom = new Room(levelNum, 1, enemyList);
+		//Move player to the start pos in new room
+		p.resetPosition(currentRoom->getStartPos());
+		//changeScreen = true;
 	}
 	Global::GetInstance().topLeft.x = 0;
 	Global::GetInstance().topLeft.y = 0;
@@ -131,8 +136,11 @@ void Level::update(float deltaTime)
 		{
 			collisionManager->setNearByTiles(enemyTiles);
 		}
-		e->enemyUpdate(collisionManager, deltaTime, sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()), p.sprite.getPosition());
+		enemyAI->executeMovement(&*e, p.sprite.getPosition(), deltaTime);
+		e->enemyUpdate(deltaTime, sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()));
 	}
+
+	//collisionManager->checkPlayerBulletToEnemies(p.ammo, enemyList);
 	for(Tile* t : nearTiles)
 	{
 		delete t;
@@ -145,7 +153,16 @@ void Level::update(float deltaTime)
 	{
 		delete t;
 	}
+	//check player weapon collisions
+	//collisionManager
+		//sword
+			//collision manager will check sword hitbox with all enemies on the list
+		//projectile
+			//check each "moving" projectile against enemies on the screen
 
+
+
+	//check enemy weapon collisions
 }
 
 void Level::draw(sf::RenderWindow& window)
@@ -159,7 +176,8 @@ void Level::draw(sf::RenderWindow& window)
 	//int enemyNum = 0;
 	for(auto& e : enemyList)
 	{
-		e->draw(window);
+		if(e->health > 0)
+			e->draw(window);
 	//	enemyNum++;
 	//	std::cout << "Enemy #" << enemyNum;
 	}
