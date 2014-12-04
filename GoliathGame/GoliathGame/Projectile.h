@@ -19,4 +19,6 @@ public:
 	void setVelocity(sf::Vector2f vel);
 
 	bool moving;
+	//for now it has damage
+	float damage;
 };
