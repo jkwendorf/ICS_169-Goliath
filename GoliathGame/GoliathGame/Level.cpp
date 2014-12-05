@@ -1,13 +1,15 @@
 #include "Level.h"
 
 Level::Level(void)
+	:changeScreen(false)
 {
 
 }
 
 Level::Level(int levelNumber)
-	:levelNum(levelNumber), p(Player()), collisionManager(new CollisionManager()), inputManager(new InputManager()), 
-	maxRooms(Global::GetInstance().levelSizes.at("Level " + std::to_string(levelNum))), loading(1.0)
+	:changeScreen(false), levelNum(levelNumber), p(Player()), collisionManager(new CollisionManager()), inputManager(new InputManager()),
+	maxRooms(Global::GetInstance().levelSizes.at("Level " + std::to_string(levelNum))), loading(1.0),
+	enemyAI(new EnemyAI(collisionManager))
 {
 	currentRoom = new Room(levelNumber, 1, enemyList);
 	background.setTexture(*TextureManager::GetInstance().retrieveTexture("bandit canyon level"));
@@ -27,10 +29,7 @@ Level::Level(int levelNumber)
 
 Level::~Level(void)
 {
-	//std::cout << "Deleting the level" << std::endl;
-	delete currentRoom;
-	delete inputManager;
-	delete collisionManager;
+	DeleteLevel();
 }
 
 void Level::DeleteLevel()
@@ -39,6 +38,7 @@ void Level::DeleteLevel()
 	delete currentRoom;
 	delete inputManager;
 	delete collisionManager;
+	delete enemyAI;
 }
 
 void Level::changeRoom()
@@ -57,9 +57,7 @@ void Level::changeRoom()
 	{
 		delete currentRoom;
 		enemyList.clear();
-		currentRoom = new Room(levelNum, 1, enemyList);
-		//Move player to the start pos in new room
-		p.resetPosition(currentRoom->getStartPos());
+		changeScreen = true;
 	}
 	Global::GetInstance().topLeft.x = 0;
 	Global::GetInstance().topLeft.y = 0;
@@ -76,63 +74,79 @@ void Level::update(float deltaTime)
 		changeRoom();
 	}
 //	std::cout << "Player Position: " << p.sprite.getPosition().x  << std::endl;
+	if(!changeScreen)
+	{
+		currentRoom->GetCollidableTiles(p, sf::Vector2i(PLAYER_DIM_X, PLAYER_DIM_Y), nearTiles);
 
-	currentRoom->GetCollidableTiles(p, sf::Vector2i(PLAYER_DIM_X, PLAYER_DIM_Y), nearTiles);
-
-	collisionManager->setNearByTiles(nearTiles);
-	collisionManager->setGrapplableTiles(nearTiles2);
+		collisionManager->setNearByTiles(nearTiles);
+		collisionManager->setGrapplableTiles(nearTiles2);
 	
-	if(p.hShot.grappleInProgress)
-	{
-		if(!p.hShot.hookedOnSomething && collisionManager->hookCollisionDetection(p.hShot))
+		if(p.hShot.grappleInProgress)
 		{
-			p.hShot.hookedOnSomething = true;
-			Tile* hookedTile = collisionManager->getHookedTile(p.hShot);
-			p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width/2, hookedTile->top + hookedTile->height));
-		}
-	}
-
-	//if(p.hShot.hookedOnSomething)
-		//std::cout << "hooked" << std::endl;
-	inputManager->update(p, collisionManager, deltaTime);
-
-	//p.isFalling = !collisionManager->playerCollisionDetection(p);
-	//p.update(deltaTime);
-	p.playerUpdate(&view, sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()), deltaTime);
-
-	if(!p.hShot.hookedOnSomething || !p.hShot.grappleInProgress)
-	{
-		//std::cout << "Check Collision" << std::endl;
-		if(p.isFalling)
-		{
-			//std::cout << "Falling Collision" << std::endl;
-			while(collisionManager->playerCollisionDetection(&p))
+			if(!p.hShot.hookedOnSomething && collisionManager->hookCollisionDetection(p.hShot))
 			{
-				p.moveOutOfTile(collisionManager->getCollidedTile(p));
+				p.hShot.hookedOnSomething = true;
+				Tile* hookedTile = collisionManager->getHookedTile(p.hShot);
+				p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width/2, hookedTile->top + hookedTile->height));
 			}
 		}
-		else if(!collisionManager->tileBelowCharacter(&p))
+
+		//if(p.hShot.hookedOnSomething)
+			//std::cout << "hooked" << std::endl;
+		inputManager->update(p, collisionManager, deltaTime);
+
+		//p.isFalling = !collisionManager->playerCollisionDetection(p);
+		//p.update(deltaTime);
+		p.playerUpdate(&view, sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()), deltaTime);
+
+		if(!p.hShot.hookedOnSomething || !p.hShot.grappleInProgress)
 		{
-			//std::cout << "Start Falling" << std::endl;
-			p.isFalling = true;
-		}
-		else if(collisionManager->tileBelowCharacter(&p))
-		{
-			//std::cout << "Ground Collision" << std::endl;
-			if(collisionManager->wallBlockingCharacter(&p))
+			//std::cout << "Check Collision" << std::endl;
+			if(p.isFalling)
 			{
-				p.move(moveOutOfTileHorizontally(p, collisionManager->getCollidedTile(p)));
+				//std::cout << "Falling Collision" << std::endl;
+				while(collisionManager->playerCollisionDetection(&p))
+				{
+					p.moveOutOfTile(collisionManager->getCollidedTile(p));
+				}
+			}
+			else if(!collisionManager->tileBelowCharacter(&p))
+			{
+				//std::cout << "Start Falling" << std::endl;
+				p.isFalling = true;
+			}
+			else if(collisionManager->tileBelowCharacter(&p))
+			{
+				//std::cout << "Ground Collision" << std::endl;
+				if(collisionManager->wallBlockingCharacter(&p))
+				{
+					p.move(moveOutOfTileHorizontally(p, collisionManager->getCollidedTile(p)));
+				}
 			}
 		}
-	}
-	for (auto& e : enemyList)
-	{
-		currentRoom->GetCollidableTiles(*e, sf::Vector2i(PLAYER_DIM_X, PLAYER_DIM_Y), enemyTiles);
-		if(enemyTiles.size() > 0)
+		for (auto& e : enemyList)
 		{
-			collisionManager->setNearByTiles(enemyTiles);
+			currentRoom->GetCollidableTiles(*e, sf::Vector2i(PLAYER_DIM_X, PLAYER_DIM_Y), enemyTiles);
+			if(enemyTiles.size() > 0)
+			{
+				collisionManager->setNearByTiles(enemyTiles);
+			}
+			enemyAI->executeMovement(&*e, p.sprite.getPosition(), deltaTime);
+			e->enemyUpdate(deltaTime, sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()));
 		}
-		e->enemyUpdate(collisionManager, deltaTime, sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()), p.sprite.getPosition());
+
+		//collisionManager->checkPlayerBulletToEnemies(p.ammo, enemyList);
+		
+		//check player weapon collisions
+		//collisionManager
+			//sword
+				//collision manager will check sword hitbox with all enemies on the list
+			//projectile
+				//check each "moving" projectile against enemies on the screen
+
+
+
+		//check enemy weapon collisions
 	}
 	for(Tile* t : nearTiles)
 	{
@@ -146,7 +160,6 @@ void Level::update(float deltaTime)
 	{
 		delete t;
 	}
-
 }
 
 void Level::draw(sf::RenderWindow& window)
@@ -160,12 +173,21 @@ void Level::draw(sf::RenderWindow& window)
 	//int enemyNum = 0;
 	for(auto& e : enemyList)
 	{
-		e->draw(window);
+		if(e->health > 0)
+			e->draw(window);
 	//	enemyNum++;
 	//	std::cout << "Enemy #" << enemyNum;
 	}
 	window.setView(view);
 	p.drawUI(window);
+}
+
+void Level::CheckChangeScreen(BaseGameScreen*& newScreen)
+{
+	if(changeScreen)
+	{
+		newScreen = new Town();
+	}
 }
 
 void Level::CleanUp()

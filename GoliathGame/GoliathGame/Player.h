@@ -4,7 +4,7 @@
 #include "Projectile.h"
 #include "UserInterface.h"
 #include "Tile.h"
-//#include "Sword.h"
+#include "Sword.h"
 //#include "CrossBow.h"
 
 #ifndef MOVE_DIR
@@ -64,6 +64,7 @@ public:
 	bool grappleInProgress, facingRight, running;
 	Projectile ammo[3];
 	void viewCheck(sf::View* view, int width, int height);
+	Sword playerSword;
 
 private:	
 	UserInterface* ui;
