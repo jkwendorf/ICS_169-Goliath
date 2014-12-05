@@ -143,7 +143,7 @@ void Player::move(sf::Vector2f& distance)
 
 void Player::draw(sf::RenderWindow& window)
 {
-	ui->draw(window);
+	//ui->draw(window);
 	BaseObject::draw(window);
 	window.draw(hShot.sprite);
 	playerSword.draw(window);
@@ -331,12 +331,12 @@ void Player::verticalAcceleration(float& deltaTime)
 	}
 }
 
-void Player::moveOutOfTile(Tile* t)
+void Player::moveOutOfTile(Tile t)
 {
-	float left = (sprite.getPosition().x + sprite.getGlobalBounds().width/2) - t->left, 
-		right = (t->left + t->width) - (sprite.getPosition().x - sprite.getGlobalBounds().width/2), 
-		up = (sprite.getPosition().y + sprite.getGlobalBounds().height/2) - t->top, 
-		down = (t->top + t->height) - (sprite.getPosition().y - sprite.getGlobalBounds().height/2);
+	float left = (sprite.getPosition().x + sprite.getGlobalBounds().width/2) - t.left, 
+		right = (t.left + t.width) - (sprite.getPosition().x - sprite.getGlobalBounds().width/2), 
+		up = (sprite.getPosition().y + sprite.getGlobalBounds().height/2) - t.top, 
+		down = (t.top + t.height) - (sprite.getPosition().y - sprite.getGlobalBounds().height/2);
 
 	// Calculate shortest distance
 	if(sgn(vel.x) > 0)
@@ -387,4 +387,9 @@ void Player::moveOutOfTile(Tile* t)
 	}
 
 	// Move in direction of shortest distance
+}
+
+void Player::drawUI(sf::RenderWindow& window)
+{
+	ui->draw(window);
 }

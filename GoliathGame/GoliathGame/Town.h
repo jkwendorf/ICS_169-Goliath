@@ -19,7 +19,7 @@ private:
 	void SetUpPoints();
 public:
 	Town();
-	~Town();
+	virtual ~Town();
 
 	void ChangeSelected(bool left);
 	void ClickCurrentObject();

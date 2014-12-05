@@ -21,7 +21,7 @@ class GameState : public State
 {
 public:
 	GameState(void);
-	~GameState(void);
+	virtual ~GameState(void);
 	void DeleteState();
 	void update(float deltaTime);
 	void draw(sf::RenderWindow& window);

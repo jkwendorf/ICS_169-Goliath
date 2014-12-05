@@ -31,8 +31,8 @@ public:
 	//controller[2] = keyboard only
 	bool controller[3];
 
-	void update(Player& s, CollisionManager* cM, float deltaTime);
-	void playerMove(Player& s, CollisionManager* cM, float deltaTime);
+	void update(Player& s, float deltaTime);
+	void playerMove(Player& s, float deltaTime);
 
 
 

@@ -1,7 +1,7 @@
 #include "Section.h"
 // include more tiles
 
-Section::Section(int sectionNumber, std::string& s, sf::Vector2i& offset, std::vector<std::unique_ptr<Enemy>> &enemyList)
+Section::Section(int sectionNumber, std::string& s, sf::Vector2i& offset, std::vector<std::shared_ptr<Enemy>> &enemyList)
 	:sectionNum(sectionNumber), pathToText(s), offset(offset), startPos(-999.0, -999.0)
 {
 	LoadTileMap(enemyList);
@@ -9,7 +9,6 @@ Section::Section(int sectionNumber, std::string& s, sf::Vector2i& offset, std::v
 
 Section::~Section()
 {
-	std::cout << "Deleting the section" << std::endl;
 	for ( int j = 0; j < gDim.x * gDim.y; j++)
 	{
 		delete[] grid1[j];
@@ -54,7 +53,6 @@ bool Section::inWindow()
 		(offset.x <= Global::GetInstance().topLeft.x + SCREEN_WIDTH && offset.x + getWidth() >= Global::GetInstance().topLeft.x + SCREEN_WIDTH)||
 		(offset.x >= Global::GetInstance().topLeft.x && offset.x + getWidth() <= Global::GetInstance().topLeft.x + SCREEN_WIDTH))
 	{
-		//std::cout << sectionNum << std::endl;
 		return true;
 	}
 	return false;
@@ -65,9 +63,9 @@ bool Section::checkPlayerInGrid(const BaseObject& player)
 	return false;
 }
 
-std::vector<sf::Vector2i*> Section::getIntersectPoints(const BaseObject& rect)
+std::vector<sf::Vector2i> Section::getIntersectPoints(const BaseObject& rect)
 {
-	std::vector<sf::Vector2i*> temp;
+	std::vector<sf::Vector2i> temp;
 	//If this is not the top left corner these calculations will not work
 	sf::Vector2i p1 = sf::Vector2i(rect.sprite.getPosition().x / GAME_TILE_DIM, rect.sprite.getPosition().y / GAME_TILE_DIM);
 	sf::Vector2i p2 = sf::Vector2i((rect.sprite.getPosition().x + GAME_TILE_DIM) / GAME_TILE_DIM, (rect.sprite.getPosition().y + GAME_TILE_DIM) / GAME_TILE_DIM);
@@ -76,15 +74,15 @@ std::vector<sf::Vector2i*> Section::getIntersectPoints(const BaseObject& rect)
 	{
 		for (int j = p1.y; j <= p2.y; j++)
 		{
-			temp.push_back(new sf::Vector2i(j, i));
+			temp.push_back(sf::Vector2i(j, i));
 		}
 	}
 	return temp;
 }
 
-std::vector<sf::Vector2i*> Section::getIntersectPoints(const sf::Vector2i& p1, const sf::Vector2i& p2)
+std::vector<sf::Vector2i> Section::getIntersectPoints(const sf::Vector2i& p1, const sf::Vector2i& p2)
 {
-	std::vector<sf::Vector2i*> temp;
+	std::vector<sf::Vector2i> temp;
 	sf::Vector2i p3 = sf::Vector2i(p1.x / GAME_TILE_DIM, p1.y / GAME_TILE_DIM);
 	sf::Vector2i p4 = sf::Vector2i(p2.x / GAME_TILE_DIM, p2.y / GAME_TILE_DIM);
 
@@ -92,13 +90,13 @@ std::vector<sf::Vector2i*> Section::getIntersectPoints(const sf::Vector2i& p1, c
 	{
 		for (int j = p3.y; j <= p4.y; j++)
 		{
-			temp.push_back(new sf::Vector2i(j, i));
+			temp.push_back(sf::Vector2i(j, i));
 		}
 	}
 	return temp;
 }
 
-void Section::surroundingRects(const sf::Vector2i& p1, const sf::Vector2i& p2, std::vector<Tile*>& nearTiles, bool checkHorz, bool checkVert)
+void Section::surroundingRects(const sf::Vector2i& p1, const sf::Vector2i& p2, std::vector<Tile>& nearTiles, bool checkHorz, bool checkVert)
 {
 	sf::Vector2i p3 = sf::Vector2i(p1.x / GAME_TILE_DIM, p1.y / GAME_TILE_DIM);
 	sf::Vector2i p4 = sf::Vector2i(p2.x / GAME_TILE_DIM, p2.y / GAME_TILE_DIM);
@@ -124,7 +122,7 @@ void Section::surroundingRects(const sf::Vector2i& p1, const sf::Vector2i& p2, s
 		{
 			if(grid1[(j*gDim.y) + i][2] == 1)
 			{
-				nearTiles.push_back(new Tile(sf::Vector2f(GAME_TILE_DIM * (grid1[(j*gDim.y) + i][1] % gDim.y) + offset.x, GAME_TILE_DIM * (grid1[(j*gDim.y) + i][1] / gDim.y)+ offset.y), 
+				nearTiles.push_back(Tile(sf::Vector2f(GAME_TILE_DIM * (grid1[(j*gDim.y) + i][1] % gDim.y) + offset.x, GAME_TILE_DIM * (grid1[(j*gDim.y) + i][1] / gDim.y)+ offset.y), 
 								sf::Vector2f(GAME_TILE_DIM, GAME_TILE_DIM), grid1[(j*gDim.y) + i][0], grid1[(j*gDim.y) + i][2], grid1[(j*gDim.y) + i][3], grid1[(j*gDim.y) + i][4]));
 			}
 		}
@@ -132,7 +130,7 @@ void Section::surroundingRects(const sf::Vector2i& p1, const sf::Vector2i& p2, s
 
 }
 
-void Section::checkGrapple(const sf::Vector2i& p1, const sf::Vector2i& p2, std::vector<Tile*>& nearTiles)
+void Section::checkGrapple(const sf::Vector2i& p1, const sf::Vector2i& p2, std::vector<Tile>& nearTiles)
 {
 	sf::Vector2i p3 = sf::Vector2i(p1.x / GAME_TILE_DIM, p1.y / GAME_TILE_DIM);
 	sf::Vector2i p4 = sf::Vector2i(p2.x / GAME_TILE_DIM, p2.y / GAME_TILE_DIM);
@@ -142,13 +140,13 @@ void Section::checkGrapple(const sf::Vector2i& p1, const sf::Vector2i& p2, std::
 		for (int j = p3.y; j <= p4.y; j++)
 		{
 			if(grid1[(j*gDim.y) + i][2] == 1 || grid1[(j*gDim.y) + i][3] == 1 )
-				nearTiles.push_back(new Tile(sf::Vector2f(GAME_TILE_DIM * (grid1[(j*gDim.y) + i][1] % gDim.y) + offset.x, GAME_TILE_DIM * (grid1[(j*gDim.y) + i][1] / gDim.y)+ offset.y), 
+				nearTiles.push_back(Tile(sf::Vector2f(GAME_TILE_DIM * (grid1[(j*gDim.y) + i][1] % gDim.y) + offset.x, GAME_TILE_DIM * (grid1[(j*gDim.y) + i][1] / gDim.y)+ offset.y), 
 								sf::Vector2f(GAME_TILE_DIM, GAME_TILE_DIM), grid1[(j*gDim.y) + i][0], grid1[(j*gDim.y) + i][2], grid1[(j*gDim.y) + i][3], grid1[(j*gDim.y) + i][4]));
 		}
 	}
 }
 
-void Section::checkInteractable(const sf::Vector2i& p1, const sf::Vector2i& p2, std::vector<Tile*>& nearTiles)
+void Section::checkInteractable(const sf::Vector2i& p1, const sf::Vector2i& p2, std::vector<Tile>& nearTiles)
 {
 	sf::Vector2i p3 = sf::Vector2i(p1.x / GAME_TILE_DIM, p1.y / GAME_TILE_DIM);
 	sf::Vector2i p4 = sf::Vector2i(p2.x / GAME_TILE_DIM, p2.y / GAME_TILE_DIM);
@@ -158,7 +156,7 @@ void Section::checkInteractable(const sf::Vector2i& p1, const sf::Vector2i& p2, 
 		for (int j = p3.y; j <= p4.y; j++)
 		{
 			if(grid1[(j*gDim.y) + i][4] == 1)
-				nearTiles.push_back(new Tile(sf::Vector2f(GAME_TILE_DIM * (grid1[(j*gDim.y) + i][1] % gDim.y) + offset.x, GAME_TILE_DIM * (grid1[(j*gDim.y) + i][1] / gDim.y)+ offset.y), 
+				nearTiles.push_back(Tile(sf::Vector2f(GAME_TILE_DIM * (grid1[(j*gDim.y) + i][1] % gDim.y) + offset.x, GAME_TILE_DIM * (grid1[(j*gDim.y) + i][1] / gDim.y)+ offset.y), 
 								sf::Vector2f(GAME_TILE_DIM, GAME_TILE_DIM), grid1[(j*gDim.y) + i][0], grid1[(j*gDim.y) + i][2], grid1[(j*gDim.y) + i][3], grid1[(j*gDim.y) + i][4]));
 		}
 	}
@@ -198,7 +196,7 @@ void Section::print()
 //Loading is the text file from the given file path
 //Parses the first line of the file to get information about the rest of the file.
 //Continues through the file until it hits the end of the file and creates tiles based off information parsed in
-void Section::LoadTileMap(std::vector<std::unique_ptr<Enemy>> &enemyList)
+void Section::LoadTileMap(std::vector<std::shared_ptr<Enemy>> &enemyList)
 {
 	std::ifstream ifs;
 	ifs.open("media/levels/" + pathToText + ".txt");
@@ -216,11 +214,9 @@ void Section::LoadTileMap(std::vector<std::unique_ptr<Enemy>> &enemyList)
 
 	//Sets up the txtWidth, txtHeight, and tileSheet with the 
 	// values in the level.txt
-	//std::cout << "Token[2] " << token[2] << std::endl; 
 	gDim = sf::Vector2i(atoi(token[0].c_str()), atoi(token[1].c_str()));
 
 	numOfTiles = atoi(token[2].c_str());
-	//std::cout << "Token[3] " << token[3] << std::endl; 
 	
 	try
 	{
@@ -248,7 +244,6 @@ void Section::LoadTileMap(std::vector<std::unique_ptr<Enemy>> &enemyList)
 
 	token.clear();
 	float ratio = (float)GAME_TILE_DIM / 100;
-	//std::cout << "RatioX: " << ratioX << " RatioY: " << ratioY << std::endl;
 
 	while(!ifs.eof()) 
 	{
@@ -260,7 +255,6 @@ void Section::LoadTileMap(std::vector<std::unique_ptr<Enemy>> &enemyList)
 			std::vector <std::string> tileToken;
 			Tokenize(token[i], tileToken, ",");
 			
-			//std::cout << "Tiletype: " << atoi(tileToken[0].c_str()) << ". X: " << atoi(tileToken[2].c_str()) << ". Y: " << atoi(tileToken[1].c_str()) << std::endl; 
 			int tileType = atoi(tileToken[0].c_str());
 			int x = atoi(tileToken[2].c_str());
 			int y = atoi(tileToken[1].c_str());
@@ -270,12 +264,12 @@ void Section::LoadTileMap(std::vector<std::unique_ptr<Enemy>> &enemyList)
 			{
 			//Ranged enemy
 			case -4:
-				enemyList.push_back(std::unique_ptr<Enemy>(new Enemy("Test", x * GAME_TILE_DIM + offset.x, y * GAME_TILE_DIM + offset.y, 10)));
+				enemyList.push_back(std::shared_ptr<Enemy>(new Enemy("Test", x * GAME_TILE_DIM + offset.x, y * GAME_TILE_DIM + offset.y, 10)));
 				break;
 			case -3:
 				try
 				{
-					enemyList.push_back(std::unique_ptr<Enemy>(new Enemy("Test", x * GAME_TILE_DIM + offset.x, y * GAME_TILE_DIM + offset.y)));
+					enemyList.push_back(std::shared_ptr<Enemy>(new Enemy("Test", x * GAME_TILE_DIM + offset.x, y * GAME_TILE_DIM + offset.y)));
 				}
 				catch(const std::exception& ex)
 				{

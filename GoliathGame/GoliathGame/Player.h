@@ -48,7 +48,9 @@ public:
 	void playerMove(float& deltaTime);
 	void horizontalAcceleration(MovementDirection dir, float& deltaTime);
 	void verticalAcceleration(float& deltaTime);
-	void moveOutOfTile(Tile* t);
+	void moveOutOfTile(Tile t);
+
+	void drawUI(sf::RenderWindow& window);
 
 	// VARIABLES
 	float stamina;

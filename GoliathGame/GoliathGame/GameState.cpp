@@ -9,21 +9,13 @@ GameState::GameState(void)
 
 GameState::~GameState(void)
 {
-	//delete currentRoom;
-	//delete collisionManager;
+	DeleteState();
 }
 
 void GameState::DeleteState()
 {
-	std::cout << "Deleting the state" << std::endl;
-	currentScreen->DeleteLevel();
 	delete currentScreen;
 	delete nextScreen;
-	/*
-	std::cout << "Calling GameState destructor" << std::endl;
-	delete collisionManager;
-	delete currentRoom;
-	*/
 }
 
 void GameState::update(float deltaTime)
