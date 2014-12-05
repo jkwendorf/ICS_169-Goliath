@@ -144,7 +144,7 @@ void Player::move(sf::Vector2f& distance)
 
 void Player::draw(sf::RenderWindow& window)
 {
-	ui->draw(window);
+	//ui->draw(window);
 	BaseObject::draw(window);
 	window.draw(hShot.sprite);
 	playerSword.draw(window);
@@ -388,4 +388,9 @@ void Player::moveOutOfTile(Tile* t)
 	}
 
 	// Move in direction of shortest distance
+}
+
+void Player::drawUI(sf::RenderWindow& window)
+{
+	ui->draw(window);
 }

@@ -180,6 +180,7 @@ void Level::draw(sf::RenderWindow& window)
 	//	std::cout << "Enemy #" << enemyNum;
 	}
 	window.setView(view);
+	p.drawUI(window);
 }
 
 void Level::CheckChangeScreen(BaseGameScreen*& newScreen)
