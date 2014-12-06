@@ -38,7 +38,7 @@ void GameState::update(float deltaTime)
 		nextScreen = NULL;
 	}
 
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::U))
 	{
 		StateManager::getInstance().changeToState(MAIN_MENU, false);
 	}
