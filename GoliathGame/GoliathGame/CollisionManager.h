@@ -14,19 +14,19 @@ public:
 	~CollisionManager();
 	bool playerCollisionDetection(BaseObject* p);
 	
-	void setNearByTiles(std::vector<Tile*> tiles);
-	void setGrapplableTiles(std::vector<Tile*> tiles);
+	void setNearByTiles(std::vector<Tile> tiles);
+	void setGrapplableTiles(std::vector<Tile> tiles);
 	bool hookCollisionDetection(HookShot hs);
-	Tile* getHookedTile(HookShot hs);
+	Tile getHookedTile(HookShot hs);
 	
-	Tile* getCollidedTile(BaseObject p);
+	Tile getCollidedTile(BaseObject p);
 	bool tileBelowCharacter(BaseObject* p);
 	bool wallBlockingCharacter(BaseObject* p);
 	int numTilesNear(BaseObject p);
 
-	void checkPlayerBulletToEnemies(Projectile p[], std::vector<std::unique_ptr<Enemy>> enemyList);
+	void checkPlayerBulletToEnemies(Projectile p[], std::vector<Enemy> enemyList);
 
 private:
-	std::vector<Tile*> tileList;
-	std::vector<Tile*> grapplableTileList;
+	std::vector<Tile> tileList;
+	std::vector<Tile> grapplableTileList;
 };

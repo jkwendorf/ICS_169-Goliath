@@ -9,8 +9,10 @@ int main()
 	sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Goliath Game");
 	// JW: Setting the framerate to 30, but this should be set by a global variable
 	window.setFramerateLimit(FPS);
-	StateManager* sM = new StateManager();
 	
+	StateManager::getInstance().addState(GAME, new GameState(), true);
+	StateManager::getInstance().addState(MAIN_MENU, new MainMenuState());
+
 	float maxTime = 1.f/FPS;
 	sf::Clock deltaTimer;
     while (window.isOpen())
@@ -23,22 +25,22 @@ int main()
             if (event.type == sf::Event::Closed || event.key.code == sf::Keyboard::Escape)
                 window.close();
 
-			sM->handleEvent(event);
+			StateManager::getInstance().getCurrentState()->handleEvent(event);
         }
 		deltaTime = min(deltaTime, maxTime);
 		//std::cout<< deltaTime << std::endl;
-		sM->update(deltaTime);
+		StateManager::getInstance().getCurrentState()->update(deltaTime);
 
         window.clear();
-		sM->draw(window);
+		StateManager::getInstance().getCurrentState()->draw(window);
         window.display();
     }
 
 	window.close();
-	delete sM;
 	Global::GetInstance().CleanUp();
 	//std::cout << "\n Press ENTER to continue...";
 	//std::cin.ignore( std::numeric_limits<std::streamsize>::max(), '\n' );
 
+	StateManager::getInstance().DeleteAllStates();
     return 0;
 }

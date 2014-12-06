@@ -16,19 +16,30 @@ enum StateEnum
 class StateManager
 {
 public:
-	StateManager(void);
-	~StateManager(void);
+	static StateManager& getInstance() 
+	{
+		 static StateManager instance;
+		 return instance;
+	}
 
-	void changeToState(StateEnum state);
+	void addState(StateEnum state, State* s);
+	void addState(StateEnum state, State* s, bool makeCurrent);
+	void deleteState(StateEnum state);
+	void changeToState(StateEnum state, bool deleteCurrentState);
 	void update(float deltaTime);
 	void draw(sf::RenderWindow& window);
 	void handleEvent(sf::Event event);
+	State* getCurrentState();
+	void DeleteAllStates();
 
 private:
-	void loadState();
-	void unloadState();
+	StateManager(void) {};
+	~StateManager(void) {};
+	StateManager(StateManager const&);
+	StateManager& operator =(StateManager const&);
 
+	std::map<StateEnum, State*> stateMap;
 	State* currentState;
-	State* nextState;
+	StateEnum currentStateEnum;
 };
 

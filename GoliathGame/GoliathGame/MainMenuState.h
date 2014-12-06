@@ -8,7 +8,7 @@ class MainMenuState : public State
 {
 public:
 	MainMenuState(void);
-	~MainMenuState(void);
+	virtual ~MainMenuState(void);
 
 	void DeleteState();
 	void update(float deltaTime);
@@ -19,5 +19,6 @@ public:
 
 private:
 	//Button* play, help, credits;
+	bool isPressed;
 };
 

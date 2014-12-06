@@ -1,16 +1,17 @@
 #include "Level.h"
 
 Level::Level(void)
-	:changeScreen(false)
+	:changeScreen(false), enemyAI(collisionManager)
 {
 
 }
 
 Level::Level(int levelNumber)
-	:changeScreen(false), levelNum(levelNumber), p(Player()), collisionManager(new CollisionManager()), inputManager(new InputManager()),
+	:changeScreen(false), levelNum(levelNumber), p(Player()), collisionManager(new CollisionManager()), inputManager(),
 	maxRooms(Global::GetInstance().levelSizes.at("Level " + std::to_string(levelNum))), loading(1.0),
-	enemyAI(new EnemyAI(collisionManager))
+	enemyAI(collisionManager)
 {
+	
 	currentRoom = new Room(levelNumber, 1, enemyList);
 	background.setTexture(*TextureManager::GetInstance().retrieveTexture("banditCity"));
 	background.setPosition(-75,75);
@@ -22,9 +23,6 @@ Level::Level(int levelNumber)
 	view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
 	p.resetPosition(currentRoom->getStartPos());
 
-	std::cout << "Room Width: " << currentRoom->getroomWidth() << std::endl;
-	//enemyList.push_back(new Enemy("Test", 1000, 1000));
-	//enemyList.push_back(new Enemy("Test", 700, 400));
 }
 
 Level::~Level(void)
@@ -34,11 +32,9 @@ Level::~Level(void)
 
 void Level::DeleteLevel()
 {
-	std::cout << "Deleting the level" << std::endl;
+	enemyList.clear();
 	delete currentRoom;
-	delete inputManager;
 	delete collisionManager;
-	delete enemyAI;
 }
 
 void Level::changeRoom()
@@ -55,26 +51,24 @@ void Level::changeRoom()
 	}
 	else
 	{
-		delete currentRoom;
+		//delete currentRoom;
 		enemyList.clear();
 		changeScreen = true;
 	}
 	Global::GetInstance().topLeft.x = 0;
 	Global::GetInstance().topLeft.y = 0;
 	view.reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y, SCREEN_WIDTH, SCREEN_HEIGHT));
-	std::cout << Global::GetInstance().topLeft.x << std::endl;
 	//p.playerUpdate(&view, sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()), 0.5f);
 }
 
 void Level::update(float deltaTime)
 {
-	std::vector<Tile*> nearTiles, nearTiles2, enemyTiles;
+	std::vector<Tile> nearTiles, nearTiles2, enemyTiles;
 	currentRoom->GetGrapplableTiles(p, nearTiles2);
 	if(currentRoom->NearInteractableTiles(p))
 	{
 		changeRoom();
 	}
-//	std::cout << "Player Position: " << p.sprite.getPosition().x  << std::endl;
 	if(!changeScreen)
 	{
 		currentRoom->GetCollidableTiles(p, sf::Vector2i(PLAYER_DIM_X, PLAYER_DIM_Y), nearTiles);
@@ -87,14 +81,14 @@ void Level::update(float deltaTime)
 			if(!p.hShot.hookedOnSomething && collisionManager->hookCollisionDetection(p.hShot))
 			{
 				p.hShot.hookedOnSomething = true;
-				Tile* hookedTile = collisionManager->getHookedTile(p.hShot);
-				p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width/2, hookedTile->top + hookedTile->height));
+				Tile hookedTile = collisionManager->getHookedTile(p.hShot);
+				p.hShot.grappleToLocation(sf::Vector2f(hookedTile.left + hookedTile.width/2, hookedTile.top + hookedTile.height));
 			}
 		}
 
 		//if(p.hShot.hookedOnSomething)
 			//std::cout << "hooked" << std::endl;
-		inputManager->update(p, collisionManager, deltaTime);
+		inputManager.update(p, deltaTime);
 
 		//p.isFalling = !collisionManager->playerCollisionDetection(p);
 		//p.update(deltaTime);
@@ -132,7 +126,7 @@ void Level::update(float deltaTime)
 			{
 				collisionManager->setNearByTiles(enemyTiles);
 			}
-			enemyAI->executeMovement(&*e, p.sprite.getPosition(), deltaTime);
+			enemyAI.executeMovement(e.get(), p.sprite.getPosition(), deltaTime);
 			e->enemyUpdate(deltaTime, sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()));
 		}
 
@@ -148,18 +142,6 @@ void Level::update(float deltaTime)
 
 
 		//check enemy weapon collisions
-	}
-	for(Tile* t : nearTiles)
-	{
-		delete t;
-	}
-	for(Tile* t : nearTiles2)
-	{
-		delete t;
-	}
-	for(Tile* t : enemyTiles)
-	{
-		delete t;
 	}
 }
 

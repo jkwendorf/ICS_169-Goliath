@@ -19,12 +19,12 @@ BaseObject::BaseObject(int testing, int objectNum, const sf::Vector2i& pos, cons
 	sprite.setTexture(*texture);
 	sf::IntRect temp = sf::IntRect(EDITOR_TILE_WIDTH * (objectNum % TileSheetCols),
 				EDITOR_TILE_HEIGHT * (objectNum / TileSheetCols),EDITOR_TILE_WIDTH, EDITOR_TILE_HEIGHT);
-	//std::cout << "Pos x: " <<  temp.left << ". Pos Y: " << temp.top << std::endl;
+
 	sprite.setTextureRect(temp);
-	//std::cout << "Pos x: " <<  pos.x << ". Pos Y: " << pos.y << std::endl;
+
 	sprite.setPosition(pos.x + sectionOffSet.x, pos.y + sectionOffSet.y);
 	sprite.setScale(scale, scale);
-	//std::cout << "Scale x: " <<  sprite.getScale().x << ". Scale Y: " << sprite.getScale().y << std::endl;
+
 }
 
 BaseObject::~BaseObject()
