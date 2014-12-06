@@ -19,5 +19,6 @@ public:
 
 private:
 	//Button* play, help, credits;
+	bool isPressed;
 };
 
