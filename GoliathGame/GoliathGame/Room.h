@@ -5,6 +5,7 @@
 #include "Global.h"
 #include "Enemy.h"
 #include <memory>
+#include <SFML\Audio\Music.hpp>
 
 class Room
 {
@@ -13,6 +14,7 @@ private:
 	int numSect, roomNum, roomWidth, roomHeight;
 	bool loadedTitles;
 	sf::Vector2f startPos;
+	sf::Music roomMusic;
 
 	Room();
 	void LoadRoom(int levelNumber, std::vector<std::shared_ptr<Enemy>> &enemyList);

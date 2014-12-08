@@ -4,6 +4,7 @@
 #include "BaseGameScreen.h"
 #include "Global.h"
 #include "Level.h"
+#include <SFML\Audio\Music.hpp>
 
 class Town : public BaseGameScreen
 {
@@ -15,6 +16,7 @@ private:
 	sf::Sprite* highlight;
 	sf::Vector2f* pointsToHighlight;
 	sf::View view;
+	sf::Music townMusic;
 
 	void SetUpPoints();
 public:

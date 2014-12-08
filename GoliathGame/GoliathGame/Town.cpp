@@ -12,6 +12,13 @@ Town::Town()
 
 	view.reset(sf::FloatRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
 	view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
+
+	if (!townMusic.openFromFile("media/sound/SilverScrapes.wav"))
+	{
+		std::cout << "Error for loading file" << std::endl;
+	}
+	townMusic.setLoop(true);
+	townMusic.play();
 }
 
 Town::~Town()
@@ -71,6 +78,7 @@ void Town::draw(sf::RenderWindow& window)
 
 void Town::DeleteLevel()
 {
+	townMusic.stop();
 	delete background;
 	delete highlight;
 	delete[] pointsToHighlight;

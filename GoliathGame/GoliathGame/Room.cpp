@@ -6,6 +6,13 @@ Room::Room(int levelNumber, int roomNumber, std::vector<std::shared_ptr<Enemy>> 
 	roomWidth(0), roomHeight(0), loadedTitles(false)
 {
 	LoadRoom(levelNumber, enemyList);
+	//Music
+	if (!roomMusic.openFromFile("media/sound/Testlevel1SoTC.wav"))
+	{
+		std::cout << "Error for loading file" << std::endl;
+	}
+	roomMusic.setLoop(true);
+	roomMusic.play();
 }
 
 Room::~Room()
@@ -14,6 +21,7 @@ Room::~Room()
 	for (int i = 0; i < numSect; i++)
 		delete sectList[i];
 	delete[] sectList;
+	roomMusic.stop();
 }
 
 Room::Room()
