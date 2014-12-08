@@ -33,6 +33,7 @@ Player::~Player()
 
 void Player::update(float deltaTime)
 {
+	//std::cout << sprite.getPosition().x << " " << sprite.getPosition().y << std::endl;
 	if(!hShot.grappleInProgress)
 	{
 		if(facingRight)

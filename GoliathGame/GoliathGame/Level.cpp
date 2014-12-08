@@ -13,8 +13,8 @@ Level::Level(int levelNumber)
 {
 	
 	currentRoom = new Room(levelNumber, 1, enemyList);
-	background.setTexture(*TextureManager::GetInstance().retrieveTexture("bandit canyon level"));
-	background.setPosition(0,-100);
+	background.setTexture(*TextureManager::GetInstance().retrieveTexture("banditCity"));
+	background.setPosition(-75,75);
 	background.scale(1.0, (float)(GAME_TILE_DIM * 22 + 100) / background.getTexture()->getSize().y);
 	loadingSprite.setTexture(*TextureManager::GetInstance().retrieveTexture("loading"));
 	loadingSprite.setPosition(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y);
@@ -58,6 +58,7 @@ void Level::changeRoom()
 	Global::GetInstance().topLeft.x = 0;
 	Global::GetInstance().topLeft.y = 0;
 	view.reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y, SCREEN_WIDTH, SCREEN_HEIGHT));
+	//p.playerUpdate(&view, sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()), 0.5f);
 }
 
 void Level::update(float deltaTime)
