@@ -27,6 +27,15 @@ enum WeaponEnum
 	HOOKSHOT
 };
 
+enum SoundEnum
+{
+	ATTACK = 0,
+	JUMP = 1,
+	SHOOT = 2,
+	TAKEDMG = 3,
+	HOOK = 4
+};
+
 class Player : public BaseObject
 {
 public:
@@ -68,4 +77,7 @@ public:
 
 private:	
 	UserInterface* ui;
+	sf::Sound soundEffects[5];
+
+	void SetUpEffects();
 };
