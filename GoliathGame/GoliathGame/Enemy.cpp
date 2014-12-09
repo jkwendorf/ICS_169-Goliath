@@ -62,6 +62,7 @@ void Enemy::update(float deltaTime)
 void Enemy::draw(sf::RenderWindow& window)
 {
 	//UNCOMMENT TO TEST ENEMY APPEARENCE
+	window.draw(sprite);
 	if(isInScreen())
 	{
 		BaseObject::draw(window);

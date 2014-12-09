@@ -98,12 +98,21 @@ Tile CollisionManager::getHookedTile(HookShot hs)
 	return Tile(sf::Vector2f(-1,-1), sf::Vector2f(0,0), -999);
 }
 
-/*
-void checkPlayerBulletToEnemies(Projectile p[], std::vector<std::unique_ptr<Enemy>> enemyList)
+
+void CollisionManager::checkPlayerBulletToEnemies(Projectile p[], Enemy* enemy)
 {
 	for(int x = 0; x < 3; x++)
-		for(auto& e : enemyList)
-			if(p[x].sprite.getTextureRect().intersects(e.sprite.getTextureRect()))
-				e.health -= p[x].damage;
+		//for(auto& e : enemyList)
+			if(sqrt(pow(p[x].sprite.getPosition().x - enemy->sprite.getPosition().x, 2) + 
+				pow(p[x].sprite.getPosition().y - enemy->sprite.getPosition().y, 2)) < 50 && p[x].moving)
+				enemy->health -= p[x].damage;
 }
-*/
+
+void CollisionManager::checkPlayerSwordToEnemies(Sword s, Enemy* enemy)
+{
+	for(int x = 0; x < 3; x++)
+		//for(auto& e : enemyList)
+			if(sqrt(pow(s.hitBox.getPosition().x - enemy->sprite.getPosition().x, 2) + 
+				pow(s.hitBox.getPosition().y - enemy->sprite.getPosition().y, 2)) < 75 && s.attacking)
+				enemy->health -= s.damage;
+}

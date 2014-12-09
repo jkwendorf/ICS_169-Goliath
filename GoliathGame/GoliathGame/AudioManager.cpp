@@ -8,6 +8,14 @@ AudioManager::~AudioManager()
 	}
 }
 
+void AudioManager::SetupMap(const std::map<std::string, sf::SoundBuffer*>& s)
+{
+	soundBufferManager = s;
+	for(int i = 0; i < soundBufferManager.size(); i++)
+	{
+		
+	}
+}
 
 sf::Sound* AudioManager::retrieveSound(std::string tex)
 {
