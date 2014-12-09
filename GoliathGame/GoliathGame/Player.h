@@ -4,7 +4,7 @@
 #include "Projectile.h"
 #include "UserInterface.h"
 #include "Tile.h"
-//#include "Sword.h"
+#include "Sword.h"
 //#include "CrossBow.h"
 
 #ifndef MOVE_DIR
@@ -48,7 +48,9 @@ public:
 	void playerMove(float& deltaTime);
 	void horizontalAcceleration(MovementDirection dir, float& deltaTime);
 	void verticalAcceleration(float& deltaTime);
-	void moveOutOfTile(Tile* t);
+	void moveOutOfTile(Tile t);
+
+	void drawUI(sf::RenderWindow& window);
 
 	// VARIABLES
 	float stamina;
@@ -62,6 +64,7 @@ public:
 	bool grappleInProgress, facingRight, running;
 	Projectile ammo[3];
 	void viewCheck(sf::View* view, int width, int height);
+	Sword playerSword;
 
 private:	
 	UserInterface* ui;

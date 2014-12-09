@@ -1,11 +1,14 @@
 #pragma once
 #include "State.h"
+#include "Button.h"
+#include "Global.h"
+#include "StateManager.h"
 
 class MainMenuState : public State
 {
 public:
 	MainMenuState(void);
-	~MainMenuState(void);
+	virtual ~MainMenuState(void);
 
 	void DeleteState();
 	void update(float deltaTime);
@@ -15,5 +18,7 @@ public:
 	void unloadContent();
 
 private:
+	//Button* play, help, credits;
+	bool isPressed;
 };
 

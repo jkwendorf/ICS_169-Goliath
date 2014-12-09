@@ -10,12 +10,18 @@
 #include "Level.h"
 #include "BaseGameScreen.h"
 
+enum SCREENENUM
+{
+	TOWN,
+	LEVEL,
+	BOSS
+};
 
 class GameState : public State
 {
 public:
 	GameState(void);
-	~GameState(void);
+	virtual ~GameState(void);
 	void DeleteState();
 	void update(float deltaTime);
 	void draw(sf::RenderWindow& window);
@@ -25,6 +31,8 @@ public:
 
 private:
 	BaseGameScreen* currentScreen;
+	BaseGameScreen* nextScreen;
+	SCREENENUM screen;
 
 };
 

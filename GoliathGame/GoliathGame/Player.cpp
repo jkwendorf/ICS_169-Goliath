@@ -12,7 +12,7 @@ Player::Player()
 	sprite.setPosition(150, 64);
 	sprite.setScale( (PLAYER_DIM_X / (float)sprite.getTexture()->getSize().x), (PLAYER_DIM_Y / (float)sprite.getTexture()->getSize().y));
 	sprite.setOrigin(sprite.getLocalBounds().width/2, sprite.getLocalBounds().height/2);
-	weapon = CROSSBOW;
+	weapon = SWORD;
 	weaponCooldown = 2.0f;
 	currentCooldown = 0.0f;
 	isFalling = true;
@@ -20,17 +20,20 @@ Player::Player()
 	{
 		ammo[x] = Projectile(sprite.getPosition(), sf::Vector2f(0.0,0.0));
 		ammo[x].sprite.setColor(sf::Color(x*50 + 150, 0, 0));
+		ammo[x].damage = 100.0f;
 	}
 	grappleDir.y = 100;
+	playerSword.damage = 100.0f;
 }
 
 Player::~Player() 
 {
-
+	delete ui;
 }
 
 void Player::update(float deltaTime)
 {
+	//std::cout << sprite.getPosition().x << " " << sprite.getPosition().y << std::endl;
 	if(!hShot.grappleInProgress)
 	{
 		if(facingRight)
@@ -45,6 +48,7 @@ void Player::update(float deltaTime)
 			pow((std::abs(hShot.sprite.getPosition().y - sprite.getPosition().y)),2)) >= 300)
 		{
 			hShot.grappleInProgress = false;
+			hShot.hookedOnSomething = false;
 		}
 	}
 
@@ -60,7 +64,7 @@ void Player::update(float deltaTime)
 		else
 			move(vel*deltaTime);
 	}
-	else if(hShot.grappleInProgress)
+	else if(hShot.grappleInProgress && hShot.hookedOnSomething)
 	{
 		vel.x = 0.f;
 		vel.y = 0.f;
@@ -70,9 +74,8 @@ void Player::update(float deltaTime)
 		grappleHookMove(*this, deltaTime);
 
 		// If were at the point, end grappling and reset the direction
-		if(distance(hShot.grappleLocation, sprite.getPosition()) < 5.f)
+		if(hShot.grappleLocation == sprite.getPosition())
 		{
-			std::cout << "Ending move" << std::endl;
 			hShot.hookedOnSomething = false;
 			hShot.grappleInProgress = false;
 			isFalling = true;
@@ -86,7 +89,7 @@ void Player::update(float deltaTime)
 			ammo[x].setLocation(sprite.getPosition());
 		ammo[x].update(deltaTime);
 	}
-
+	playerSword.update(deltaTime);
 	ui->update(health, stamina);
 }
 
@@ -106,16 +109,26 @@ void Player::attack()
 				
 				ammo[x].setVelocity(sf::Vector2f(xSpeed,0.0));
 				ammo[x].moving = true;
-				//break;
+				break;
 			}
-		/*
+
+		
 		if(ammo[0].velocity.x == 0)
 			ammo[0].velocity.x ? facingRight =  10.0 : -10.0;
 		else if(ammo[1].velocity.x == 0)
 			ammo[1].velocity.x ? facingRight =  10.0 : -10.0;
 		else if(ammo[2].velocity.x == 0)
 			ammo[2].velocity.x ? facingRight =  10.0 : -10.0;
-		*/
+		
+	}
+	else if (weapon == SWORD)
+	{
+		if(facingRight)
+			playerSword.hitBox.setPosition(sprite.getPosition().x + 20, sprite.getPosition().y - 60);
+		else
+			playerSword.hitBox.setPosition(sprite.getPosition().x - 60, sprite.getPosition().y - 60);
+		playerSword.attacking = true;
+		playerSword.currentCooldown = 0.0;
 	}
 }
 
@@ -131,11 +144,13 @@ void Player::move(sf::Vector2f& distance)
 
 void Player::draw(sf::RenderWindow& window)
 {
-	ui->draw(window);
+	//ui->draw(window);
 	BaseObject::draw(window);
 	window.draw(hShot.sprite);
-	//for(int x = 0; x < 3; x++)
-	//	ammo[x].draw(window);
+	playerSword.draw(window);
+	for(int x = 0; x < 3; x++)
+		if(ammo[x].moving)
+			ammo[x].draw(window);
 
 	/* //TESTING CIRCLE
 	sf::CircleShape circle = sf::CircleShape(5.0);
@@ -147,19 +162,21 @@ void Player::draw(sf::RenderWindow& window)
 
 void Player::grapple()
 {
-	hShot.grappleInProgress = true;
+	if(!hShot.grappleInProgress)
+	{
+		hShot.grappleInProgress = true;
 	
-	if(facingRight)
-	{
-		hShot.startLocation = sf::Vector2f(sprite.getPosition().x + 60, sprite.getPosition().y - 15);
-		hShot.grappleToLocation(sf::Vector2f(sprite.getPosition().x + 300 , sprite.getPosition().y - 175));
+		if(facingRight)
+		{
+			hShot.startLocation = sf::Vector2f(sprite.getPosition().x + 60, sprite.getPosition().y - 15);
+			hShot.grappleToLocation(sf::Vector2f(sprite.getPosition().x + 300 , sprite.getPosition().y - 175));
+		}
+		else
+		{
+			hShot.startLocation = sf::Vector2f(sprite.getPosition().x - 60, sprite.getPosition().y - 15);
+			hShot.grappleToLocation(sf::Vector2f(sprite.getPosition().x - 300 , sprite.getPosition().y - 175));
+		}
 	}
-	else
-	{
-		hShot.startLocation = sf::Vector2f(sprite.getPosition().x - 60, sprite.getPosition().y - 15);
-		hShot.grappleToLocation(sf::Vector2f(sprite.getPosition().x - 300 , sprite.getPosition().y - 175));
-	}
-
 }
 
 void Player::resetPosition(sf::Vector2f& newPos)
@@ -255,9 +272,8 @@ void Player::viewCheck(sf::View* view, int width, int height)
 void Player::horizontalAcceleration(MovementDirection dir, float& deltaTime)
 {
 
-	if(!hShot.hookedOnSomething)
+	if(!hShot.hookedOnSomething || !hShot.grappleInProgress)
 	{
-
 		if(dir != STILL)
 		{
 			float maxSpeed = SPEED;
@@ -316,12 +332,12 @@ void Player::verticalAcceleration(float& deltaTime)
 	}
 }
 
-void Player::moveOutOfTile(Tile* t)
+void Player::moveOutOfTile(Tile t)
 {
-	float left = (sprite.getPosition().x + sprite.getGlobalBounds().width/2) - t->left, 
-		right = (t->left + t->width) - (sprite.getPosition().x - sprite.getGlobalBounds().width/2), 
-		up = (sprite.getPosition().y + sprite.getGlobalBounds().height/2) - t->top, 
-		down = (t->top + t->height) - (sprite.getPosition().y - sprite.getGlobalBounds().height/2);
+	float left = (sprite.getPosition().x + sprite.getGlobalBounds().width/2) - t.left, 
+		right = (t.left + t.width) - (sprite.getPosition().x - sprite.getGlobalBounds().width/2), 
+		up = (sprite.getPosition().y + sprite.getGlobalBounds().height/2) - t.top, 
+		down = (t.top + t.height) - (sprite.getPosition().y - sprite.getGlobalBounds().height/2);
 
 	// Calculate shortest distance
 	if(sgn(vel.x) > 0)
@@ -372,4 +388,9 @@ void Player::moveOutOfTile(Tile* t)
 	}
 
 	// Move in direction of shortest distance
+}
+
+void Player::drawUI(sf::RenderWindow& window)
+{
+	ui->draw(window);
 }

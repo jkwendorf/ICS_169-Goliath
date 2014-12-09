@@ -1,61 +1,74 @@
 #include "StateManager.h"
 
-StateManager::StateManager(void)
+// Adds a state into the StateManager, but can also be used to set the added state as the current state
+void StateManager::addState(StateEnum state, State* s, bool makeCurrent)
 {
-	currentState = new GameState();
-	currentState->loadContent();
-}
+	stateMap.insert(std::make_pair(state, s));
 
-StateManager::~StateManager(void)
-{
-	if(currentState != NULL)
+	if(makeCurrent)
 	{
-		currentState->DeleteState();
-		delete currentState;
-	}
-	if(nextState != NULL)
-	{
-		nextState->DeleteState();
-		delete nextState;
+		if (currentState)
+			currentState->unloadContent();
+
+		currentState = s;
+		currentStateEnum = state;
+		currentState->loadContent();
 	}
 }
 
-void StateManager::changeToState(StateEnum state)
+// Adds a state into the StateManager
+void StateManager::addState(StateEnum state, State* s)
 {
-	switch(state)
+	addState(state, s, false);
+}
+
+// Deletes a selected state from the StateManager
+void StateManager::deleteState(StateEnum state)
+{
+	auto iter = stateMap.begin();
+	iter = stateMap.find(state);
+	
+	if(iter != stateMap.end() && stateMap.size() != 1)
 	{
-	case MAIN_MENU:
-		nextState = new MainMenuState();
-		break;
-	case GAME:
-		nextState = new GameState();
-		break;
-	case END_GAME:
-		nextState = new EndGameState();
-		break;
-	//case TRANSITION:
-		//break;
-	default:
-		nextState = new GameState();
-		break;
+		iter->second->DeleteState();
+		delete iter->second;
+
+		// Safeguard in case someone deletes the current state
+		if (currentState == iter->second) 
+		{
+			currentState = stateMap.begin()->second;
+			currentStateEnum = stateMap.begin()->first;
+		}
+
+		stateMap.erase(iter);
 	}
-
-	loadState();
-	unloadState();
-
-	delete currentState;
-	currentState = nextState;
-	nextState = NULL;
 }
 
-void StateManager::loadState()
+// Loads a new state to be displayed, can also delete the current state
+void StateManager::changeToState(StateEnum state, bool deleteCurrentState)
 {
-	nextState->loadContent();
-}
+	auto iter = stateMap.begin();
+	iter = stateMap.find(state);
 
-void StateManager::unloadState()
-{
-	currentState->unloadContent();
+	if(iter != stateMap.end())
+	{
+		if (currentState)
+			currentState->unloadContent();
+
+		if (deleteCurrentState && !stateMap.size() == 1)
+		{
+			auto current = stateMap.begin();
+			current = stateMap.find(currentStateEnum);
+			
+			currentState->DeleteState();
+			delete currentState;
+			stateMap.erase(current);
+		}
+
+		currentState = iter->second;
+		currentStateEnum = state;
+		currentState->loadContent();
+	}
 }
 
 void StateManager::update(float deltaTime)
@@ -71,4 +84,23 @@ void StateManager::draw(sf::RenderWindow& window)
 void StateManager::handleEvent(sf::Event event)
 {
 	currentState->handleEvent(event);
+}
+
+State* StateManager::getCurrentState()
+{
+	return currentState;
+}
+
+void StateManager::DeleteAllStates()
+{
+	auto iter = stateMap.begin();
+	while(iter != stateMap.end())
+	{
+		if(iter->second != nullptr)
+		{
+			iter->second->DeleteState();
+			delete iter->second;
+		}
+		iter++;
+	}
 }

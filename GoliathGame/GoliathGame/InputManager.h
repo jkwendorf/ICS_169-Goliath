@@ -21,7 +21,9 @@ public:
 	//utility[1] = jump
 	//utility[2] = grapple
 	//utility[3] = attack
-	bool utility[4];
+	//utility[4] = sword
+	//utility[5] = crossbow
+	bool utility[6];
 
 
 	//controller[0] = game pad
@@ -29,8 +31,8 @@ public:
 	//controller[2] = keyboard only
 	bool controller[3];
 
-	void update(Player& s, CollisionManager* cM, float deltaTime);
-	void playerMove(Player& s, CollisionManager* cM, float deltaTime);
+	void update(Player& s, float deltaTime);
+	void playerMove(Player& s, float deltaTime);
 
 
 

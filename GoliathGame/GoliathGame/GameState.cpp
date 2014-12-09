@@ -1,33 +1,47 @@
 #include "GameState.h"
 #include "PhysicsManager.h"
+#include "StateManager.h"
 
 GameState::GameState(void)
-	:currentScreen(new Level(1))
+	:currentScreen(new Level(1)), nextScreen(NULL), screen(LEVEL)
 {
 
 }
 
 GameState::~GameState(void)
 {
-	//delete currentRoom;
-	//delete collisionManager;
+	DeleteState();
 }
 
 void GameState::DeleteState()
 {
-	std::cout << "Deleting the state" << std::endl;
-	currentScreen->DeleteLevel();
-	delete currentScreen;
-	/*
-	std::cout << "Calling GameState destructor" << std::endl;
-	delete collisionManager;
-	delete currentRoom;
-	*/
+	if(currentScreen != nullptr)
+	{
+		delete currentScreen;
+		currentScreen = nullptr;
+	}
+	if(nextScreen != nullptr)
+	{
+		delete nextScreen;
+		nextScreen = nullptr;
+	}
 }
 
 void GameState::update(float deltaTime)
 {
 	currentScreen->update(deltaTime);
+	currentScreen->CheckChangeScreen(nextScreen);
+	if(nextScreen)
+	{
+		delete currentScreen;
+		currentScreen = nextScreen;
+		nextScreen = NULL;
+	}
+
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::U))
+	{
+		StateManager::getInstance().changeToState(MAIN_MENU, false);
+	}
 }
 
 void GameState::draw(sf::RenderWindow& window)

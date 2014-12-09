@@ -5,7 +5,7 @@ class EndGameState : public State
 {
 public:
 	EndGameState(void);
-	~EndGameState(void);
+	virtual ~EndGameState(void);
 
 	void DeleteState();
 	void update(float deltaTime);

@@ -1,14 +1,11 @@
 #include "Enemy.h"
 #include "PhysicsManager.h"
 
-Enemy::Enemy() : BaseObject()
-{
 
-}
 
 //Probably still need to work on some more overloads
-Enemy::Enemy(sf::String body, float x, float y) :
-	BaseObject()
+Enemy::Enemy(sf::String body, float x, float y) : 
+	health(100.0f)
 {
 	sprite.setTexture(*TextureManager::GetInstance().retrieveTexture(body));
 	sprite.setPosition(x, y);
@@ -31,7 +28,7 @@ Enemy::Enemy(sf::String body, float x, float y) :
 }
 
 Enemy::Enemy(sf::String body, float x, float y, float range) :
-	BaseObject(), attackRange(range)
+	attackRange(range), health(100.0f)
 {
 	sprite.setTexture(*TextureManager::GetInstance().retrieveTexture(body));
 	sprite.setPosition(x, y);
@@ -65,6 +62,7 @@ void Enemy::update(float deltaTime)
 void Enemy::draw(sf::RenderWindow& window)
 {
 	//UNCOMMENT TO TEST ENEMY APPEARENCE
+	window.draw(sprite);
 	if(isInScreen())
 	{
 		BaseObject::draw(window);
@@ -75,9 +73,7 @@ void Enemy::draw(sf::RenderWindow& window)
 				ammo[x].draw(window);
 			}
 		}
-	//	std::cout << " is in screen" << std::endl;
 	}
-	//else std::cout << " not in screen" << std::endl;
 }
 
 void Enemy::move(float x, float y)
@@ -95,138 +91,14 @@ void Enemy::destroy()
 	//allows the enemy to be taken off the screen
 }
 
-void Enemy::enemyUpdate(CollisionManager* cM, float deltaTime, sf::Vector2i roomSize, sf::Vector2f pPosition)
+void Enemy::enemyUpdate(float deltaTime, sf::Vector2i roomSize)
 {
-	gravity(cM, deltaTime);
-
-	//if enemy isn't in range of player, handle normally
-	if((movingRight && sprite.getPosition().x - pPosition.x > 0) || (!movingRight && sprite.getPosition().x - pPosition.x < 0))
-	{
-		if(inRange(pPosition))
-		{
-			moveToPlayer(cM, pPosition, deltaTime);
-		}
-		else normalMove(cM, deltaTime);
-	}
-	else
-	{
-		normalMove(cM, deltaTime);
-	}
-
-	if(inAttackRange(pPosition))
-	{
-		attack(pPosition, deltaTime);
-	}
-
 	enemyCheck(roomSize);
 
 	update(deltaTime);
 }
 
-void Enemy::gravity(CollisionManager* cM, float deltaTime)
-{
-	move(moveVertically(*this, deltaTime));
-	if(cM->playerCollisionDetection(this))
-	{
-		move(moveOutOfTileVertically(*this, cM->getCollidedTile(*this)));
-	}
-	else if(!isFalling)
-	{
-		isFalling = true;
-	}
-}
 
-void Enemy::normalMove(CollisionManager* cM, float deltaTime)
-{
-	if(movingRight)
-	{
-		move(moveHorizontally(*this, RIGHT, false, deltaTime)); 
-		if(cM->playerCollisionDetection(this))
-		{
-			move(moveOutOfTileHorizontally(*this, cM->getCollidedTile(*this)));
-			movingRight = false;
-		}
-
-	}
-	else
-	{
-		move(moveHorizontally(*this, LEFT, false, deltaTime));
-		if(cM->playerCollisionDetection(this))
-		{
-			move(moveOutOfTileHorizontally(*this, cM->getCollidedTile(*this)));
-			movingRight = true;
-		}
-	}
-}
-
-void Enemy::moveToPlayer(CollisionManager* cM, sf::Vector2f pPosition, float deltaTime)
-{
-	//move towards player
-
-
-	//A* Search
-	//	Heuristic is distance
-	//	Restrictions are tiles
-	//	Figure out how to convert screen Position to distance
-	//	Figure out how to check screen position in terms of tiles
-	//	Store bunch of coordinates
-	//	if Player position is not that
-	//		keep moving
-	//		once you reach that next destination
-	//		keep on going
-	if(sprite.getPosition().x != pPosition.x)
-	{
-		if(playerOnLeft(pPosition))
-		{
-			movingRight = false;
-			move(moveHorizontally(*this, LEFT, false, deltaTime)); 
-		}
-		else 
-		{
-			movingRight = true;
-			move(moveHorizontally(*this, RIGHT, false, deltaTime)); 
-		}
-	}
-
-	//if you come across a wall, jump
-	if(cM->playerCollisionDetection(this))
-	{
-		move(moveOutOfTileHorizontally(*this, cM->getCollidedTile(*this)));
-		vel.y = JUMP_SPEED;
-		isFalling = true;
-	}
-	
-}
-
-bool Enemy::playerOnLeft(sf::Vector2f pPosition)
-{
-	if(sprite.getPosition().x > pPosition.x)
-	{
-		return true;
-	}
-	else return false;
-}
-
-bool Enemy::inRange(sf::Vector2f pPosition)
-{
-	if((sprite.getPosition().x + (GAME_TILE_DIM * 6)) > pPosition.x && (sprite.getPosition().x - (GAME_TILE_DIM * 6)) < pPosition.x)
-	{
-		return true;
-	}
-	else return false;
-}
-
-bool Enemy::inAttackRange(sf::Vector2f pPosition)
-{
-	if((sprite.getPosition().x + attackRange) > pPosition.x && (sprite.getPosition().x - attackRange) < pPosition.x)
-	{
-		if(sprite.getPosition().y == pPosition.y)
-		{
-			return true;
-		}
-	}
-	else return false;
-}
 
 void Enemy::enemyCheck(sf::Vector2i roomSize)
 {
@@ -246,25 +118,13 @@ void Enemy::attack(sf::Vector2f pPosition, float deltaTime)
 {
 	if(attackRange >= ENEMY_ATTACK_HIGH_THRESHOLD)
 	{
-		if(playerOnLeft(pPosition) && !movingRight)
-		{
-			rangeAttack(deltaTime);
-		}
-		else if (!playerOnLeft(pPosition) && movingRight)
-		{
-			rangeAttack(deltaTime);
-		}
+
+		rangeAttack(deltaTime);
+
 	}
 	else if(attackRange <= ENEMY_ATTACK_LOW_THRESHOLD)
 	{
-		if(playerOnLeft(pPosition) && !movingRight)
-		{
-			meleeAttack();
-		}
-		else if (!playerOnLeft(pPosition) && movingRight)
-		{
-			meleeAttack();
-		}
+		meleeAttack();
 	}
 
 }
@@ -314,4 +174,14 @@ bool Enemy::isInScreen()
 		return true;
 	}
 	else return false;
+}
+
+bool Enemy::isMovingRight()
+{
+	return movingRight;
+}
+
+void Enemy::changeMove()
+{
+	movingRight = !movingRight;
 }
