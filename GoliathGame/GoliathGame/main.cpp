@@ -4,8 +4,9 @@
 
 int main()
 {
+
+	Global::GetInstance().ParseXML();
 	bool infocus = true;
-	Global::GetInstance().ParseLevelXML();
 	Global::GetInstance().calculateOffset();
 	sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Goliath Game");
 	// JW: Setting the framerate to 30, but this should be set by a global variable

@@ -199,5 +199,8 @@
     <Xml Include="Levels.xml">
       <Filter>Resource Files</Filter>
     </Xml>
+    <Xml Include="Sounds.xml">
+      <Filter>Resource Files</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

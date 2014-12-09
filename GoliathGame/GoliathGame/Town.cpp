@@ -5,7 +5,7 @@ Town::Town()
 	highlight(new sf::Sprite(*TextureManager::GetInstance().retrieveTexture("HighLight"))),
 	background(new sf::Sprite(*TextureManager::GetInstance().retrieveTexture("Town"))),
 	pointsToHighlight(new sf::Vector2f[5]),
-	testingTimer(5.0)
+	testingTimer(20.0)
 {
 	SetUpPoints();
 	highlight->scale((float)(32) / highlight->getTexture()->getSize().x, (float)(32) / highlight->getTexture()->getSize().y);

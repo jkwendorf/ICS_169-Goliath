@@ -284,9 +284,14 @@ void Section::LoadTileMap(std::vector<std::shared_ptr<Enemy>> &enemyList)
 				break;
 			case 5:
 			case 6:
-			case 7:
 				//Grappleable
 				grid1[(y*gDim.y) + x][2] = 0;
+				grid1[(y*gDim.y) + x][3] = 1;
+				grid1[(y*gDim.y) + x][4] = 0;
+				break;
+			case 7:
+				//Grappleable
+				grid1[(y*gDim.y) + x][2] = 1;
 				grid1[(y*gDim.y) + x][3] = 1;
 				grid1[(y*gDim.y) + x][4] = 0;
 				break;

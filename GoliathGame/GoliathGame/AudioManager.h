@@ -12,6 +12,7 @@ public:
 		return instance;
 	}
 
+	void SetupMap(const std::map<std::string, sf::SoundBuffer*>& s);
 	sf::Sound* retrieveSound(std::string& sound);
 
 private:
