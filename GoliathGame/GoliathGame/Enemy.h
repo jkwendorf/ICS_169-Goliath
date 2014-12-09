@@ -24,6 +24,8 @@ public:
 	bool isMovingRight();
 	void changeMove();
 
+	Projectile ammo[3];
+
 private:
 	int weapon;
 	float weaponCooldown;
@@ -36,5 +38,5 @@ private:
 	bool attacked(); //To be more defined to run away from player if being attacked
 	bool destroyed; //NEED TO FIGURE OUT ENEMY DESTRUCTION
 
-	Projectile ammo[3];
+
 };

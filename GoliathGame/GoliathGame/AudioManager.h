@@ -12,7 +12,8 @@ public:
 		return instance;
 	}
 
-	sf::Sound* retrieveSound(std::string& sound);
+	void SetupMap(const std::map<std::string, sf::SoundBuffer*>& s);
+	sf::SoundBuffer* retrieveSound(std::string& sound);
 
 private:
 	AudioManager() {};
@@ -22,5 +23,4 @@ private:
 	AudioManager& operator =(const AudioManager&);
 
 	std::map<std::string, sf::SoundBuffer*> soundBufferManager;
-	std::map<std::string, sf::Sound*> soundManager;
 };

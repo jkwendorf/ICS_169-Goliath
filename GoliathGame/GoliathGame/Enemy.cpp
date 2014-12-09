@@ -24,6 +24,7 @@ Enemy::Enemy(sf::String body, float x, float y) :
 	{
 		ammo[x] = Projectile(sprite.getPosition(), sf::Vector2f(0.0,0.0));
 		ammo[x].sprite.setColor(sf::Color(x*50 + 150, 0, 0));
+		ammo[x].damage = 20.0f;
 	}
 }
 
@@ -41,6 +42,7 @@ Enemy::Enemy(sf::String body, float x, float y, float range) :
 	{
 		ammo[x] = Projectile(sprite.getPosition(), sf::Vector2f(0.0,0.0));
 		ammo[x].sprite.setColor(sf::Color(x*50 + 150, 0, 0));
+		ammo[x].damage = 20.0f;
 	}
 }
 
@@ -97,8 +99,6 @@ void Enemy::enemyUpdate(float deltaTime, sf::Vector2i roomSize)
 
 	update(deltaTime);
 }
-
-
 
 void Enemy::enemyCheck(sf::Vector2i roomSize)
 {

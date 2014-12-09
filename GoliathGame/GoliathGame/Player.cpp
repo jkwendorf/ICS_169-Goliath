@@ -24,6 +24,8 @@ Player::Player()
 	}
 	grappleDir.y = 100;
 	playerSword.damage = 100.0f;
+
+	SetUpEffects();
 }
 
 Player::~Player() 
@@ -51,7 +53,6 @@ void Player::update(float deltaTime)
 			hShot.hookedOnSomething = false;
 		}
 	}
-
 
 	if(!hShot.hookedOnSomething || !hShot.grappleInProgress)
 	{	
@@ -98,6 +99,7 @@ void Player::attack()
 
 	if(weapon == CROSSBOW)
 	{
+		soundEffects[SHOOT].play();
 		float xSpeed;
 		for(int x = 0; x < 3; x++)
 			if(!ammo[x].moving)
@@ -123,6 +125,7 @@ void Player::attack()
 	}
 	else if (weapon == SWORD)
 	{
+		soundEffects[ATTACK].play();
 		if(facingRight)
 			playerSword.hitBox.setPosition(sprite.getPosition().x + 20, sprite.getPosition().y - 60);
 		else
@@ -164,6 +167,7 @@ void Player::grapple()
 {
 	if(!hShot.grappleInProgress)
 	{
+		soundEffects[HOOK].play();
 		hShot.grappleInProgress = true;
 	
 		if(facingRight)
@@ -186,6 +190,7 @@ void Player::resetPosition(sf::Vector2f& newPos)
 
 void Player::jump()
 {
+	soundEffects[JUMP].play();
 	vel.y = JUMP_SPEED;
 	isFalling = true;
 }
@@ -282,8 +287,8 @@ void Player::horizontalAcceleration(MovementDirection dir, float& deltaTime)
 				maxSpeed = -1.f*maxSpeed;
 				if(running)
 				{
-					maxSpeed *= BOOST;
-					vel.x += MOVE_ACCEL*BOOST*dir*deltaTime;
+					maxSpeed -= BOOST;
+					vel.x += (MOVE_ACCEL+BOOST)*dir*deltaTime;
 				}
 				else
 					vel.x += MOVE_ACCEL*dir*deltaTime;
@@ -294,8 +299,8 @@ void Player::horizontalAcceleration(MovementDirection dir, float& deltaTime)
 			{
 				if(running)
 				{
-					maxSpeed *= BOOST;
-					vel.x += MOVE_ACCEL*BOOST*dir*deltaTime;
+					maxSpeed += BOOST;
+					vel.x += (MOVE_ACCEL+BOOST)*dir*deltaTime;
 				}
 				else
 					vel.x += MOVE_ACCEL*dir*deltaTime;
@@ -393,4 +398,13 @@ void Player::moveOutOfTile(Tile t)
 void Player::drawUI(sf::RenderWindow& window)
 {
 	ui->draw(window);
+}
+
+void Player::SetUpEffects()
+{
+	soundEffects[ATTACK] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("playerAttack")));
+	soundEffects[JUMP] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("playerJump")));
+	soundEffects[SHOOT] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("playerShoot")));
+	soundEffects[TAKEDMG] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("playerTakeDMG")));
+	soundEffects[HOOK] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("playerHook")));
 }

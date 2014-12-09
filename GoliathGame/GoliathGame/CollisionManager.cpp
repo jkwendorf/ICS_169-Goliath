@@ -102,17 +102,39 @@ Tile CollisionManager::getHookedTile(HookShot hs)
 void CollisionManager::checkPlayerBulletToEnemies(Projectile p[], Enemy* enemy)
 {
 	for(int x = 0; x < 3; x++)
-		//for(auto& e : enemyList)
-			if(sqrt(pow(p[x].sprite.getPosition().x - enemy->sprite.getPosition().x, 2) + 
-				pow(p[x].sprite.getPosition().y - enemy->sprite.getPosition().y, 2)) < 50 && p[x].moving)
-				enemy->health -= p[x].damage;
+		if(sqrt(pow(p[x].sprite.getPosition().x - enemy->sprite.getPosition().x, 2) + 
+			pow(p[x].sprite.getPosition().y - enemy->sprite.getPosition().y, 2)) < 50 && p[x].moving)
+		{
+			enemy->health -= p[x].damage;
+			p[x].moving = false;
+		}
 }
 
 void CollisionManager::checkPlayerSwordToEnemies(Sword s, Enemy* enemy)
 {
+	if(sqrt(pow(s.hitBox.getPosition().x - enemy->sprite.getPosition().x, 2) + 
+		pow(s.hitBox.getPosition().y - enemy->sprite.getPosition().y, 2)) < 75 && s.attacking)
+		enemy->health -= s.damage;
+}
+
+void CollisionManager::checkEnemyBulletToEnemies(Projectile p[], Player* player)
+{
 	for(int x = 0; x < 3; x++)
-		//for(auto& e : enemyList)
-			if(sqrt(pow(s.hitBox.getPosition().x - enemy->sprite.getPosition().x, 2) + 
-				pow(s.hitBox.getPosition().y - enemy->sprite.getPosition().y, 2)) < 75 && s.attacking)
-				enemy->health -= s.damage;
+	{
+		if(sqrt(pow(p[x].sprite.getPosition().x - player->sprite.getPosition().x, 2) + 
+			pow(p[x].sprite.getPosition().y - player->sprite.getPosition().y, 2)) < 50 && p[x].moving)
+		{
+			player->health -= p[x].damage;
+			p[x].moving = false;
+		}
+	}
+}
+
+void CollisionManager::checkEnemySwordToEnemies(Sword s, Player* player)
+{
+	if(sqrt(pow(s.hitBox.getPosition().x - player->sprite.getPosition().x, 2) + 
+		pow(s.hitBox.getPosition().y - player->sprite.getPosition().y, 2)) < 75 && s.attacking)
+	{
+		player->health -= s.damage;
+	}
 }
