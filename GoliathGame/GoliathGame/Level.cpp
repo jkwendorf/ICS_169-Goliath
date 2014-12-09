@@ -125,14 +125,19 @@ void Level::update(float deltaTime)
 			if(e->health > 0)
 			{
 				currentRoom->GetCollidableTiles(*e, sf::Vector2i(PLAYER_DIM_X, PLAYER_DIM_Y), enemyTiles);
+
 				if(enemyTiles.size() > 0)
 				{
 					collisionManager->setNearByTiles(enemyTiles);
 				}
+
 				enemyAI.executeMovement(e.get(), p.sprite.getPosition(), deltaTime);
 				e->enemyUpdate(deltaTime, sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()));
+
 				collisionManager->checkPlayerBulletToEnemies(p.ammo, e.get());
 				collisionManager->checkPlayerSwordToEnemies(p.playerSword, e.get());
+
+				collisionManager->checkEnemyBulletToEnemies(e.get()->ammo, &p);
 			}
 		}
 		/*
