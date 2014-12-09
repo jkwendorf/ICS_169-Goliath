@@ -287,8 +287,8 @@ void Player::horizontalAcceleration(MovementDirection dir, float& deltaTime)
 				maxSpeed = -1.f*maxSpeed;
 				if(running)
 				{
-					maxSpeed *= BOOST;
-					vel.x += MOVE_ACCEL*BOOST*dir*deltaTime;
+					maxSpeed -= BOOST;
+					vel.x += (MOVE_ACCEL+BOOST)*dir*deltaTime;
 				}
 				else
 					vel.x += MOVE_ACCEL*dir*deltaTime;
@@ -299,8 +299,8 @@ void Player::horizontalAcceleration(MovementDirection dir, float& deltaTime)
 			{
 				if(running)
 				{
-					maxSpeed *= BOOST;
-					vel.x += MOVE_ACCEL*BOOST*dir*deltaTime;
+					maxSpeed += BOOST;
+					vel.x += (MOVE_ACCEL+BOOST)*dir*deltaTime;
 				}
 				else
 					vel.x += MOVE_ACCEL*dir*deltaTime;
