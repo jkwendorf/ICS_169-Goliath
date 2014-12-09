@@ -4,7 +4,9 @@
 
 int main()
 {
+
 	Global::GetInstance().ParseXML();
+	bool infocus = true;
 	Global::GetInstance().calculateOffset();
 	sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Goliath Game");
 	// JW: Setting the framerate to 30, but this should be set by a global variable
@@ -24,16 +26,23 @@ int main()
         {
             if (event.type == sf::Event::Closed || event.key.code == sf::Keyboard::Escape)
                 window.close();
-
+			if (event.type == sf::Event::GainedFocus)
+				infocus = true;
+			if (event.type == sf::Event::LostFocus)
+				infocus = false;
+			//infocus = event.type == sf::Event::GainedFocus ? true: false;
 			StateManager::getInstance().getCurrentState()->handleEvent(event);
         }
 		deltaTime = min(deltaTime, maxTime);
 		//std::cout<< deltaTime << std::endl;
-		StateManager::getInstance().getCurrentState()->update(deltaTime);
+		if(infocus)
+		{
+			StateManager::getInstance().getCurrentState()->update(deltaTime);
+			window.clear();
+			StateManager::getInstance().getCurrentState()->draw(window);
+			window.display();
+		}
 
-        window.clear();
-		StateManager::getInstance().getCurrentState()->draw(window);
-        window.display();
     }
 
 	window.close();

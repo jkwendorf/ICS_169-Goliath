@@ -22,6 +22,7 @@ Level::Level(int levelNumber)
 	view.reset(sf::FloatRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
 	view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
 	p.resetPosition(currentRoom->getStartPos());
+	//realEnemyList.push_back(new Enemy("Test",200,200, 10));
 
 }
 
@@ -121,17 +122,23 @@ void Level::update(float deltaTime)
 		}
 		for (auto& e : enemyList)
 		{
-			currentRoom->GetCollidableTiles(*e, sf::Vector2i(PLAYER_DIM_X, PLAYER_DIM_Y), enemyTiles);
-			if(enemyTiles.size() > 0)
+			if(e->health > 0)
 			{
-				collisionManager->setNearByTiles(enemyTiles);
+				currentRoom->GetCollidableTiles(*e, sf::Vector2i(PLAYER_DIM_X, PLAYER_DIM_Y), enemyTiles);
+				if(enemyTiles.size() > 0)
+				{
+					collisionManager->setNearByTiles(enemyTiles);
+				}
+				enemyAI.executeMovement(e.get(), p.sprite.getPosition(), deltaTime);
+				e->enemyUpdate(deltaTime, sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()));
+				collisionManager->checkPlayerBulletToEnemies(p.ammo, e.get());
+				collisionManager->checkPlayerSwordToEnemies(p.playerSword, e.get());
 			}
-			enemyAI.executeMovement(e.get(), p.sprite.getPosition(), deltaTime);
-			e->enemyUpdate(deltaTime, sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()));
 		}
-
-		//collisionManager->checkPlayerBulletToEnemies(p.ammo, enemyList);
-		
+		/*
+		enemyAI.executeMovement(realEnemyList.at(0), p.sprite.getPosition(), deltaTime);
+		collisionManager->checkPlayerBulletToEnemies(p.ammo, realEnemyList.front());
+		*/
 		//check player weapon collisions
 		//collisionManager
 			//sword
@@ -157,10 +164,14 @@ void Level::draw(sf::RenderWindow& window)
 	for(auto& e : enemyList)
 	{
 		if(e->health > 0)
+		{
 			e->draw(window);
+			//std::cout << e->health << std::endl;
+		}
 	//	enemyNum++;
 	//	std::cout << "Enemy #" << enemyNum;
 	}
+	
 	window.setView(view);
 	p.drawUI(window);
 }

@@ -24,7 +24,8 @@ public:
 	bool wallBlockingCharacter(BaseObject* p);
 	int numTilesNear(BaseObject p);
 
-	void checkPlayerBulletToEnemies(Projectile p[], std::vector<Enemy> enemyList);
+	void checkPlayerBulletToEnemies(Projectile p[], Enemy* enemy);
+	void checkPlayerSwordToEnemies(Sword s, Enemy* enemy);
 
 private:
 	std::vector<Tile> tileList;

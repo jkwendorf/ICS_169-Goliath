@@ -116,10 +116,12 @@ void InputManager::playerMove(Player& player, float deltaTime)
 	if(utility[4])
 	{
 		player.weapon = SWORD;
+		std::cout << "Sword switch" << std::endl;
 	}
 	if(utility[5])
 	{
 		player.weapon = CROSSBOW;
+		std::cout << "Cross Bow Switch" << std::endl;
 	}
 	//player.sprite.move(player.vel);
 	//player.vel.x = 0.0;
