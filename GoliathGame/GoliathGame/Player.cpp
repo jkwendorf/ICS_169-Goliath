@@ -54,7 +54,6 @@ void Player::update(float deltaTime)
 		}
 	}
 
-
 	if(!hShot.hookedOnSomething || !hShot.grappleInProgress)
 	{	
 	// Move the player

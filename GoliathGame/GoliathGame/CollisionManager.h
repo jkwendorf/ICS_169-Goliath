@@ -27,6 +27,9 @@ public:
 	void checkPlayerBulletToEnemies(Projectile p[], Enemy* enemy);
 	void checkPlayerSwordToEnemies(Sword s, Enemy* enemy);
 
+	void checkEnemyBulletToEnemies(Projectile p[], Player* player);
+	void checkEnemySwordToEnemies(Sword s, Player* player);
+
 private:
 	std::vector<Tile> tileList;
 	std::vector<Tile> grapplableTileList;
