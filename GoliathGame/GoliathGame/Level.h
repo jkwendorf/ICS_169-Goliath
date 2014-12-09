@@ -18,8 +18,8 @@ private:
 	bool changeScreen;
 	float loading;
 	int levelNum, maxRooms;
-	Player p;
 	std::vector<std::shared_ptr<Enemy>> enemyList;
+	Player p;
 	Room* currentRoom;
 	sf::View view;
 	sf::RenderWindow win;
