@@ -11,22 +11,23 @@
 #include <memory>
 #include "Town.h"
 
+
 class Level : public BaseGameScreen
 {
 private:
 	bool changeScreen;
 	float loading;
 	int levelNum, maxRooms;
+	std::vector<std::shared_ptr<Enemy>> enemyList;
 	Player p;
-	std::vector<std::unique_ptr<Enemy>> enemyList;
 	Room* currentRoom;
 	sf::View view;
 	sf::RenderWindow win;
 	sf::Sprite background, loadingSprite;
 
 	CollisionManager* collisionManager;
-	InputManager* inputManager;
-	EnemyAI* enemyAI;
+	InputManager inputManager;
+	EnemyAI enemyAI;
 
 	void viewCheck();
 	void playerCheck();
@@ -35,7 +36,7 @@ private:
 public:
 	Level();
 	Level(int levelNumber);
-	~Level(void);
+	virtual ~Level(void);
 	void update(float deltaTime);
 	void draw(sf::RenderWindow& window);
 	void DeleteLevel();

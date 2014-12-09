@@ -96,6 +96,9 @@
     <ClCompile Include="Boss.cpp">
       <Filter>Source Files\Level Stuff</Filter>
     </ClCompile>
+    <ClCompile Include="AudioManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="State.h">
@@ -188,9 +191,15 @@
     <ClInclude Include="Room.h">
       <Filter>Header Files\Level Stuff</Filter>
     </ClInclude>
+    <ClInclude Include="AudioManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Levels.xml">
+      <Filter>Resource Files</Filter>
+    </Xml>
+    <Xml Include="Sounds.xml">
       <Filter>Resource Files</Filter>
     </Xml>
   </ItemGroup>

@@ -5,6 +5,7 @@
 #include "Global.h"
 #include "Enemy.h"
 #include <memory>
+#include <SFML\Audio\Music.hpp>
 
 class Room
 {
@@ -13,32 +14,33 @@ private:
 	int numSect, roomNum, roomWidth, roomHeight;
 	bool loadedTitles;
 	sf::Vector2f startPos;
+	sf::Music roomMusic;
 
 	Room();
-	void LoadRoom(int levelNumber, std::vector<std::unique_ptr<Enemy>> &enemyList);
+	void LoadRoom(int levelNumber, std::vector<std::shared_ptr<Enemy>> &enemyList);
 	bool CheckSectionOnScreen(int sectionNum);
-	std::vector<Tile*> checkBotRight(int i, sf::IntRect& rect);
-	std::vector<sf::Vector2i*> inSameGrid(const sf::Vector2i& p1, const sf::Vector2i& p2);
-	std::vector<sf::Vector2i*> inDifferentGrid(const sf::Vector2i& p1, const sf::Vector2i& p2, const sf::Vector2i& p3, const sf::Vector2i& p4);
+	std::vector<Tile> checkBotRight(int i, sf::IntRect& rect);
+	std::vector<sf::Vector2i> inSameGrid(const sf::Vector2i& p1, const sf::Vector2i& p2);
+	std::vector<sf::Vector2i> inDifferentGrid(const sf::Vector2i& p1, const sf::Vector2i& p2, const sf::Vector2i& p3, const sf::Vector2i& p4);
 	void checkUpperLeftSameGrid(int currentGrid, sf::IntRect& rect, const sf::Vector2i& topLeft, 
-		const sf::Vector2i& botRight, std::vector<Tile*>& nearTiles, bool checkBoxOnly, bool grapple = false);
+		const sf::Vector2i& botRight, std::vector<Tile>& nearTiles, bool checkBoxOnly, bool grapple = false);
 	void checkLowerRightNextGrid(int currentGrid, sf::IntRect& rect, const sf::Vector2i& topLeft, 
-		const sf::Vector2i& botRight, std::vector<Tile*>& nearTiles, bool checkBoxOnly, bool grapple = false);
+		const sf::Vector2i& botRight, std::vector<Tile>& nearTiles, bool checkBoxOnly, bool grapple = false);
 	void checkLowerRightLastCol(int currentGrid, sf::IntRect& rect, const sf::Vector2i& topLeft, const sf::Vector2i& botRight,
-		std::vector<Tile*>& nearTiles);
+		std::vector<Tile>& nearTiles);
 	void checkUpperLeftFirstCol(int currentGrid, sf::IntRect& rect, const sf::Vector2i& topLeft, const sf::Vector2i& botRight,
-		std::vector<Tile*>& nearTiles);
-	void GetNearTiles(sf::IntRect& player, std::vector<Tile*>& nearTiles, bool checkBoxOnly = false, bool grapple = false);
+		std::vector<Tile>& nearTiles);
+	void GetNearTiles(sf::IntRect& player, std::vector<Tile>& nearTiles, bool checkBoxOnly = false, bool grapple = false);
 
 public:
 	//Player player;
-	Room(int levelNumber, int roomNumber, std::vector<std::unique_ptr<Enemy>> &enemyList);
+	Room(int levelNumber, int roomNumber, std::vector<std::shared_ptr<Enemy>> &enemyList);
 	~Room();
 	
-	void GetCollidableTiles(BaseObject& obj, sf::Vector2i& dim, std::vector<Tile*>& nearTiles);
+	void GetCollidableTiles(BaseObject& obj, sf::Vector2i& dim, std::vector<Tile>& nearTiles);
 	//These two functions only works for player 
 	bool NearInteractableTiles(BaseObject& obj);
-	void GetGrapplableTiles(Player& player, std::vector<Tile*>& nearTiles);
+	void GetGrapplableTiles(Player& player, std::vector<Tile>& nearTiles);
 
 	void update(float deltaTime);
 	void draw(sf::RenderWindow& w);

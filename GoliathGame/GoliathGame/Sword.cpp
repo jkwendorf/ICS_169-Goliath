@@ -6,6 +6,8 @@ Sword::Sword():attacking(false)
 	hitBox.setFillColor(sf::Color::Red);
 	currentCooldown = 0.0;
 	weaponCooldown = .5;
+	damage = 100.0;
+	hitBox.setOrigin(25, 50);
 }
 
 Sword::~Sword()

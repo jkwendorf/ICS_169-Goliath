@@ -63,22 +63,22 @@ inline sf::Vector2f moveHorizontally(BaseObject& b, MovementDirection dir, bool 
 	return dis;
 }
 
-inline sf::Vector2f moveOutOfTileVertically(BaseObject& p, Tile* t)
+inline sf::Vector2f moveOutOfTileVertically(BaseObject& p, Tile t)
 {
 	sf::Vector2f newPos;
 
 	// If colliding from above
-	if(t->top > p.sprite.getPosition().y)
+	if(t.top > p.sprite.getPosition().y)
 	{
 		p.isFalling = false;
 		p.vel.y = 0.f;
-		newPos.y = t->top - p.sprite.getPosition().y - p.sprite.getGlobalBounds().height/2.f -0.1f;
+		newPos.y = t.top - p.sprite.getPosition().y - p.sprite.getGlobalBounds().height/2.f -0.1f;
 	}
 	// If colliding from below
-	else if(t->top < p.sprite.getPosition().y)
+	else if(t.top < p.sprite.getPosition().y)
 	{			
 		p.vel.y = 0.f;
-		newPos.y = (t->top + t->height) - 
+		newPos.y = (t.top + t.height) - 
 			(p.sprite.getPosition().y - p.sprite.getGlobalBounds().height/2.f);
 	}
 
@@ -86,15 +86,15 @@ inline sf::Vector2f moveOutOfTileVertically(BaseObject& p, Tile* t)
 	return newPos;
 }
 
-inline sf::Vector2f moveOutOfTileHorizontally(BaseObject& p, Tile* t)
+inline sf::Vector2f moveOutOfTileHorizontally(BaseObject& p, Tile t)
 {
  	sf::Vector2f newPos;
 	// If the player is colliding with the left side of the tile
-	if(p.sprite.getPosition().x < t->left)
-		newPos.x = t->left - (p.sprite.getPosition().x + p.sprite.getGlobalBounds().width/2);
+	if(p.sprite.getPosition().x < t.left)
+		newPos.x = t.left - (p.sprite.getPosition().x + p.sprite.getGlobalBounds().width/2);
 	// If the player is colliding with the right side of the tile
-	else if(p.sprite.getPosition().x > t->left + t->width)
-		newPos.x = (t->left + t->width) - (p.sprite.getPosition().x - p.sprite.getGlobalBounds().width/2);
+	else if(p.sprite.getPosition().x > t.left + t.width)
+		newPos.x = (t.left + t.width) - (p.sprite.getPosition().x - p.sprite.getGlobalBounds().width/2);
 
 	p.vel.x = 0;
 	//return sf::Vector2f(0.f, 0.f);

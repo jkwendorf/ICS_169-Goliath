@@ -62,6 +62,7 @@ void Enemy::update(float deltaTime)
 void Enemy::draw(sf::RenderWindow& window)
 {
 	//UNCOMMENT TO TEST ENEMY APPEARENCE
+	window.draw(sprite);
 	if(isInScreen())
 	{
 		BaseObject::draw(window);
@@ -72,9 +73,7 @@ void Enemy::draw(sf::RenderWindow& window)
 				ammo[x].draw(window);
 			}
 		}
-	//	std::cout << " is in screen" << std::endl;
 	}
-	//else std::cout << " not in screen" << std::endl;
 }
 
 void Enemy::move(float x, float y)

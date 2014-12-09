@@ -20,12 +20,12 @@ private:
 	std::string pathToText;
 
 	Section();
-	void LoadTileMap(std::vector<std::unique_ptr<Enemy>> &enemyList);
+	void LoadTileMap(std::vector<std::shared_ptr<Enemy>> &enemyList);
 	void Tokenize(const std::string& str,
                       std::vector<std::string>& tokens,
                       const std::string& delimiters = " ");
 public:
-	Section(int sectionNumber, std::string& s, sf::Vector2i& offset, std::vector<std::unique_ptr<Enemy>> &enemyList);
+	Section(int sectionNumber, std::string& s, sf::Vector2i& offset, std::vector<std::shared_ptr<Enemy>> &enemyList);
 	~Section();
 	sf::Vector2i getOffset();
 	sf::Vector2i getGridDim();
@@ -37,12 +37,12 @@ public:
 	bool inWindow();
 	bool checkPlayerInGrid(const BaseObject& player);
 
-	std::vector<sf::Vector2i*> getIntersectPoints(const BaseObject& rect);
-	std::vector<sf::Vector2i*> getIntersectPoints(const sf::Vector2i& p1, const sf::Vector2i& p2);
-	void surroundingRects(const sf::Vector2i& p1, const sf::Vector2i& p2, std::vector<Tile*>& nearTiles,
+	std::vector<sf::Vector2i> getIntersectPoints(const BaseObject& rect);
+	std::vector<sf::Vector2i> getIntersectPoints(const sf::Vector2i& p1, const sf::Vector2i& p2);
+	void surroundingRects(const sf::Vector2i& p1, const sf::Vector2i& p2, std::vector<Tile>& nearTiles,
 		bool checkHorz = true, bool checkVert = true);
-	void checkGrapple(const sf::Vector2i& p1, const sf::Vector2i& p2, std::vector<Tile*>& nearTiles);
-	void checkInteractable(const sf::Vector2i& p1, const sf::Vector2i& p2, std::vector<Tile*>& nearTiles);
+	void checkGrapple(const sf::Vector2i& p1, const sf::Vector2i& p2, std::vector<Tile>& nearTiles);
+	void checkInteractable(const sf::Vector2i& p1, const sf::Vector2i& p2, std::vector<Tile>& nearTiles);
 	void update(float deltaTime);
 	void draw(sf::RenderWindow& w);
 	void print();

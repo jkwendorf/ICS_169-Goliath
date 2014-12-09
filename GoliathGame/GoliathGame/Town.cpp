@@ -5,13 +5,20 @@ Town::Town()
 	highlight(new sf::Sprite(*TextureManager::GetInstance().retrieveTexture("HighLight"))),
 	background(new sf::Sprite(*TextureManager::GetInstance().retrieveTexture("Town"))),
 	pointsToHighlight(new sf::Vector2f[5]),
-	testingTimer(5.0)
+	testingTimer(20.0)
 {
 	SetUpPoints();
 	highlight->scale((float)(32) / highlight->getTexture()->getSize().x, (float)(32) / highlight->getTexture()->getSize().y);
 
 	view.reset(sf::FloatRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
 	view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
+
+	if (!townMusic.openFromFile("media/sound/SilverScrapes.wav"))
+	{
+		std::cout << "Error for loading file" << std::endl;
+	}
+	townMusic.setLoop(true);
+	townMusic.play();
 }
 
 Town::~Town()
@@ -71,6 +78,7 @@ void Town::draw(sf::RenderWindow& window)
 
 void Town::DeleteLevel()
 {
+	townMusic.stop();
 	delete background;
 	delete highlight;
 	delete[] pointsToHighlight;

@@ -84,6 +84,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="BaseObject.cpp" />
     <ClCompile Include="Boss.cpp" />
     <ClCompile Include="Button.cpp" />
@@ -111,6 +112,7 @@
     <ClCompile Include="UserInterface.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AudioManager.h" />
     <ClInclude Include="BaseGameScreen.h" />
     <ClInclude Include="BaseObject.h" />
     <ClInclude Include="Boss.h" />
@@ -146,6 +148,7 @@
     <Xml Include="Levels.xml">
       <SubType>Designer</SubType>
     </Xml>
+    <Xml Include="Sounds.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -22,7 +22,7 @@ void Global::CleanUp()
 	//delete[] currentTileSheet;
 }
 
-void Global::ParseLevelXML() {
+void Global::ParseXML() {
 	pugi::xml_document doc;
 
 	pugi::xml_parse_result result = doc.load_file("Levels.xml");
@@ -51,6 +51,16 @@ void Global::ParseLevelXML() {
 			//std::cout << std::endl;
 		}
 	}
+
+	std::map<std::string, sf::SoundBuffer*> temp;
+	result = doc.load_file("Sounds.xml");
+	
+	for(pugi::xml_node sound = doc.child("Sound"); sound; sound = doc.next_sibling("Sound"))
+	{
+		temp[sound.attribute("name").as_string()] = new sf::SoundBuffer();
+		temp[sound.attribute("name").as_string()]->loadFromFile(sound.attribute("path").as_string());
+	}
+	//AudioManager::GetInstance().SetupMap(temp);
 
 }
 
@@ -129,7 +139,7 @@ bool Global::checkPoint(const sf::Vector2i& p, const sf::IntRect& r)
 void Global::calculateOffset()
 {
 	//grab height and width and calculate that offset
-	xOffset = SCREEN_WIDTH / 5;
+	xOffset = SCREEN_WIDTH / 2;
 	yOffset = SCREEN_HEIGHT / 8;
 
 }

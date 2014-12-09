@@ -6,6 +6,7 @@
 #include <fstream>
 #include <map>
 #include <SFML/Graphics.hpp>
+#include "AudioManager.h"
 // JW: In the future, we might want to make Global a static class so we can alter values
 
 #define SCREEN_WIDTH 1280
@@ -19,6 +20,7 @@
 #define PLAYER_DIM_Y PLAYER_DIM_X * 2
 #define ENEMY_ATTACK_LOW_THRESHOLD 100
 #define ENEMY_ATTACK_HIGH_THRESHOLD 400
+
 //Player sprite dim never used...
 #define PLAYER_SPRITE_DIM 1000
 
@@ -42,7 +44,7 @@ public :
 	std::map<std::string, int> roomSizes;
 	std::map<std::string, std::string> roomTileSheets;
 
-	void ParseLevelXML();
+	void ParseXML();
 	void ParseLevelSizes(std::map<std::string, int>& mapToUpdate, std::string& fileName);
 	void ParseLevelTileSheets();
 	bool checkPoint(const sf::Vector2i& p, const sf::IntRect& r);
