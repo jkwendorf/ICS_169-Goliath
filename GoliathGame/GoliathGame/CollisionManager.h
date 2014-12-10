@@ -24,10 +24,10 @@ public:
 	bool wallBlockingCharacter(BaseObject* p);
 	int numTilesNear(BaseObject p);
 
-	void checkPlayerBulletToEnemies(Projectile p[], Enemy* enemy);
+	void checkPlayerBulletToEnemies(Projectile p, Enemy* enemy);
 	void checkPlayerSwordToEnemies(Sword s, Enemy* enemy);
 
-	void checkEnemyBulletToEnemies(Projectile p[], Player* player);
+	void checkEnemyBulletToEnemies(Projectile p, Player* player);
 	void checkEnemySwordToEnemies(Sword s, Player* player);
 
 private:

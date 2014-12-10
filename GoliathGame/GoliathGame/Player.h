@@ -58,6 +58,7 @@ public:
 	void horizontalAcceleration(MovementDirection dir, float& deltaTime);
 	void verticalAcceleration(float& deltaTime);
 	void moveOutOfTile(Tile t);
+	void vaultAboveGrappleTile();
 
 	void drawUI(sf::RenderWindow& window);
 
@@ -70,7 +71,7 @@ public:
 	HookShot hShot;
 	sf::Vector2f grappleDir;
 
-	bool grappleInProgress, facingRight, running;
+	bool grappleInProgress, facingRight, running, isHanging;
 	Projectile ammo[3];
 	void viewCheck(sf::View* view, int width, int height);
 	Sword playerSword;
