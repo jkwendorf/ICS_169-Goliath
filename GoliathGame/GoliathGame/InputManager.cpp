@@ -40,9 +40,12 @@ void InputManager::update(Player& s, float deltaTime)
 
 	//utility[0] = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift);
 	s.running = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift);
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && !s.isFalling)
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 	{
-		s.jump();
+		if(!s.isHanging && !s.isFalling)
+			s.jump();
+		else if(s.isHanging)
+			s.vaultAboveGrappleTile();
 	}
 	utility[2] = sf::Mouse::isButtonPressed(sf::Mouse::Right) && !utility[2] ? true : false;
 	utility[3] = sf::Mouse::isButtonPressed(sf::Mouse::Left) && !utility[3] ? true : false;
@@ -79,7 +82,7 @@ void InputManager::playerMove(Player& player, float deltaTime)
 	/* HANDLE LEFT AND RIGHT MOTION*/
 	if(movement[0])
 	{
-		if(!player.hShot.grappleInProgress || !player.hShot.hookedOnSomething)
+		if((!player.hShot.grappleInProgress || !player.hShot.hookedOnSomething) && !player.isHanging)
 		{
 			player.horizontalAcceleration(LEFT, deltaTime);
 			player.facingRight = false;
@@ -87,7 +90,7 @@ void InputManager::playerMove(Player& player, float deltaTime)
 	}
 	else if(movement[1])
 	{
-		 if(!player.hShot.grappleInProgress || !player.hShot.hookedOnSomething)
+		 if((!player.hShot.grappleInProgress || !player.hShot.hookedOnSomething) && !player.isHanging)
 		 {
 			player.horizontalAcceleration(RIGHT, deltaTime);
 			player.facingRight = true;
@@ -98,10 +101,15 @@ void InputManager::playerMove(Player& player, float deltaTime)
 
 	if(utility[2])
 	{
-		if(!player.grappleInProgress)
-			player.grapple();
+		if(!player.isHanging)
+		{
+			if(!player.grappleInProgress)
+				player.grapple();
+			else
+				player.currentCooldown += deltaTime;
+		}
 		else
-			player.currentCooldown += deltaTime;
+			player.isHanging = false;
 	}
 	if(utility[3])
 	{

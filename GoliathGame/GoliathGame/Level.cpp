@@ -83,7 +83,17 @@ void Level::update(float deltaTime)
 			{
 				p.hShot.hookedOnSomething = true;
 				Tile hookedTile = collisionManager->getHookedTile(p.hShot);
-				p.hShot.grappleToLocation(sf::Vector2f(hookedTile.left + hookedTile.width/2, hookedTile.top + hookedTile.height));
+				if(hookedTile.getTileNum() == 7)
+				{
+					if(p.hShot.fireRight)
+						p.hShot.grappleToLocation(sf::Vector2f(hookedTile.left - p.sprite.getGlobalBounds().width/2, hookedTile.top + hookedTile.height/2));
+					else
+						p.hShot.grappleToLocation(sf::Vector2f(hookedTile.left + hookedTile.width + p.sprite.getGlobalBounds().width/2, hookedTile.top + hookedTile.height/2));
+					
+					p.isHanging = true;
+				}
+				else
+					p.hShot.grappleToLocation(sf::Vector2f(hookedTile.left + hookedTile.width/2, hookedTile.top + hookedTile.height));
 			}
 		}
 
