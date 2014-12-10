@@ -44,8 +44,11 @@ void InputManager::update(Player& s, float deltaTime)
 	{
 		if(!s.isHanging && !s.isFalling)
 			s.jump();
-		else if(s.isHanging)
-			s.vaultAboveGrappleTile();
+		else if(s.isHanging && !s.isVaulting)
+		{
+			s.interpolateVaultAboveGrappleTile();
+			//s.instantVaultAboveGrappleTile();
+		}
 	}
 	utility[2] = sf::Mouse::isButtonPressed(sf::Mouse::Right) && !utility[2] ? true : false;
 	utility[3] = sf::Mouse::isButtonPressed(sf::Mouse::Left) && !utility[3] ? true : false;
@@ -103,12 +106,12 @@ void InputManager::playerMove(Player& player, float deltaTime)
 	{
 		if(!player.isHanging)
 		{
-			if(!player.grappleInProgress)
+			if(!player.grappleInProgress && !player.isHanging && !player.isVaulting)
 				player.grapple();
 			else
 				player.currentCooldown += deltaTime;
 		}
-		else
+		else if(!player.isVaulting)
 			player.isHanging = false;
 	}
 	if(utility[3])
