@@ -139,7 +139,7 @@ void Player::attack()
 
 	if(weapon == CROSSBOW)
 	{
-		soundEffects[SHOOT].play();
+		
 		float xSpeed;
 		for(int x = 0; x < 3; x++)
 			if(!ammo[x].moving)
@@ -151,6 +151,7 @@ void Player::attack()
 				
 				ammo[x].setVelocity(sf::Vector2f(xSpeed,0.0));
 				ammo[x].moving = true;
+				soundEffects[SHOOT].play();
 				break;
 			}
 
@@ -167,9 +168,9 @@ void Player::attack()
 	{
 		soundEffects[ATTACK].play();
 		if(facingRight)
-			playerSword.hitBox.setPosition(sprite.getPosition().x + 20, sprite.getPosition().y - 60);
+			playerSword.hitBox.setPosition(sprite.getPosition().x + PLAYER_DIM_X*1.5, sprite.getPosition().y);
 		else
-			playerSword.hitBox.setPosition(sprite.getPosition().x - 60, sprite.getPosition().y - 60);
+			playerSword.hitBox.setPosition(sprite.getPosition().x - PLAYER_DIM_X*1.5, sprite.getPosition().y);
 		playerSword.attacking = true;
 		playerSword.currentCooldown = 0.0;
 	}
