@@ -124,6 +124,9 @@ void Level::update(float deltaTime)
 			}
 			else if(collisionManager->tileBelowCharacter(&p))
 			{
+				if(p.hShot.isDisabled)
+					p.hShot.isDisabled = false;
+
 				//std::cout << "Ground Collision" << std::endl;
 				if(collisionManager->wallBlockingCharacter(&p))
 				{
