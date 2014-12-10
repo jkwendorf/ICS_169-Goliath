@@ -3,7 +3,8 @@
 #include "PhysicsManager.h"
 
 Player::Player() 
-	: BaseObject(), grappleInProgress(false), facingRight(true),running(false),  health(100), stamina(50), ui(new UserInterface(health, stamina))
+	: BaseObject(), grappleInProgress(false), facingRight(true),running(false), 
+	isHanging(false), health(100), stamina(50), ui(new UserInterface(health, stamina))
 {
 	vel = sf::Vector2f(0.0,0.0);
 
@@ -180,6 +181,7 @@ void Player::grapple()
 			hShot.startLocation = sf::Vector2f(sprite.getPosition().x - 60, sprite.getPosition().y - 15);
 			hShot.grappleToLocation(sf::Vector2f(sprite.getPosition().x - 300 , sprite.getPosition().y - 175));
 		}
+		hShot.fireRight = facingRight;
 	}
 }
 
@@ -328,7 +330,7 @@ void Player::horizontalAcceleration(MovementDirection dir, float& deltaTime)
 
 void Player::verticalAcceleration(float& deltaTime)
 {
-	if(isFalling)
+	if(isFalling && !isHanging)
 	{
 		if(vel.y >= TERMINAL_VELOCITY)
 			vel.y = TERMINAL_VELOCITY;
@@ -407,4 +409,16 @@ void Player::SetUpEffects()
 	soundEffects[SHOOT] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("playerShoot")));
 	soundEffects[TAKEDMG] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("playerTakeDMG")));
 	soundEffects[HOOK] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("playerHook")));
+}
+
+void Player::vaultAboveGrappleTile()
+{
+	if(hShot.fireRight)
+		sprite.setPosition(sf::Vector2f(sprite.getPosition().x + sprite.getGlobalBounds().width/2 + GAME_TILE_DIM/2, 
+							sprite.getPosition().y - sprite.getGlobalBounds().height));
+	else
+		sprite.setPosition(sf::Vector2f(sprite.getPosition().x - sprite.getGlobalBounds().width/2 - GAME_TILE_DIM/2, 
+							sprite.getPosition().y - sprite.getGlobalBounds().height));
+
+	isHanging = false;
 }

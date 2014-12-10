@@ -83,7 +83,17 @@ void Level::update(float deltaTime)
 			{
 				p.hShot.hookedOnSomething = true;
 				Tile hookedTile = collisionManager->getHookedTile(p.hShot);
-				p.hShot.grappleToLocation(sf::Vector2f(hookedTile.left + hookedTile.width/2, hookedTile.top + hookedTile.height));
+				if(hookedTile.getTileNum() == 7)
+				{
+					if(p.hShot.fireRight)
+						p.hShot.grappleToLocation(sf::Vector2f(hookedTile.left - p.sprite.getGlobalBounds().width/2, hookedTile.top + hookedTile.height/2));
+					else
+						p.hShot.grappleToLocation(sf::Vector2f(hookedTile.left + hookedTile.width + p.sprite.getGlobalBounds().width/2, hookedTile.top + hookedTile.height/2));
+					
+					p.isHanging = true;
+				}
+				else
+					p.hShot.grappleToLocation(sf::Vector2f(hookedTile.left + hookedTile.width/2, hookedTile.top + hookedTile.height));
 			}
 		}
 
@@ -120,10 +130,12 @@ void Level::update(float deltaTime)
 				}
 			}
 		}
+
 		for (auto& e : enemyList)
 		{
 			if(e->health > 0)
 			{
+				std::vector<Tile> proTile;
 				currentRoom->GetCollidableTiles(*e, sf::Vector2i(PLAYER_DIM_X, PLAYER_DIM_Y), enemyTiles);
 
 				if(enemyTiles.size() > 0)
@@ -133,13 +145,55 @@ void Level::update(float deltaTime)
 
 				enemyAI.executeMovement(e.get(), p.sprite.getPosition(), deltaTime);
 				e->enemyUpdate(deltaTime, sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()));
+				for(Projectile& po : e.get()->ammo)
+				{
+					if(po.moving)
+					{
+						currentRoom->GetCollidableTiles(po, sf::Vector2i(po.sprite.getTexture()->getSize().x,
+							po.sprite.getTexture()->getSize().y), proTile);
 
-				collisionManager->checkPlayerBulletToEnemies(p.ammo, e.get());
-				collisionManager->checkPlayerSwordToEnemies(p.playerSword, e.get());
+						if(proTile.size() > 0)
+						{
+							collisionManager->setNearByTiles(proTile);
+						}
 
-				collisionManager->checkEnemyBulletToEnemies(e.get()->ammo, &p);
+						if(collisionManager->playerCollisionDetection(&po))
+						{
+							po.moving = false;
+						}
+
+						collisionManager->checkEnemyBulletToEnemies(po, &p);
+					}
+				}
 			}
 		}
+
+		for(Projectile& po : p.ammo)
+		{
+			std::vector<Tile> proTile;
+			if(po.moving)
+			{
+				currentRoom->GetCollidableTiles(po, sf::Vector2i(po.sprite.getTexture()->getSize().x,
+					po.sprite.getTexture()->getSize().y), proTile);
+				if(proTile.size() > 0)
+				{
+					collisionManager->setNearByTiles(proTile);
+				}
+
+				if(collisionManager->playerCollisionDetection(&po))
+				{
+					po.moving = false;
+					po.startTime = 0;
+				}
+
+				for(auto& e : enemyList)
+					collisionManager->checkPlayerBulletToEnemies(po, e.get());		
+			}
+		}
+
+		for(auto& e : enemyList)
+			collisionManager->checkPlayerSwordToEnemies(p.playerSword, e.get());
+
 		/*
 		enemyAI.executeMovement(realEnemyList.at(0), p.sprite.getPosition(), deltaTime);
 		collisionManager->checkPlayerBulletToEnemies(p.ammo, realEnemyList.front());
@@ -150,9 +204,6 @@ void Level::update(float deltaTime)
 				//collision manager will check sword hitbox with all enemies on the list
 			//projectile
 				//check each "moving" projectile against enemies on the screen
-
-
-
 		//check enemy weapon collisions
 	}
 }

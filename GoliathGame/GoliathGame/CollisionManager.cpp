@@ -24,9 +24,9 @@ bool CollisionManager::playerCollisionDetection(BaseObject* p)
 {
 	for(Tile b : tileList)
 	{
-		//std::cout << "(" << b->sprite.getGlobalBounds().left << "," << b->sprite.getGlobalBounds().top << ")";
-		//std::cout << "(" << p.sprite.getGlobalBounds().left << "," << p.sprite.getGlobalBounds().top << ")" << std::endl;
-		//b->sprite.setColor(sf::Color::Red);
+		//std::cout << "(" << b.left << "," << b.top << ")";
+		//std::cout << "(" << p->sprite.getGlobalBounds().left << "," << p->sprite.getGlobalBounds().top << ")" << std::endl;
+		
 		if(b.intersects(p->sprite.getGlobalBounds()))
 			return true;
 	}
@@ -99,15 +99,16 @@ Tile CollisionManager::getHookedTile(HookShot hs)
 }
 
 
-void CollisionManager::checkPlayerBulletToEnemies(Projectile p[], Enemy* enemy)
+void CollisionManager::checkPlayerBulletToEnemies(Projectile p, Enemy* enemy)
 {
-	for(int x = 0; x < 3; x++)
-		if(sqrt(pow(p[x].sprite.getPosition().x - enemy->sprite.getPosition().x, 2) + 
-			pow(p[x].sprite.getPosition().y - enemy->sprite.getPosition().y, 2)) < 50 && p[x].moving)
+	//for(int x = 0; x < 3; x++)
+		if(sqrt(pow(p.sprite.getPosition().x - enemy->sprite.getPosition().x, 2) + 
+			pow(p.sprite.getPosition().y - enemy->sprite.getPosition().y, 2)) < 50 && p.moving)
 		{
-			enemy->health -= p[x].damage;
-			p[x].moving = false;
+			enemy->health -= p.damage;
+			p.moving = false;
 		}
+
 }
 
 void CollisionManager::checkPlayerSwordToEnemies(Sword s, Enemy* enemy)
@@ -117,17 +118,18 @@ void CollisionManager::checkPlayerSwordToEnemies(Sword s, Enemy* enemy)
 		enemy->health -= s.damage;
 }
 
-void CollisionManager::checkEnemyBulletToEnemies(Projectile p[], Player* player)
+void CollisionManager::checkEnemyBulletToEnemies(Projectile p, Player* player)
 {
-	for(int x = 0; x < 3; x++)
-	{
-		if(sqrt(pow(p[x].sprite.getPosition().x - player->sprite.getPosition().x, 2) + 
-			pow(p[x].sprite.getPosition().y - player->sprite.getPosition().y, 2)) < 50 && p[x].moving)
+	//for(int x = 0; x < 3; x++)
+	
+		if(sqrt(pow(p.sprite.getPosition().x - player->sprite.getPosition().x, 2) + 
+			pow(p.sprite.getPosition().y - player->sprite.getPosition().y, 2)) < 50 && p.moving)
 		{
-			player->health -= p[x].damage;
-			p[x].moving = false;
+			player->health -= p.damage;
+			p.moving = false;
+			//Convert to single projectile
+			//check if it collides with wall and make it disappear when it collides
 		}
-	}
 }
 
 void CollisionManager::checkEnemySwordToEnemies(Sword s, Player* player)
