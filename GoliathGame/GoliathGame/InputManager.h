@@ -34,7 +34,7 @@ public:
 	void update(Player& s, float deltaTime);
 	void playerMove(Player& s, float deltaTime);
 
-
-
+	float inputCooldown, currentInputCooldown;
+	float weaponSwitchCooldown, currentWeaponSwitchCooldown;
 	
 };

@@ -12,6 +12,12 @@ InputManager::InputManager()
 	}
 	utility[3] = false;
 	controller[1] = true;
+
+	currentInputCooldown = 1.0;
+	inputCooldown = 1.0;
+
+	currentWeaponSwitchCooldown = 1.0;
+	weaponSwitchCooldown = 1.0;
 }
 
 InputManager::InputManager(int controllerScheme)
@@ -56,6 +62,8 @@ void InputManager::update(Player& s, float deltaTime)
 	utility[5] = sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !utility[5] ? true : false;
 
 	playerMove(s, deltaTime);
+	currentInputCooldown += deltaTime;
+	currentWeaponSwitchCooldown += deltaTime;
 }
 
 void InputManager::playerMove(Player& player, float deltaTime)
@@ -122,23 +130,36 @@ void InputManager::playerMove(Player& player, float deltaTime)
 	}
 	if(utility[3])
 	{
-		player.attack();
-		player.currentCooldown += deltaTime;
-		if(player.currentCooldown >= player.weaponCooldown)
+		if(currentInputCooldown >= inputCooldown)
 		{
-			utility[3] = false;
-			player.currentCooldown = 0.0;
+			player.attack();
+			player.currentCooldown += deltaTime;
+			if(player.currentCooldown >= player.weaponCooldown)
+			{
+				utility[3] = false;
+				player.currentCooldown = 0.0;
+			}
+			currentInputCooldown = 0.0;
 		}
 	}
 	if(utility[4])
 	{
-		player.weapon = SWORD;
-		std::cout << "Sword switch" << std::endl;
-	}
-	if(utility[5])
-	{
-		player.weapon = CROSSBOW;
-		std::cout << "Cross Bow Switch" << std::endl;
+		if(currentWeaponSwitchCooldown >= weaponSwitchCooldown)
+		{
+			if(player.weapon == CROSSBOW)
+			{
+				player.weapon = SWORD;
+				inputCooldown = 1.50;
+				std::cout << "Sword switch" << std::endl;
+			}
+			else if(player.weapon == SWORD)
+			{
+				player.weapon = CROSSBOW;
+				inputCooldown = .25;
+				std::cout << "Cross Bow Switch" << std::endl;
+			}
+			currentWeaponSwitchCooldown = 0.0;
+		}
 	}
 	//player.sprite.move(player.vel);
 	//player.vel.x = 0.0;
