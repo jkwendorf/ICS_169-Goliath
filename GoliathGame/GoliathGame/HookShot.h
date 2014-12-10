@@ -15,5 +15,5 @@ public:
 	void draw(sf::RenderWindow& window);
 	void attack();
 	void grappleToLocation(sf::Vector2f location);
-	bool hookedOnSomething, grappleInProgress, fireRight;
+	bool hookedOnSomething, grappleInProgress, fireRight, isDisabled;
 };

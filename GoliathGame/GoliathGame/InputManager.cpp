@@ -104,15 +104,21 @@ void InputManager::playerMove(Player& player, float deltaTime)
 
 	if(utility[2])
 	{
-		if(!player.isHanging)
+		if(!player.hShot.isDisabled)
 		{
-			if(!player.grappleInProgress && !player.isHanging && !player.isVaulting)
-				player.grapple();
-			else
-				player.currentCooldown += deltaTime;
+			if(!player.isHanging)
+			{
+				if(!player.grappleInProgress && !player.isHanging && !player.isVaulting)
+					player.grapple();
+				else
+					player.currentCooldown += deltaTime;
+			}
+			else if(!player.isVaulting)
+			{
+				player.isHanging = false;
+				player.hShot.isDisabled = true;
+			}
 		}
-		else if(!player.isVaulting)
-			player.isHanging = false;
 	}
 	if(utility[3])
 	{
