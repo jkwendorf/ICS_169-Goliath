@@ -11,6 +11,7 @@ public:
 	~EnemyAI();
 
 	void executeMovement(Enemy* e, sf::Vector2f pPosition, float deltaTime);
+	void moveOutOfOtherEnemy(Enemy* e, Enemy* ne, float deltaTime);
 
 private:
 	CollisionManager* colMan;
@@ -20,4 +21,5 @@ private:
 	bool inAttackRange(Enemy* e, sf::Vector2f pPosition);
 	void gravity(Enemy* e, float deltaTime);
 	bool playerOnLeft(Enemy* e, sf::Vector2f pPosition);
+	void moveOutOfPlayer(Enemy* e, sf::Vector2f pPosition, float deltaTime);
 };
