@@ -187,7 +187,7 @@ void Level::update(float deltaTime)
 				if(collisionManager->playerCollisionDetection(&po))
 				{
 					po.moving = false;
-					po.startTime = 0;
+					//po.startTime = 0;
 				}
 
 				for(auto& e : enemyList)

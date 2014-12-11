@@ -45,6 +45,7 @@ void InputManager::update(Player& s, float deltaTime)
 	movement[1] = sf::Keyboard::isKeyPressed(sf::Keyboard::D);
 
 	//utility[0] = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift);
+	
 	s.running = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift);
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 	{
@@ -95,6 +96,8 @@ void InputManager::playerMove(Player& player, float deltaTime)
 	{
 		if((!player.hShot.grappleInProgress || !player.hShot.hookedOnSomething) && !player.isHanging)
 		{
+			if(player.running)
+				player.stamina--;
 			player.horizontalAcceleration(LEFT, deltaTime);
 			player.facingRight = false;
 		}
@@ -103,6 +106,8 @@ void InputManager::playerMove(Player& player, float deltaTime)
 	{
 		 if((!player.hShot.grappleInProgress || !player.hShot.hookedOnSomething) && !player.isHanging)
 		 {
+			 if(player.running)
+				 player.stamina--;
 			player.horizontalAcceleration(RIGHT, deltaTime);
 			player.facingRight = true;
 		 }
