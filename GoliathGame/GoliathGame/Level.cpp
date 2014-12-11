@@ -135,6 +135,33 @@ void Level::update(float deltaTime)
 			}
 		}
 
+		for(Projectile& po : p.ammo)
+		{
+			std::vector<Tile> proTile;
+			if(po.moving)
+			{
+				currentRoom->GetCollidableTiles(po, sf::Vector2i(po.sprite.getTexture()->getSize().x/10,
+					po.sprite.getTexture()->getSize().y/10), proTile);
+				for(auto& t : proTile)
+				{
+					std::cout << t.getTileNum() << std::endl;
+				}
+				if(proTile.size() > 0)
+				{
+					collisionManager->setNearByTiles(proTile);
+				}
+
+				if(collisionManager->playerCollisionDetection(&po))
+				{
+					po.moving = false;
+					po.startTime = 0;
+				}
+
+				for(auto& e : enemyList)
+					collisionManager->checkPlayerBulletToEnemies(po, e.get());		
+			}
+		}
+
 		for (auto& e : enemyList)
 		{
 			if(e->health > 0)
@@ -153,8 +180,8 @@ void Level::update(float deltaTime)
 				{
 					if(po.moving)
 					{
-						currentRoom->GetCollidableTiles(po, sf::Vector2i(po.sprite.getTexture()->getSize().x,
-							po.sprite.getTexture()->getSize().y), proTile);
+						currentRoom->GetCollidableTiles(po, sf::Vector2i(po.sprite.getTexture()->getSize().x/10,
+							po.sprite.getTexture()->getSize().y/10), proTile);
 
 						if(proTile.size() > 0)
 						{
@@ -169,29 +196,6 @@ void Level::update(float deltaTime)
 						collisionManager->checkEnemyBulletToEnemies(po, &p);
 					}
 				}
-			}
-		}
-
-		for(Projectile& po : p.ammo)
-		{
-			std::vector<Tile> proTile;
-			if(po.moving)
-			{
-				currentRoom->GetCollidableTiles(po, sf::Vector2i(po.sprite.getTexture()->getSize().x,
-					po.sprite.getTexture()->getSize().y), proTile);
-				if(proTile.size() > 0)
-				{
-					collisionManager->setNearByTiles(proTile);
-				}
-
-				if(collisionManager->playerCollisionDetection(&po))
-				{
-					po.moving = false;
-					po.startTime = 0;
-				}
-
-				for(auto& e : enemyList)
-					collisionManager->checkPlayerBulletToEnemies(po, e.get());		
 			}
 		}
 
