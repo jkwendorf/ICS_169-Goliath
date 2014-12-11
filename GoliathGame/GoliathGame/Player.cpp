@@ -20,7 +20,7 @@ Player::Player()
 	for(int x = 0; x < 3; x++)
 	{
 		ammo[x] = Projectile(sprite.getPosition(), sf::Vector2f(0.0,0.0));
-		ammo[x].sprite.setColor(sf::Color(x*50 + 150, 0, 0));
+		//ammo[x].sprite.setColor(sf::Color(x*50 + 150, 0, 0));
 		ammo[x].damage = 100.0f;
 	}
 	grappleDir.y = 100;
@@ -127,7 +127,7 @@ void Player::update(float deltaTime)
 	for(int x = 0; x < 3; x++)
 	{
 		if(!ammo[x].moving)
-			ammo[x].setLocation(sprite.getPosition());
+			ammo[x].setLocation(sf::Vector2f(sprite.getPosition().x + 125, sprite.getPosition().y + 25));
 		ammo[x].update(deltaTime);
 	}
 	playerSword.update(deltaTime);

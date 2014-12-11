@@ -21,4 +21,6 @@ public:
 	bool moving;
 	//for now it has damage
 	float damage;
+	sf::Texture projectileTexture;
+	sf::Vector2i source;
 };
