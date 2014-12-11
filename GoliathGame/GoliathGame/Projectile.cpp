@@ -24,7 +24,7 @@ Projectile::~Projectile()
 
 void Projectile::update(float deltaTime)
 {
-	
+	//startTime += deltaTime;
 	if(moving)
 	{
 		startTime += deltaTime;
