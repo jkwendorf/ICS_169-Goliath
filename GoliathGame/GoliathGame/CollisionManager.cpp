@@ -102,13 +102,12 @@ Tile CollisionManager::getHookedTile(HookShot hs)
 void CollisionManager::checkPlayerBulletToEnemies(Projectile p, Enemy* enemy)
 {
 	//for(int x = 0; x < 3; x++)
-		if(sqrt(pow(p.sprite.getPosition().x - enemy->sprite.getPosition().x, 2) + 
-			pow(p.sprite.getPosition().y - enemy->sprite.getPosition().y, 2)) < 50 && p.moving)
-		{
-			enemy->health -= p.damage;
-			p.moving = false;
-		}
-
+	if(sqrt(pow(p.sprite.getPosition().x - enemy->sprite.getPosition().x, 2) + 
+		pow(p.sprite.getPosition().y - enemy->sprite.getPosition().y, 2)) < 50 && p.moving)
+	{
+		enemy->health -= p.damage;
+		p.moving = false;
+	}
 }
 
 void CollisionManager::checkPlayerSwordToEnemies(Sword s, Enemy* enemy)
