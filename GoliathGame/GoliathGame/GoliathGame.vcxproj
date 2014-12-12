@@ -119,6 +119,7 @@
     <ClInclude Include="Boss.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="ButtonManager.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="EndGameState.h" />
     <ClInclude Include="Enemy.h" />

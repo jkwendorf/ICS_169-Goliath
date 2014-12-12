@@ -100,12 +100,13 @@ void Level::update(float deltaTime)
 
 		//if(p.hShot.hookedOnSomething)
 			//std::cout << "hooked" << std::endl;
-		inputManager.update(p, deltaTime);
+
 
 		//p.isFalling = !collisionManager->playerCollisionDetection(p);
 		//p.update(deltaTime);
 		p.playerUpdate(&view, sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()), deltaTime);
 
+		inputManager.update(p, &view, deltaTime);
 		if((!p.hShot.hookedOnSomething || !p.hShot.grappleInProgress) && !p.isHanging && !p.isVaulting)
 		{
 			//std::cout << "Check Collision" << std::endl;

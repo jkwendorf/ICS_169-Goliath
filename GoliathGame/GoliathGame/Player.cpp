@@ -138,6 +138,7 @@ void Player::update(float deltaTime)
 	if(stamina > 50)
 		stamina = 50;
 	playerSword.update(deltaTime);
+
 	ui->update(health, stamina);
 }
 
@@ -289,15 +290,29 @@ void Player::viewCheck(sf::View* view, int width, int height)
 	if(sprite.getPosition().y - (PLAYER_DIM_Y / 2) < 0 + Global::GetInstance().yOffset)
 	{
 		Global::GetInstance().topLeft.y = sprite.getPosition().y - (PLAYER_DIM_Y / 2) - Global::GetInstance().yOffset;
+		atTopEdge = true;
+		atBottomEdge = false;
 	}
 	else if(sprite.getPosition().y + (PLAYER_DIM_Y / 2) > SCREEN_HEIGHT - Global::GetInstance().yOffset)
 	{
 		Global::GetInstance().topLeft.y = sprite.getPosition().y + (PLAYER_DIM_Y / 2) + Global::GetInstance().yOffset - SCREEN_HEIGHT;
+		atTopEdge = false;
+		atBottomEdge = true;
+	}
+	else
+	{
+		atTopEdge = false;
+		atBottomEdge = false;
 	}
 
 	if(Global::GetInstance().topLeft.y > height - SCREEN_HEIGHT)
 	{
 		Global::GetInstance().topLeft.y = height - SCREEN_HEIGHT;
+		atTheBottom = true;
+	}
+	else
+	{
+		atTheBottom = false;
 	}
 		
 	if(Global::GetInstance().topLeft.x == 0)
