@@ -228,3 +228,4 @@ UpgradeLog*.htm
 # Microsoft Fakes
 FakesAssemblies/
 FakesAssembiles\
+/GoliathGame/Debug/openal32.dll

@@ -20,7 +20,7 @@ Player::Player()
 	for(int x = 0; x < 3; x++)
 	{
 		ammo[x] = Projectile(sprite.getPosition(), sf::Vector2f(0.0,0.0));
-		ammo[x].sprite.setColor(sf::Color(x*50 + 150, 0, 0));
+		//ammo[x].sprite.setColor(sf::Color(x*50 + 150, 0, 0));
 		ammo[x].damage = 100.0f;
 	}
 	grappleDir.y = 100;
@@ -127,9 +127,16 @@ void Player::update(float deltaTime)
 	for(int x = 0; x < 3; x++)
 	{
 		if(!ammo[x].moving)
-			ammo[x].setLocation(sprite.getPosition());
+			ammo[x].setLocation(sf::Vector2f(sprite.getPosition().x + 125, sprite.getPosition().y + 25));
 		ammo[x].update(deltaTime);
 	}
+	
+	if(!running && !playerSword.attacking)
+		stamina++;
+	if(stamina < 0)
+		stamina = 0;
+	if(stamina > 50)
+		stamina = 50;
 	playerSword.update(deltaTime);
 	ui->update(health, stamina);
 }
@@ -139,7 +146,7 @@ void Player::attack()
 
 	if(weapon == CROSSBOW)
 	{
-		soundEffects[SHOOT].play();
+		
 		float xSpeed;
 		for(int x = 0; x < 3; x++)
 			if(!ammo[x].moving)
@@ -151,6 +158,7 @@ void Player::attack()
 				
 				ammo[x].setVelocity(sf::Vector2f(xSpeed,0.0));
 				ammo[x].moving = true;
+				soundEffects[SHOOT].play();
 				break;
 			}
 
@@ -165,12 +173,16 @@ void Player::attack()
 	}
 	else if (weapon == SWORD)
 	{
-		soundEffects[ATTACK].play();
-		if(facingRight)
-			playerSword.hitBox.setPosition(sprite.getPosition().x + 20, sprite.getPosition().y - 60);
-		else
-			playerSword.hitBox.setPosition(sprite.getPosition().x - 60, sprite.getPosition().y - 60);
-		playerSword.attacking = true;
+		if(stamina > 10)
+		{
+			if(facingRight)
+				playerSword.hitBox.setPosition(sprite.getPosition().x + PLAYER_DIM_X*1.5, sprite.getPosition().y);
+			else
+				playerSword.hitBox.setPosition(sprite.getPosition().x - PLAYER_DIM_X*1.5, sprite.getPosition().y);
+			soundEffects[ATTACK].play();
+			playerSword.attacking = true;
+		}
+		stamina -= 10;
 		playerSword.currentCooldown = 0.0;
 	}
 }
@@ -326,7 +338,7 @@ void Player::horizontalAcceleration(MovementDirection dir, float& deltaTime)
 			if(dir == LEFT)
 			{ 
 				maxSpeed = -1.f*maxSpeed;
-				if(running)
+				if(running && stamina > 0)
 				{
 					maxSpeed -= BOOST;
 					vel.x += (MOVE_ACCEL+BOOST)*dir*deltaTime;
@@ -338,7 +350,7 @@ void Player::horizontalAcceleration(MovementDirection dir, float& deltaTime)
 			}
 			else
 			{
-				if(running)
+				if(running && stamina > 0)
 				{
 					maxSpeed += BOOST;
 					vel.x += (MOVE_ACCEL+BOOST)*dir*deltaTime;
