@@ -247,4 +247,3 @@ void Level::CheckChangeScreen(BaseGameScreen*& newScreen)
 void Level::CleanUp()
 {
 }
-
