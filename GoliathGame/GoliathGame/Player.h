@@ -76,9 +76,10 @@ public:
 	Projectile ammo[3];
 	void viewCheck(sf::View* view, int width, int height);
 	Sword playerSword;
+	bool atTopEdge, atBottomEdge, atTheBottom;
+	UserInterface* ui;
 
 private:	
-	UserInterface* ui;
 	sf::Sound soundEffects[5];
 
 	void SetUpEffects();
