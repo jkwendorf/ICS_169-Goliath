@@ -44,6 +44,10 @@ public :
 	std::map<std::string, int> roomSizes;
 	std::map<std::string, std::string> roomTileSheets;
 
+	std::vector<std::vector<float>> augments;
+	float basePlayerStats[6];
+	int* PlayerInventory;
+
 	void ParseXML();
 	void ParseLevelSizes(std::map<std::string, int>& mapToUpdate, std::string& fileName);
 	void ParseLevelTileSheets();

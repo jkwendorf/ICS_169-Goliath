@@ -69,14 +69,14 @@ void Room::GetCollidableTiles(BaseObject& obj, sf::Vector2i& dim, std::vector<Ti
 	return;
 }
 
-bool Room::NearInteractableTiles(BaseObject& obj)
+int Room::NearInteractableTiles(BaseObject& obj)
 {
 	std::vector<Tile> nearTiles;
 	sf::IntRect rect(sf::Vector2i(obj.sprite.getPosition().x - PLAYER_DIM_X/2, obj.sprite.getPosition().y - PLAYER_DIM_Y/2), sf::Vector2i(PLAYER_DIM_X, PLAYER_DIM_Y));
 	GetNearTiles(rect, nearTiles, true);
 	if(nearTiles.size() > 0)
-		return true;
-	return false; 
+		return nearTiles[0].getTileNum();
+	return -999; 
 }
 
 void Room::GetGrapplableTiles(Player& player, std::vector<Tile>& nearTiles)

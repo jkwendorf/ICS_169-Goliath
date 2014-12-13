@@ -82,5 +82,6 @@ public:
 private:	
 	sf::Sound soundEffects[5];
 
+	void SetUpAugments();
 	void SetUpEffects();
 };
