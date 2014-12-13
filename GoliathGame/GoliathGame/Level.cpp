@@ -83,6 +83,7 @@ void Level::update(float deltaTime)
 			{
 				p.hShot.hookedOnSomething = true;
 				Tile hookedTile = collisionManager->getHookedTile(p.hShot);
+				
 				if(hookedTile.getTileNum() == 7)
 				{
 					if(p.hShot.fireRight)
@@ -90,7 +91,7 @@ void Level::update(float deltaTime)
 					else
 						p.hShot.grappleToLocation(sf::Vector2f(hookedTile.left + hookedTile.width + p.sprite.getGlobalBounds().width/2, hookedTile.top + hookedTile.height/2));
 					
-					p.isHanging = true;
+					p.shouldHang = true;
 				}
 				else
 					p.hShot.grappleToLocation(sf::Vector2f(hookedTile.left + hookedTile.width/2, hookedTile.top + hookedTile.height));
@@ -105,7 +106,7 @@ void Level::update(float deltaTime)
 		//p.update(deltaTime);
 		p.playerUpdate(&view, sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()), deltaTime);
 
-		if(!p.hShot.hookedOnSomething || !p.hShot.grappleInProgress)
+		if((!p.hShot.hookedOnSomething || !p.hShot.grappleInProgress) && !p.isHanging && !p.isVaulting)
 		{
 			//std::cout << "Check Collision" << std::endl;
 			if(p.isFalling)
@@ -123,6 +124,9 @@ void Level::update(float deltaTime)
 			}
 			else if(collisionManager->tileBelowCharacter(&p))
 			{
+				if(p.hShot.isDisabled)
+					p.hShot.isDisabled = false;
+
 				//std::cout << "Ground Collision" << std::endl;
 				if(collisionManager->wallBlockingCharacter(&p))
 				{

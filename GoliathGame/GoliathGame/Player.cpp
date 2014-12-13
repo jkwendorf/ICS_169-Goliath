@@ -3,8 +3,8 @@
 #include "PhysicsManager.h"
 
 Player::Player() 
-	: BaseObject(), grappleInProgress(false), facingRight(true),running(false), 
-	isHanging(false), health(100), stamina(50), ui(new UserInterface(health, stamina))
+	: BaseObject(), grappleInProgress(false), facingRight(true),running(false), isVaulting(false), 
+	isHanging(false), shouldHang(false), health(100), stamina(50), ui(new UserInterface(health, stamina))
 {
 	vel = sf::Vector2f(0.0,0.0);
 
@@ -55,16 +55,11 @@ void Player::update(float deltaTime)
 		}
 	}
 
-	if(!hShot.hookedOnSomething || !hShot.grappleInProgress)
+	if((!hShot.hookedOnSomething || !hShot.grappleInProgress) && !isHanging)
 	{	
-	// Move the player
+		// Move the player
 		verticalAcceleration(deltaTime);
-
-
-		if(running)
-			move(vel*deltaTime);
-		else
-			move(vel*deltaTime);
+		move(vel*deltaTime);
 	}
 	else if(hShot.grappleInProgress && hShot.hookedOnSomething)
 	{
@@ -78,12 +73,56 @@ void Player::update(float deltaTime)
 		// If were at the point, end grappling and reset the direction
 		if(hShot.grappleLocation == sprite.getPosition())
 		{
-			hShot.hookedOnSomething = false;
-			hShot.grappleInProgress = false;
-			isFalling = true;
-			grappleDir.y = 100;
+				hShot.hookedOnSomething = false;
+				hShot.grappleInProgress = false;
+				isFalling = true;
+				grappleDir.y = 100;
+			
+			if(shouldHang)
+			{
+// JW: We should make it so the InputManager can tell us if a key is down at any point.
+				shouldHang = false;
+				isHanging = true;
+				if(sf::Mouse::isButtonPressed(sf::Mouse::Right))
+				{
+					interpolateVaultAboveGrappleTile();
+				}
+			}
 		}
-	}	
+	}
+	else if(isHanging && isVaulting)
+	{
+		if(sprite.getPosition().y > vaultPos.y)
+		{
+			move(0.f, -300.f*deltaTime);
+
+			if(sprite.getPosition().y <= vaultPos.y)
+				sprite.setPosition(sprite.getPosition().x, vaultPos.y);
+		}
+		else if(sprite.getPosition().y == vaultPos.y)
+		{
+			if(hShot.fireRight)
+			{
+				move(300.f*deltaTime, 0.f);
+
+				if(sprite.getPosition().x >= vaultPos.x)
+					sprite.setPosition(vaultPos.x, sprite.getPosition().y);
+			}
+			else
+			{
+				move(-300.f*deltaTime, 0.f);
+				
+				if(sprite.getPosition().x <= vaultPos.x)
+					sprite.setPosition(vaultPos.x, sprite.getPosition().y);
+			}
+		}
+
+		if(vaultPos == sprite.getPosition())
+		{
+			isHanging = false;
+			isVaulting = false;
+		}
+	}
 
 	for(int x = 0; x < 3; x++)
 	{
@@ -100,7 +139,7 @@ void Player::attack()
 
 	if(weapon == CROSSBOW)
 	{
-		soundEffects[SHOOT].play();
+		
 		float xSpeed;
 		for(int x = 0; x < 3; x++)
 			if(!ammo[x].moving)
@@ -112,6 +151,7 @@ void Player::attack()
 				
 				ammo[x].setVelocity(sf::Vector2f(xSpeed,0.0));
 				ammo[x].moving = true;
+				soundEffects[SHOOT].play();
 				break;
 			}
 
@@ -128,9 +168,9 @@ void Player::attack()
 	{
 		soundEffects[ATTACK].play();
 		if(facingRight)
-			playerSword.hitBox.setPosition(sprite.getPosition().x + 20, sprite.getPosition().y - 60);
+			playerSword.hitBox.setPosition(sprite.getPosition().x + PLAYER_DIM_X*1.5, sprite.getPosition().y);
 		else
-			playerSword.hitBox.setPosition(sprite.getPosition().x - 60, sprite.getPosition().y - 60);
+			playerSword.hitBox.setPosition(sprite.getPosition().x - PLAYER_DIM_X*1.5, sprite.getPosition().y);
 		playerSword.attacking = true;
 		playerSword.currentCooldown = 0.0;
 	}
@@ -166,7 +206,7 @@ void Player::draw(sf::RenderWindow& window)
 
 void Player::grapple()
 {
-	if(!hShot.grappleInProgress)
+	if(!hShot.grappleInProgress && !isVaulting)
 	{
 		soundEffects[HOOK].play();
 		hShot.grappleInProgress = true;
@@ -411,7 +451,7 @@ void Player::SetUpEffects()
 	soundEffects[HOOK] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("playerHook")));
 }
 
-void Player::vaultAboveGrappleTile()
+void Player::instantVaultAboveGrappleTile()
 {
 	if(hShot.fireRight)
 		sprite.setPosition(sf::Vector2f(sprite.getPosition().x + sprite.getGlobalBounds().width/2 + GAME_TILE_DIM/2, 
@@ -421,4 +461,16 @@ void Player::vaultAboveGrappleTile()
 							sprite.getPosition().y - sprite.getGlobalBounds().height));
 
 	isHanging = false;
+}
+
+void Player::interpolateVaultAboveGrappleTile()
+{
+	if(hShot.fireRight)
+		vaultPos = sf::Vector2f(sprite.getPosition().x + sprite.getGlobalBounds().width/2 + GAME_TILE_DIM/2, 
+								sprite.getPosition().y - sprite.getGlobalBounds().height);
+	else
+		vaultPos = sf::Vector2f(sprite.getPosition().x - sprite.getGlobalBounds().width/2 - GAME_TILE_DIM/2, 
+								sprite.getPosition().y - sprite.getGlobalBounds().height);
+
+	isVaulting = true;
 }
