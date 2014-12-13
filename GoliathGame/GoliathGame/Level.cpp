@@ -66,9 +66,13 @@ void Level::update(float deltaTime)
 {
 	std::vector<Tile> nearTiles, nearTiles2, enemyTiles;
 	currentRoom->GetGrapplableTiles(p, nearTiles2);
-	if(currentRoom->NearInteractableTiles(p))
+	int nearTile = currentRoom->NearInteractableTiles(p);
+	if( nearTile != -999)
 	{
-		changeRoom();
+		if(nearTile == 18 || nearTile == 19)
+			changeRoom();
+		//else if (nearTile == 17)
+			
 	}
 	if(!changeScreen)
 	{

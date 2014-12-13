@@ -11,6 +11,7 @@ Global::~Global()
 	//	delete currentTileSheet[i];
 	//}
 	//delete[] currentTileSheet;
+	
 }
 
 void Global::CleanUp()
@@ -20,6 +21,7 @@ void Global::CleanUp()
 		delete currentTileSheet[i];
 	}
 	//delete[] currentTileSheet;
+	delete[] PlayerInventory;
 }
 
 void Global::ParseXML() {
@@ -61,6 +63,46 @@ void Global::ParseXML() {
 		temp[sound.attribute("name").as_string()]->loadFromFile(sound.attribute("path").as_string());
 	}
 	//AudioManager::GetInstance().SetupMap(temp);
+	result = doc.load_file("PlayerStats.xml");
+
+	pugi::xml_node playerXML = doc.child("Player");
+
+	PlayerInventory = new int[playerXML.attribute("numAugments").as_int()];
+	pugi::xml_node baseStats = playerXML.child("BaseStats");
+	int i=0;
+
+	for(auto& att : baseStats.attributes())
+	{
+		basePlayerStats[i] = att.as_float();
+		i++;
+	}
+	
+	baseStats = playerXML.child("Augments");
+
+	for (pugi::xml_node a : baseStats.children("a"))
+	{
+		float temp[6] = {a.attribute("bonusHealth").as_float(), a.attribute("bonusStamina").as_float(),
+			a.attribute("bonusMelee").as_float(),a.attribute("bonusRangeDmg").as_float(),
+			a.attribute("bonusAttSpeed").as_float(), a.attribute("bonusHookshoot").as_float() };
+		std::vector<float> float_vect; 
+		float_vect.insert( float_vect.begin(), temp , temp + 6 ) ; 
+		augments.insert(augments.end(), float_vect);
+	}
+
+	//for (auto& a : augments)
+	//{
+	//	std::cout << a[0] << "," << a[1] << "," << a[2] << "," << a[3] << "," << a[4] << std::endl;
+	//}
+
+	baseStats = playerXML.child("PlayerInventory");
+	
+	i=0;
+	for(auto& att : baseStats.attributes())
+	{
+		PlayerInventory[i] = att.as_int();
+		//std::cout << PlayerInventory[i] << std::endl;
+		i++;
+	}
 
 }
 
