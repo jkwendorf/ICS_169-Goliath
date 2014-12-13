@@ -2,6 +2,7 @@
 
 #include "BaseObject.h"
 #include "Projectile.h"
+#include "Sword.h"
 //#include "CollisionManager.h"
 
 class Enemy : public BaseObject
@@ -25,6 +26,7 @@ public:
 	void changeMove();
 
 	Projectile ammo[3];
+	Sword eSword;
 
 private:
 	int weapon;
@@ -34,7 +36,7 @@ private:
 	bool isInScreen();
 	void enemyCheck(sf::Vector2i roomSize);
 	void rangeAttack(float deltaTime);
-	void meleeAttack();
+	void meleeAttack(float deltaTime);
 	bool attacked(); //To be more defined to run away from player if being attacked
 	bool destroyed; //NEED TO FIGURE OUT ENEMY DESTRUCTION
 
