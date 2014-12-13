@@ -38,11 +38,11 @@ int main()
 		if(infocus)
 		{
 			StateManager::getInstance().getCurrentState()->update(deltaTime);
-			window.clear();
-			StateManager::getInstance().getCurrentState()->draw(window);
-			window.display();
 		}
-
+	
+		window.clear();
+		StateManager::getInstance().getCurrentState()->draw(window);
+		window.display();
     }
 
 	window.close();

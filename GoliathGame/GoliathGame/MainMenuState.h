@@ -1,6 +1,6 @@
 #pragma once
 #include "State.h"
-#include "Button.h"
+#include "ButtonManager.h"
 #include "Global.h"
 #include "StateManager.h"
 
@@ -18,7 +18,8 @@ public:
 	void unloadContent();
 
 private:
-	//Button* play, help, credits;
-	bool isPressed;
+	ButtonManager* bM;
+	sf::Font* f;
+	bool isPressedUp, isPressedDown;
 };
 

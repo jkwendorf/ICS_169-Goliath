@@ -66,9 +66,13 @@ void Level::update(float deltaTime)
 {
 	std::vector<Tile> nearTiles, nearTiles2, enemyTiles;
 	currentRoom->GetGrapplableTiles(p, nearTiles2);
-	if(currentRoom->NearInteractableTiles(p))
+	int nearTile = currentRoom->NearInteractableTiles(p);
+	if( nearTile != -999)
 	{
-		changeRoom();
+		if(nearTile == 18 || nearTile == 19)
+			changeRoom();
+		//else if (nearTile == 17)
+			
 	}
 	if(!changeScreen)
 	{
@@ -100,12 +104,13 @@ void Level::update(float deltaTime)
 
 		//if(p.hShot.hookedOnSomething)
 			//std::cout << "hooked" << std::endl;
-		inputManager.update(p, deltaTime);
+
 
 		//p.isFalling = !collisionManager->playerCollisionDetection(p);
 		//p.update(deltaTime);
 		p.playerUpdate(&view, sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()), deltaTime);
 
+		inputManager.update(p, &view, deltaTime);
 		if((!p.hShot.hookedOnSomething || !p.hShot.grappleInProgress) && !p.isHanging && !p.isVaulting)
 		{
 			//std::cout << "Check Collision" << std::endl;
@@ -135,6 +140,33 @@ void Level::update(float deltaTime)
 			}
 		}
 
+		for(Projectile& po : p.ammo)
+		{
+			std::vector<Tile> proTile;
+			if(po.moving)
+			{
+				currentRoom->GetCollidableTiles(po, sf::Vector2i(po.sprite.getTexture()->getSize().x/10,
+					po.sprite.getTexture()->getSize().y/10), proTile);
+				for(auto& t : proTile)
+				{
+					std::cout << t.getTileNum() << std::endl;
+				}
+				if(proTile.size() > 0)
+				{
+					collisionManager->setNearByTiles(proTile);
+				}
+
+				if(collisionManager->playerCollisionDetection(&po))
+				{
+					po.moving = false;
+					po.startTime = 0;
+				}
+
+				for(auto& e : enemyList)
+					collisionManager->checkPlayerBulletToEnemies(po, e.get());		
+			}
+		}
+
 		for (auto& e : enemyList)
 		{
 			if(e->health > 0)
@@ -153,8 +185,8 @@ void Level::update(float deltaTime)
 				{
 					if(po.moving)
 					{
-						currentRoom->GetCollidableTiles(po, sf::Vector2i(po.sprite.getTexture()->getSize().x,
-							po.sprite.getTexture()->getSize().y), proTile);
+						currentRoom->GetCollidableTiles(po, sf::Vector2i(po.sprite.getTexture()->getSize().x/10,
+							po.sprite.getTexture()->getSize().y/10), proTile);
 
 						if(proTile.size() > 0)
 						{
@@ -169,29 +201,6 @@ void Level::update(float deltaTime)
 						collisionManager->checkEnemyBulletToEnemies(po, &p);
 					}
 				}
-			}
-		}
-
-		for(Projectile& po : p.ammo)
-		{
-			std::vector<Tile> proTile;
-			if(po.moving)
-			{
-				currentRoom->GetCollidableTiles(po, sf::Vector2i(po.sprite.getTexture()->getSize().x,
-					po.sprite.getTexture()->getSize().y), proTile);
-				if(proTile.size() > 0)
-				{
-					collisionManager->setNearByTiles(proTile);
-				}
-
-				if(collisionManager->playerCollisionDetection(&po))
-				{
-					po.moving = false;
-					po.startTime = 0;
-				}
-
-				for(auto& e : enemyList)
-					collisionManager->checkPlayerBulletToEnemies(po, e.get());		
 			}
 		}
 
@@ -247,4 +256,3 @@ void Level::CheckChangeScreen(BaseGameScreen*& newScreen)
 void Level::CleanUp()
 {
 }
-

@@ -13,6 +13,7 @@ EnemyAI::~EnemyAI()
 
 void EnemyAI::executeMovement(Enemy* e, sf::Vector2f pPosition, float deltaTime)
 {
+	//moveOutOfPlayer(e, pPosition, deltaTime);
 	gravity(e, deltaTime);
 
 	//if enemy isn't in range of player, handle normally
@@ -55,7 +56,6 @@ void EnemyAI::normalMove(Enemy* e, float deltaTime)
 			e->move(moveOutOfTileHorizontally(*e, colMan->getCollidedTile(*e)));
 			e->changeMove();
 		}
-
 	}
 	else
 	{
@@ -71,8 +71,6 @@ void EnemyAI::normalMove(Enemy* e, float deltaTime)
 void EnemyAI::moveToPlayer(Enemy* e, sf::Vector2f pPosition, float deltaTime)
 {
 	//move towards player
-
-
 	//A* Search
 	//	Heuristic is distance
 	//	Restrictions are tiles
@@ -143,4 +141,56 @@ bool EnemyAI::inAttackRange(Enemy* e, sf::Vector2f pPosition)
 		else return false;
 	}
 	else return false;
+}
+
+void EnemyAI::moveOutOfOtherEnemy(Enemy* e, Enemy* ne, float deltaTime)
+{
+	if(playerOnLeft(e, ne->sprite.getPosition()))
+	{
+		e->sprite.setPosition(ne->sprite.getPosition().x + PLAYER_DIM_X, e->sprite.getPosition().y);
+		if(e->isMovingRight() != ne->isMovingRight())
+		{
+			e->changeMove();
+			e->move(moveHorizontally(*e, RIGHT, false, deltaTime)); 
+		}
+	}
+	else
+	{
+		e->sprite.setPosition(ne->sprite.getPosition().x - PLAYER_DIM_X, e->sprite.getPosition().y);
+		if(e->isMovingRight() != ne->isMovingRight())
+		{
+			e->changeMove();
+			e->move(moveHorizontally(*e, LEFT, false, deltaTime)); 
+		}
+	}
+
+	if(colMan->playerCollisionDetection(e))
+	{
+		e->move(moveOutOfTileHorizontally(*e, colMan->getCollidedTile(*e)));
+		e->vel.y = JUMP_SPEED;
+		e->isFalling = true;
+	}
+}
+
+void EnemyAI::moveOutOfPlayer(Enemy* e, sf::Vector2f pPosition, float deltaTime)
+{
+	if(playerOnLeft(e, pPosition))
+	{
+		e->sprite.setPosition(pPosition.x + PLAYER_DIM_X, e->sprite.getPosition().y);
+		e->changeMove();
+		e->move(moveHorizontally(*e, RIGHT, false, deltaTime)); 
+	}
+	else
+	{
+		e->sprite.setPosition(pPosition.x - PLAYER_DIM_X, e->sprite.getPosition().y);
+		e->changeMove();
+		e->move(moveHorizontally(*e, LEFT, false, deltaTime)); 
+	}
+
+	if(colMan->playerCollisionDetection(e))
+	{
+		e->move(moveOutOfTileHorizontally(*e, colMan->getCollidedTile(*e)));
+		e->vel.y = JUMP_SPEED;
+		e->isFalling = true;
+	}
 }
