@@ -59,6 +59,7 @@ void Level::changeRoom()
 	Global::GetInstance().topLeft.x = 0;
 	Global::GetInstance().topLeft.y = 0;
 	view.reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y, SCREEN_WIDTH, SCREEN_HEIGHT));
+	p.isFalling = true;
 	//p.playerUpdate(&view, sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()), 0.5f);
 }
 
@@ -178,9 +179,21 @@ void Level::update(float deltaTime)
 				{
 					collisionManager->setNearByTiles(enemyTiles);
 				}
+					
+				for(auto& ne : enemyList)
+				{
+					if(e.get() != ne.get() 
+						&& e.get()->sprite.getGlobalBounds().intersects(ne.get()->sprite.getGlobalBounds()))
+					{
+						std::cout << "Enemy is hitting each other" << std::endl;
+						enemyAI.moveOutOfOtherEnemy(e.get(), ne.get(), deltaTime);
+					}
+				}
 
 				enemyAI.executeMovement(e.get(), p.sprite.getPosition(), deltaTime);
+
 				e->enemyUpdate(deltaTime, sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()));
+
 				for(Projectile& po : e.get()->ammo)
 				{
 					if(po.moving)
@@ -198,14 +211,17 @@ void Level::update(float deltaTime)
 							po.moving = false;
 						}
 
-						collisionManager->checkEnemyBulletToEnemies(po, &p);
+						collisionManager->checkEnemyBulletToPlayer(po, &p);
 					}
 				}
 			}
 		}
 
 		for(auto& e : enemyList)
+		{
 			collisionManager->checkPlayerSwordToEnemies(p.playerSword, e.get());
+			collisionManager->checkEnemySwordToPlayer(e.get()->eSword, &p);
+		}
 
 		/*
 		enemyAI.executeMovement(realEnemyList.at(0), p.sprite.getPosition(), deltaTime);

@@ -86,7 +86,7 @@ void Player::update(float deltaTime)
 // JW: We should make it so the InputManager can tell us if a key is down at any point.
 				shouldHang = false;
 				isHanging = true;
-				if(sf::Mouse::isButtonPressed(sf::Mouse::Right))
+				if(sf::Mouse::isButtonPressed(sf::Mouse::Right) || sf::Joystick::isButtonPressed(0, 1))
 				{
 					interpolateVaultAboveGrappleTile();
 				}

@@ -44,13 +44,13 @@ void InputManager::update(Player& s, sf::View* v, float deltaTime)
 	*/
 
 	//change this when you want more complex movement
-	movement[0] = sf::Keyboard::isKeyPressed(sf::Keyboard::A);
-	movement[1] = sf::Keyboard::isKeyPressed(sf::Keyboard::D);
+	movement[0] = sf::Keyboard::isKeyPressed(sf::Keyboard::A) || (sf::Joystick::getAxisPosition(0, sf::Joystick::X) < -25);
+	movement[1] = sf::Keyboard::isKeyPressed(sf::Keyboard::D) || (sf::Joystick::getAxisPosition(0, sf::Joystick::X) > 25);
 
 	//utility[0] = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift);
 	
-	s.running = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift);
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+	s.running = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Joystick::getAxisPosition(0, sf::Joystick::Z) > 25;
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || sf::Joystick::isButtonPressed(0, 0))
 	{
 		if(!s.isHanging && !s.isFalling)
 			s.jump();
@@ -60,11 +60,11 @@ void InputManager::update(Player& s, sf::View* v, float deltaTime)
 			//s.instantVaultAboveGrappleTile();
 		}
 	}
-	utility[2] = sf::Mouse::isButtonPressed(sf::Mouse::Right) && !utility[2] ? true : false;
-	utility[3] = sf::Mouse::isButtonPressed(sf::Mouse::Left) && !utility[3] ? true : false;
-	utility[4] = sf::Keyboard::isKeyPressed(sf::Keyboard::Q) && !utility[4] ? true : false;
-	utility[5] = sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !utility[6] ? true : false;
-	utility[6] = sf::Keyboard::isKeyPressed(sf::Keyboard::S) && !utility[5] ? true : false;
+	utility[2] = (sf::Mouse::isButtonPressed(sf::Mouse::Right) || sf::Joystick::isButtonPressed(0, 1)) && !utility[2] ? true : false;
+	utility[3] = (sf::Mouse::isButtonPressed(sf::Mouse::Left) || sf::Joystick::isButtonPressed(0, 2)) && !utility[3] ? true : false;
+	utility[4] = (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || sf::Joystick::isButtonPressed(0, 3)) && !utility[4] ? true : false;
+	utility[5] = (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Joystick::getAxisPosition(0, sf::Joystick::Y) < -25) && !utility[6] ? true : false;
+	utility[6] = (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Joystick::getAxisPosition(0, sf::Joystick::Y) > 25) && !utility[5] ? true : false;
 
 	playerMove(s, deltaTime);
 	viewMove(v, s, deltaTime);
