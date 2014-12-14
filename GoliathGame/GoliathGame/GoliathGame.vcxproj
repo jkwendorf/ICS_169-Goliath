@@ -151,6 +151,7 @@
     <Xml Include="Levels.xml">
       <SubType>Designer</SubType>
     </Xml>
+    <Xml Include="PlayerStats.xml" />
     <Xml Include="Sounds.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
