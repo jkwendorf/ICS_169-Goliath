@@ -48,6 +48,7 @@ public :
 	float basePlayerStats[6];
 	int* PlayerInventory;
 
+	void SavePlayer();
 	void ParseXML();
 	void ParseLevelSizes(std::map<std::string, int>& mapToUpdate, std::string& fileName);
 	void ParseLevelTileSheets();

@@ -106,6 +106,28 @@ void Global::ParseXML() {
 
 }
 
+
+void Global::SavePlayer() {
+	std::cout << "Saving the player" << std::endl;
+	pugi::xml_document doc;
+
+	pugi::xml_parse_result result = doc.load_file("PlayerStats.xml");
+	std::cout << result << std::endl;
+	pugi::xml_node playerNode = doc.child("Player");
+	pugi::xml_node playerInventory = playerNode.child("PlayerInventory");
+	
+	int i = 0;
+	for (auto& att: playerInventory.attributes()) {
+		//std::cout << "Old value: " << att.name() << " " << att.as_int() << std::endl;
+		//att.set_value(1);
+		//std::cout << "New value: " << att.as_int() << std::endl;
+
+		//Uncomment this to save PlayerInventory augmenets
+		//att.set_value(PlayerInventory[i]);
+	}
+	//doc.save_file(std::cout);
+	doc.save_file("PlayerStats.xml");
+}
 //Call this before handling levels.
 void Global::ParseLevelSizes(std::map<std::string, int>& mapToUpdate, std::string& fileName)
 {
