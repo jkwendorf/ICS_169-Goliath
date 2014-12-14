@@ -59,6 +59,7 @@ void Level::changeRoom()
 	Global::GetInstance().topLeft.x = 0;
 	Global::GetInstance().topLeft.y = 0;
 	view.reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y, SCREEN_WIDTH, SCREEN_HEIGHT));
+	p.isFalling = true;
 	//p.playerUpdate(&view, sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()), 0.5f);
 }
 
