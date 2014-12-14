@@ -67,9 +67,13 @@ void Level::update(float deltaTime)
 {
 	std::vector<Tile> nearTiles, nearTiles2, enemyTiles;
 	currentRoom->GetGrapplableTiles(p, nearTiles2);
-	if(currentRoom->NearInteractableTiles(p))
+	int nearTile = currentRoom->NearInteractableTiles(p);
+	if( nearTile != -999)
 	{
-		changeRoom();
+		if(nearTile == 18 || nearTile == 19)
+			changeRoom();
+		//else if (nearTile == 17)
+			
 	}
 	if(!changeScreen)
 	{
@@ -175,9 +179,21 @@ void Level::update(float deltaTime)
 				{
 					collisionManager->setNearByTiles(enemyTiles);
 				}
+					
+				for(auto& ne : enemyList)
+				{
+					if(e.get() != ne.get() 
+						&& e.get()->sprite.getGlobalBounds().intersects(ne.get()->sprite.getGlobalBounds()))
+					{
+						std::cout << "Enemy is hitting each other" << std::endl;
+						enemyAI.moveOutOfOtherEnemy(e.get(), ne.get(), deltaTime);
+					}
+				}
 
 				enemyAI.executeMovement(e.get(), p.sprite.getPosition(), deltaTime);
+
 				e->enemyUpdate(deltaTime, sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()));
+
 				for(Projectile& po : e.get()->ammo)
 				{
 					if(po.moving)
@@ -195,14 +211,17 @@ void Level::update(float deltaTime)
 							po.moving = false;
 						}
 
-						collisionManager->checkEnemyBulletToEnemies(po, &p);
+						collisionManager->checkEnemyBulletToPlayer(po, &p);
 					}
 				}
 			}
 		}
 
 		for(auto& e : enemyList)
+		{
 			collisionManager->checkPlayerSwordToEnemies(p.playerSword, e.get());
+			collisionManager->checkEnemySwordToPlayer(e.get()->eSword, &p);
+		}
 
 		/*
 		enemyAI.executeMovement(realEnemyList.at(0), p.sprite.getPosition(), deltaTime);
