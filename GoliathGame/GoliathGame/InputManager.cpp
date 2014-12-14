@@ -18,6 +18,9 @@ InputManager::InputManager()
 
 	currentWeaponSwitchCooldown = 1.0;
 	weaponSwitchCooldown = 1.0;
+
+	
+	viewChanged = 0;
 }
 
 InputManager::InputManager(int controllerScheme)
@@ -32,7 +35,7 @@ InputManager::~InputManager()
 
 }
 
-void InputManager::update(Player& s, float deltaTime)
+void InputManager::update(Player& s, sf::View* v, float deltaTime)
 {
 	// JW: Players should conserve momentum when jumping.  They shouldn't be able to change directions in midair
 
@@ -41,13 +44,13 @@ void InputManager::update(Player& s, float deltaTime)
 	*/
 
 	//change this when you want more complex movement
-	movement[0] = sf::Keyboard::isKeyPressed(sf::Keyboard::A);
-	movement[1] = sf::Keyboard::isKeyPressed(sf::Keyboard::D);
+	movement[0] = sf::Keyboard::isKeyPressed(sf::Keyboard::A) || (sf::Joystick::getAxisPosition(0, sf::Joystick::X) < -25);
+	movement[1] = sf::Keyboard::isKeyPressed(sf::Keyboard::D) || (sf::Joystick::getAxisPosition(0, sf::Joystick::X) > 25);
 
 	//utility[0] = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift);
 	
-	s.running = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift);
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+	s.running = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Joystick::getAxisPosition(0, sf::Joystick::Z) > 25;
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || sf::Joystick::isButtonPressed(0, 0))
 	{
 		if(!s.isHanging && !s.isFalling)
 			s.jump();
@@ -57,12 +60,15 @@ void InputManager::update(Player& s, float deltaTime)
 			//s.instantVaultAboveGrappleTile();
 		}
 	}
-	utility[2] = sf::Mouse::isButtonPressed(sf::Mouse::Right) && !utility[2] ? true : false;
-	utility[3] = sf::Mouse::isButtonPressed(sf::Mouse::Left) && !utility[3] ? true : false;
-	utility[4] = sf::Keyboard::isKeyPressed(sf::Keyboard::Q) && !utility[4] ? true : false;
-	utility[5] = sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !utility[5] ? true : false;
+	utility[2] = (sf::Mouse::isButtonPressed(sf::Mouse::Right) || sf::Joystick::isButtonPressed(0, 1)) && !utility[2] ? true : false;
+	utility[3] = (sf::Mouse::isButtonPressed(sf::Mouse::Left) || sf::Joystick::isButtonPressed(0, 2)) && !utility[3] ? true : false;
+	utility[4] = (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || sf::Joystick::isButtonPressed(0, 3)) && !utility[4] ? true : false;
+	utility[5] = (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Joystick::getAxisPosition(0, sf::Joystick::Y) < -25) && !utility[6] ? true : false;
+	utility[6] = (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Joystick::getAxisPosition(0, sf::Joystick::Y) > 25) && !utility[5] ? true : false;
 
 	playerMove(s, deltaTime);
+	viewMove(v, s, deltaTime);
+
 	currentInputCooldown += deltaTime;
 	currentWeaponSwitchCooldown += deltaTime;
 }
@@ -166,6 +172,58 @@ void InputManager::playerMove(Player& player, float deltaTime)
 			currentWeaponSwitchCooldown = 0.0;
 		}
 	}
+
 	//player.sprite.move(player.vel);
 	//player.vel.x = 0.0;
+}
+
+void InputManager::viewMove(sf::View* v, Player& s, float deltaTime)
+{
+	viewDifference = 100.0f*deltaTime;	
+	if(s.vel.x == 0 && s.vel.y == 0 && !s.grappleInProgress)
+	{
+		if(utility[5])
+		{
+			viewChanged -= viewDifference;
+			if(viewChanged < Global::GetInstance().yOffset * (-4) && viewChanged < 0)
+			{
+				viewDifference = 0;
+				viewChanged = Global::GetInstance().yOffset * -4;
+			}
+			Global::GetInstance().topLeft.y -= viewDifference;
+			if(s.atBottomEdge)
+			{
+				v->reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y + viewChanged, SCREEN_WIDTH, SCREEN_HEIGHT));
+				s.ui->updateDifferent(s.health, s.stamina, Global::GetInstance().topLeft.y + viewChanged);
+			}
+		}
+		else if(utility[6])
+		{
+			viewChanged += viewDifference;
+			if(viewChanged > Global::GetInstance().yOffset * 4 && viewChanged > 0)
+			{
+				viewDifference = 0;
+				viewChanged = Global::GetInstance().yOffset * 4;
+			}
+			Global::GetInstance().topLeft.y += viewDifference;
+			if(s.atTopEdge || !s.atTheBottom)
+			{
+				v->reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y + viewChanged, SCREEN_WIDTH, SCREEN_HEIGHT));
+				s.ui->updateDifferent(s.health, s.stamina, Global::GetInstance().topLeft.y + viewChanged);
+			}
+		}		
+		else
+		{
+			Global::GetInstance().topLeft.y -= viewChanged;
+			viewChanged = 0;
+		}
+
+		//std::cout << viewChanged << std::endl;
+		//std::cout << Global::GetInstance().yOffset << std::endl;
+	}
+	else
+	{
+		Global::GetInstance().topLeft.y -= viewChanged;
+		viewChanged = 0;
+	}
 }

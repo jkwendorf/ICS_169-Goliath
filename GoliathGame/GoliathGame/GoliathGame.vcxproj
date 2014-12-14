@@ -88,6 +88,7 @@
     <ClCompile Include="BaseObject.cpp" />
     <ClCompile Include="Boss.cpp" />
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="ButtonManager.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="EndGameState.cpp" />
     <ClCompile Include="Enemy.cpp" />
@@ -117,6 +118,7 @@
     <ClInclude Include="BaseObject.h" />
     <ClInclude Include="Boss.h" />
     <ClInclude Include="Button.h" />
+    <ClInclude Include="ButtonManager.h" />
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="EndGameState.h" />
     <ClInclude Include="Enemy.h" />
@@ -148,6 +150,7 @@
     <Xml Include="Levels.xml">
       <SubType>Designer</SubType>
     </Xml>
+    <Xml Include="PlayerStats.xml" />
     <Xml Include="Sounds.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

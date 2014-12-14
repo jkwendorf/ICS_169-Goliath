@@ -267,14 +267,7 @@ void Section::LoadTileMap(std::vector<std::shared_ptr<Enemy>> &enemyList)
 				enemyList.push_back(std::shared_ptr<Enemy>(new Enemy("Test", x * GAME_TILE_DIM + offset.x, y * GAME_TILE_DIM + offset.y, 10)));
 				break;
 			case -3:
-				try
-				{
-					enemyList.push_back(std::shared_ptr<Enemy>(new Enemy("Test", x * GAME_TILE_DIM + offset.x, y * GAME_TILE_DIM + offset.y)));
-				}
-				catch(const std::exception& ex)
-				{
-					std::cout << "Problem" << std::endl;
-				}
+				enemyList.push_back(std::shared_ptr<Enemy>(new Enemy("Test", x * GAME_TILE_DIM + offset.x, y * GAME_TILE_DIM + offset.y)));
 				break;
 			case -1:
 				startPos = sf::Vector2f(x * GAME_TILE_DIM + offset.x, y * GAME_TILE_DIM + offset.y);
@@ -294,6 +287,11 @@ void Section::LoadTileMap(std::vector<std::shared_ptr<Enemy>> &enemyList)
 				grid1[(y*gDim.y) + x][2] = 1;
 				grid1[(y*gDim.y) + x][3] = 1;
 				grid1[(y*gDim.y) + x][4] = 0;
+				break;
+			case 17:
+				grid1[(y*gDim.y) + x][2] = 1;
+				grid1[(y*gDim.y) + x][3] = 0;
+				grid1[(y*gDim.y) + x][4] = 1;
 				break;
 			case 18:
 			case 19:

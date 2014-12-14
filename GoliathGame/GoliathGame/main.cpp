@@ -38,14 +38,15 @@ int main()
 		if(infocus)
 		{
 			StateManager::getInstance().getCurrentState()->update(deltaTime);
-			window.clear();
-			StateManager::getInstance().getCurrentState()->draw(window);
-			window.display();
 		}
 
+		window.clear();
+		StateManager::getInstance().getCurrentState()->draw(window);
+		window.display();
     }
 
 	window.close();
+	Global::GetInstance().SavePlayer();
 	Global::GetInstance().CleanUp();
 	//std::cout << "\n Press ENTER to continue...";
 	//std::cin.ignore( std::numeric_limits<std::streamsize>::max(), '\n' );
