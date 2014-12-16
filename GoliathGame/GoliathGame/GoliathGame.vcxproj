@@ -98,6 +98,7 @@
     <ClCompile Include="HookShot.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Level.cpp" />
+    <ClCompile Include="PauseGameState.cpp" />
     <ClCompile Include="pugixml.cpp" />
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="main.cpp" />
@@ -128,6 +129,7 @@
     <ClInclude Include="HookShot.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Level.h" />
+    <ClInclude Include="PauseGameState.h" />
     <ClInclude Include="pugiconfig.hpp" />
     <ClInclude Include="pugixml.hpp" />
     <ClInclude Include="Room.h" />

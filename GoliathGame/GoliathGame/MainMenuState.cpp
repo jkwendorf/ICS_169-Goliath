@@ -8,12 +8,13 @@ MainMenuState::MainMenuState(void)
 	f = new sf::Font();
 	if(f->loadFromFile("media/fonts/arial.ttf"))
 	{
-		bM = new ButtonManager(sf::Vector2f(100, 100), 25, sf::Vector2f(200, 66), TextureManager::GetInstance().retrieveTexture("ButtonTest"), f); 
+		bM = new ButtonManager(sf::Vector2f(SCREEN_WIDTH/2 - 100, SCREEN_HEIGHT/4 - 33), 15, sf::Vector2f(200, 66), TextureManager::GetInstance().retrieveTexture("ButtonTest"), f); 
 		bM->createButton("Play Game", [] {StateManager::getInstance().changeToState(GAME, false);});
-		bM->createButton("Help", [] {std::cout << "HI" << std::endl;});
 		bM->createButton("Options", [] {});
-		bM->createButton("Quit", [] {});
+		bM->createButton("Quit", [&] {setToQuit();});
 	}
+
+	shouldQuit = false;
 }
 
 MainMenuState::~MainMenuState(void)
@@ -31,10 +32,10 @@ void MainMenuState::DeleteState()
 
 void MainMenuState::update(float deltaTime)
 {
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::P))
+	/*if(sf::Keyboard::isKeyPressed(sf::Keyboard::P))
 	{
 		StateManager::getInstance().changeToState(GAME, false);
-	}
+	}*/
 	/*if(sf::Keyboard::isKeyPressed(sf::Keyboard::O) && !isPressed)
 	{
  		StateManager::getInstance().deleteState(GAME);
@@ -44,27 +45,27 @@ void MainMenuState::update(float deltaTime)
 	else if(!sf::Keyboard::isKeyPressed(sf::Keyboard::O))
 		isPressed = false;*/
 
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && !isPressedUp)
+	if((sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Joystick::getAxisPosition(0, sf::Joystick::Y) < -25) && !isPressedUp)
 	{
 		bM->scrollUp();
 		isPressedUp = true;
 	}
-	else if(!sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+	else if((!sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && sf::Joystick::getAxisPosition(0, sf::Joystick::Y) > -25) && isPressedUp)
 	{
 		isPressedUp = false;
 	}
 	
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down) &&!isPressedDown)
+	if((sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || sf::Joystick::getAxisPosition(0, sf::Joystick::Y) > 25) &&!isPressedDown)
 	{
 		bM->scrollDown();
 		isPressedDown = true;
 	}
-	else if(!sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+	else if((!sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && sf::Joystick::getAxisPosition(0, sf::Joystick::Y) < 25) && isPressedDown)
 	{
 		isPressedDown = false;
 	}
 
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Return) || sf::Joystick::isButtonPressed(0, 0))
 	{
 		bM->pressSelectedButton();
 	}
@@ -90,4 +91,9 @@ void MainMenuState::loadContent()
 void MainMenuState::unloadContent()
 {
 
+}
+
+void MainMenuState::setToQuit()
+{
+	shouldQuit = true;
 }

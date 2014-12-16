@@ -1,5 +1,6 @@
 #pragma once
 #include "State.h"
+#include "ButtonManager.h"
 
 class EndGameState : public State
 {
@@ -13,6 +14,10 @@ public:
 	void handleEvent(sf::Event event);
 	void loadContent();
 	void unloadContent();
+	void setToQuit();
 
 private:
+	sf::Font* f;
+	ButtonManager* bM;
+	bool isUpPressed, isDownPressed;
 };
