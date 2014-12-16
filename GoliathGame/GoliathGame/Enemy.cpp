@@ -11,7 +11,7 @@ Enemy::Enemy(sf::String body, float x, float y) :
 	sprite.setPosition(x, y);
 
 	//For testing
-	attackRange = 500;
+	attackRange = 30;
 
 	weaponCooldown = 2.0f;
 	currentCooldown = 2.0f;
@@ -26,6 +26,7 @@ Enemy::Enemy(sf::String body, float x, float y) :
 		ammo[x].sprite.setColor(sf::Color(x*50 + 150, 0, 0));
 		ammo[x].damage = 20.0f;
 	}
+	eSword.damage = 20.0f;
 }
 
 Enemy::Enemy(sf::String body, float x, float y, float range) :
@@ -59,12 +60,12 @@ void Enemy::update(float deltaTime)
 			ammo[x].setLocation(sprite.getPosition());
 		ammo[x].update(deltaTime);
 	}
+	eSword.update(deltaTime);
 }
 
 void Enemy::draw(sf::RenderWindow& window)
 {
 	//UNCOMMENT TO TEST ENEMY APPEARENCE
-	window.draw(sprite);
 	if(isInScreen())
 	{
 		BaseObject::draw(window);
@@ -75,6 +76,7 @@ void Enemy::draw(sf::RenderWindow& window)
 				ammo[x].draw(window);
 			}
 		}
+		eSword.draw(window);
 	}
 }
 
@@ -124,7 +126,7 @@ void Enemy::attack(sf::Vector2f pPosition, float deltaTime)
 	}
 	else if(attackRange <= ENEMY_ATTACK_LOW_THRESHOLD)
 	{
-		meleeAttack();
+		meleeAttack(deltaTime);
 	}
 
 }
@@ -159,9 +161,26 @@ void Enemy::rangeAttack(float deltaTime)
 	currentCooldown += deltaTime;
 }
 
-void Enemy::meleeAttack()
+void Enemy::meleeAttack(float deltaTime)
 {
-
+	if(currentCooldown >= weaponCooldown)
+	{
+		if(movingRight)
+		{
+			eSword.hitBox.setPosition(sprite.getPosition().x + PLAYER_DIM_X*1.5, sprite.getPosition().y);
+		}
+		else
+		{
+			eSword.hitBox.setPosition(sprite.getPosition().x - PLAYER_DIM_X*1.5, sprite.getPosition().y);
+		}
+		eSword.attacking = true;
+		currentCooldown = 0.0f;
+	}
+	else if(eSword.attacking)
+	{
+		eSword.attacking = false;
+	}
+	currentCooldown += deltaTime;
 }
 
 bool Enemy::isInScreen()

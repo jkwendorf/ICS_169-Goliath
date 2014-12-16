@@ -33,3 +33,12 @@ void UserInterface::update(float h, float s)
 	staminaBar.setSize(sf::Vector2f((s * 6), 50));
 	staminaBar.setPosition(Global::GetInstance().topLeft.x + 20, Global::GetInstance().topLeft.y + 90);
 }
+
+void UserInterface::updateDifferent(float h, float s, float offset)
+{
+	healthBar.setSize(sf::Vector2f((h * 6), 50));
+	healthBar.setPosition(Global::GetInstance().topLeft.x + 20, offset + 20);
+
+	staminaBar.setSize(sf::Vector2f((s * 6), 50));
+	staminaBar.setPosition(Global::GetInstance().topLeft.x + 20, offset + 90);
+}

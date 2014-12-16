@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<Player numAugments="3">
+	<BaseStats health="100" stamina="50" meleeDmg="100" rangedDmg="100" attackSpeed="2.0" hookshotLength="100" />
+	<Augments>
+		<a name="augment1" bonusHealth="5" bonusStamina="0" bonusMelee="0" bonusRange="0" bonusAttSpeed="0" bonusHookshoot="0" />
+		<a name="augment2" bonusHealth="0" bonusStamina="2" bonusMelee="0" bonusRange="0" bonusAttSpeed="0" bonusHookshoot="0" />
+		<a name="augment3" bonusHealth="10" bonusStamina="-2" bonusMelee="0" bonusRange="0" bonusAttSpeed="0" bonusHookshoot="0" />
+	</Augments>
+	<PlayerInventory numA1="0" numA2="0" numA3="0" />
+</Player>

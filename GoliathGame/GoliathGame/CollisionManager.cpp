@@ -117,7 +117,7 @@ void CollisionManager::checkPlayerSwordToEnemies(Sword s, Enemy* enemy)
 		enemy->health -= s.damage;
 }
 
-void CollisionManager::checkEnemyBulletToEnemies(Projectile p, Player* player)
+void CollisionManager::checkEnemyBulletToPlayer(Projectile p, Player* player)
 {
 	//for(int x = 0; x < 3; x++)
 	
@@ -131,11 +131,14 @@ void CollisionManager::checkEnemyBulletToEnemies(Projectile p, Player* player)
 		}
 }
 
-void CollisionManager::checkEnemySwordToEnemies(Sword s, Player* player)
+void CollisionManager::checkEnemySwordToPlayer(Sword s, Player* player)
 {
 	if(sqrt(pow(s.hitBox.getPosition().x - player->sprite.getPosition().x, 2) + 
 		pow(s.hitBox.getPosition().y - player->sprite.getPosition().y, 2)) < 75 && s.attacking)
 	{
-		player->health -= s.damage;
+		if(s.attacking)
+		{
+			player->health -= s.damage;
+		}
 	}
 }

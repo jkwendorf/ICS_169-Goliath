@@ -41,5 +41,4 @@ public:
 	void draw(sf::RenderWindow& window);
 	void DeleteLevel();
 	void CheckChangeScreen(BaseGameScreen*& newScreen);
-
 };

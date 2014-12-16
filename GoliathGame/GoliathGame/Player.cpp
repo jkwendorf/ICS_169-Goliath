@@ -4,7 +4,8 @@
 
 Player::Player() 
 	: BaseObject(), grappleInProgress(false), facingRight(true),running(false), isVaulting(false), 
-	isHanging(false), shouldHang(false), health(100), stamina(50), ui(new UserInterface(health, stamina))
+	isHanging(false), shouldHang(false), health(Global::GetInstance().basePlayerStats[0]), 
+	stamina(Global::GetInstance().basePlayerStats[1]),	weaponCooldown(Global::GetInstance().basePlayerStats[4])
 {
 	vel = sf::Vector2f(0.0,0.0);
 
@@ -14,18 +15,20 @@ Player::Player()
 	sprite.setScale( (PLAYER_DIM_X / (float)sprite.getTexture()->getSize().x), (PLAYER_DIM_Y / (float)sprite.getTexture()->getSize().y));
 	sprite.setOrigin(sprite.getLocalBounds().width/2, sprite.getLocalBounds().height/2);
 	weapon = SWORD;
-	weaponCooldown = 2.0f;
-	currentCooldown = 0.0f;
+
 	isFalling = true;
 	for(int x = 0; x < 3; x++)
 	{
 		ammo[x] = Projectile(sprite.getPosition(), sf::Vector2f(0.0,0.0));
 		//ammo[x].sprite.setColor(sf::Color(x*50 + 150, 0, 0));
-		ammo[x].damage = 100.0f;
+		ammo[x].damage = Global::GetInstance().basePlayerStats[3];
 	}
 	grappleDir.y = 100;
-	playerSword.damage = 100.0f;
+	playerSword.damage = Global::GetInstance().basePlayerStats[2];
 
+	SetUpAugments();
+
+	ui = new UserInterface(health, stamina);
 	SetUpEffects();
 }
 
@@ -83,7 +86,7 @@ void Player::update(float deltaTime)
 // JW: We should make it so the InputManager can tell us if a key is down at any point.
 				shouldHang = false;
 				isHanging = true;
-				if(sf::Mouse::isButtonPressed(sf::Mouse::Right))
+				if(sf::Mouse::isButtonPressed(sf::Mouse::Right) || sf::Joystick::isButtonPressed(0, 1))
 				{
 					interpolateVaultAboveGrappleTile();
 				}
@@ -137,7 +140,12 @@ void Player::update(float deltaTime)
 		stamina = 0;
 	if(stamina > 50)
 		stamina = 50;
+	if(health < 0)
+		health = 0;
+	if(health > 100)
+		health = 100;
 	playerSword.update(deltaTime);
+
 	ui->update(health, stamina);
 }
 
@@ -289,15 +297,29 @@ void Player::viewCheck(sf::View* view, int width, int height)
 	if(sprite.getPosition().y - (PLAYER_DIM_Y / 2) < 0 + Global::GetInstance().yOffset)
 	{
 		Global::GetInstance().topLeft.y = sprite.getPosition().y - (PLAYER_DIM_Y / 2) - Global::GetInstance().yOffset;
+		atTopEdge = true;
+		atBottomEdge = false;
 	}
 	else if(sprite.getPosition().y + (PLAYER_DIM_Y / 2) > SCREEN_HEIGHT - Global::GetInstance().yOffset)
 	{
 		Global::GetInstance().topLeft.y = sprite.getPosition().y + (PLAYER_DIM_Y / 2) + Global::GetInstance().yOffset - SCREEN_HEIGHT;
+		atTopEdge = false;
+		atBottomEdge = true;
+	}
+	else
+	{
+		atTopEdge = false;
+		atBottomEdge = false;
 	}
 
 	if(Global::GetInstance().topLeft.y > height - SCREEN_HEIGHT)
 	{
 		Global::GetInstance().topLeft.y = height - SCREEN_HEIGHT;
+		atTheBottom = true;
+	}
+	else
+	{
+		atTheBottom = false;
 	}
 		
 	if(Global::GetInstance().topLeft.x == 0)
@@ -325,7 +347,6 @@ void Player::viewCheck(sf::View* view, int width, int height)
 
 	view->reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y, SCREEN_WIDTH, SCREEN_HEIGHT));
 }
-
 
 void Player::horizontalAcceleration(MovementDirection dir, float& deltaTime)
 {
@@ -397,60 +418,46 @@ void Player::moveOutOfTile(Tile t)
 		up = (sprite.getPosition().y + sprite.getGlobalBounds().height/2) - t.top, 
 		down = (t.top + t.height) - (sprite.getPosition().y - sprite.getGlobalBounds().height/2);
 
-	// Calculate shortest distance
-	if(sgn(vel.x) > 0)
-	{
-		if(sgn(vel.y) > 0)
-		{
-			if(up >= left)
-				move(moveOutOfTileHorizontally(*this, t));
-			else
-				move(moveOutOfTileVertically(*this, t));
-		}
-		else if(sgn(vel.y) < 0)
-		{
-			if(down >= left)
-				move(moveOutOfTileHorizontally(*this, t));
-			else
-				move(moveOutOfTileVertically(*this, t));
-		}
-		else
-		{
-			move(moveOutOfTileHorizontally(*this, t));
-		}
-	}
-	else if(sgn(vel.x) < 0)
-	{
-		if(sgn(vel.y) > 0)
-		{
-			if(up >= right)
-				move(moveOutOfTileHorizontally(*this, t));
-			else
-				move(moveOutOfTileVertically(*this, t));
-		}
-		else if(sgn(vel.y) < 0)
-		{
-			if(down >= right)
-				move(moveOutOfTileHorizontally(*this, t));
-			else
-				move(moveOutOfTileVertically(*this, t));
-		}
-		else
-		{
-			move(moveOutOfTileHorizontally(*this, t));
-		}
-	}
+	float mini = min(up, down);
+	mini = min(right, mini); 
+	mini = min(left, mini);
+	
+	if(mini == left || mini == right)
+		move(moveOutOfTileHorizontally(*this, t));
 	else
-	{
 		move(moveOutOfTileVertically(*this, t));
-	}
-
-	// Move in direction of shortest distance
 }
 
 void Player::drawUI(sf::RenderWindow& window)
 {
 	ui->draw(window);
+}
+
+void Player::SetUpAugments()
+{
+	Global g= Global::GetInstance();
+	int i = 0;
+	for(auto& aug : g.augments)
+	{
+		//std::cout << health << "," << stamina << "," << playerSword.damage << "," << ammo[0].damage << "," << weaponCooldown << std::endl;
+		health += aug[0] * g.PlayerInventory[i];
+		//std::cout << "health " <<  aug[0] << "," << g.PlayerInventory[i] << std::endl;
+		stamina += aug[1] * g.PlayerInventory[i];
+		//std::cout << "stamina " <<  aug[1] << std::endl;
+		playerSword.damage += aug[2] * g.PlayerInventory[i];
+		//std::cout << "Sword " <<  aug[2] << std::endl;
+		for(int x = 0; x < 3; x++)
+		{
+			ammo[x].damage += aug[3] * g.PlayerInventory[i];
+			//std::cout << "Shooting " <<  aug[3] << std::endl;
+		}
+		weaponCooldown += aug[4] * g.PlayerInventory[i];
+		//std::cout << "Speed " <<  aug[4] << std::endl;
+		//std::cout << health << "," << stamina << "," << playerSword.damage << "," << ammo[0].damage << "," << weaponCooldown << std::endl;
+		i++;
+	}
+	
+
 }
 
 void Player::SetUpEffects()
