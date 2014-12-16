@@ -86,7 +86,7 @@ void Player::update(float deltaTime)
 // JW: We should make it so the InputManager can tell us if a key is down at any point.
 				shouldHang = false;
 				isHanging = true;
-				if(sf::Mouse::isButtonPressed(sf::Mouse::Right))
+				if(sf::Mouse::isButtonPressed(sf::Mouse::Right) || sf::Joystick::isButtonPressed(0, 1))
 				{
 					interpolateVaultAboveGrappleTile();
 				}
@@ -140,6 +140,10 @@ void Player::update(float deltaTime)
 		stamina = 0;
 	if(stamina > 50)
 		stamina = 50;
+	if(health < 0)
+		health = 0;
+	if(health > 100)
+		health = 100;
 	playerSword.update(deltaTime);
 
 	ui->update(health, stamina);
@@ -414,55 +418,14 @@ void Player::moveOutOfTile(Tile t)
 		up = (sprite.getPosition().y + sprite.getGlobalBounds().height/2) - t.top, 
 		down = (t.top + t.height) - (sprite.getPosition().y - sprite.getGlobalBounds().height/2);
 
-	// Calculate shortest distance
-	if(sgn(vel.x) > 0)
-	{
-		if(sgn(vel.y) > 0)
-		{
-			if(up >= left)
-				move(moveOutOfTileHorizontally(*this, t));
-			else
-				move(moveOutOfTileVertically(*this, t));
-		}
-		else if(sgn(vel.y) < 0)
-		{
-			if(down >= left)
-				move(moveOutOfTileHorizontally(*this, t));
-			else
-				move(moveOutOfTileVertically(*this, t));
-		}
-		else
-		{
-			move(moveOutOfTileHorizontally(*this, t));
-		}
-	}
-	else if(sgn(vel.x) < 0)
-	{
-		if(sgn(vel.y) > 0)
-		{
-			if(up >= right)
-				move(moveOutOfTileHorizontally(*this, t));
-			else
-				move(moveOutOfTileVertically(*this, t));
-		}
-		else if(sgn(vel.y) < 0)
-		{
-			if(down >= right)
-				move(moveOutOfTileHorizontally(*this, t));
-			else
-				move(moveOutOfTileVertically(*this, t));
-		}
-		else
-		{
-			move(moveOutOfTileHorizontally(*this, t));
-		}
-	}
+	float mini = min(up, down);
+	mini = min(right, mini); 
+	mini = min(left, mini);
+	
+	if(mini == left || mini == right)
+		move(moveOutOfTileHorizontally(*this, t));
 	else
-	{
 		move(moveOutOfTileVertically(*this, t));
-	}
-
-	// Move in direction of shortest distance
 }
 
 void Player::drawUI(sf::RenderWindow& window)

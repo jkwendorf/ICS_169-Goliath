@@ -98,6 +98,7 @@
     <ClCompile Include="HookShot.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Level.cpp" />
+    <ClCompile Include="PauseGameState.cpp" />
     <ClCompile Include="pugixml.cpp" />
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="main.cpp" />
@@ -119,7 +120,6 @@
     <ClInclude Include="Boss.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="ButtonManager.h" />
-    <ClInclude Include="Camera.h" />
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="EndGameState.h" />
     <ClInclude Include="Enemy.h" />
@@ -129,6 +129,7 @@
     <ClInclude Include="HookShot.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Level.h" />
+    <ClInclude Include="PauseGameState.h" />
     <ClInclude Include="pugiconfig.hpp" />
     <ClInclude Include="pugixml.hpp" />
     <ClInclude Include="Room.h" />
@@ -149,6 +150,9 @@
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Levels.xml">
+      <SubType>Designer</SubType>
+    </Xml>
+    <Xml Include="PlayerStats.xml">
       <SubType>Designer</SubType>
     </Xml>
     <Xml Include="Sounds.xml" />

@@ -4,12 +4,14 @@
 #include "GameState.h"
 #include "MainMenuState.h"
 #include "EndGameState.h"
+#include "PauseGameState.h"
 
 enum StateEnum
 {
 	MAIN_MENU,
 	GAME,
 	TRANSITION,
+	PAUSE_GAME,
 	END_GAME
 };
 
@@ -30,6 +32,7 @@ public:
 	void draw(sf::RenderWindow& window);
 	void handleEvent(sf::Event event);
 	State* getCurrentState();
+	bool shouldQuit();
 	void DeleteAllStates();
 
 private:
