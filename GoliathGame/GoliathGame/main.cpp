@@ -14,6 +14,7 @@ int main()
 	
 	StateManager::getInstance().addState(GAME, new GameState(), true);
 	StateManager::getInstance().addState(MAIN_MENU, new MainMenuState());
+	StateManager::getInstance().addState(END_GAME, new EndGameState());
 
 	float maxTime = 1.f/FPS;
 	sf::Clock deltaTimer;
@@ -24,7 +25,7 @@ int main()
         sf::Event event;
         while (window.pollEvent(event))
         {
-            if (event.type == sf::Event::Closed || event.key.code == sf::Keyboard::Escape)
+            if (event.type == sf::Event::Closed)
                 window.close();
 			if (event.type == sf::Event::GainedFocus)
 				infocus = true;
@@ -43,6 +44,9 @@ int main()
 		window.clear();
 		StateManager::getInstance().getCurrentState()->draw(window);
 		window.display();
+
+		if(StateManager::getInstance().shouldQuit())
+			window.close();
     }
 
 	window.close();

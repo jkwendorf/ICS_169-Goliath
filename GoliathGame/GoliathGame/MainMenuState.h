@@ -16,6 +16,7 @@ public:
 	void handleEvent(sf::Event event);
 	void loadContent();
 	void unloadContent();
+	void setToQuit();
 
 private:
 	ButtonManager* bM;

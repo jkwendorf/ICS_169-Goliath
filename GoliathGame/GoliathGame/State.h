@@ -12,4 +12,7 @@ public:
 	virtual void handleEvent(sf::Event event) = 0;
 	virtual void loadContent() = 0;
 	virtual void unloadContent() = 0;
+	virtual void setToQuit() = 0;
+	
+	bool shouldQuit;
 };
