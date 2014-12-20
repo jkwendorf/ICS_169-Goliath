@@ -160,7 +160,7 @@ void InputManager::playerMove(Player& player, float deltaTime)
 			if(player.weapon == CROSSBOW)
 			{
 				player.weapon = SWORD;
-				inputCooldown = 1.50;
+				inputCooldown = 1.25;
 				std::cout << "Sword switch" << std::endl;
 			}
 			else if(player.weapon == SWORD)

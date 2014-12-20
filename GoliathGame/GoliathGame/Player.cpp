@@ -144,8 +144,15 @@ void Player::update(float deltaTime)
 		health = 0;
 	if(health > 100)
 		health = 100;
-	playerSword.update(deltaTime);
 
+	playerSword.update(deltaTime);
+	if(playerSword.attacking)
+	{
+		if(facingRight)
+			playerSword.hitBox.setPosition(sprite.getPosition().x + PLAYER_DIM_X*1.5, sprite.getPosition().y);
+		else
+			playerSword.hitBox.setPosition(sprite.getPosition().x - PLAYER_DIM_X*1.5, sprite.getPosition().y);
+	}
 	ui->update(health, stamina);
 }
 

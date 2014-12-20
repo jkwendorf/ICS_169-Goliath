@@ -15,6 +15,7 @@ Projectile::Projectile(sf::Vector2f startPos, sf::Vector2f vel) :
 	endTime = 2.0;
 	startTime = 0.0;
 	sprite.setOrigin(sprite.getLocalBounds().width/2, sprite.getLocalBounds().height/2);
+	sprite.setTextureRect(sf::IntRect(0, 0, 64, 64));
 }
 
 Projectile::~Projectile()
