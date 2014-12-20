@@ -55,7 +55,7 @@ void StateManager::changeToState(StateEnum state, bool deleteCurrentState)
 		if (currentState)
 			currentState->unloadContent();
 
-		if (deleteCurrentState && !stateMap.size() == 1)
+		if (deleteCurrentState)
 		{
 			auto current = stateMap.begin();
 			current = stateMap.find(currentStateEnum);
@@ -103,4 +103,9 @@ void StateManager::DeleteAllStates()
 		}
 		iter++;
 	}
+}
+
+bool StateManager::shouldQuit()
+{
+	return currentState->shouldQuit;
 }

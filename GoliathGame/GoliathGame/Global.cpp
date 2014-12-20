@@ -118,12 +118,14 @@ void Global::SavePlayer() {
 	
 	int i = 0;
 	for (auto& att: playerInventory.attributes()) {
+
 		//std::cout << "Old value: " << att.name() << " " << att.as_int() << std::endl;
 		//att.set_value(1);
 		//std::cout << "New value: " << att.as_int() << std::endl;
 
 		//Uncomment this to save PlayerInventory augmenets
 		//att.set_value(PlayerInventory[i]);
+
 	}
 	//doc.save_file(std::cout);
 	doc.save_file("PlayerStats.xml");

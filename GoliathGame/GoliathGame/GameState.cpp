@@ -5,7 +5,7 @@
 GameState::GameState(void)
 	:currentScreen(new Level(1)), nextScreen(NULL), screen(LEVEL)
 {
-
+	shouldQuit = false;
 }
 
 GameState::~GameState(void)
@@ -38,9 +38,9 @@ void GameState::update(float deltaTime)
 		nextScreen = NULL;
 	}
 
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::U))
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || sf::Joystick::isButtonPressed(0, 7))
 	{
-		StateManager::getInstance().changeToState(MAIN_MENU, false);
+		StateManager::getInstance().addState(PAUSE_GAME, new PauseGameState(), true);
 	}
 }
 
@@ -63,4 +63,9 @@ void GameState::unloadContent()
 {
 	//currentRoom* temp = currentRoom;
 	//delete temp;
+}
+
+void GameState::setToQuit()
+{
+	shouldQuit = true;
 }

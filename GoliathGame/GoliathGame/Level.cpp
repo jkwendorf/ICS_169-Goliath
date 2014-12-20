@@ -19,7 +19,9 @@ Level::Level(int levelNumber)
 	loadingSprite.setTexture(*TextureManager::GetInstance().retrieveTexture("loading"));
 	loadingSprite.setPosition(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y);
 	background.scale(1.0, (float)(GAME_TILE_DIM * 22 + 100) / background.getTexture()->getSize().y);
-	view.reset(sf::FloatRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
+	Global::GetInstance().topLeft.x = 0;
+	Global::GetInstance().topLeft.y = 0;
+	view.reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y, SCREEN_WIDTH, SCREEN_HEIGHT));
 	view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
 	p.resetPosition(currentRoom->getStartPos());
 	//realEnemyList.push_back(new Enemy("Test",200,200, 10));

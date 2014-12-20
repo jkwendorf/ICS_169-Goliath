@@ -1,12 +1,14 @@
 #pragma once
 #include "State.h"
 #include "ButtonManager.h"
+#include "Global.h"
+#include "StateManager.h"
 
-class EndGameState : public State
+class PauseGameState : public State
 {
 public:
-	EndGameState(void);
-	virtual ~EndGameState(void);
+	PauseGameState(void);
+	virtual ~PauseGameState(void);
 
 	void DeleteState();
 	void update(float deltaTime);
@@ -17,7 +19,8 @@ public:
 	void setToQuit();
 
 private:
-	sf::Font* f;
 	ButtonManager* bM;
-	bool isUpPressed, isDownPressed;
+	sf::Font* f;
+	bool isPressedUp, isPressedDown;
 };
+
