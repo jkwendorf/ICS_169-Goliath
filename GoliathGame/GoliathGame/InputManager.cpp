@@ -19,6 +19,8 @@ InputManager::InputManager()
 	currentWeaponSwitchCooldown = 1.0;
 	weaponSwitchCooldown = 1.0;
 
+	currentGrappleCooldown = .5;
+	grappleCooldown = .5;
 	
 	viewChanged = 0;
 }
@@ -71,6 +73,7 @@ void InputManager::update(Player& s, sf::View* v, float deltaTime)
 
 	currentInputCooldown += deltaTime;
 	currentWeaponSwitchCooldown += deltaTime;
+	currentGrappleCooldown += deltaTime;
 }
 
 void InputManager::playerMove(Player& player, float deltaTime)
@@ -112,8 +115,8 @@ void InputManager::playerMove(Player& player, float deltaTime)
 	{
 		 if((!player.hShot.grappleInProgress || !player.hShot.hookedOnSomething) && !player.isHanging)
 		 {
-			 if(player.running)
-				 player.stamina--;
+			if(player.running)
+				player.stamina--;
 			player.horizontalAcceleration(RIGHT, deltaTime);
 			player.facingRight = true;
 		 }
@@ -123,19 +126,25 @@ void InputManager::playerMove(Player& player, float deltaTime)
 
 	if(utility[2])
 	{
-		if(!player.hShot.isDisabled)
+		if(currentGrappleCooldown >= grappleCooldown)
 		{
-			if(!player.isHanging)
+			if(!player.hShot.isDisabled)
 			{
-				if(!player.grappleInProgress && !player.isHanging && !player.isVaulting)
-					player.grapple();
-				else
-					player.currentCooldown += deltaTime;
-			}
-			else if(!player.isVaulting)
-			{
-				player.isHanging = false;
-				player.hShot.isDisabled = true;
+				if(!player.isHanging)
+				{
+					if(!player.grappleInProgress && !player.isHanging && !player.isVaulting)
+					{
+						player.grapple();
+						currentGrappleCooldown = 0;
+					}
+					else
+						player.currentCooldown += deltaTime;
+				}
+				else if(!player.isVaulting)
+				{
+					player.isHanging = false;
+					player.hShot.isDisabled = true;
+				}
 			}
 		}
 	}
