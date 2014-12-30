@@ -12,7 +12,7 @@
 #define TERMINAL_VELOCITY 940
 #define JUMP_SPEED -820
 #define GRAVITY 1600
-#define SPEED 192 // Three squares per second
+#define SPEED 500 // Three squares per second
 #define MOVE_ACCEL 768 // Accelerate in a fourth of a second
 #define BOOST 128 // Five squares per second
 #define GRAPPLE_SPEED 1000

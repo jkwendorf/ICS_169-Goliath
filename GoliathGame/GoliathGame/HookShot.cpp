@@ -7,7 +7,7 @@ HookShot::HookShot() :
 	sprite.setScale(0.05,0.05);
 	sprite.setOrigin(sprite.getLocalBounds().width/2, sprite.getLocalBounds().height/2);
 	currentCooldown = 0.0;
-	weaponCooldown = 1.5;
+	weaponCooldown = 1.0;
 }
 
 HookShot::~HookShot()

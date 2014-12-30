@@ -84,6 +84,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Animation.cpp" />
     <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="BaseObject.cpp" />
     <ClCompile Include="Boss.cpp" />
@@ -114,6 +115,7 @@
     <ClCompile Include="UserInterface.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Animation.h" />
     <ClInclude Include="AudioManager.h" />
     <ClInclude Include="BaseGameScreen.h" />
     <ClInclude Include="BaseObject.h" />
