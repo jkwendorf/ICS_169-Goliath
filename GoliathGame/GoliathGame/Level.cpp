@@ -116,6 +116,7 @@ void Level::update(float deltaTime)
 		inputManager.update(p, &view, deltaTime);
 		if((!p.hShot.hookedOnSomething || !p.hShot.grappleInProgress) && !p.isHanging && !p.isVaulting)
 		{
+			collisionManager->checkTreasure(&p);
 			//std::cout << "Check Collision" << std::endl;
 			if(p.isFalling)
 			{

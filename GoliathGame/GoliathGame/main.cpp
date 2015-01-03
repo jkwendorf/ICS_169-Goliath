@@ -4,7 +4,7 @@
 
 int main()
 {
-
+	
 	Global::GetInstance().ParseXML();
 	bool infocus = true;
 	Global::GetInstance().calculateOffset();

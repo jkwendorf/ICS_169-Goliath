@@ -442,24 +442,26 @@ void Player::drawUI(sf::RenderWindow& window)
 
 void Player::SetUpAugments()
 {
-	Global g= Global::GetInstance();
+	Global g = Global::GetInstance();
+	
 	int i = 0;
 	
 	for(auto& aug : g.augments)
 	{
+		int num = g.inventory->checkInventory(aug.first);
 		//std::cout << health << "," << stamina << "," << playerSword.damage << "," << ammo[0].damage << "," << weaponCooldown << std::endl;
-		health += aug[0] * g.PlayerInventory[i];
+		health += aug.second[0] * num;
 		//std::cout << "health " <<  aug[0] << "," << g.PlayerInventory[i] << std::endl;
-		stamina += aug[1] * g.PlayerInventory[i];
+		stamina += aug.second[1] * num;
 		//std::cout << "stamina " <<  aug[1] << std::endl;
-		playerSword.damage += aug[2] * g.PlayerInventory[i];
+		playerSword.damage += aug.second[2] * num;
 		//std::cout << "Sword " <<  aug[2] << std::endl;
 		for(int x = 0; x < 3; x++)
 		{
-			ammo[x].damage += aug[3] * g.PlayerInventory[i];
+			ammo[x].damage += aug.second[3] * num;
 			//std::cout << "Shooting " <<  aug[3] << std::endl;
 		}
-		weaponCooldown += aug[4] * g.PlayerInventory[i];
+		weaponCooldown += aug.second[4] * num;
 		//std::cout << "Speed " <<  aug[4] << std::endl;
 		//std::cout << health << "," << stamina << "," << playerSword.damage << "," << ammo[0].damage << "," << weaponCooldown << std::endl;
 		i++;

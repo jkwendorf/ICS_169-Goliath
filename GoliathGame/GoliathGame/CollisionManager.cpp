@@ -1,9 +1,11 @@
 #include "CollisionManager.h"
 
+
 CollisionManager::CollisionManager()
 {
-
+	addObserver(Global::GetInstance().inventory);
 }
+
 
 CollisionManager::~CollisionManager()
 {
@@ -14,7 +16,7 @@ bool CollisionManager::hookCollisionDetection(HookShot hs)
 	for(Tile* b : grapplableTileList)
 	{
 		//b->sprite.setColor(sf::Color::Red);
-		if(b->intersects(hs.sprite.getGlobalBounds()) && b->getGrappleable())
+		if(b->intersects(hs.sprite.getGlobalBounds()) && ((b->getFlags() & TILE::GRAPPLEABLEMASK) != 0))
 			return true;
 	}
 	return false;
@@ -28,20 +30,27 @@ bool CollisionManager::playerCollisionDetection(BaseObject* p)
 		
 		if(b->intersects(p->sprite.getGlobalBounds()))
 		{
-			if(((b->getFlags() & TILE::OPENEDMASK) == 0) && ((b->getFlags() & TILE::TREASUREMASK) != 0)
-				&& p->objectNum != -999)
-			{
-				Global::GetInstance().addAugment();
-				b->changeOpened();
-				sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("GainItem"))).play();
-			}
 			return true;
 		}
 	}
-	//std::cout << "\n\n\n\n";
 	return false;
 }
 
+void CollisionManager::checkTreasure(BaseObject* p)
+{
+	for(Tile* b : tileList)
+	{
+		if(b->intersects(p->sprite.getGlobalBounds()))
+		{
+			if(((b->getFlags() & TILE::OPENEDMASK) == 0) && ((b->getFlags() & TILE::TREASUREMASK) != 0))
+			{
+ 				notify(*p, Util::Events::PICK_UP_ITEM);
+				b->changeOpened();
+				return;
+			}
+		}
+	}
+}
 
 Tile* CollisionManager::getCollidedTile(BaseObject p)
 {
@@ -100,7 +109,7 @@ Tile* CollisionManager::getHookedTile(HookShot hs)
 {
 	for(Tile* b : grapplableTileList)
 	{
-		if(b->intersects(hs.sprite.getGlobalBounds()) && b->getGrappleable())
+		if(b->intersects(hs.sprite.getGlobalBounds()) && ((b->getFlags() & TILE::GRAPPLEABLEMASK) != 0))
 			return b;
 	}
 	return NULL;

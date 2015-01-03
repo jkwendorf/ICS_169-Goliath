@@ -1,7 +1,8 @@
 #pragma once
 #include "TextureManager.h"
 #include <SFML/Graphics.hpp>
-#include "Global.h"
+#include "Defines.h"
+#include <iostream>
 
 class BaseObject
 {

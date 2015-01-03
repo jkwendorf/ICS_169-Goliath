@@ -8,15 +8,6 @@ AudioManager::~AudioManager()
 	}
 }
 
-void AudioManager::SetupMap(const std::map<std::string, sf::SoundBuffer*>& s)
-{
-	soundBufferManager = s;
-	for(int i = 0; i < soundBufferManager.size(); i++)
-	{
-		
-	}
-}
-
 sf::SoundBuffer* AudioManager::retrieveSound(std::string& sound)
 {
 	std::map<std::string, sf::SoundBuffer*>::iterator it = soundBufferManager.begin(); 
@@ -38,7 +29,8 @@ sf::SoundBuffer* AudioManager::retrieveSound(std::string& sound)
 	// JW: We first need to set the string as empty, then clear.  It's strange like that.
 	//fileAppender.str("");
 	//fileAppender.clear();
-
+	if(!newSound->loadFromFile(name))
+		newSound->loadFromFile("media/sound/Default.wav");
 
 	soundBufferManager.emplace(sound, newSound);
 

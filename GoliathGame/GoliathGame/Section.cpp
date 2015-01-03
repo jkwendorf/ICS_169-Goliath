@@ -272,27 +272,27 @@ void Section::LoadTileMap(std::vector<std::shared_ptr<Enemy>> &enemyList)
 				//Grappleable
 				delete grid1[(y*gDim.y) + x];
 				grid1[(y*gDim.y) + x] = new Tile(sf::Vector2f(x * GAME_TILE_DIM + offset.x, y * GAME_TILE_DIM + offset.y), 
-					tileType, 0x02, false, true);
+					tileType, 0x02);
 		
 				break;
 			case 7:
 				//Grappleable and collidable
 				delete grid1[(y*gDim.y) + x];
 				grid1[(y*gDim.y) + x] = new Tile(sf::Vector2f(x * GAME_TILE_DIM + offset.x, y * GAME_TILE_DIM + offset.y), 
-					tileType, 0x03, true, true);
+					tileType, 0x03);
 				break;
 			case 17:
 				//Treasure
 				delete grid1[(y*gDim.y) + x];
 				grid1[(y*gDim.y) + x] = new Tile(sf::Vector2f(x * GAME_TILE_DIM + offset.x, y * GAME_TILE_DIM + offset.y), 
-					tileType, 0x09, true, false, true);
+					tileType, 0x09);
 				break;
 			case 18:
 			case 19:
 				//Interactable
 				delete grid1[(y*gDim.y) + x];
 				grid1[(y*gDim.y) + x] = new Tile(sf::Vector2f(x * GAME_TILE_DIM + offset.x, y * GAME_TILE_DIM + offset.y), 
-					tileType, 0x04, false, false, true);
+					tileType, 0x04);
 				break;
 			default:
 				delete grid1[(y*gDim.y) + x];

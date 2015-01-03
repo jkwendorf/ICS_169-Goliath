@@ -25,14 +25,10 @@ private:
 	uint8 flags;
 	
 public:
-	Tile() : tileNum(-999), flags(0x00), collidable(false), grappleable(false), interactable(false),  treasure(false) {};
-	Tile(sf::Vector2f& pos_, int tileNum_, uint8 flags_, bool canCollide_ = true, bool grappleable_ = false, bool interactable_ = false, bool treasure_ = false);
+	Tile() : tileNum(-999), flags(0x00) {};
+	Tile(sf::Vector2f& pos_, int tileNum_, uint8 flags_);
 	~Tile();
 	int getTileNum();
-	bool getCollidable();
-	bool getGrappleable();
-	bool getInteractable();
-	bool getTreasure();
 	uint8 getFlags();
 	void changeOpened();
 };

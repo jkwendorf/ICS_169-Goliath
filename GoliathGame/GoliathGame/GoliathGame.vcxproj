@@ -100,6 +100,7 @@
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="PauseGameState.cpp" />
+    <ClCompile Include="PlayerInventory.cpp" />
     <ClCompile Include="pugixml.cpp" />
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="main.cpp" />
@@ -123,9 +124,11 @@
     <ClInclude Include="Button.h" />
     <ClInclude Include="ButtonManager.h" />
     <ClInclude Include="CollisionManager.h" />
+    <ClInclude Include="Defines.h" />
     <ClInclude Include="EndGameState.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyAI.h" />
+    <ClInclude Include="Events.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="Global.h" />
     <ClInclude Include="HookShot.h" />
@@ -141,6 +144,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="Section.h" />
+    <ClInclude Include="Subject.h" />
     <ClInclude Include="Sword.h" />
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="MainMenuState.h" />

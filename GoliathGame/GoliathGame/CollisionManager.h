@@ -4,15 +4,18 @@
 #include "Player.h"
 #include "Tile.h"
 #include "Enemy.h"
+#include "Subject.h"
+#include "PlayerInventory.h"
 #include <memory>
 
 
-class CollisionManager
+class CollisionManager : public Subject
 {
 public:
 	CollisionManager();
 	~CollisionManager();
 	bool playerCollisionDetection(BaseObject* p);
+	void checkTreasure(BaseObject* p);
 	
 	void setNearByTiles(std::vector<Tile*> tiles);
 	void setGrapplableTiles(std::vector<Tile*> tiles);
