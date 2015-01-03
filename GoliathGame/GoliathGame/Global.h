@@ -31,6 +31,8 @@
 #define X_OFFSET 100
 #define Y_OFFSET 100
 
+typedef unsigned __int8	uint8;
+
 class Global
 {
 public :
@@ -47,12 +49,13 @@ public :
 	std::vector<std::vector<float>> augments;
 	float basePlayerStats[6];
 	int* PlayerInventory;
+	void addAugment();
 
 	void SavePlayer();
 	void ParseXML();
 	void ParseLevelSizes(std::map<std::string, int>& mapToUpdate, std::string& fileName);
 	void ParseLevelTileSheets();
-	bool checkPoint(const sf::Vector2i& p, const sf::IntRect& r);
+	bool checkPoint(const sf::Vector2f& p, const sf::FloatRect& r);
 
 	sf::Vector2f topLeft;
 	int fps;
@@ -66,4 +69,5 @@ public :
 
 	void calculateOffset(); //Calculates offset and sets it using current screen size
 	void SetUpTileSheet(sf::Texture* texture);
+
 };

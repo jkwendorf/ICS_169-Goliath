@@ -1,6 +1,6 @@
 #include "StateManager.h"
 #include "Global.h"
-//#include <vld.h>
+#include <vld.h>
 
 int main()
 {
@@ -50,11 +50,14 @@ int main()
     }
 
 	window.close();
-	Global::GetInstance().SavePlayer();
-	Global::GetInstance().CleanUp();
-	//std::cout << "\n Press ENTER to continue...";
-	//std::cin.ignore( std::numeric_limits<std::streamsize>::max(), '\n' );
 
 	StateManager::getInstance().DeleteAllStates();
+	
+	Global::GetInstance().SavePlayer();
+	Global::GetInstance().CleanUp();
+
+	std::cout << "\n Press ENTER to continue...";
+	std::cin.ignore( std::numeric_limits<std::streamsize>::max(), '\n' );
+
     return 0;
 }

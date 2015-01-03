@@ -67,7 +67,7 @@ void Level::changeRoom()
 
 void Level::update(float deltaTime)
 {
-	std::vector<Tile> nearTiles, nearTiles2, enemyTiles;
+	std::vector<Tile*> nearTiles, nearTiles2, enemyTiles;
 	currentRoom->GetGrapplableTiles(p, nearTiles2);
 	int nearTile = currentRoom->NearInteractableTiles(p);
 	if( nearTile != -999)
@@ -79,7 +79,7 @@ void Level::update(float deltaTime)
 	}
 	if(!changeScreen)
 	{
-		currentRoom->GetCollidableTiles(p, sf::Vector2i(PLAYER_DIM_X, PLAYER_DIM_Y), nearTiles);
+		currentRoom->GetCollidableTiles(p, sf::Vector2f(PLAYER_DIM_X, PLAYER_DIM_Y), nearTiles);
 
 		collisionManager->setNearByTiles(nearTiles);
 		collisionManager->setGrapplableTiles(nearTiles2);
@@ -89,19 +89,19 @@ void Level::update(float deltaTime)
 			if(!p.hShot.hookedOnSomething && collisionManager->hookCollisionDetection(p.hShot))
 			{
 				p.hShot.hookedOnSomething = true;
-				Tile hookedTile = collisionManager->getHookedTile(p.hShot);
+				Tile* hookedTile = collisionManager->getHookedTile(p.hShot);
 				
-				if(hookedTile.getTileNum() == 7)
+				if(hookedTile->getTileNum() == 7)
 				{
 					if(p.hShot.fireRight)
-						p.hShot.grappleToLocation(sf::Vector2f(hookedTile.left - p.sprite.getGlobalBounds().width/2, hookedTile.top + hookedTile.height/2));
+						p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left - p.sprite.getGlobalBounds().width/2, hookedTile->top + hookedTile->height/2));
 					else
-						p.hShot.grappleToLocation(sf::Vector2f(hookedTile.left + hookedTile.width + p.sprite.getGlobalBounds().width/2, hookedTile.top + hookedTile.height/2));
+						p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width + p.sprite.getGlobalBounds().width/2, hookedTile->top + hookedTile->height/2));
 					
 					p.shouldHang = true;
 				}
 				else
-					p.hShot.grappleToLocation(sf::Vector2f(hookedTile.left + hookedTile.width/2, hookedTile.top + hookedTile.height));
+					p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width/2, hookedTile->top + hookedTile->height));
 			}
 		}
 
@@ -145,14 +145,14 @@ void Level::update(float deltaTime)
 
 		for(Projectile& po : p.ammo)
 		{
-			std::vector<Tile> proTile;
+			std::vector<Tile*> proTile;
 			if(po.moving)
 			{
-				currentRoom->GetCollidableTiles(po, sf::Vector2i(po.sprite.getTexture()->getSize().x/10,
+				currentRoom->GetCollidableTiles(po, sf::Vector2f(po.sprite.getTexture()->getSize().x/10,
 					po.sprite.getTexture()->getSize().y/10), proTile);
 				for(auto& t : proTile)
 				{
-					std::cout << t.getTileNum() << std::endl;
+					std::cout << t->getTileNum() << std::endl;
 				}
 				if(proTile.size() > 0)
 				{
@@ -174,8 +174,8 @@ void Level::update(float deltaTime)
 		{
 			if(e->health > 0)
 			{
-				std::vector<Tile> proTile;
-				currentRoom->GetCollidableTiles(*e, sf::Vector2i(PLAYER_DIM_X, PLAYER_DIM_Y), enemyTiles);
+				std::vector<Tile*> proTile;
+				currentRoom->GetCollidableTiles(*e, sf::Vector2f(PLAYER_DIM_X, PLAYER_DIM_Y), enemyTiles);
 
 				if(enemyTiles.size() > 0)
 				{
@@ -200,7 +200,7 @@ void Level::update(float deltaTime)
 				{
 					if(po.moving)
 					{
-						currentRoom->GetCollidableTiles(po, sf::Vector2i(po.sprite.getTexture()->getSize().x/10,
+						currentRoom->GetCollidableTiles(po, sf::Vector2f(po.sprite.getTexture()->getSize().x/10,
 							po.sprite.getTexture()->getSize().y/10), proTile);
 
 						if(proTile.size() > 0)

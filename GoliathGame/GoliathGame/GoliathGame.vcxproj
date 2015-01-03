@@ -131,7 +131,9 @@
     <ClInclude Include="HookShot.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Level.h" />
+    <ClInclude Include="Observer.h" />
     <ClInclude Include="PauseGameState.h" />
+    <ClInclude Include="PlayerInventory.h" />
     <ClInclude Include="pugiconfig.hpp" />
     <ClInclude Include="pugixml.hpp" />
     <ClInclude Include="Room.h" />

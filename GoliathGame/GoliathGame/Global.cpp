@@ -2,6 +2,7 @@
 
 Global::Global()
 {
+
 }
 
 Global::~Global()
@@ -66,7 +67,7 @@ void Global::ParseXML() {
 	result = doc.load_file("PlayerStats.xml");
 
 	pugi::xml_node playerXML = doc.child("Player");
-
+	
 	PlayerInventory = new int[playerXML.attribute("numAugments").as_int()];
 	pugi::xml_node baseStats = playerXML.child("BaseStats");
 	int i=0;
@@ -99,13 +100,24 @@ void Global::ParseXML() {
 	i=0;
 	for(auto& att : baseStats.attributes())
 	{
+		std::cout << att.as_int() << std::endl;
 		PlayerInventory[i] = att.as_int();
-		//std::cout << PlayerInventory[i] << std::endl;
+		std::cout << PlayerInventory[i] << std::endl;
 		i++;
 	}
 
 }
 
+void Global::addAugment()
+{
+	int randNum = std::rand() % Global::GetInstance().augments.size();
+	std::cout << randNum<< std::endl;
+	PlayerInventory[randNum]++;
+	for(int i = 0; i < 3; i++)
+	{
+		std::cout << "Augment " << i << ": " << PlayerInventory[i] << std::endl;
+	}
+}
 
 void Global::SavePlayer() {
 	std::cout << "Saving the player" << std::endl;
@@ -195,7 +207,7 @@ void Global::ParseLevelTileSheets()
 }
 
 
-bool Global::checkPoint(const sf::Vector2i& p, const sf::IntRect& r)
+bool Global::checkPoint(const sf::Vector2f& p, const sf::FloatRect& r)
 {
 	if (p.x >= r.left && p.x < r.left + r.width && p.y >= r.top && p.y <= r.top + r.height)
 		return true;

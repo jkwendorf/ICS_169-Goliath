@@ -39,11 +39,6 @@ sf::SoundBuffer* AudioManager::retrieveSound(std::string& sound)
 	//fileAppender.str("");
 	//fileAppender.clear();
 
-	//If you can load a Audio
-	//	Store that in texManager
-	//	Return the Audio
-	if(!newSound->loadFromFile(name))
-		newSound->loadFromFile("media/art/FileNotFound.png");
 
 	soundBufferManager.emplace(sound, newSound);
 

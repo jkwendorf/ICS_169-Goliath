@@ -3,7 +3,7 @@
 #include "PhysicsManager.h"
 
 Player::Player() 
-	: BaseObject(), grappleInProgress(false), facingRight(true),running(false), isVaulting(false), 
+	: BaseObject(0), grappleInProgress(false), facingRight(true),running(false), isVaulting(false), 
 	isHanging(false), shouldHang(false), health(Global::GetInstance().basePlayerStats[0]), 
 	stamina(Global::GetInstance().basePlayerStats[1]),	weaponCooldown(Global::GetInstance().basePlayerStats[4])
 {
@@ -418,12 +418,12 @@ void Player::verticalAcceleration(float& deltaTime)
 	}
 }
 
-void Player::moveOutOfTile(Tile t)
+void Player::moveOutOfTile(Tile* t)
 {
-	float left = (sprite.getPosition().x + sprite.getGlobalBounds().width/2) - t.left, 
-		right = (t.left + t.width) - (sprite.getPosition().x - sprite.getGlobalBounds().width/2), 
-		up = (sprite.getPosition().y + sprite.getGlobalBounds().height/2) - t.top, 
-		down = (t.top + t.height) - (sprite.getPosition().y - sprite.getGlobalBounds().height/2);
+	float left = (sprite.getPosition().x + sprite.getGlobalBounds().width/2) - t->left, 
+		right = (t->left + t->width) - (sprite.getPosition().x - sprite.getGlobalBounds().width/2), 
+		up = (sprite.getPosition().y + sprite.getGlobalBounds().height/2) - t->top, 
+		down = (t->top + t->height) - (sprite.getPosition().y - sprite.getGlobalBounds().height/2);
 
 	float mini = min(up, down);
 	mini = min(right, mini); 
@@ -444,6 +444,7 @@ void Player::SetUpAugments()
 {
 	Global g= Global::GetInstance();
 	int i = 0;
+	
 	for(auto& aug : g.augments)
 	{
 		//std::cout << health << "," << stamina << "," << playerSword.damage << "," << ammo[0].damage << "," << weaponCooldown << std::endl;
@@ -463,8 +464,6 @@ void Player::SetUpAugments()
 		//std::cout << health << "," << stamina << "," << playerSword.damage << "," << ammo[0].damage << "," << weaponCooldown << std::endl;
 		i++;
 	}
-	
-
 }
 
 void Player::SetUpEffects()
