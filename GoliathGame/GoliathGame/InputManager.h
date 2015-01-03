@@ -39,5 +39,6 @@ public:
 	float inputCooldown, currentInputCooldown;
 	float weaponSwitchCooldown, currentWeaponSwitchCooldown;
 	float viewDifference, viewChanged;
+	float grappleCooldown, currentGrappleCooldown;
 	
 };

@@ -3,7 +3,7 @@
 #include "PhysicsManager.h"
 
 Player::Player() 
-	: BaseObject(), grappleInProgress(false), facingRight(true),running(false), isVaulting(false), 
+	: BaseObject(0), grappleInProgress(false), facingRight(true),running(false), isVaulting(false), 
 	isHanging(false), shouldHang(false), health(Global::GetInstance().basePlayerStats[0]), 
 	stamina(Global::GetInstance().basePlayerStats[1]),	weaponCooldown(Global::GetInstance().basePlayerStats[4])
 {
@@ -51,7 +51,7 @@ void Player::update(float deltaTime)
 	{
 		hShot.update(deltaTime);
 		if(sqrt(pow((std::abs(hShot.sprite.getPosition().x - sprite.getPosition().x)),2) + 
-			pow((std::abs(hShot.sprite.getPosition().y - sprite.getPosition().y)),2)) >= 300)
+			pow((std::abs(hShot.sprite.getPosition().y - sprite.getPosition().y)),2)) >= 275 || hShot.currentCooldown >= hShot.weaponCooldown)
 		{
 			hShot.grappleInProgress = false;
 			hShot.hookedOnSomething = false;
@@ -130,7 +130,7 @@ void Player::update(float deltaTime)
 	for(int x = 0; x < 3; x++)
 	{
 		if(!ammo[x].moving)
-			ammo[x].setLocation(sf::Vector2f(sprite.getPosition().x + 125, sprite.getPosition().y + 25));
+			ammo[x].setLocation(sf::Vector2f(sprite.getPosition().x + 250, sprite.getPosition().y - 25));
 		ammo[x].update(deltaTime);
 	}
 	
@@ -144,8 +144,15 @@ void Player::update(float deltaTime)
 		health = 0;
 	if(health > 100)
 		health = 100;
-	playerSword.update(deltaTime);
 
+	playerSword.update(deltaTime);
+	if(playerSword.attacking)
+	{
+		if(facingRight)
+			playerSword.hitBox.setPosition(sprite.getPosition().x + PLAYER_DIM_X*1.5, sprite.getPosition().y);
+		else
+			playerSword.hitBox.setPosition(sprite.getPosition().x - PLAYER_DIM_X*1.5, sprite.getPosition().y);
+	}
 	ui->update(health, stamina);
 }
 
@@ -411,12 +418,12 @@ void Player::verticalAcceleration(float& deltaTime)
 	}
 }
 
-void Player::moveOutOfTile(Tile t)
+void Player::moveOutOfTile(Tile* t)
 {
-	float left = (sprite.getPosition().x + sprite.getGlobalBounds().width/2) - t.left, 
-		right = (t.left + t.width) - (sprite.getPosition().x - sprite.getGlobalBounds().width/2), 
-		up = (sprite.getPosition().y + sprite.getGlobalBounds().height/2) - t.top, 
-		down = (t.top + t.height) - (sprite.getPosition().y - sprite.getGlobalBounds().height/2);
+	float left = (sprite.getPosition().x + sprite.getGlobalBounds().width/2) - t->left, 
+		right = (t->left + t->width) - (sprite.getPosition().x - sprite.getGlobalBounds().width/2), 
+		up = (sprite.getPosition().y + sprite.getGlobalBounds().height/2) - t->top, 
+		down = (t->top + t->height) - (sprite.getPosition().y - sprite.getGlobalBounds().height/2);
 
 	float mini = min(up, down);
 	mini = min(right, mini); 
@@ -435,29 +442,30 @@ void Player::drawUI(sf::RenderWindow& window)
 
 void Player::SetUpAugments()
 {
-	Global g= Global::GetInstance();
+	Global g = Global::GetInstance();
+	
 	int i = 0;
+	
 	for(auto& aug : g.augments)
 	{
+		int num = g.inventory->checkInventory(aug.first);
 		//std::cout << health << "," << stamina << "," << playerSword.damage << "," << ammo[0].damage << "," << weaponCooldown << std::endl;
-		health += aug[0] * g.PlayerInventory[i];
+		health += aug.second[0] * num;
 		//std::cout << "health " <<  aug[0] << "," << g.PlayerInventory[i] << std::endl;
-		stamina += aug[1] * g.PlayerInventory[i];
+		stamina += aug.second[1] * num;
 		//std::cout << "stamina " <<  aug[1] << std::endl;
-		playerSword.damage += aug[2] * g.PlayerInventory[i];
+		playerSword.damage += aug.second[2] * num;
 		//std::cout << "Sword " <<  aug[2] << std::endl;
 		for(int x = 0; x < 3; x++)
 		{
-			ammo[x].damage += aug[3] * g.PlayerInventory[i];
+			ammo[x].damage += aug.second[3] * num;
 			//std::cout << "Shooting " <<  aug[3] << std::endl;
 		}
-		weaponCooldown += aug[4] * g.PlayerInventory[i];
+		weaponCooldown += aug.second[4] * num;
 		//std::cout << "Speed " <<  aug[4] << std::endl;
 		//std::cout << health << "," << stamina << "," << playerSword.damage << "," << ammo[0].damage << "," << weaponCooldown << std::endl;
 		i++;
 	}
-	
-
 }
 
 void Player::SetUpEffects()

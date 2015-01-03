@@ -1,7 +1,9 @@
 #include "Global.h"
 
 Global::Global()
+	:inventory(new PlayerInventory())
 {
+	test = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("GainItem")));
 }
 
 Global::~Global()
@@ -20,8 +22,7 @@ void Global::CleanUp()
 	{
 		delete currentTileSheet[i];
 	}
-	//delete[] currentTileSheet;
-	delete[] PlayerInventory;
+	delete inventory;
 }
 
 void Global::ParseXML() {
@@ -66,8 +67,7 @@ void Global::ParseXML() {
 	result = doc.load_file("PlayerStats.xml");
 
 	pugi::xml_node playerXML = doc.child("Player");
-
-	PlayerInventory = new int[playerXML.attribute("numAugments").as_int()];
+	
 	pugi::xml_node baseStats = playerXML.child("BaseStats");
 	int i=0;
 
@@ -81,12 +81,15 @@ void Global::ParseXML() {
 
 	for (pugi::xml_node a : baseStats.children("a"))
 	{
-		float temp[6] = {a.attribute("bonusHealth").as_float(), a.attribute("bonusStamina").as_float(),
-			a.attribute("bonusMelee").as_float(),a.attribute("bonusRangeDmg").as_float(),
-			a.attribute("bonusAttSpeed").as_float(), a.attribute("bonusHookshoot").as_float() };
-		std::vector<float> float_vect; 
-		float_vect.insert( float_vect.begin(), temp , temp + 6 ) ; 
-		augments.insert(augments.end(), float_vect);
+		std::vector<float> temp;
+		temp.push_back(a.attribute("bonusHealth").as_float());
+		temp.push_back(a.attribute("bonusStamina").as_float());
+		temp.push_back(a.attribute("bonusMelee").as_float());
+		temp.push_back(a.attribute("bonusRangeDmg").as_float());
+		temp.push_back(a.attribute("bonusAttSpeed").as_float());
+		temp.push_back(a.attribute("bonusHookshoot").as_float());
+		std::string tempStr = a.attribute("name").as_string();
+		augments.emplace(tempStr, temp);
 	}
 
 	//for (auto& a : augments)
@@ -97,15 +100,16 @@ void Global::ParseXML() {
 	baseStats = playerXML.child("PlayerInventory");
 	
 	i=0;
-	for(auto& att : baseStats.attributes())
+	for (pugi::xml_node a : baseStats.children("item"))
 	{
-		PlayerInventory[i] = att.as_int();
+		std::cout << a.attribute("name").as_string() << ", " << a.attribute("amount").as_int() << std::endl;
+		//PlayerInventory[i] = att.as_int();
+		inventory->addItem(a.attribute("name").as_string(), a.attribute("amount").as_int());
 		//std::cout << PlayerInventory[i] << std::endl;
-		i++;
+		//i++;
 	}
 
 }
-
 
 void Global::SavePlayer() {
 	std::cout << "Saving the player" << std::endl;
@@ -195,7 +199,7 @@ void Global::ParseLevelTileSheets()
 }
 
 
-bool Global::checkPoint(const sf::Vector2i& p, const sf::IntRect& r)
+bool Global::checkPoint(const sf::Vector2f& p, const sf::FloatRect& r)
 {
 	if (p.x >= r.left && p.x < r.left + r.width && p.y >= r.top && p.y <= r.top + r.height)
 		return true;

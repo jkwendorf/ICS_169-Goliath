@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML\Graphics.hpp>
 #include "BaseObject.h"
+#include "Animation.h"
 
 class Projectile : public BaseObject
 {
@@ -23,4 +24,8 @@ public:
 	float damage;
 	sf::Texture projectileTexture;
 	sf::Vector2i source;
+	bool spriteLeftSwitch, spriteRightSwitch;
+	int width;
+
+	Animation bulletAnimation;
 };
