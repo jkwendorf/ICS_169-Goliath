@@ -96,9 +96,12 @@
     <ClCompile Include="EnemyAI.cpp" />
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="Global.cpp" />
+    <ClCompile Include="GrappleCommand.cpp" />
     <ClCompile Include="HookShot.cpp" />
     <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="JumpCommand.cpp" />
     <ClCompile Include="Level.cpp" />
+    <ClCompile Include="MoveCommand.cpp" />
     <ClCompile Include="PauseGameState.cpp" />
     <ClCompile Include="PlayerInventory.cpp" />
     <ClCompile Include="pugixml.cpp" />
@@ -117,13 +120,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
+    <ClInclude Include="AttackCommand.h" />
     <ClInclude Include="AudioManager.h" />
     <ClInclude Include="BaseGameScreen.h" />
     <ClInclude Include="BaseObject.h" />
+    <ClInclude Include="BaseState.h" />
     <ClInclude Include="Boss.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="ButtonManager.h" />
+    <ClInclude Include="ClimbCommand.h" />
     <ClInclude Include="CollisionManager.h" />
+    <ClInclude Include="Command.h" />
     <ClInclude Include="Defines.h" />
     <ClInclude Include="EndGameState.h" />
     <ClInclude Include="Enemy.h" />
@@ -131,10 +138,14 @@
     <ClInclude Include="Events.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="Global.h" />
+    <ClInclude Include="GrappleCommand.h" />
     <ClInclude Include="HookShot.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="JumpCommand.h" />
     <ClInclude Include="Level.h" />
+    <ClInclude Include="MoveCommand.h" />
     <ClInclude Include="Observer.h" />
+    <ClInclude Include="OnGroundState.h" />
     <ClInclude Include="PauseGameState.h" />
     <ClInclude Include="PlayerInventory.h" />
     <ClInclude Include="pugiconfig.hpp" />
@@ -145,6 +156,7 @@
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="Section.h" />
     <ClInclude Include="Subject.h" />
+    <ClInclude Include="SwitchWeaponCommand.h" />
     <ClInclude Include="Sword.h" />
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="MainMenuState.h" />
