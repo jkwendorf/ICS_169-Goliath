@@ -32,13 +32,35 @@ Player::Player()
 	SetUpEffects();
 }
 
+void Player::init(CollisionManager* collisionManager_, BaseState* startState)
+{
+	collisionManager = collisionManager_;
+	state = startState;
+}
+
 Player::~Player() 
 {
 	delete ui;
 }
 
+void Player::handleInput()
+{
+	for(std::deque<Command*>::iterator it = inputQueue.begin(); it != inputQueue.end(); it++)
+	{
+		state->handleInput(this, *it);
+	}
+}
+
 void Player::update(float deltaTime)
 {
+	/*
+	while(!inputQueue.empty())
+	{
+		state->update(*this, inputQueue.front(), deltaTime);
+		inputQueue.pop_front();
+	}
+	*/
+
 	//std::cout << sprite.getPosition().x << " " << sprite.getPosition().y << std::endl;
 	if(!hShot.grappleInProgress)
 	{
@@ -173,7 +195,7 @@ void Player::attack()
 				
 				ammo[x].setVelocity(sf::Vector2f(xSpeed,0.0));
 				ammo[x].moving = true;
-				soundEffects[SHOOT].play();
+				soundEffects[SHOOTSOUND].play();
 				break;
 			}
 
@@ -194,7 +216,7 @@ void Player::attack()
 				playerSword.hitBox.setPosition(sprite.getPosition().x + PLAYER_DIM_X*1.5, sprite.getPosition().y);
 			else
 				playerSword.hitBox.setPosition(sprite.getPosition().x - PLAYER_DIM_X*1.5, sprite.getPosition().y);
-			soundEffects[ATTACK].play();
+			soundEffects[ATTACKSOUND].play();
 			playerSword.attacking = true;
 		}
 		stamina -= 10;
@@ -234,7 +256,7 @@ void Player::grapple()
 {
 	if(!hShot.grappleInProgress && !isVaulting)
 	{
-		soundEffects[HOOK].play();
+		soundEffects[HOOKSOUND].play();
 		hShot.grappleInProgress = true;
 	
 		if(facingRight)
@@ -258,7 +280,7 @@ void Player::resetPosition(sf::Vector2f& newPos)
 
 void Player::jump()
 {
-	soundEffects[JUMP].play();
+	soundEffects[JUMPSOUND].play();
 	vel.y = JUMP_SPEED;
 	isFalling = true;
 }
@@ -470,11 +492,11 @@ void Player::SetUpAugments()
 
 void Player::SetUpEffects()
 {
-	soundEffects[ATTACK] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("playerAttack")));
-	soundEffects[JUMP] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("playerJump")));
-	soundEffects[SHOOT] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("playerShoot")));
-	soundEffects[TAKEDMG] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("playerTakeDMG")));
-	soundEffects[HOOK] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("playerHook")));
+	soundEffects[ATTACKSOUND] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("playerAttack")));
+	soundEffects[JUMPSOUND] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("playerJump")));
+	soundEffects[SHOOTSOUND] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("playerShoot")));
+	soundEffects[TAKEDMGSOUND] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("playerTakeDMG")));
+	soundEffects[HOOKSOUND] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("playerHook")));
 }
 
 void Player::instantVaultAboveGrappleTile()

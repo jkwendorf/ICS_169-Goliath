@@ -7,11 +7,11 @@ Level::Level(void)
 }
 
 Level::Level(int levelNumber)
-	:changeScreen(false), levelNum(levelNumber), p(Player()), collisionManager(new CollisionManager()), inputManager(),
+	:changeScreen(false), levelNum(levelNumber), p(), collisionManager(new CollisionManager()), inputManager(),
 	maxRooms(Global::GetInstance().levelSizes.at("Level " + std::to_string(levelNum))), loading(1.0),
 	enemyAI(collisionManager)
 {
-	
+	p.init(collisionManager, new JumpingState());
 	currentRoom = new Room(levelNumber, 1, enemyList);
 	background.setTexture(*TextureManager::GetInstance().retrieveTexture("banditCity"));
 	background.setPosition(-75,75);
@@ -264,7 +264,7 @@ void Level::draw(sf::RenderWindow& window)
 	p.drawUI(window);
 }
 
-void Level::CheckChangeScreen(BaseGameScreen*& newScreen)
+void Level::CheckChangeScreen(BaseGameScreen* newScreen)
 {
 	if(changeScreen)
 	{

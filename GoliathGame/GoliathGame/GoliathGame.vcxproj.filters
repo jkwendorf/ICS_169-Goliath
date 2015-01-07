@@ -46,6 +46,9 @@
     <Filter Include="Source Files\Commands">
       <UniqueIdentifier>{5afa65bd-98cf-4650-a6a1-b7957b54cc32}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Player\Player States">
+      <UniqueIdentifier>{f734605d-858e-4e14-a243-02bbc0cea473}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -146,6 +149,45 @@
     </ClCompile>
     <ClCompile Include="GrappleCommand.cpp">
       <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="AttackCommand.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="SwitchWeaponCommand.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="RunCommand.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="LookCommand.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="ClimbCommand.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="IdleState.cpp">
+      <Filter>Source Files\Player\Player States</Filter>
+    </ClCompile>
+    <ClCompile Include="OnGroundState.cpp">
+      <Filter>Source Files\Player\Player States</Filter>
+    </ClCompile>
+    <ClCompile Include="WalkingState.cpp">
+      <Filter>Source Files\Player\Player States</Filter>
+    </ClCompile>
+    <ClCompile Include="GrapplingState.cpp">
+      <Filter>Source Files\Player\Player States</Filter>
+    </ClCompile>
+    <ClCompile Include="JumpingState.cpp">
+      <Filter>Source Files\Player\Player States</Filter>
+    </ClCompile>
+    <ClCompile Include="RunningState.cpp">
+      <Filter>Source Files\Player\Player States</Filter>
+    </ClCompile>
+    <ClCompile Include="HangingState.cpp">
+      <Filter>Source Files\Player\Player States</Filter>
+    </ClCompile>
+    <ClCompile Include="AttackState.cpp">
+      <Filter>Source Files\Player\Player States</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -257,9 +299,6 @@
     <ClInclude Include="OnGroundState.h">
       <Filter>Header Files\Player\Player States</Filter>
     </ClInclude>
-    <ClInclude Include="BaseState.h">
-      <Filter>Header Files\Player\Player States</Filter>
-    </ClInclude>
     <ClInclude Include="Command.h">
       <Filter>Header Files\Commands</Filter>
     </ClInclude>
@@ -292,6 +331,42 @@
     </ClInclude>
     <ClInclude Include="SwitchWeaponCommand.h">
       <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="RunCommand.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="LookCommand.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="WalkingState.h">
+      <Filter>Header Files\Player\Player States</Filter>
+    </ClInclude>
+    <ClInclude Include="JumpingState.h">
+      <Filter>Header Files\Player\Player States</Filter>
+    </ClInclude>
+    <ClInclude Include="GrapplingState.h">
+      <Filter>Header Files\Player\Player States</Filter>
+    </ClInclude>
+    <ClInclude Include="IdleState.h">
+      <Filter>Header Files\Player\Player States</Filter>
+    </ClInclude>
+    <ClInclude Include="HangingState.h">
+      <Filter>Header Files\Player\Player States</Filter>
+    </ClInclude>
+    <ClInclude Include="AttackState.h">
+      <Filter>Header Files\Player\Player States</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticStateHolder.h">
+      <Filter>Header Files\Player\Player States</Filter>
+    </ClInclude>
+    <ClInclude Include="RunningState.h">
+      <Filter>Header Files\Player\Player States</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticCommandHolder.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseState.h">
+      <Filter>Header Files\Player\Player States</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

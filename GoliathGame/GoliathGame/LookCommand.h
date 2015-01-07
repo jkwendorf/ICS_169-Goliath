@@ -6,11 +6,10 @@ class LookCommand : public Command
 {
 private:
 	Player* player;
-	sf::View* view;
 	float deltaTime;
 	LookDirection dir;
 public: 
-	LookCommand(Player* player_, sf::View* view_, float deltaTime_, LookDirection direction_);
+	LookCommand(Player* player_, float deltaTime_, LookDirection direction_, Input inputCode_);
 	virtual void execute();
 
 };

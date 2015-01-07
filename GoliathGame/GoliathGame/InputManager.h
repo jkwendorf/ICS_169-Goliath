@@ -4,7 +4,7 @@
 #include "Global.h"
 #include "Player.h"
 #include "CollisionManager.h"
-
+#include "StaticCommandHolder.h"
 
 
 class InputManager

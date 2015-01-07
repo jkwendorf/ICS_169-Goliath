@@ -9,7 +9,8 @@ private:
 	float deltaTime;
 	Player* player;
 public: 
-	MoveCommand(Player* player_, MovementDirection direction_, float deltaTime_);
+	MoveCommand();
+	void init(Player* player_, MovementDirection direction_, float deltaTime_, Input inputCode_);
 	virtual void execute();
 
 };

@@ -1,10 +1,16 @@
 #include "MoveCommand.h"
 
-MoveCommand::MoveCommand(Player* player_, MovementDirection direction_, float deltaTime_)
-	:player(player_), dir(direction_), deltaTime(deltaTime_)
+MoveCommand::MoveCommand()
 {
 }
 
+void MoveCommand::init(Player* player_, MovementDirection direction_, float deltaTime_, Input inputCode_)
+{
+	player = player_;
+	dir = direction_; 
+	deltaTime = deltaTime_;
+	inputCode = inputCode_;
+}
 void MoveCommand::execute()
 {
 	player->horizontalAcceleration(dir, deltaTime);

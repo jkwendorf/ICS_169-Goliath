@@ -1,23 +1,18 @@
 #pragma once
 
 #include "Player.h"
+#include "Command.h"
 
-enum Input
-{
-	MOVELEFT,
-	MOVERIGHT,
-	RUN,
-	JUMP,
-	GRAPPLE,
-	ATTACK,
-	LOOKUP,
-	LOOKDOWN
-};
+class Player;
+class Command;
 
 class BaseState
 {
 public:
-  virtual ~BaseState() {}
-  virtual void handleInput(Player& heroine, Input input) {}
-  virtual void update(Player& heroine) {}
+	virtual ~BaseState() {}
+	virtual void enter() {}
+	virtual void handleInput(Player* player, Command* input) {};
+	virtual void update(Command* input, float deltaTime) {}
+	virtual void exit() {}
+
 };
