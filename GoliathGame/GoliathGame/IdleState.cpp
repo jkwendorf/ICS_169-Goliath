@@ -10,12 +10,22 @@ void IdleState::enter()
 }
 void IdleState::handleInput(Player* player, Command* input) 
 {
-
+	if (input->inputCode == LOOKUP || input->inputCode == LOOKDOWN)
+	{
+		player->newState = new LookingState();
+		input->execute();
+	}
+	else
+	{
+		OnGroundState::handleInput(player, input);
+	}
+	
 }
-void IdleState::update(Command* input, float deltaTime) 
+void IdleState::update(Player* player, float deltaTime) 
 {
 
 }
+
 void IdleState::exit() 
 {
 

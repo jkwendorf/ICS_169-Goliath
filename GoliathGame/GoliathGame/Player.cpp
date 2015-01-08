@@ -35,19 +35,26 @@ Player::Player()
 void Player::init(CollisionManager* collisionManager_, BaseState* startState)
 {
 	collisionManager = collisionManager_;
-	state = startState;
+	currentState = startState;
 }
 
 Player::~Player() 
 {
 	delete ui;
+	delete currentState;
 }
 
 void Player::handleInput()
 {
 	for(std::deque<Command*>::iterator it = inputQueue.begin(); it != inputQueue.end(); it++)
 	{
-		state->handleInput(this, *it);
+		currentState->handleInput(this, *it);
+		if(newState != NULL)
+		{
+			delete currentState;
+			currentState = newState;
+			newState = NULL;
+		}
 	}
 }
 
@@ -455,6 +462,42 @@ void Player::moveOutOfTile(Tile* t)
 		move(moveOutOfTileHorizontally(*this, t));
 	else
 		move(moveOutOfTileVertically(*this, t));
+}
+
+void Player::viewMove(float deltaTime, float& viewChanged_, LookDirection dir)
+{
+	float viewDifference = 100.0f*deltaTime;	
+	if(dir == UP)
+	{
+		viewChanged_ -= viewDifference;
+		if(viewChanged_ < Global::GetInstance().yOffset * (-4) && viewChanged_ < 0)
+		{
+			viewDifference = 0;
+			viewChanged_ = Global::GetInstance().yOffset * -4;
+		}
+		Global::GetInstance().topLeft.y -= viewDifference;
+		if(atBottomEdge)
+		{
+			view->reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y + viewChanged_, SCREEN_WIDTH, SCREEN_HEIGHT));
+			ui->updateDifferent(health, stamina, Global::GetInstance().topLeft.y + viewChanged_);
+		}
+	}
+	else
+	{
+		viewChanged_ += viewDifference;
+		if(viewChanged_ > Global::GetInstance().yOffset * 4 && viewChanged_ > 0)
+		{
+			viewDifference = 0;
+			viewChanged_ = Global::GetInstance().yOffset * 4;
+		}
+		Global::GetInstance().topLeft.y += viewDifference;
+		if(atTopEdge || !atTheBottom)
+		{
+			view->reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y + viewChanged_, SCREEN_WIDTH, SCREEN_HEIGHT));
+			ui->updateDifferent(health, stamina, Global::GetInstance().topLeft.y + viewChanged_);
+		}
+	}		
+
 }
 
 void Player::drawUI(sf::RenderWindow& window)

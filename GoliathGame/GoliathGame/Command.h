@@ -4,6 +4,7 @@
 
 enum Input
 {
+	NONE,
 	MOVELEFT,
 	MOVERIGHT,
 	RUN,

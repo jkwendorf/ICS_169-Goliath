@@ -9,5 +9,5 @@ LookCommand::LookCommand(Player* player_, float deltaTime_, LookDirection direct
 
 void LookCommand::execute()
 {
-	player->viewMove(deltaTime, dir);
+
 }

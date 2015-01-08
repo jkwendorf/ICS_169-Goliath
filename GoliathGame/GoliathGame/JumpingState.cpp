@@ -14,9 +14,9 @@ void JumpingState::handleInput(Player* player, Command* input)
 
 }
 
-void JumpingState::update(Command* input, float deltaTime) 
+void JumpingState::update(Player* player, float deltaTime) 
 {
-	input->execute();
+	
 }
 
 void JumpingState::exit() 

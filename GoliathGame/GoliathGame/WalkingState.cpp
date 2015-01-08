@@ -9,11 +9,12 @@ void WalkingState::enter()
 
 void WalkingState::handleInput(Player* player, Command* input) 
 {
-
+	OnGroundState::handleInput(player, input);
 }
 
-void WalkingState::update(Command* input, float deltaTime) 
+void WalkingState::update(Player* player, float deltaTime) 
 {
+	OnGroundState::update(player, deltaTime);
 }
 
 void WalkingState::exit() 

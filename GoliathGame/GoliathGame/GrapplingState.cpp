@@ -19,7 +19,7 @@ void GrapplingState::handleInput(Player* player, Command* input)
 	}
 }
 
-void GrapplingState::update(Command* input, float deltaTime) 
+void GrapplingState::update(Player* player, float deltaTime) 
 {
 }
 

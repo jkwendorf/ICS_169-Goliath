@@ -9,6 +9,6 @@ public:
 	JumpingState();
 	void enter();
 	void handleInput(Player* player, Command* input);
-	void update(Command* input, float deltaTime);
+	void update(Player* player, float deltaTime);
 	void exit();
 };

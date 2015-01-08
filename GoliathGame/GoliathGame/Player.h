@@ -87,7 +87,7 @@ public:
 	void instantVaultAboveGrappleTile();
 	void interpolateVaultAboveGrappleTile();
 
-	void viewMove(float deltaTime, LookDirection dir) {};
+	void viewMove(float deltaTime, float& viewChanged_, LookDirection dir);
 	void drawUI(sf::RenderWindow& window);
 
 	// VARIABLES
@@ -107,7 +107,8 @@ public:
 	UserInterface* ui;
 
 	sf::View* view;
-	BaseState* state;
+	BaseState* currentState;
+	BaseState* newState;
 	CollisionManager* collisionManager;
 	std::deque<Command*> inputQueue;
 

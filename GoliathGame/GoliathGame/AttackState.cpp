@@ -12,7 +12,7 @@ void AttackState::handleInput(Player* player, Command* input)
 
 }
 
-void AttackState::update(Command* input, float deltaTime) 
+void AttackState::update(Player* player, float deltaTime) 
 {
 }
 
