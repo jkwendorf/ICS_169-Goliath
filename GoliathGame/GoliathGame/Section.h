@@ -13,10 +13,10 @@ class Section
 {
 private:
 	int sectionNum, numOfTiles;
-	int ** grid1;
+	Tile** grid1;
 	
-	sf::Vector2i gDim, offset;
-	sf::Vector2f startPos;
+	sf::Vector2i gDim;
+	sf::Vector2f startPos, offset;
 	std::string pathToText;
 
 	Section();
@@ -25,9 +25,9 @@ private:
                       std::vector<std::string>& tokens,
                       const std::string& delimiters = " ");
 public:
-	Section(int sectionNumber, std::string& s, sf::Vector2i& offset, std::vector<std::shared_ptr<Enemy>> &enemyList);
+	Section(int sectionNumber, std::string& s, sf::Vector2f& offset, std::vector<std::shared_ptr<Enemy>> &enemyList);
 	~Section();
-	sf::Vector2i getOffset();
+	sf::Vector2f getOffset();
 	sf::Vector2i getGridDim();
 	int getWidth();
 	int getHeight();
@@ -37,12 +37,12 @@ public:
 	bool inWindow();
 	bool checkPlayerInGrid(const BaseObject& player);
 
-	std::vector<sf::Vector2i> getIntersectPoints(const BaseObject& rect);
-	std::vector<sf::Vector2i> getIntersectPoints(const sf::Vector2i& p1, const sf::Vector2i& p2);
-	void surroundingRects(const sf::Vector2i& p1, const sf::Vector2i& p2, std::vector<Tile>& nearTiles,
+	std::vector<sf::Vector2f> getIntersectPoints(const BaseObject& rect);
+	std::vector<sf::Vector2f> getIntersectPoints(const sf::Vector2f& p1, const sf::Vector2f& p2);
+	void surroundingRects(const sf::Vector2f& p1, const sf::Vector2f& p2, std::vector<Tile*>& nearTiles,
 		bool checkHorz = true, bool checkVert = true);
-	void checkGrapple(const sf::Vector2i& p1, const sf::Vector2i& p2, std::vector<Tile>& nearTiles);
-	void checkInteractable(const sf::Vector2i& p1, const sf::Vector2i& p2, std::vector<Tile>& nearTiles);
+	void checkGrapple(const sf::Vector2f& p1, const sf::Vector2f& p2, std::vector<Tile*>& nearTiles);
+	void checkInteractable(const sf::Vector2f& p1, const sf::Vector2f& p2, std::vector<Tile*>& nearTiles);
 	void update(float deltaTime);
 	void draw(sf::RenderWindow& w);
 	void print();
