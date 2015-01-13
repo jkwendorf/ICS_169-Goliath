@@ -93,7 +93,7 @@ inline sf::Vector2f moveOutOfTileHorizontally(BaseObject& p, Tile* t)
 	if(p.sprite.getPosition().x < t->left)
 		newPos.x = t->left - (p.sprite.getPosition().x + p.sprite.getGlobalBounds().width/2);
 	// If the player is colliding with the right side of the tile
-	else if(p.sprite.getPosition().x > t->left + t->width)
+	else// if(p.sprite.getPosition().x > t->left + t->width)
 		newPos.x = (t->left + t->width) - (p.sprite.getPosition().x - p.sprite.getGlobalBounds().width/2);
 
 	p.vel.x = 0;

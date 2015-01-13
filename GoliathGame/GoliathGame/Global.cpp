@@ -122,7 +122,7 @@ void Global::SavePlayer() {
 	
 	int i = 0;
 	for (auto& att: playerInventory.attributes()) {
-
+		//std::cout << "asd " << inventory[i] 
 		//std::cout << "Old value: " << att.name() << " " << att.as_int() << std::endl;
 		//att.set_value(1);
 		//std::cout << "New value: " << att.as_int() << std::endl;
