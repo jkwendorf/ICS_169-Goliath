@@ -423,12 +423,12 @@ void Player::moveOutOfTile(Tile* t)
 	float left = (sprite.getPosition().x + sprite.getGlobalBounds().width/2) - t->left, 
 		right = (t->left + t->width) - (sprite.getPosition().x - sprite.getGlobalBounds().width/2), 
 		up = (sprite.getPosition().y + sprite.getGlobalBounds().height/2) - t->top, 
-		down = (t->top + t->height) - (sprite.getPosition().y - sprite.getGlobalBounds().height/2);
+		down = (t->top + t->height) - (sprite.getPosition().y - sprite.getGlobalBounds().height/2); 
 
 	float mini = min(up, down);
 	mini = min(right, mini); 
 	mini = min(left, mini);
-	
+
 	if(mini == left || mini == right)
 		move(moveOutOfTileHorizontally(*this, t));
 	else
