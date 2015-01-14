@@ -121,14 +121,14 @@ void Global::SavePlayer() {
 	pugi::xml_node playerInventory = playerNode.child("PlayerInventory");
 	
 	int i = 0;
-	for (auto& att: playerInventory.attributes()) {
-		//std::cout << "asd " << inventory[i] 
+	for (pugi::xml_node att: playerInventory.children("item")) {
+		//std::cout << "Number amount of "<< att.attribute("name").as_string() << " : " << inventory->checkInventory(att.attribute("name").as_string()) << std::endl;
 		//std::cout << "Old value: " << att.name() << " " << att.as_int() << std::endl;
 		//att.set_value(1);
 		//std::cout << "New value: " << att.as_int() << std::endl;
 
 		//Uncomment this to save PlayerInventory augmenets
-		//att.set_value(PlayerInventory[i]);
+		att.attribute("amount").set_value(inventory->checkInventory(att.attribute("name").as_string()));
 
 	}
 	//doc.save_file(std::cout);
