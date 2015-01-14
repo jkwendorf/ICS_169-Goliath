@@ -75,7 +75,7 @@ inline sf::Vector2f moveOutOfTileVertically(BaseObject& p, Tile* t)
 		newPos.y = t->top - p.sprite.getPosition().y - p.sprite.getGlobalBounds().height/2.f -0.1f;
 	}
 	// If colliding from below
-	else if(t->top < p.sprite.getPosition().y)
+	else// if(t->top < p.sprite.getPosition().y)
 	{			
 		p.vel.y = 0.f;
 		newPos.y = (t->top + t->height) - 
