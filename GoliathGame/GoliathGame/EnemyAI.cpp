@@ -20,11 +20,11 @@ void EnemyAI::executeMovement(Enemy* e, sf::Vector2f pPosition, float deltaTime)
 	if((e->isMovingRight() && e->sprite.getPosition().x - pPosition.x > 0) 
 		|| (!e->isMovingRight() && e->sprite.getPosition().x - pPosition.x < 0))
 	{
-		if(inRange(e, pPosition))
+		/*if(inRange(e, pPosition))
 		{
 			moveToPlayer(e, pPosition, deltaTime);
 		}
-		else normalMove(e, deltaTime);
+		else*/normalMove(e, deltaTime);
 	}
 	else
 	{

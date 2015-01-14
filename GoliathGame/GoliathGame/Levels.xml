@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Game>
-  <Level number="1" tilesheet="BanditTile" size="2">
+  <Level number="1" tilesheet="BanditTile" size="5">
     <Room number="1" size="1"></Room>
     <Room number="2" size="1"></Room>
+    <Room number="3" size="1"></Room>
+    <Room number="4" size="1"></Room>
+    <Room number="5" size="1"></Room>
   </Level>
 </Game>
