@@ -130,7 +130,7 @@ void Player::update(float deltaTime)
 	for(int x = 0; x < 3; x++)
 	{
 		if(!ammo[x].moving)
-			ammo[x].setLocation(sf::Vector2f(sprite.getPosition().x + 250, sprite.getPosition().y - 25));
+			ammo[x].setLocation(sf::Vector2f(sprite.getPosition().x + 300, sprite.getPosition().y - 25));
 		ammo[x].update(deltaTime);
 	}
 	
