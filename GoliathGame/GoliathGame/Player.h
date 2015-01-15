@@ -57,7 +57,7 @@ public:
 	void playerMove(float& deltaTime);
 	void horizontalAcceleration(MovementDirection dir, float& deltaTime);
 	void verticalAcceleration(float& deltaTime);
-	void moveOutOfTile(Tile t);
+	void moveOutOfTile(Tile* t);
 	void instantVaultAboveGrappleTile();
 	void interpolateVaultAboveGrappleTile();
 
@@ -69,6 +69,7 @@ public:
 	float weaponCooldown;
 	float currentCooldown;
 	int weapon;
+	int bottomPoint;
 	HookShot hShot;
 	sf::Vector2f grappleDir, vaultPos;
 
