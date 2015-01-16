@@ -1,14 +1,21 @@
 #include "ButtonManager.h"
 
 ButtonManager::ButtonManager()
-	:startingPos(sf::Vector2f(0,0)), offset(15), buttonDim(sf::Vector2f(300, 100)), current(0)
+	:startingPos(sf::Vector2f(0,0)), offset(15), buttonDim(sf::Vector2f(300, 100)), current(0), canScrollHorizontal(false)
 {
 	masterTexture = nullptr;
 	masterFont = nullptr;
 }
 
 ButtonManager::ButtonManager(sf::Vector2f startingPos, int offset, sf::Vector2f buttonDim, sf::Texture* text, sf::Font* font)
-	:startingPos(startingPos), offset(offset), buttonDim(buttonDim), current(0)
+	:startingPos(startingPos), offset(offset), buttonDim(buttonDim), current(0), canScrollHorizontal(false)
+{
+	masterTexture = text;
+	masterFont = font;
+}
+
+ButtonManager::ButtonManager(sf::Vector2f startingPos, int itemsPerCol, int offset, sf::Vector2f buttonDim, sf::Texture* text, sf::Font* font)
+	:startingPos(startingPos), itemsPerCol(itemsPerCol), offset(offset), buttonDim(buttonDim), current(0), canScrollHorizontal(true)
 {
 	masterTexture = text;
 	masterFont = font;
@@ -24,7 +31,14 @@ ButtonManager::~ButtonManager()
 
 void ButtonManager::createButton(std::string text, std::function<void ()> onPress)
 {
-	buttonList.push_back(new Button(sf::Vector2f(startingPos.x, startingPos.y + buttonList.size()*(buttonDim.y + offset)), text, buttonDim, masterTexture, masterFont, onPress));
+	if(!canScrollHorizontal)
+		buttonList.push_back(new Button(sf::Vector2f(startingPos.x, startingPos.y + buttonList.size()*(buttonDim.y + offset)), text, buttonDim, masterTexture, masterFont, onPress));
+	else
+	{
+		buttonList.push_back(new Button(sf::Vector2f(startingPos.x + (buttonList.size()/itemsPerCol *(buttonDim.x+offset)),
+		startingPos.y + (buttonList.size()%itemsPerCol)*(buttonDim.y + offset)),
+		text, buttonDim, masterTexture, masterFont, onPress));
+	}
 	if(buttonList.size() == 1)
 		buttonList.at(0)->setSelected(true);
 }
@@ -47,6 +61,32 @@ void ButtonManager::scrollDown()
 	if(current >= buttonList.size())
 		current = 0;
 	buttonList.at(current)->setSelected(true);
+}
+
+void ButtonManager::scrollLeft()
+{
+	if(canScrollHorizontal && buttonList.size() > itemsPerCol)
+	{
+		buttonList.at(current)->setSelected(false);
+		current -= itemsPerCol;
+
+		if(current < 0)
+			current = buttonList.size() + current;
+		buttonList.at(current)->setSelected(true);
+	}
+}
+
+void ButtonManager::scrollRight()
+{
+	if(canScrollHorizontal && buttonList.size() > itemsPerCol)
+	{
+		buttonList.at(current)->setSelected(false);
+		current += itemsPerCol;
+
+		if(current >= buttonList.size())
+			current = current - buttonList.size();
+		buttonList.at(current)->setSelected(true);
+	}
 }
 
 void ButtonManager::pressSelectedButton()
