@@ -99,6 +99,7 @@
     <ClCompile Include="HookShot.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Level.cpp" />
+    <ClCompile Include="LevelSelectState.cpp" />
     <ClCompile Include="PauseGameState.cpp" />
     <ClCompile Include="PlayerInventory.cpp" />
     <ClCompile Include="pugixml.cpp" />
@@ -134,6 +135,7 @@
     <ClInclude Include="HookShot.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Level.h" />
+    <ClInclude Include="LevelSelectState.h" />
     <ClInclude Include="Observer.h" />
     <ClInclude Include="PauseGameState.h" />
     <ClInclude Include="PlayerInventory.h" />

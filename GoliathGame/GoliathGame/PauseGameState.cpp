@@ -12,6 +12,7 @@ PauseGameState::PauseGameState(void)
 		bM->createButton("Save Game", [] {});
 		bM->createButton("Options", [] {});
 		bM->createButton("Quit", [&] {setToQuit();});
+		//bM->createButton("Quit", [&] {StateManager::getInstance().changeToState(MAIN_MENU, true);});
 	}
 
 	shouldQuit = false;
