@@ -63,6 +63,7 @@ Enemy::Enemy(sf::String body, float x, float y, float range) :
 	eSword.damage = 20.0f;
 }
 
+//USE THIS CONSTRUCTOR AND NOTHING ELSE
 Enemy::Enemy(sf::String body, float x, float y, float range, float jp, float ms, float tRange) :
 	attackRange(range), health(100.0f), jumpSpeed(-1 * jp), moveSpeed(ms), patrolRange(tRange)
 {
