@@ -12,9 +12,14 @@ Enemy::Enemy(sf::String body, float x, float y) :
 
 	//For testing
 	attackRange = 30;
+	jumpSpeed = -400;
+	patrolRange = 100;
+	moveSpeed = 150;
+	initialPosition = sf::Vector2f(x,y);
 
 	weaponCooldown = 2.0f;
 	currentCooldown = 2.0f;
+
 
 	//ND: Change Player dimensions to whatever floats your boat
 	sprite.setScale( (PLAYER_DIM_X / (float)sprite.getTexture()->getSize().x), (PLAYER_DIM_Y / (float)sprite.getTexture()->getSize().y));
@@ -29,8 +34,38 @@ Enemy::Enemy(sf::String body, float x, float y) :
 	eSword.damage = 20.0f;
 }
 
-Enemy::Enemy(sf::String body, float x, float y, float range) :
-	attackRange(range), health(100.0f)
+Enemy::Enemy(sf::String body, float x, float y, float range) : 
+	health(100.0f), attackRange(range)
+{
+	sprite.setTexture(*TextureManager::GetInstance().retrieveTexture(body));
+	sprite.setPosition(x, y);
+
+	//For testing
+	jumpSpeed = -400;
+	patrolRange = 20;
+	moveSpeed = 250;
+	initialPosition = sf::Vector2f(x,y);
+
+	weaponCooldown = 2.0f;
+	currentCooldown = 2.0f;
+
+
+	//ND: Change Player dimensions to whatever floats your boat
+	sprite.setScale( (PLAYER_DIM_X / (float)sprite.getTexture()->getSize().x), (PLAYER_DIM_Y / (float)sprite.getTexture()->getSize().y));
+	sprite.setOrigin(sprite.getLocalBounds().width/2, sprite.getLocalBounds().height/2);
+
+	for(int x = 0; x < 3; x++)
+	{
+		ammo[x] = Projectile(sprite.getPosition(), sf::Vector2f(0.0,0.0));
+		ammo[x].sprite.setColor(sf::Color(x*50 + 150, 0, 0));
+		ammo[x].damage = 20.0f;
+	}
+	eSword.damage = 20.0f;
+}
+
+//USE THIS CONSTRUCTOR AND NOTHING ELSE
+Enemy::Enemy(sf::String body, float x, float y, float range, float jp, float ms, float tRange) :
+	attackRange(range), health(100.0f), jumpSpeed(-1 * jp), moveSpeed(ms), patrolRange(tRange)
 {
 	sprite.setTexture(*TextureManager::GetInstance().retrieveTexture(body));
 	sprite.setPosition(x, y);
@@ -38,6 +73,9 @@ Enemy::Enemy(sf::String body, float x, float y, float range) :
 	//ND: Change Player dimensions to whatever floats your boat
 	sprite.setScale( (PLAYER_DIM_X / (float)sprite.getTexture()->getSize().x), (PLAYER_DIM_Y / (float)sprite.getTexture()->getSize().y));
 	sprite.setOrigin(sprite.getLocalBounds().width/2, sprite.getLocalBounds().height/2);
+	initialPosition = sf::Vector2f(x,y);
+
+	raycast = Projectile(sprite.getPosition(), sf::Vector2f(0.0,0.0));
 
 	for(int x = 0; x < 3; x++)
 	{

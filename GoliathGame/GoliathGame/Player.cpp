@@ -5,7 +5,7 @@
 Player::Player() 
 	: BaseObject(0), grappleInProgress(false), facingRight(true),running(false), isVaulting(false), 
 	isHanging(false), shouldHang(false), health(Global::GetInstance().basePlayerStats[0]), 
-	stamina(Global::GetInstance().basePlayerStats[1]),	weaponCooldown(Global::GetInstance().basePlayerStats[4])
+	stamina(Global::GetInstance().basePlayerStats[1]),	weaponCooldown(Global::GetInstance().basePlayerStats[4]), bottomPoint(0)
 {
 	vel = sf::Vector2f(0.0,0.0);
 
@@ -330,15 +330,25 @@ void Player::viewCheck(sf::View* view, int width, int height)
 		}
 	}
 
+	//If falling, bottom edge is player position
+	//If not, bottom edge is player's bottom most point
+	//Highest bottom point is TBD
+
+	if(isFalling)
+	{
+		bottomPoint = sprite.getPosition().y - (PLAYER_DIM_Y / 2);
+		//std::cout << bottomPoint << std::endl;
+	}
+
 	if(sprite.getPosition().y - (PLAYER_DIM_Y / 2) < 0 + Global::GetInstance().yOffset)
 	{
 		Global::GetInstance().topLeft.y = sprite.getPosition().y - (PLAYER_DIM_Y / 2) - Global::GetInstance().yOffset;
 		atTopEdge = true;
 		atBottomEdge = false;
 	}
-	else if(sprite.getPosition().y + (PLAYER_DIM_Y / 2) > SCREEN_HEIGHT - Global::GetInstance().yOffset)
+	else if(sprite.getPosition().y - (PLAYER_DIM_Y / 2) > SCREEN_HEIGHT - Global::GetInstance().yOffset)
 	{
-		Global::GetInstance().topLeft.y = sprite.getPosition().y + (PLAYER_DIM_Y / 2) + Global::GetInstance().yOffset - SCREEN_HEIGHT;
+		Global::GetInstance().topLeft.y = sprite.getPosition().y - (PLAYER_DIM_Y / 2) + Global::GetInstance().yOffset - SCREEN_HEIGHT;
 		atTopEdge = false;
 		atBottomEdge = true;
 	}
@@ -375,7 +385,6 @@ void Player::viewCheck(sf::View* view, int width, int height)
 	{
 		if((sprite.getPosition().x + (PLAYER_DIM_X / 2)) > (width - 1))
 		{
-
       		sprite.setPosition((width - 1 - (PLAYER_DIM_X / 2)), sprite.getPosition().y);
 			vel.x = 0.f;
 		}
@@ -452,12 +461,12 @@ void Player::moveOutOfTile(Tile* t)
 	float left = (sprite.getPosition().x + sprite.getGlobalBounds().width/2) - t->left, 
 		right = (t->left + t->width) - (sprite.getPosition().x - sprite.getGlobalBounds().width/2), 
 		up = (sprite.getPosition().y + sprite.getGlobalBounds().height/2) - t->top, 
-		down = (t->top + t->height) - (sprite.getPosition().y - sprite.getGlobalBounds().height/2);
+		down = (t->top + t->height) - (sprite.getPosition().y - sprite.getGlobalBounds().height/2); 
 
 	float mini = min(up, down);
 	mini = min(right, mini); 
 	mini = min(left, mini);
-	
+
 	if(mini == left || mini == right)
 		move(moveOutOfTileHorizontally(*this, t));
 	else

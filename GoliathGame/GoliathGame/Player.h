@@ -96,6 +96,7 @@ public:
 	float weaponCooldown;
 	float currentCooldown;
 	int weapon;
+	int bottomPoint;
 	HookShot hShot;
 	sf::Vector2f grappleDir, vaultPos;
 
