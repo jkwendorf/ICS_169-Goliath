@@ -4,7 +4,7 @@
 
 int main()
 {
-	
+	srand (time (NULL));
 	Global::GetInstance().ParseXML();
 	bool infocus = true;
 	Global::GetInstance().calculateOffset();
@@ -13,7 +13,7 @@ int main()
 	window.setFramerateLimit(FPS);
 	
 	StateManager::getInstance().addState(MAIN_MENU, new MainMenuState(), true);
-	//StateManager::getInstance().addState(LEVEL_SELECT, new LevelSelectState());
+	StateManager::getInstance().addState(LEVEL_SELECT, new LevelSelectState());
 	//StateManager::getInstance().addState(GAME, new GameState());
 	//StateManager::getInstance().addState(END_GAME, new EndGameState());
 

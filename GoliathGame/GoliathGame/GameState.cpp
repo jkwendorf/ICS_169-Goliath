@@ -2,8 +2,8 @@
 #include "PhysicsManager.h"
 #include "StateManager.h"
 
-GameState::GameState(void)
-	:currentScreen(new Level(1)), nextScreen(NULL), screen(LEVEL)
+GameState::GameState(int levelNum, int roomNumber)
+	:currentScreen(new Level(levelNum, roomNumber)), nextScreen(NULL), screen(LEVEL)
 {
 	shouldQuit = false;
 }

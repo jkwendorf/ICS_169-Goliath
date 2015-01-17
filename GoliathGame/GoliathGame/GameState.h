@@ -20,7 +20,7 @@ enum SCREENENUM
 class GameState : public State
 {
 public:
-	GameState(void);
+	GameState(int levelNum, int roomNumber);
 	virtual ~GameState(void);
 	void DeleteState();
 	void update(float deltaTime);

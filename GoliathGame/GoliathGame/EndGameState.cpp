@@ -8,7 +8,7 @@ EndGameState::EndGameState(void)
 	if(f->loadFromFile("media/fonts/arial.ttf"))
 	{
 		bM = new ButtonManager(sf::Vector2f(SCREEN_WIDTH/2 - 100, SCREEN_HEIGHT/4 - 33), 15, sf::Vector2f(200, 66), TextureManager::GetInstance().retrieveTexture("ButtonTest"), f); 
-		bM->createButton("Retry", [] {StateManager::getInstance().addState(GAME, new GameState(), true);});
+		//bM->createButton("Retry", [] {StateManager::getInstance().addState(GAME, new GameState(), true);});
 		bM->createButton("Quit", [&] {setToQuit();});
 	}
 	

@@ -108,6 +108,7 @@
     <ClCompile Include="JumpCommand.cpp" />
     <ClCompile Include="JumpingState.cpp" />
     <ClCompile Include="Level.cpp" />
+    <ClCompile Include="LevelSelectState.cpp" />
     <ClCompile Include="LookCommand.cpp" />
     <ClCompile Include="LookingState.cpp" />
     <ClCompile Include="MoveCommand.cpp" />
@@ -162,6 +163,7 @@
     <ClInclude Include="JumpCommand.h" />
     <ClInclude Include="JumpingState.h" />
     <ClInclude Include="Level.h" />
+    <ClInclude Include="LevelSelectState.h" />
     <ClInclude Include="LookCommand.h" />
     <ClInclude Include="LookingState.h" />
     <ClInclude Include="MoveCommand.h" />

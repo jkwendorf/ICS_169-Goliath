@@ -192,6 +192,9 @@
     <ClCompile Include="LookingState.cpp">
       <Filter>Source Files\Player\Player States</Filter>
     </ClCompile>
+    <ClCompile Include="LevelSelectState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="State.h">
@@ -373,6 +376,9 @@
     </ClInclude>
     <ClInclude Include="LookingState.h">
       <Filter>Header Files\Player\Player States</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelSelectState.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
