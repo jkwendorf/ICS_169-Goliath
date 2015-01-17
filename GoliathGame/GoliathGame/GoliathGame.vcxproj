@@ -159,6 +159,7 @@
     <ClInclude Include="Weapon.h" />
   </ItemGroup>
   <ItemGroup>
+    <Xml Include="EnemyAttributes.xml" />
     <Xml Include="Levels.xml">
       <SubType>Designer</SubType>
     </Xml>

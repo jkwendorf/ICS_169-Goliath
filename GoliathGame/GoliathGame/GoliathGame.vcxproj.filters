@@ -265,5 +265,8 @@
     <Xml Include="PlayerStats.xml">
       <Filter>Resource Files</Filter>
     </Xml>
+    <Xml Include="EnemyAttributes.xml">
+      <Filter>Resource Files</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

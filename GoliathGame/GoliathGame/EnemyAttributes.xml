@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<EnemyAttributes>
+  <AttackRange value="30"></AttackRange>
+  <JumpSpeed value="-400"></JumpSpeed>
+  <PatrolRange value="100"></PatrolRange>
+  <MoveSpeed value="150"></MoveSpeed>
+</EnemyAttributes>
