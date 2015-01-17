@@ -16,6 +16,7 @@ void HangingState::handleInput(Player* player, Command* input)
 
 void HangingState::update(Player* player, float deltaTime) 
 {
+
 }
 
 void HangingState::exit() 
