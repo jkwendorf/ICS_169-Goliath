@@ -8,6 +8,7 @@
 #include "PlayerInventory.h"
 #include <memory>
 
+class Player;
 
 class CollisionManager : public Subject
 {

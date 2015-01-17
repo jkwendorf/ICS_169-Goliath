@@ -10,6 +10,7 @@
 #include "EnemyAI.h"
 #include <memory>
 #include "Town.h"
+#include "JumpingState.h"
 
 
 class Level : public BaseGameScreen
@@ -40,5 +41,5 @@ public:
 	void update(float deltaTime);
 	void draw(sf::RenderWindow& window);
 	void DeleteLevel();
-	void CheckChangeScreen(BaseGameScreen*& newScreen);
+	void CheckChangeScreen(BaseGameScreen* newScreen);
 };
