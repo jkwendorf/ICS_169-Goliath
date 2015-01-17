@@ -10,6 +10,7 @@ class Enemy : public BaseObject
 public:
 	Enemy();
 	Enemy(sf::String body, float x, float y);
+	Enemy(sf::String body, float x, float y, float range, float jp, float ms, float tRange);
 	Enemy(sf::String body, float x, float y, float range);
 	~Enemy();
 
@@ -27,6 +28,11 @@ public:
 
 	Projectile ammo[3];
 	Sword eSword;
+	float jumpSpeed;
+	float moveSpeed;
+	Projectile raycast;
+	int patrolRange;
+	sf::Vector2f initialPosition;
 
 private:
 	int weapon;
@@ -39,6 +45,5 @@ private:
 	void meleeAttack(float deltaTime);
 	bool attacked(); //To be more defined to run away from player if being attacked
 	bool destroyed; //NEED TO FIGURE OUT ENEMY DESTRUCTION
-
 
 };

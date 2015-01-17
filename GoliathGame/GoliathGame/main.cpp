@@ -12,9 +12,10 @@ int main()
 	// JW: Setting the framerate to 30, but this should be set by a global variable
 	window.setFramerateLimit(FPS);
 	
-	StateManager::getInstance().addState(GAME, new GameState(), true);
-	StateManager::getInstance().addState(MAIN_MENU, new MainMenuState());
-	StateManager::getInstance().addState(END_GAME, new EndGameState());
+	StateManager::getInstance().addState(MAIN_MENU, new MainMenuState(), true);
+	StateManager::getInstance().addState(LEVEL_SELECT, new LevelSelectState());
+	//StateManager::getInstance().addState(GAME, new GameState());
+	//StateManager::getInstance().addState(END_GAME, new EndGameState());
 
 	float maxTime = 1.f/FPS;
 	sf::Clock deltaTimer;

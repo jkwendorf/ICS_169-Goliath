@@ -9,6 +9,6 @@
 	<PlayerInventory>
 		<item name="augment1" amount="1" />
 		<item name="augment2" amount="0" />
-		<item name="augment3" amount="1" />
+		<item name="augment3" amount="3" />
 	</PlayerInventory>
 </Player>
