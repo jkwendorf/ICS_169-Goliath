@@ -51,7 +51,7 @@ void Player::update(float deltaTime)
 	{
 		hShot.update(deltaTime);
 		if(sqrt(pow((std::abs(hShot.sprite.getPosition().x - sprite.getPosition().x)),2) + 
-			pow((std::abs(hShot.sprite.getPosition().y - sprite.getPosition().y)),2)) >= 275 || hShot.currentCooldown >= hShot.weaponCooldown)
+			pow((std::abs(hShot.sprite.getPosition().y - sprite.getPosition().y)),2)) >= hShot.grappleLength || hShot.currentCooldown >= hShot.weaponCooldown)
 		{
 			hShot.grappleInProgress = false;
 			hShot.hookedOnSomething = false;
