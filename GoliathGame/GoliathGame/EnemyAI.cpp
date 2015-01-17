@@ -17,10 +17,10 @@ void EnemyAI::executeMovement(Enemy* e, sf::Vector2f pPosition, float deltaTime)
 	gravity(e, deltaTime);
 
 	//if enemy isn't in range of player, handle normally
-	if((e->isMovingRight() && e->sprite.getPosition().x - pPosition.x > 0) 
+	/*if((e->isMovingRight() && e->sprite.getPosition().x - pPosition.x > 0) 
 		|| (!e->isMovingRight() && e->sprite.getPosition().x - pPosition.x < 0))
 	{
-		if(inRange(e, pPosition))
+		/*if(inRange(e, pPosition))
 		{
 			moveToPlayer(e, pPosition, deltaTime);
 		}
@@ -28,8 +28,9 @@ void EnemyAI::executeMovement(Enemy* e, sf::Vector2f pPosition, float deltaTime)
 	}
 	else
 	{
-		normalMove(e, deltaTime);
-	}
+		
+	}*/
+	normalMove(e, deltaTime);
 }
 
 void EnemyAI::gravity(Enemy* e, float deltaTime)
@@ -48,21 +49,41 @@ void EnemyAI::gravity(Enemy* e, float deltaTime)
 
 void EnemyAI::normalMove(Enemy* e, float deltaTime)
 {
+	float movement;
 	if(e->isMovingRight())
 	{
-		e->move(moveHorizontally(*e, RIGHT, false, deltaTime)); 
+		movement = e->moveSpeed * deltaTime;
+		e->move(movement, 0);
+		//e->move(moveHorizontally(*e, RIGHT, false, deltaTime / e->moveSpeed)); 
+
 		if(colMan->playerCollisionDetection(e))
 		{
 			e->move(moveOutOfTileHorizontally(*e, colMan->getCollidedTile(*e)));
+			//e->changeMove();
+
+			e->vel.y = e->jumpSpeed;
+			e->isFalling = true;
+		}
+		else if(e->sprite.getPosition().x > e->initialPosition.x + (e->patrolRange / 2))
+		{
 			e->changeMove();
 		}
 	}
 	else
 	{
-		e->move(moveHorizontally(*e, LEFT, false, deltaTime));
+		movement = -1 * e->moveSpeed * deltaTime;
+		e->move(movement, 0);
+		//e->move(moveHorizontally(*e, LEFT, false, deltaTime / e->moveSpeed));
 		if(colMan->playerCollisionDetection(e))
 		{
 			e->move(moveOutOfTileHorizontally(*e, colMan->getCollidedTile(*e)));
+			//e->changeMove();
+
+			e->vel.y = e->jumpSpeed;
+			e->isFalling = true;
+		}
+		else if (e->sprite.getPosition().x < e->initialPosition.x - e->patrolRange / 2)
+		{
 			e->changeMove();
 		}
 	}
@@ -86,12 +107,12 @@ void EnemyAI::moveToPlayer(Enemy* e, sf::Vector2f pPosition, float deltaTime)
 		if(playerOnLeft(e, pPosition))
 		{
 			e->changeMove();
-			e->move(moveHorizontally(*e, LEFT, false, deltaTime)); 
+			e->move(moveHorizontally(*e, LEFT, false, deltaTime / e->moveSpeed)); 
 		}
 		else 
 		{
 			e->changeMove();
-			e->move(moveHorizontally(*e, RIGHT, false, deltaTime)); 
+			e->move(moveHorizontally(*e, RIGHT, false, deltaTime / e->moveSpeed)); 
 		}
 	}
 
