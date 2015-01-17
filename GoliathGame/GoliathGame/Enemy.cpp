@@ -9,12 +9,17 @@ Enemy::Enemy(sf::String body, float x, float y) :
 {
 	sprite.setTexture(*TextureManager::GetInstance().retrieveTexture(body));
 	sprite.setPosition(x, y);
-
 	//For testing
-	attackRange = 30;
-	jumpSpeed = -400;
-	patrolRange = 100;
-	moveSpeed = 150;
+	//attackRange = 30;
+	//jumpSpeed = -400;
+	//patrolRange = 100;
+	//moveSpeed = 150;
+
+	attackRange = Global::GetInstance().enemyAttributes[0];
+	jumpSpeed = Global::GetInstance().enemyAttributes[1];
+	patrolRange = Global::GetInstance().enemyAttributes[2];
+	moveSpeed = Global::GetInstance().enemyAttributes[3];
+
 	initialPosition = sf::Vector2f(x,y);
 
 	weaponCooldown = 2.0f;
