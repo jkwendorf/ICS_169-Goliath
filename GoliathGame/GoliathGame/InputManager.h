@@ -4,6 +4,8 @@
 #include "Global.h"
 #include "Player.h"
 #include "CollisionManager.h"
+#include "StaticCommandHolder.h"
+
 
 class InputManager
 {
@@ -39,5 +41,6 @@ public:
 	float inputCooldown, currentInputCooldown;
 	float weaponSwitchCooldown, currentWeaponSwitchCooldown;
 	float viewDifference, viewChanged;
+	float grappleCooldown, currentGrappleCooldown;
 	
 };

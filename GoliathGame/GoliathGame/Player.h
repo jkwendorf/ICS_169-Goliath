@@ -1,11 +1,30 @@
 #pragma once
+
+#include <deque>
+
 #include "BaseObject.h"
+#include "BaseState.h"
 #include "HookShot.h"
 #include "Projectile.h"
 #include "UserInterface.h"
 #include "Tile.h"
 #include "Sword.h"
+#include "CollisionManager.h"
+#include "Command.h"
+
 //#include "CrossBow.h"
+
+#ifndef LOOK_DIR
+#define LOOK_DIR
+
+enum LookDirection
+{
+	UP = -1,
+	DOWN = 1,
+
+};
+
+#endif // MOVE_DIR
 
 #ifndef MOVE_DIR
 #define MOVE_DIR
@@ -29,12 +48,17 @@ enum WeaponEnum
 
 enum SoundEnum
 {
-	ATTACK = 0,
-	JUMP = 1,
-	SHOOT = 2,
-	TAKEDMG = 3,
-	HOOK = 4
+	ATTACKSOUND = 0,
+	JUMPSOUND = 1,
+	SHOOTSOUND = 2,
+	TAKEDMGSOUND = 3,
+	HOOKSOUND = 4
 };
+
+class BaseState;
+class JumpingState;
+class Command;
+class CollisionManager;
 
 class Player : public BaseObject
 {
@@ -42,7 +66,9 @@ public:
 	// METHODS AND FUNCTIONS
 	Player();
 	~Player();
+	void init(CollisionManager* collisionManager_, BaseState* startState);
 
+	void handleInput();
 	void update(float deltaTime);
 	void attack();
 	void move(float x, float y);
@@ -57,10 +83,11 @@ public:
 	void playerMove(float& deltaTime);
 	void horizontalAcceleration(MovementDirection dir, float& deltaTime);
 	void verticalAcceleration(float& deltaTime);
-	void moveOutOfTile(Tile t);
+	void moveOutOfTile(Tile* t);
 	void instantVaultAboveGrappleTile();
 	void interpolateVaultAboveGrappleTile();
 
+	void viewMove(float deltaTime, float& viewChanged_, LookDirection dir);
 	void drawUI(sf::RenderWindow& window);
 
 	// VARIABLES
@@ -78,6 +105,12 @@ public:
 	Sword playerSword;
 	bool atTopEdge, atBottomEdge, atTheBottom;
 	UserInterface* ui;
+
+	sf::View* view;
+	BaseState* currentState;
+	BaseState* newState;
+	CollisionManager* collisionManager;
+	std::deque<Command*> inputQueue;
 
 private:	
 	sf::Sound soundEffects[5];

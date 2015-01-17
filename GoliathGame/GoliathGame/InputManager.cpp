@@ -19,6 +19,8 @@ InputManager::InputManager()
 	currentWeaponSwitchCooldown = 1.0;
 	weaponSwitchCooldown = 1.0;
 
+	currentGrappleCooldown = .5;
+	grappleCooldown = .5;
 	
 	viewChanged = 0;
 }
@@ -50,7 +52,8 @@ void InputManager::update(Player& s, sf::View* v, float deltaTime)
 	//utility[0] = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift);
 	
 	s.running = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Joystick::getAxisPosition(0, sf::Joystick::Z) > 25;
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || sf::Joystick::isButtonPressed(0, 0))
+	utility[1] = (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || sf::Joystick::isButtonPressed(0, 0)) && !utility[1] ? true : false;
+	/*
 	{
 		if(!s.isHanging && !s.isFalling)
 			s.jump();
@@ -60,6 +63,7 @@ void InputManager::update(Player& s, sf::View* v, float deltaTime)
 			//s.instantVaultAboveGrappleTile();
 		}
 	}
+	*/
 	utility[2] = (sf::Mouse::isButtonPressed(sf::Mouse::Right) || sf::Joystick::isButtonPressed(0, 1)) && !utility[2] ? true : false;
 	utility[3] = (sf::Mouse::isButtonPressed(sf::Mouse::Left) || sf::Joystick::isButtonPressed(0, 2)) && !utility[3] ? true : false;
 	utility[4] = (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || sf::Joystick::isButtonPressed(0, 3)) && !utility[4] ? true : false;
@@ -71,6 +75,7 @@ void InputManager::update(Player& s, sf::View* v, float deltaTime)
 
 	currentInputCooldown += deltaTime;
 	currentWeaponSwitchCooldown += deltaTime;
+	currentGrappleCooldown += deltaTime;
 }
 
 void InputManager::playerMove(Player& player, float deltaTime)
@@ -112,8 +117,8 @@ void InputManager::playerMove(Player& player, float deltaTime)
 	{
 		 if((!player.hShot.grappleInProgress || !player.hShot.hookedOnSomething) && !player.isHanging)
 		 {
-			 if(player.running)
-				 player.stamina--;
+			if(player.running)
+				player.stamina--;
 			player.horizontalAcceleration(RIGHT, deltaTime);
 			player.facingRight = true;
 		 }
@@ -121,21 +126,37 @@ void InputManager::playerMove(Player& player, float deltaTime)
 	else
 		player.horizontalAcceleration(STILL, deltaTime);
 
+	if(utility[1])
+	{
+		if(!player.isHanging && !player.isFalling)
+			player.jump();
+		else if(player.isHanging && !player.isVaulting)
+		{
+			player.interpolateVaultAboveGrappleTile();
+			//s.instantVaultAboveGrappleTile();
+		}
+	}
 	if(utility[2])
 	{
-		if(!player.hShot.isDisabled)
+		if(currentGrappleCooldown >= grappleCooldown)
 		{
-			if(!player.isHanging)
+			if(!player.hShot.isDisabled)
 			{
-				if(!player.grappleInProgress && !player.isHanging && !player.isVaulting)
-					player.grapple();
-				else
-					player.currentCooldown += deltaTime;
-			}
-			else if(!player.isVaulting)
-			{
-				player.isHanging = false;
-				player.hShot.isDisabled = true;
+				if(!player.isHanging)
+				{
+					if(!player.grappleInProgress && !player.isHanging && !player.isVaulting)
+					{
+						player.grapple();
+						currentGrappleCooldown = 0;
+					}
+					else
+						player.currentCooldown += deltaTime;
+				}
+				else if(!player.isVaulting)
+				{
+					player.isHanging = false;
+					player.hShot.isDisabled = true;
+				}
 			}
 		}
 	}
@@ -160,7 +181,7 @@ void InputManager::playerMove(Player& player, float deltaTime)
 			if(player.weapon == CROSSBOW)
 			{
 				player.weapon = SWORD;
-				inputCooldown = 1.50;
+				inputCooldown = 1.25;
 				std::cout << "Sword switch" << std::endl;
 			}
 			else if(player.weapon == SWORD)
