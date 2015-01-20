@@ -30,6 +30,7 @@ void EnemyAI::executeMovement(Enemy* e, sf::Vector2f pPosition, float deltaTime)
 	{
 		
 	}*/
+
 	normalMove(e, deltaTime);
 }
 

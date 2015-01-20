@@ -218,6 +218,28 @@ void Level::update(float deltaTime)
 						collisionManager->checkEnemyBulletToPlayer(po, &p);
 					}
 				}
+
+				Projectile& ray = e.get()->raycast;
+
+				if(ray.moving)
+				{
+					currentRoom->GetCollidableTiles(ray, sf::Vector2f(ray.sprite.getTexture()->getSize().x/10,
+							ray.sprite.getTexture()->getSize().y/10), proTile);
+
+					std::cout << "RAY POSITION: " << ray.sprite.getPosition().x << std::endl;
+						if(proTile.size() > 0)
+						{
+							collisionManager->setNearByTiles(proTile);
+						}
+
+						if(collisionManager->playerCollisionDetection(&ray))
+						{
+							std::cout << "RAY HIT WALL" << std::endl;
+							ray.moving = false;
+						}
+
+						collisionManager->checkEnemyBulletToPlayer(ray, &p);
+				}
 			}
 		}
 

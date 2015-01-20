@@ -21,6 +21,7 @@ Enemy::Enemy(sf::String body, float x, float y) :
 	moveSpeed = Global::GetInstance().enemyAttributes[3];
 
 	initialPosition = sf::Vector2f(x,y);
+	raycast = Projectile(sprite.getPosition(), sf::Vector2f(0.0,0.0));
 
 	weaponCooldown = 2.0f;
 	currentCooldown = 2.0f;
@@ -103,7 +104,23 @@ void Enemy::update(float deltaTime)
 			ammo[x].setLocation(sprite.getPosition());
 		ammo[x].update(deltaTime);
 	}
+
 	eSword.update(deltaTime);
+
+	if(!raycast.moving)
+	{
+		if(isMovingRight())
+		{
+			raycast.velocity.x = 10.0f;
+		}
+		else
+		{
+			raycast.velocity.x = -10.0f;
+		}
+		raycast.moving = true;
+	}
+
+	raycast.update(deltaTime);
 }
 
 void Enemy::draw(sf::RenderWindow& window)
@@ -120,6 +137,10 @@ void Enemy::draw(sf::RenderWindow& window)
 			}
 		}
 		eSword.draw(window);
+		if(raycast.moving)
+		{
+			raycast.draw(window);
+		}
 	}
 }
 
