@@ -85,20 +85,34 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="AttackCommand.cpp" />
+    <ClCompile Include="AttackState.cpp" />
     <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="BaseObject.cpp" />
     <ClCompile Include="Boss.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="ButtonManager.cpp" />
+    <ClCompile Include="ClimbCommand.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="EndGameState.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyAI.cpp" />
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="Global.cpp" />
+    <ClCompile Include="GrappleCommand.cpp" />
+    <ClCompile Include="GrapplingState.cpp" />
+    <ClCompile Include="HangingState.cpp" />
     <ClCompile Include="HookShot.cpp" />
+    <ClCompile Include="IdleState.cpp" />
     <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="JumpCommand.cpp" />
+    <ClCompile Include="JumpingState.cpp" />
     <ClCompile Include="Level.cpp" />
+    <ClCompile Include="LevelSelectState.cpp" />
+    <ClCompile Include="LookCommand.cpp" />
+    <ClCompile Include="LookingState.cpp" />
+    <ClCompile Include="MoveCommand.cpp" />
+    <ClCompile Include="OnGroundState.cpp" />
     <ClCompile Include="PauseGameState.cpp" />
     <ClCompile Include="PlayerInventory.cpp" />
     <ClCompile Include="pugixml.cpp" />
@@ -107,23 +121,32 @@
     <ClCompile Include="MainMenuState.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Projectile.cpp" />
+    <ClCompile Include="RunCommand.cpp" />
+    <ClCompile Include="RunningState.cpp" />
     <ClCompile Include="Section.cpp" />
     <ClCompile Include="StateManager.cpp" />
+    <ClCompile Include="SwitchWeaponCommand.cpp" />
     <ClCompile Include="Sword.cpp" />
     <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="Town.cpp" />
     <ClCompile Include="UserInterface.cpp" />
+    <ClCompile Include="WalkingState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
+    <ClInclude Include="AttackCommand.h" />
+    <ClInclude Include="AttackState.h" />
     <ClInclude Include="AudioManager.h" />
     <ClInclude Include="BaseGameScreen.h" />
     <ClInclude Include="BaseObject.h" />
+    <ClInclude Include="BaseState.h" />
     <ClInclude Include="Boss.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="ButtonManager.h" />
+    <ClInclude Include="ClimbCommand.h" />
     <ClInclude Include="CollisionManager.h" />
+    <ClInclude Include="Command.h" />
     <ClInclude Include="Defines.h" />
     <ClInclude Include="EndGameState.h" />
     <ClInclude Include="Enemy.h" />
@@ -131,10 +154,21 @@
     <ClInclude Include="Events.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="Global.h" />
+    <ClInclude Include="GrappleCommand.h" />
+    <ClInclude Include="GrapplingState.h" />
+    <ClInclude Include="HangingState.h" />
     <ClInclude Include="HookShot.h" />
+    <ClInclude Include="IdleState.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="JumpCommand.h" />
+    <ClInclude Include="JumpingState.h" />
     <ClInclude Include="Level.h" />
+    <ClInclude Include="LevelSelectState.h" />
+    <ClInclude Include="LookCommand.h" />
+    <ClInclude Include="LookingState.h" />
+    <ClInclude Include="MoveCommand.h" />
     <ClInclude Include="Observer.h" />
+    <ClInclude Include="OnGroundState.h" />
     <ClInclude Include="PauseGameState.h" />
     <ClInclude Include="PlayerInventory.h" />
     <ClInclude Include="pugiconfig.hpp" />
@@ -143,8 +177,13 @@
     <ClInclude Include="PhysicsManager.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Projectile.h" />
+    <ClInclude Include="RunCommand.h" />
+    <ClInclude Include="RunningState.h" />
     <ClInclude Include="Section.h" />
+    <ClInclude Include="StaticCommandHolder.h" />
+    <ClInclude Include="StaticStateHolder.h" />
     <ClInclude Include="Subject.h" />
+    <ClInclude Include="SwitchWeaponCommand.h" />
     <ClInclude Include="Sword.h" />
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="MainMenuState.h" />
@@ -154,9 +193,11 @@
     <ClInclude Include="Town.h" />
     <ClInclude Include="UserInterface.h" />
     <ClInclude Include="Utility.h" />
+    <ClInclude Include="WalkingState.h" />
     <ClInclude Include="Weapon.h" />
   </ItemGroup>
   <ItemGroup>
+    <Xml Include="EnemyAttributes.xml" />
     <Xml Include="Levels.xml">
       <SubType>Designer</SubType>
     </Xml>
@@ -164,6 +205,10 @@
       <SubType>Designer</SubType>
     </Xml>
     <Xml Include="Sounds.xml" />
+    <Xml Include="PlayerAttributes.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

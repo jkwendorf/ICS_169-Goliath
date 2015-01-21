@@ -11,14 +11,22 @@
 
 #define TERMINAL_VELOCITY 940
 #define JUMP_SPEED -820
+<<<<<<< HEAD
 #define GRAVITY 2000 //Every 800 is one square
 #define SPEED 400//450 // Three squares per second
 #define MOVE_ACCEL 832 // Accelerate in a fourth of a second
 #define BOOST 128 // Five squares per second
 #define GRAPPLE_SPEED 1000
+=======
+#define GRAVITY 1600
+//#define SPEED 500 // Three squares per second
+//#define MOVE_ACCEL 768 // Accelerate in a fourth of a second
+//#define BOOST 128 // Five squares per second
+//#define GRAPPLE_SPEED 1000
+>>>>>>> 2417d8949d2eeafec90fa4438a566c64467cde9d
 
 #ifndef MOVE_DIR
-#define MOVE_DIR
+#define MOVE_DIRS
 
 enum MovementDirection
 {
@@ -54,9 +62,9 @@ inline sf::Vector2f moveHorizontally(BaseObject& b, MovementDirection dir, bool 
 	sf::Vector2f dis;
 
 	if(sprint)
-		dis.x = dir*SPEED*BOOST*deltaTime;
+		dis.x = dir*b.moveSpeed*b.boostSpeed*deltaTime;
 	else
-		dis.x = dir*SPEED*deltaTime;
+		dis.x = dir*b.moveSpeed*deltaTime;
 
 	dis.y = 0.f;
 
@@ -104,7 +112,7 @@ inline sf::Vector2f moveOutOfTileHorizontally(BaseObject& p, Tile* t)
 
 inline void grappleHookMove(Player& p, float& deltaTime)
 {
-	sf::Vector2f moveAmount(p.grappleDir*(deltaTime*GRAPPLE_SPEED));
+	sf::Vector2f moveAmount(p.grappleDir*(deltaTime*p.grappleSpeed));
 
 	float length, maxDistance = distance(p.hShot.grappleLocation, p.sprite.getPosition());
 	norm(moveAmount, length);

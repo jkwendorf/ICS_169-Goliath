@@ -5,6 +5,7 @@
 #include "MainMenuState.h"
 #include "EndGameState.h"
 #include "PauseGameState.h"
+#include "LevelSelectState.h"
 
 enum StateEnum
 {
@@ -12,6 +13,7 @@ enum StateEnum
 	GAME,
 	TRANSITION,
 	PAUSE_GAME,
+	LEVEL_SELECT,
 	END_GAME
 };
 

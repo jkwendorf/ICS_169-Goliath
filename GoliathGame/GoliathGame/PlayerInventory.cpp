@@ -24,8 +24,11 @@ void PlayerInventory::onNotify(const BaseObject& entity, Util::Events event)
 	case Util::Events::PICK_UP_ITEM:
 		if (entity.objectNum == 0)
 		{
+			
 			std::map<std::string, int>::iterator item = inventory.begin();
-			std::advance( item, std::rand() % inventory.size() );
+			int temp = std::rand() % inventory.size();
+			std::cout << temp << std::endl;
+			std::advance( item,  temp);
 			updateInventory(item->first, 1); 
 			gainItem.play();
 		}

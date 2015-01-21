@@ -13,10 +13,10 @@ public:
 	}
 
 	sf::SoundBuffer* retrieveSound(std::string& sound);
-
 private:
 	AudioManager() {};
 	~AudioManager();
+	
 
 	AudioManager(const AudioManager&);
 	AudioManager& operator =(const AudioManager&);

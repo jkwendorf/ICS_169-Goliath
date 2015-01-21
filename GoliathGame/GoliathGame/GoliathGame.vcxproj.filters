@@ -37,6 +37,18 @@
     <Filter Include="Source Files\Managers">
       <UniqueIdentifier>{525c4f53-446c-4d8a-bb58-83647d1eef03}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Player\Player States">
+      <UniqueIdentifier>{07472c1a-caa4-4f24-aebc-b4e0774f27a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Commands">
+      <UniqueIdentifier>{be83593d-3932-4e06-a6db-f63036278532}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Commands">
+      <UniqueIdentifier>{5afa65bd-98cf-4650-a6a1-b7957b54cc32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Player\Player States">
+      <UniqueIdentifier>{f734605d-858e-4e14-a243-02bbc0cea473}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -78,9 +90,6 @@
     <ClCompile Include="Level.cpp">
       <Filter>Source Files\Level Stuff</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="EnemyAI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -95,9 +104,6 @@
     </ClCompile>
     <ClCompile Include="Boss.cpp">
       <Filter>Source Files\Level Stuff</Filter>
-    </ClCompile>
-    <ClCompile Include="AudioManager.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PauseGameState.cpp">
       <Filter>Source Files</Filter>
@@ -129,6 +135,66 @@
     <ClCompile Include="TextureManager.cpp">
       <Filter>Source Files\Managers</Filter>
     </ClCompile>
+    <ClCompile Include="UserInterface.cpp">
+      <Filter>Source Files\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioManager.cpp">
+      <Filter>Source Files\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="MoveCommand.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="JumpCommand.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="GrappleCommand.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="AttackCommand.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="SwitchWeaponCommand.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="RunCommand.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="LookCommand.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="ClimbCommand.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="IdleState.cpp">
+      <Filter>Source Files\Player\Player States</Filter>
+    </ClCompile>
+    <ClCompile Include="OnGroundState.cpp">
+      <Filter>Source Files\Player\Player States</Filter>
+    </ClCompile>
+    <ClCompile Include="WalkingState.cpp">
+      <Filter>Source Files\Player\Player States</Filter>
+    </ClCompile>
+    <ClCompile Include="GrapplingState.cpp">
+      <Filter>Source Files\Player\Player States</Filter>
+    </ClCompile>
+    <ClCompile Include="JumpingState.cpp">
+      <Filter>Source Files\Player\Player States</Filter>
+    </ClCompile>
+    <ClCompile Include="RunningState.cpp">
+      <Filter>Source Files\Player\Player States</Filter>
+    </ClCompile>
+    <ClCompile Include="HangingState.cpp">
+      <Filter>Source Files\Player\Player States</Filter>
+    </ClCompile>
+    <ClCompile Include="AttackState.cpp">
+      <Filter>Source Files\Player\Player States</Filter>
+    </ClCompile>
+    <ClCompile Include="LookingState.cpp">
+      <Filter>Source Files\Player\Player States</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelSelectState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="State.h">
@@ -149,20 +215,8 @@
     <ClInclude Include="BaseObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="HookShot.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="InputManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Weapon.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Section.h">
       <Filter>Header Files\Level Stuff</Filter>
-    </ClInclude>
-    <ClInclude Include="Projectile.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Enemy.h">
       <Filter>Header Files</Filter>
@@ -189,9 +243,6 @@
       <Filter>Header Files\Level Stuff</Filter>
     </ClInclude>
     <ClInclude Include="EnemyAI.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Sword.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Boss.h">
@@ -248,6 +299,87 @@
     <ClInclude Include="TextureManager.h">
       <Filter>Header Files\Managers</Filter>
     </ClInclude>
+    <ClInclude Include="InputManager.h">
+      <Filter>Header Files\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="OnGroundState.h">
+      <Filter>Header Files\Player\Player States</Filter>
+    </ClInclude>
+    <ClInclude Include="Command.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveCommand.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="JumpCommand.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectile.h">
+      <Filter>Header Files\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Sword.h">
+      <Filter>Header Files\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon.h">
+      <Filter>Header Files\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="HookShot.h">
+      <Filter>Header Files\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="GrappleCommand.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="ClimbCommand.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="AttackCommand.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="SwitchWeaponCommand.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="RunCommand.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="LookCommand.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="WalkingState.h">
+      <Filter>Header Files\Player\Player States</Filter>
+    </ClInclude>
+    <ClInclude Include="JumpingState.h">
+      <Filter>Header Files\Player\Player States</Filter>
+    </ClInclude>
+    <ClInclude Include="GrapplingState.h">
+      <Filter>Header Files\Player\Player States</Filter>
+    </ClInclude>
+    <ClInclude Include="IdleState.h">
+      <Filter>Header Files\Player\Player States</Filter>
+    </ClInclude>
+    <ClInclude Include="HangingState.h">
+      <Filter>Header Files\Player\Player States</Filter>
+    </ClInclude>
+    <ClInclude Include="AttackState.h">
+      <Filter>Header Files\Player\Player States</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticStateHolder.h">
+      <Filter>Header Files\Player\Player States</Filter>
+    </ClInclude>
+    <ClInclude Include="RunningState.h">
+      <Filter>Header Files\Player\Player States</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticCommandHolder.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseState.h">
+      <Filter>Header Files\Player\Player States</Filter>
+    </ClInclude>
+    <ClInclude Include="LookingState.h">
+      <Filter>Header Files\Player\Player States</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelSelectState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Levels.xml">
@@ -259,5 +391,14 @@
     <Xml Include="PlayerStats.xml">
       <Filter>Resource Files</Filter>
     </Xml>
+    <Xml Include="EnemyAttributes.xml">
+      <Filter>Resource Files</Filter>
+    </Xml>
+    <Xml Include="PlayerAttributes.xml">
+      <Filter>Resource Files</Filter>
+    </Xml>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

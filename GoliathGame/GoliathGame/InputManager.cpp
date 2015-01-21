@@ -52,7 +52,8 @@ void InputManager::update(Player& s, sf::View* v, float deltaTime)
 	//utility[0] = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift);
 	
 	s.running = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Joystick::getAxisPosition(0, sf::Joystick::Z) > 25;
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || sf::Joystick::isButtonPressed(0, 0))
+	utility[1] = (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || sf::Joystick::isButtonPressed(0, 0)) && !utility[1] ? true : false;
+	/*
 	{
 		if(!s.isHanging && !s.isFalling)
 			s.jump();
@@ -62,6 +63,7 @@ void InputManager::update(Player& s, sf::View* v, float deltaTime)
 			//s.instantVaultAboveGrappleTile();
 		}
 	}
+	*/
 	utility[2] = (sf::Mouse::isButtonPressed(sf::Mouse::Right) || sf::Joystick::isButtonPressed(0, 1)) && !utility[2] ? true : false;
 	utility[3] = (sf::Mouse::isButtonPressed(sf::Mouse::Left) || sf::Joystick::isButtonPressed(0, 2)) && !utility[3] ? true : false;
 	utility[4] = (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || sf::Joystick::isButtonPressed(0, 3)) && !utility[4] ? true : false;
@@ -124,6 +126,16 @@ void InputManager::playerMove(Player& player, float deltaTime)
 	else
 		player.horizontalAcceleration(STILL, deltaTime);
 
+	if(utility[1])
+	{
+		if(!player.isHanging && !player.isFalling)
+			player.jump();
+		else if(player.isHanging && !player.isVaulting)
+		{
+			player.interpolateVaultAboveGrappleTile();
+			//s.instantVaultAboveGrappleTile();
+		}
+	}
 	if(utility[2])
 	{
 		if(currentGrappleCooldown >= grappleCooldown)

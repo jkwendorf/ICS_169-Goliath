@@ -10,6 +10,7 @@
 #include "EnemyAI.h"
 #include <memory>
 #include "Town.h"
+#include "JumpingState.h"
 
 
 class Level : public BaseGameScreen
@@ -35,10 +36,10 @@ private:
 	void CleanUp();
 public:
 	Level();
-	Level(int levelNumber);
+	Level(int levelNumber, int roomNumber);
 	virtual ~Level(void);
 	void update(float deltaTime);
 	void draw(sf::RenderWindow& window);
 	void DeleteLevel();
-	void CheckChangeScreen(BaseGameScreen*& newScreen);
+	void CheckChangeScreen(BaseGameScreen* newScreen);
 };

@@ -88,6 +88,6 @@ void Town::CheckChangeScreen(BaseGameScreen*& newScreen)
 {
 	if(changeScreen)
 	{
-		newScreen = new Level(1);
+		newScreen = new Level(1,1);
 	}
 }
