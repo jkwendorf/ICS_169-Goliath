@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PlayerAttributes>
+  <MoveSpeed value="500"></MoveSpeed>
+  <JumpSpeed value="-820"></JumpSpeed>
+  <MoveAccel value="768"></MoveAccel>
+  <BoostSpeed value="128"></BoostSpeed>
+  <GrappleSpeed value="1000"></GrappleSpeed>
+</PlayerAttributes>

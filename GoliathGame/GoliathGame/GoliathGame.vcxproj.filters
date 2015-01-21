@@ -394,5 +394,11 @@
     <Xml Include="EnemyAttributes.xml">
       <Filter>Resource Files</Filter>
     </Xml>
+    <Xml Include="PlayerAttributes.xml">
+      <Filter>Resource Files</Filter>
+    </Xml>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

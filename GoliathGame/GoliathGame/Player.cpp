@@ -9,6 +9,12 @@ Player::Player()
 {
 	vel = sf::Vector2f(0.0,0.0);
 
+	jumpSpeed = Global::GetInstance().playerAttributes[1];
+	moveSpeed = Global::GetInstance().playerAttributes[0];
+	moveAccel = Global::GetInstance().playerAttributes[2];
+	boostSpeed = Global::GetInstance().playerAttributes[3];
+	grappleSpeed = Global::GetInstance().playerAttributes[4];
+
 	sprite.setTexture(*TextureManager::GetInstance().retrieveTexture("David"));
 	//sprite.setPosition(64, 560);
 	sprite.setPosition(150, 64);
@@ -288,7 +294,7 @@ void Player::resetPosition(sf::Vector2f& newPos)
 void Player::jump()
 {
 	soundEffects[JUMPSOUND].play();
-	vel.y = JUMP_SPEED;
+ 	vel.y = jumpSpeed;
 	isFalling = true;
 }
 
@@ -400,17 +406,17 @@ void Player::horizontalAcceleration(MovementDirection dir, float& deltaTime)
 	{
 		if(dir != STILL)
 		{
-			float maxSpeed = SPEED;
+			float maxSpeed = moveSpeed;
 			if(dir == LEFT)
 			{ 
 				maxSpeed = -1.f*maxSpeed;
 				if(running && stamina > 0)
 				{
-					maxSpeed -= BOOST;
-					vel.x += (MOVE_ACCEL+BOOST)*dir*deltaTime;
+					maxSpeed -= boostSpeed;
+					vel.x += (moveAccel+boostSpeed)*dir*deltaTime;
 				}
 				else
-					vel.x += MOVE_ACCEL*dir*deltaTime;
+					vel.x += moveAccel*dir*deltaTime;
 
 				vel.x = max(vel.x, maxSpeed);
 			}
@@ -418,11 +424,11 @@ void Player::horizontalAcceleration(MovementDirection dir, float& deltaTime)
 			{
 				if(running && stamina > 0)
 				{
-					maxSpeed += BOOST;
-					vel.x += (MOVE_ACCEL+BOOST)*dir*deltaTime;
+					maxSpeed += boostSpeed;
+					vel.x += (moveAccel+boostSpeed)*dir*deltaTime;
 				}
 				else
-					vel.x += MOVE_ACCEL*dir*deltaTime;
+					vel.x += moveAccel*dir*deltaTime;
 
 				vel.x = min(vel.x, maxSpeed);
 			}
@@ -431,13 +437,13 @@ void Player::horizontalAcceleration(MovementDirection dir, float& deltaTime)
 		{
 			if(vel.x > 0.f)
 			{
-				vel.x -= MOVE_ACCEL*deltaTime;
+				vel.x -= moveAccel*deltaTime;
 				if(vel.x <= 0.f)
 					vel.x = 0.f;
 			}
 			else if(vel.x < 0.f)
 			{
-				vel.x += MOVE_ACCEL*deltaTime;
+				vel.x += moveAccel*deltaTime;
 				if(vel.x >= 0.f)
 					vel.x = 0.f;
 			}
