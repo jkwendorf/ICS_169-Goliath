@@ -36,14 +36,16 @@ bool CollisionManager::playerCollisionDetection(BaseObject* p)
 	return false;
 }
 
-Tile* CollisionManager::getNearestGrappleTile(BaseObject p)
+Tile CollisionManager::getNearestGrappleTile(BaseObject p)
 {
 
-	Tile* closestTile = grapplableTileList.front();
+	Tile closestTile = *grapplableTileList.front();
 	for(Tile* b: grapplableTileList)
-		if(sqrt(pow((b->top - p.sprite.getPosition().y),2) + pow((b->left - p.sprite.getPosition().x),2)) < 
-			sqrt(pow((closestTile->top - p.sprite.getPosition().y),2) + pow((closestTile->left - p.sprite.getPosition().x),2)))
-			closestTile = b;
+		if(sqrt(pow(((b->top + b->height/2) - p.sprite.getPosition().y),2) + pow(((b->left + b->width/2)  - p.sprite.getPosition().x),2)) < 
+			sqrt(pow(((closestTile.top + closestTile.height/2) - p.sprite.getPosition().y),2) + pow(((closestTile.left + closestTile.width/2) - p.sprite.getPosition().x),2)))
+		{
+			closestTile = *b;
+		}
 
 	return closestTile;
 }

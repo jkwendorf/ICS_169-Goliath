@@ -24,7 +24,7 @@ public:
 	Tile* getHookedTile(HookShot hs);
 	
 	Tile* getCollidedTile(BaseObject p);
-	Tile* getNearestGrappleTile(BaseObject p);
+	Tile getNearestGrappleTile(BaseObject p);
 	bool tileBelowCharacter(BaseObject* p);
 	bool wallBlockingCharacter(BaseObject* p);
 	int numTilesNear(BaseObject p);

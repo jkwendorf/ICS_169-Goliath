@@ -7,12 +7,7 @@
 		<a name="augment3" bonusHealth="10" bonusStamina="-2" bonusMelee="0" bonusRange="0" bonusAttSpeed="0" bonusHookshoot="0" />
 	</Augments>
 	<PlayerInventory>
-		<item name="augment1" amount="0" />
-		<item name="augment2" amount="0" />
-<<<<<<< HEAD
-		<item name="augment3" amount="4" />
-=======
-		<item name="augment3" amount="0" />
->>>>>>> cf49aedae83d24732d20b7b480b9c84d2197c4f0
+		<item name="augment1" amount="1" />
+		<item name="augment2" amount="1" />
 	</PlayerInventory>
 </Player>
