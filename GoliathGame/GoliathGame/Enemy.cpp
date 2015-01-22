@@ -109,6 +109,11 @@ void Enemy::update(float deltaTime)
 
 	if(!raycast.moving)
 	{
+		raycast.setLocation(sprite.getPosition());
+		if(raycast.sprite.getPosition() == sprite.getPosition())
+		{
+			std::cout << "Position Reset" << std::endl;
+		}
 		if(isMovingRight())
 		{
 			raycast.velocity.x = 10.0f;
@@ -137,10 +142,9 @@ void Enemy::draw(sf::RenderWindow& window)
 			}
 		}
 		eSword.draw(window);
-		if(raycast.moving)
-		{
-			raycast.draw(window);
-		}
+
+		raycast.draw(window);
+		
 	}
 }
 

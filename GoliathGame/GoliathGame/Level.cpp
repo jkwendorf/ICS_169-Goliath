@@ -226,7 +226,6 @@ void Level::update(float deltaTime)
 					currentRoom->GetCollidableTiles(ray, sf::Vector2f(ray.sprite.getTexture()->getSize().x/10,
 							ray.sprite.getTexture()->getSize().y/10), proTile);
 
-					std::cout << "RAY POSITION: " << ray.sprite.getPosition().x << std::endl;
 						if(proTile.size() > 0)
 						{
 							collisionManager->setNearByTiles(proTile);
@@ -234,7 +233,6 @@ void Level::update(float deltaTime)
 
 						if(collisionManager->playerCollisionDetection(&ray))
 						{
-							std::cout << "RAY HIT WALL" << std::endl;
 							ray.moving = false;
 						}
 
