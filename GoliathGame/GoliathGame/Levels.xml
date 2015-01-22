@@ -6,4 +6,22 @@
     <Room number="3" size="1"></Room>
     <Room number="4" size="1"></Room>
   </Level>
+  <Level number="2" tilesheet="BanditTile" size="4">
+    <Room number="1" size="1"></Room>
+    <Room number="2" size="1"></Room>
+    <Room number="3" size="1"></Room>
+    <Room number="4" size="1"></Room>
+  </Level> 
+  <Level number="3" tilesheet="BanditTile" size="4">
+    <Room number="1" size="1"></Room>
+    <Room number="2" size="1"></Room>
+    <Room number="3" size="1"></Room>
+    <Room number="4" size="1"></Room>
+  </Level> 
+  <Level number="4" tilesheet="BanditTile" size="4">
+    <Room number="1" size="1"></Room>
+    <Room number="2" size="1"></Room>
+    <Room number="3" size="1"></Room>
+    <Room number="4" size="1"></Room>
+  </Level> 
 </Game>

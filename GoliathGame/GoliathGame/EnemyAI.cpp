@@ -120,7 +120,7 @@ void EnemyAI::moveToPlayer(Enemy* e, sf::Vector2f pPosition, float deltaTime)
 	if(colMan->playerCollisionDetection(e))
 	{
 		e->move(moveOutOfTileHorizontally(*e, colMan->getCollidedTile(*e)));
-		e->vel.y = JUMP_SPEED;
+		e->vel.y = e->jumpSpeed;
 		e->isFalling = true;
 	}
 	
@@ -188,7 +188,7 @@ void EnemyAI::moveOutOfOtherEnemy(Enemy* e, Enemy* ne, float deltaTime)
 	if(colMan->playerCollisionDetection(e))
 	{
 		e->move(moveOutOfTileHorizontally(*e, colMan->getCollidedTile(*e)));
-		e->vel.y = JUMP_SPEED;
+		e->vel.y = e->jumpSpeed;
 		e->isFalling = true;
 	}
 }
@@ -211,7 +211,7 @@ void EnemyAI::moveOutOfPlayer(Enemy* e, sf::Vector2f pPosition, float deltaTime)
 	if(colMan->playerCollisionDetection(e))
 	{
 		e->move(moveOutOfTileHorizontally(*e, colMan->getCollidedTile(*e)));
-		e->vel.y = JUMP_SPEED;
+		e->vel.y = e->jumpSpeed;
 		e->isFalling = true;
 	}
 }

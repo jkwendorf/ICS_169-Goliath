@@ -36,7 +36,7 @@ private:
 	void CleanUp();
 public:
 	Level();
-	Level(int levelNumber);
+	Level(int levelNumber, int roomNumber);
 	virtual ~Level(void);
 	void update(float deltaTime);
 	void draw(sf::RenderWindow& window);

@@ -1,5 +1,6 @@
 #include "PauseGameState.h"
 #include "StateManager.h"
+#include "Global.h"
 
 PauseGameState::PauseGameState(void)
 	: isPressedUp(false), isPressedDown(false)
@@ -9,7 +10,7 @@ PauseGameState::PauseGameState(void)
 	{
 		bM = new ButtonManager(sf::Vector2f(SCREEN_WIDTH/2 - 100, SCREEN_HEIGHT/4 - 33), 15, sf::Vector2f(200, 66), TextureManager::GetInstance().retrieveTexture("ButtonTest"), f); 
 		bM->createButton("Resume", [] {StateManager::getInstance().changeToState(GAME, true);});
-		bM->createButton("Save Game", [] {});
+		bM->createButton("Save Game", [] {Global::GetInstance().SavePlayer();});
 		bM->createButton("Options", [] {});
 		bM->createButton("Quit", [&] {setToQuit();});
 		//bM->createButton("Quit", [&] {StateManager::getInstance().changeToState(MAIN_MENU, true);});
