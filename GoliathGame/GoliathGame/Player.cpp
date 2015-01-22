@@ -261,22 +261,29 @@ void Player::draw(sf::RenderWindow& window)
 
 void Player::grapple()
 {
+
+
 	if(!hShot.grappleInProgress && !isVaulting)
 	{
 		soundEffects[HOOKSOUND].play();
 		hShot.grappleInProgress = true;
-	
-		if(facingRight)
+		if(!collisionManager->isGrappleListEmpty())
 		{
-			hShot.startLocation = sf::Vector2f(sprite.getPosition().x + 60, sprite.getPosition().y - 15);
-			hShot.grappleToLocation(sf::Vector2f(sprite.getPosition().x + 300 , sprite.getPosition().y - 175));
+			Tile* closestGrappleTile = collisionManager->getNearestGrappleTile(this);
+			std::cout << closestGrappleTile->top << " " << closestGrappleTile->left << std::endl;
+			if(facingRight)
+			{
+				hShot.startLocation = sf::Vector2f(sprite.getPosition().x + 60, sprite.getPosition().y - 15);
+				hShot.grappleToLocation(sf::Vector2f(closestGrappleTile->left , closestGrappleTile->top));
+			}
+			else
+			{
+				hShot.startLocation = sf::Vector2f(sprite.getPosition().x - 60, sprite.getPosition().y - 15);
+				hShot.grappleToLocation(sf::Vector2f(closestGrappleTile->left , closestGrappleTile->top));
+			}
+			hShot.fireRight = facingRight;
+			
 		}
-		else
-		{
-			hShot.startLocation = sf::Vector2f(sprite.getPosition().x - 60, sprite.getPosition().y - 15);
-			hShot.grappleToLocation(sf::Vector2f(sprite.getPosition().x - 300 , sprite.getPosition().y - 175));
-		}
-		hShot.fireRight = facingRight;
 	}
 }
 

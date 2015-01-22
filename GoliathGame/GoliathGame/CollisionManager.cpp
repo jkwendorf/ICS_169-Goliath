@@ -36,6 +36,17 @@ bool CollisionManager::playerCollisionDetection(BaseObject* p)
 	return false;
 }
 
+Tile* CollisionManager::getNearestGrappleTile(BaseObject p)
+{
+
+	Tile* closestTile = grapplableTileList.front();
+	for(Tile* b: grapplableTileList)
+		if(sqrt(pow((b->top - p.sprite.getPosition().y),2) + pow((b->left - p.sprite.getPosition().x),2)) < 
+			sqrt(pow((closestTile->top - p.sprite.getPosition().y),2) + pow((closestTile->left - p.sprite.getPosition().x),2)))
+			closestTile = b;
+
+	return closestTile;
+}
 void CollisionManager::checkTreasure(BaseObject* p)
 {
 	for(Tile* b : tileList)
@@ -158,4 +169,9 @@ void CollisionManager::checkEnemySwordToPlayer(Sword s, Player* player)
 			player->health -= s.damage;
 		}
 	}
+}
+
+bool CollisionManager::isGrappleListEmpty()
+{
+	return grapplableTileList.empty();
 }
