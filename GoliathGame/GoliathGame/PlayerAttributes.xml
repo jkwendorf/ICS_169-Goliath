@@ -5,4 +5,5 @@
   <MoveAccel value="768"></MoveAccel>
   <BoostSpeed value="128"></BoostSpeed>
   <GrappleSpeed value="1000"></GrappleSpeed>
+  <Gravity value="6969"></Gravity>
 </PlayerAttributes>

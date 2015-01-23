@@ -148,6 +148,7 @@ void Global::LoadPlayerAttribtues() {
 	playerAttributes[2] = playerAtt.child("MoveAccel").attribute("value").as_int();
 	playerAttributes[3] = playerAtt.child("BoostSpeed").attribute("value").as_int();
 	playerAttributes[4] = playerAtt.child("GrappleSpeed").attribute("value").as_int();
+	playerAttributes[5] = playerAtt.child("Gravity").attribute("value").as_int();
 }
 
 void Global::LoadEnemyAttributes() {
