@@ -24,6 +24,7 @@ public:
 	Tile* getHookedTile(HookShot hs);
 	
 	Tile* getCollidedTile(BaseObject p);
+	Tile getNearestGrappleTile(BaseObject p);
 	bool tileBelowCharacter(BaseObject* p);
 	bool wallBlockingCharacter(BaseObject* p);
 	int numTilesNear(BaseObject p);
@@ -33,6 +34,8 @@ public:
 
 	void checkEnemyBulletToPlayer(Projectile p, Player* player);
 	void checkEnemySwordToPlayer(Sword s, Player* player);
+
+	bool isGrappleListEmpty();
 
 private:
 	std::vector<Tile*> tileList;
