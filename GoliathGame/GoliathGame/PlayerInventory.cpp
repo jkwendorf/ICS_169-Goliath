@@ -44,7 +44,7 @@ void PlayerInventory::updateInventory(const std::string& slotToUpdate, int numbe
 
 int PlayerInventory::checkInventory(const std::string& item)
 {
-	std::cout << inventory.at(0) << std::endl;
+	//std::cout << inventory.at(0) << std::endl;
 	int temp = 0;
 	try
 	{
