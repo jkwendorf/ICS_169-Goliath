@@ -9,6 +9,7 @@ int main()
 	bool infocus = true;
 	Global::GetInstance().calculateOffset();
 	Global::GetInstance().LoadEnemyAttributes();
+	Global::GetInstance().LoadPlayerAttribtues();
 	sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Goliath Game");
 	// JW: Setting the framerate to 30, but this should be set by a global variable
 	window.setFramerateLimit(FPS);

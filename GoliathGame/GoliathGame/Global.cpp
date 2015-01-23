@@ -135,6 +135,21 @@ void Global::SavePlayer() {
 	doc.save_file("PlayerStats.xml");
 }
 
+void Global::LoadPlayerAttribtues() {
+	pugi::xml_document doc;
+
+	pugi::xml_parse_result result = doc.load_file("PlayerAttributes.xml");
+	std::cout << result << std::endl;
+
+	pugi::xml_node playerAtt = doc.child("PlayerAttributes");
+
+	playerAttributes[0] = playerAtt.child("MoveSpeed").attribute("value").as_int();
+	playerAttributes[1] = playerAtt.child("JumpSpeed").attribute("value").as_int();
+	playerAttributes[2] = playerAtt.child("MoveAccel").attribute("value").as_int();
+	playerAttributes[3] = playerAtt.child("BoostSpeed").attribute("value").as_int();
+	playerAttributes[4] = playerAtt.child("GrappleSpeed").attribute("value").as_int();
+}
+
 void Global::LoadEnemyAttributes() {
 	std::cout << "Get enemy Attributes" << std::endl;
 	pugi::xml_document doc;
