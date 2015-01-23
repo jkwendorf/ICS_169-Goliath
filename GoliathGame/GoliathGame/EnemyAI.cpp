@@ -16,22 +16,12 @@ void EnemyAI::executeMovement(Enemy* e, sf::Vector2f pPosition, float deltaTime)
 	//moveOutOfPlayer(e, pPosition, deltaTime);
 	gravity(e, deltaTime);
 
-	//if enemy isn't in range of player, handle normally
-	/*if((e->isMovingRight() && e->sprite.getPosition().x - pPosition.x > 0) 
-		|| (!e->isMovingRight() && e->sprite.getPosition().x - pPosition.x < 0))
+	if(e->foundPlayer)
 	{
-		/*if(inRange(e, pPosition))
-		{
-			moveToPlayer(e, pPosition, deltaTime);
-		}
-		else normalMove(e, deltaTime);
+		std::cout << "Moving to Player" << std::endl;
+		moveToPlayer(e, pPosition, deltaTime);
 	}
-	else
-	{
-		
-	}*/
-
-	normalMove(e, deltaTime);
+	else normalMove(e, deltaTime);
 }
 
 void EnemyAI::gravity(Enemy* e, float deltaTime)
@@ -55,7 +45,6 @@ void EnemyAI::normalMove(Enemy* e, float deltaTime)
 	{
 		movement = e->moveSpeed * deltaTime;
 		e->move(movement, 0);
-		//e->move(moveHorizontally(*e, RIGHT, false, deltaTime / e->moveSpeed)); 
 
 		if(colMan->playerCollisionDetection(e))
 		{
@@ -103,17 +92,27 @@ void EnemyAI::moveToPlayer(Enemy* e, sf::Vector2f pPosition, float deltaTime)
 	//		keep moving
 	//		once you reach that next destination
 	//		keep on going
+
+	float movement;
 	if(e->sprite.getPosition().x != pPosition.x)
 	{
 		if(playerOnLeft(e, pPosition))
 		{
-			e->changeMove();
-			e->move(moveHorizontally(*e, LEFT, false, deltaTime / e->moveSpeed)); 
+			if(e->isMovingRight())
+			{
+				e->changeMove();
+			}
+			movement = e->moveSpeed * deltaTime * -1;
+			e->move(movement, 0);
 		}
 		else 
 		{
-			e->changeMove();
-			e->move(moveHorizontally(*e, RIGHT, false, deltaTime / e->moveSpeed)); 
+			if(!e->isMovingRight())
+			{
+				e->changeMove();
+			}
+			movement = e->moveSpeed * deltaTime * 1;
+			e->move(movement, 0);
 		}
 	}
 

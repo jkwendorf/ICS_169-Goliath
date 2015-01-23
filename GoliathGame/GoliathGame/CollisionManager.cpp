@@ -155,3 +155,13 @@ void CollisionManager::checkEnemySwordToPlayer(Sword s, Player* player)
 		}
 	}
 }
+
+bool CollisionManager::checkIfEnemyInRange(Projectile p, Player* player)
+{
+	if(sqrt(pow(p.sprite.getPosition().x - player->sprite.getPosition().x, 2) + 
+		pow(p.sprite.getPosition().y - player->sprite.getPosition().y, 2)) < 50 && p.moving)
+	{
+		return true;
+	}
+	else return false;
+}

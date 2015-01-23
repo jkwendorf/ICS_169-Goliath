@@ -22,6 +22,9 @@ Enemy::Enemy(sf::String body, float x, float y) :
 
 	initialPosition = sf::Vector2f(x,y);
 	raycast = Projectile(sprite.getPosition(), sf::Vector2f(0.0,0.0));
+	rayCool = 1.1f;
+
+	foundPlayer = false;
 
 	weaponCooldown = 2.0f;
 	currentCooldown = 2.0f;
@@ -52,9 +55,11 @@ Enemy::Enemy(sf::String body, float x, float y, float range) :
 	moveSpeed = 250;
 	initialPosition = sf::Vector2f(x,y);
 
+	raycast = Projectile(sprite.getPosition(), sf::Vector2f(0.0,0.0));
+	rayCool = 1.1f;
+
 	weaponCooldown = 2.0f;
 	currentCooldown = 2.0f;
-
 
 	//ND: Change Player dimensions to whatever floats your boat
 	sprite.setScale( (PLAYER_DIM_X / (float)sprite.getTexture()->getSize().x), (PLAYER_DIM_Y / (float)sprite.getTexture()->getSize().y));
@@ -81,6 +86,7 @@ Enemy::Enemy(sf::String body, float x, float y, float range, float jp, float ms,
 	sprite.setOrigin(sprite.getLocalBounds().width/2, sprite.getLocalBounds().height/2);
 	initialPosition = sf::Vector2f(x,y);
 
+	rayCool = 3.1f;
 	raycast = Projectile(sprite.getPosition(), sf::Vector2f(0.0,0.0));
 
 	for(int x = 0; x < 3; x++)
@@ -109,18 +115,15 @@ void Enemy::update(float deltaTime)
 
 	if(!raycast.moving)
 	{
+		rayCool = 0;
 		raycast.setLocation(sprite.getPosition());
-		if(raycast.sprite.getPosition() == sprite.getPosition())
-		{
-			std::cout << "Position Reset" << std::endl;
-		}
 		if(isMovingRight())
 		{
-			raycast.velocity.x = 10.0f;
+			raycast.setVelocity(sf::Vector2f(5.0f, 0));
 		}
 		else
 		{
-			raycast.velocity.x = -10.0f;
+			raycast.setVelocity(sf::Vector2f(-5.0f, 0));
 		}
 		raycast.moving = true;
 	}
@@ -261,6 +264,12 @@ bool Enemy::isInScreen()
 		return true;
 	}
 	else return false;
+}
+
+void Enemy::resetRay()
+{
+	raycast.setLocation(sprite.getPosition());
+	raycast.moving = false;
 }
 
 bool Enemy::isMovingRight()

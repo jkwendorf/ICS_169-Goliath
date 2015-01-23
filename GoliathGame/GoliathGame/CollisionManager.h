@@ -34,6 +34,8 @@ public:
 	void checkEnemyBulletToPlayer(Projectile p, Player* player);
 	void checkEnemySwordToPlayer(Sword s, Player* player);
 
+	bool checkIfEnemyInRange(Projectile p, Player* player);
+
 private:
 	std::vector<Tile*> tileList;
 	std::vector<Tile*> grapplableTileList;

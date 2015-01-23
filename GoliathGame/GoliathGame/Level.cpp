@@ -172,8 +172,11 @@ void Level::update(float deltaTime)
 			}
 		}
 
+		int i = 0;
+
 		for (auto& e : enemyList)
 		{
+			i++;
 			if(e->health > 0)
 			{
 				std::vector<Tile*> proTile;
@@ -230,13 +233,18 @@ void Level::update(float deltaTime)
 						{
 							collisionManager->setNearByTiles(proTile);
 						}
-
+						std::cout << "Enemy " << i << " ray position: " << ray.sprite.getPosition().x << std::endl;
+						std::cout << "Enemy " << i << " position: " << e.get()->sprite.getPosition().x << std::endl;
 						if(collisionManager->playerCollisionDetection(&ray))
 						{
-							ray.moving = false;
+							e.get()->foundPlayer = false;
+							e.get()->resetRay();
 						}
 
-						collisionManager->checkEnemyBulletToPlayer(ray, &p);
+						if(collisionManager->checkIfEnemyInRange(ray, &p))
+						{
+							e.get()->foundPlayer = true;
+						}
 				}
 			}
 		}
