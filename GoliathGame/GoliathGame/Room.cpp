@@ -94,24 +94,25 @@ void Room::GetGrapplableTiles(Player& player, std::vector<Tile*>& nearTiles)
 		}
 		else
 		{
-			sf::FloatRect rect(sf::Vector2f(player.sprite.getPosition().x + PLAYER_DIM_X/2, player.sprite.getPosition().y - PLAYER_DIM_Y/2 - player.hShot.grappleLength),
+			sf::FloatRect rect(sf::Vector2f(player.sprite.getPosition().x, player.sprite.getPosition().y - PLAYER_DIM_Y/2 - player.hShot.grappleLength),
 				sf::Vector2f(player.hShot.grappleLength + PLAYER_DIM_X/2, player.hShot.grappleLength + PLAYER_DIM_Y/2));
 			GetNearTiles(rect, nearTiles, true, true);
 			return;
 		}
 	}
 	else
-	{
+	{ 
+		//These two cases do not work need to fix the Grant Walker
 		if (!player.facingRight)
 		{
 			sf::FloatRect rect(sf::Vector2f(player.sprite.getPosition().x - PLAYER_DIM_X/2 - player.hShot.grappleLength, player.sprite.getPosition().y - PLAYER_DIM_Y/2),
-				sf::Vector2f(player.hShot.grappleLength, 0));
+				sf::Vector2f(player.hShot.grappleLength + PLAYER_DIM_X/2, 0));
 			GetNearTiles(rect, nearTiles, true, true);
 			return;
 		}
 		else
 		{
-			sf::FloatRect rect(sf::Vector2f(player.sprite.getPosition().x + PLAYER_DIM_X/2, player.sprite.getPosition().y - PLAYER_DIM_Y/2),
+			sf::FloatRect rect(sf::Vector2f(player.sprite.getPosition().x , player.sprite.getPosition().y - PLAYER_DIM_Y/2),
 				sf::Vector2f(player.hShot.grappleLength, 0));
 			GetNearTiles(rect, nearTiles, true, true);
 			return;
