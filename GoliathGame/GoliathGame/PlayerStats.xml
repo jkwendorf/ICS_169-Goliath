@@ -13,7 +13,7 @@
 		<item name="augment3" amount="10" />
 =======
 		<item name="augment1" amount="0" />
-		<item name="augment2" amount="0" />
+		<item name="augment2" amount="1" />
 		<item name="augment3" amount="0" />
 >>>>>>> 2417d8949d2eeafec90fa4438a566c64467cde9d
 	</PlayerInventory>

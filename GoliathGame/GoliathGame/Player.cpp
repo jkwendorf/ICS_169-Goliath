@@ -14,6 +14,7 @@ Player::Player()
 	moveAccel = Global::GetInstance().playerAttributes[2];
 	boostSpeed = Global::GetInstance().playerAttributes[3];
 	grappleSpeed = Global::GetInstance().playerAttributes[4];
+	gravity = Global::GetInstance().playerAttributes[5];
 
 	sprite.setTexture(*TextureManager::GetInstance().retrieveTexture("David"));
 	//sprite.setPosition(64, 560);
@@ -86,7 +87,7 @@ void Player::update(float deltaTime)
 	{
 		hShot.update(deltaTime);
 		if(sqrt(pow((std::abs(hShot.sprite.getPosition().x - sprite.getPosition().x)),2) + 
-			pow((std::abs(hShot.sprite.getPosition().y - sprite.getPosition().y)),2)) >= 275 || hShot.currentCooldown >= hShot.weaponCooldown)
+			pow((std::abs(hShot.sprite.getPosition().y - sprite.getPosition().y)),2)) >= hShot.grappleLength || hShot.currentCooldown >= hShot.weaponCooldown)
 		{
 			hShot.grappleInProgress = false;
 			hShot.hookedOnSomething = false;
@@ -165,7 +166,7 @@ void Player::update(float deltaTime)
 	for(int x = 0; x < 3; x++)
 	{
 		if(!ammo[x].moving)
-			ammo[x].setLocation(sf::Vector2f(sprite.getPosition().x + 250, sprite.getPosition().y - 25));
+			ammo[x].setLocation(sf::Vector2f(sprite.getPosition().x + 300, sprite.getPosition().y - 25));
 		ammo[x].update(deltaTime);
 	}
 	
@@ -267,22 +268,28 @@ void Player::draw(sf::RenderWindow& window)
 
 void Player::grapple()
 {
-	if(!hShot.grappleInProgress && !isVaulting)
+
+	if(!collisionManager->isGrappleListEmpty())
 	{
-		soundEffects[HOOKSOUND].play();
-		hShot.grappleInProgress = true;
-	
-		if(facingRight)
+		if(!hShot.grappleInProgress && !isVaulting)
 		{
-			hShot.startLocation = sf::Vector2f(sprite.getPosition().x + 60, sprite.getPosition().y - 15);
-			hShot.grappleToLocation(sf::Vector2f(sprite.getPosition().x + 300 , sprite.getPosition().y - 175));
+			soundEffects[HOOKSOUND].play();
+			hShot.grappleInProgress = true;
+			Tile closestGrappleTile = collisionManager->getNearestGrappleTile(this);
+			std::cout << closestGrappleTile.top << " " << closestGrappleTile.left << std::endl;
+			if(facingRight)
+			{
+				hShot.startLocation = sf::Vector2f(sprite.getPosition().x + 60, sprite.getPosition().y - 15);
+				hShot.grappleToLocation(sf::Vector2f(closestGrappleTile.left + closestGrappleTile.width/2 , closestGrappleTile.top + closestGrappleTile.height/2));
+			}
+			else
+			{
+				hShot.startLocation = sf::Vector2f(sprite.getPosition().x - 60, sprite.getPosition().y - 15);
+				hShot.grappleToLocation(sf::Vector2f(closestGrappleTile.left + closestGrappleTile.width/2 , closestGrappleTile.top + closestGrappleTile.height/2));
+			}
+			hShot.fireRight = facingRight;
+			
 		}
-		else
-		{
-			hShot.startLocation = sf::Vector2f(sprite.getPosition().x - 60, sprite.getPosition().y - 15);
-			hShot.grappleToLocation(sf::Vector2f(sprite.getPosition().x - 300 , sprite.getPosition().y - 175));
-		}
-		hShot.fireRight = facingRight;
 	}
 }
 
@@ -458,7 +465,7 @@ void Player::verticalAcceleration(float& deltaTime)
 		if(vel.y >= TERMINAL_VELOCITY)
 			vel.y = TERMINAL_VELOCITY;
 		else
-			vel.y += GRAVITY * deltaTime;
+			vel.y += gravity * deltaTime;
 	}
 }
 
