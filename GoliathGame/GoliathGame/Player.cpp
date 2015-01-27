@@ -14,6 +14,7 @@ Player::Player()
 	moveAccel = Global::GetInstance().playerAttributes[2];
 	boostSpeed = Global::GetInstance().playerAttributes[3];
 	grappleSpeed = Global::GetInstance().playerAttributes[4];
+	gravity = Global::GetInstance().playerAttributes[5];
 
 	sprite.setTexture(*TextureManager::GetInstance().retrieveTexture("David"));
 	//sprite.setPosition(64, 560);
@@ -464,7 +465,7 @@ void Player::verticalAcceleration(float& deltaTime)
 		if(vel.y >= TERMINAL_VELOCITY)
 			vel.y = TERMINAL_VELOCITY;
 		else
-			vel.y += GRAVITY * deltaTime;
+			vel.y += gravity * deltaTime;
 	}
 }
 
