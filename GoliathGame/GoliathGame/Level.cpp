@@ -14,6 +14,8 @@ Level::Level(int levelNumber, int roomNumber)
 	p.init(collisionManager, new JumpingState());
 	currentRoom = new Room(levelNumber, roomNumber, enemyList);
 	background.setTexture(*TextureManager::GetInstance().retrieveTexture("banditCity"));
+	sf::Color color = background.getColor();
+	background.setColor(sf::Color(color.r, color.g, color.b, 200));
 	background.setPosition(-75,75);
 	background.scale(1.0, (float)(GAME_TILE_DIM * 22 + 100) / background.getTexture()->getSize().y);
 	loadingSprite.setTexture(*TextureManager::GetInstance().retrieveTexture("loading"));
