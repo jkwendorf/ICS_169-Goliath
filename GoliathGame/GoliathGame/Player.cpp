@@ -275,7 +275,7 @@ void Player::grapple()
 		{
 			soundEffects[HOOKSOUND].play();
 			hShot.grappleInProgress = true;
-			Tile closestGrappleTile = collisionManager->getNearestGrappleTile(this);
+			Tile closestGrappleTile = collisionManager->getNearestGrappleTile(*this);
 			std::cout << closestGrappleTile.top << " " << closestGrappleTile.left << std::endl;
 			if(facingRight)
 			{
