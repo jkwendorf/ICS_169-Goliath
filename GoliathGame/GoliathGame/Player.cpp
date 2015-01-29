@@ -268,7 +268,7 @@ void Player::draw(sf::RenderWindow& window)
 
 void Player::grapple()
 {
-
+	*Global::GetInstance().debugLog << "Player Pos: " << sprite.getPosition().x << ", " << sprite.getPosition().y << "---";
 	if(!collisionManager->isGrappleListEmpty())
 	{
 		if(!hShot.grappleInProgress && !isVaulting)
@@ -276,6 +276,8 @@ void Player::grapple()
 			soundEffects[HOOKSOUND].play();
 			hShot.grappleInProgress = true;
 			Tile closestGrappleTile = collisionManager->getNearestGrappleTile(*this);
+			*Global::GetInstance().debugLog << closestGrappleTile.getTileNum() << ":" << 
+					closestGrappleTile.left << ", " << closestGrappleTile.top << "||";
 			std::cout << closestGrappleTile.top << " " << closestGrappleTile.left << std::endl;
 			if(facingRight)
 			{

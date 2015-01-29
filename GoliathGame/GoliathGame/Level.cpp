@@ -245,6 +245,9 @@ void Level::draw(sf::RenderWindow& window)
 {
 	//window.draw(r);
 	window.draw(background);
+
+	//window.draw(Global::GetInstance().testingRect);
+
 	currentRoom->draw(window);
 	p.draw(window);
 	//UNCOMMENT FOR TESTING
@@ -260,6 +263,7 @@ void Level::draw(sf::RenderWindow& window)
 	//	enemyNum++;
 	//	std::cout << "Enemy #" << enemyNum;
 	}
+	
 	
 	window.setView(view);
 	p.drawUI(window);

@@ -53,4 +53,6 @@ public :
 
 	sf::Sound test;
 
+	std::ofstream* debugLog;
+	sf::RectangleShape testingRect;
 };
