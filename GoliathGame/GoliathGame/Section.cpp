@@ -148,12 +148,9 @@ void Section::checkGrapple(const sf::Vector2f& p1, const sf::Vector2f& p2, std::
 			if(grid1[(j*gDim.y) + i]->getFlags() & TILE::GRAPPLEABLEMASK)
 			{
 				nearTiles.push_back(grid1[(j*gDim.y) + i]);
-				*Global::GetInstance().debugLog << grid1[(j*gDim.y) + i]->getTileNum() << ":" << 
-					grid1[(j*gDim.y) + i]->left << ", " << grid1[(j*gDim.y) + i]->top << "||";
 			}
 		}
 	}
-	*Global::GetInstance().debugLog << std::endl;
 }
 
 void Section::checkInteractable(const sf::Vector2f& p1, const sf::Vector2f& p2, std::vector<Tile*>& nearTiles)

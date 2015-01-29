@@ -1,10 +1,10 @@
 #include "Global.h"
 
 Global::Global()
-	:inventory(new PlayerInventory()), debugLog(new std::ofstream())
+	:inventory(new PlayerInventory())
 {
 	test = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("GainItem")));
-	debugLog->open ("debugLog.txt");
+
 	testingRect.setPosition(-100, -100);
 	testingRect.setOutlineColor(sf::Color::Red);
 	testingRect.setOutlineThickness(5);
@@ -28,8 +28,6 @@ void Global::CleanUp()
 		delete currentTileSheet[i];
 	}
 	delete inventory;
-	debugLog->close();
-	delete debugLog;
 }
 
 void Global::ParseXML() {
