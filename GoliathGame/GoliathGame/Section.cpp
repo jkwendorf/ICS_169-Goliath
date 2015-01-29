@@ -134,6 +134,11 @@ void Section::checkGrapple(const sf::Vector2f& p1, const sf::Vector2f& p2, std::
 {
 	sf::Vector2f p3 = sf::Vector2f(p1.x / GAME_TILE_DIM, p1.y / GAME_TILE_DIM);
 	sf::Vector2f p4 = sf::Vector2f(p2.x / GAME_TILE_DIM, p2.y / GAME_TILE_DIM);
+	Global::GetInstance().testingRect.setPosition(p1.x, p1.y);
+	Global::GetInstance().testingRect.setSize(sf::Vector2f(p2.x - p1.x, p2.y - p1.y));
+
+	sf::Vector2f temp = Global::GetInstance().testingRect.getPosition();
+	sf::Vector2f temp2 = Global::GetInstance().testingRect.getSize();
 
 	for(int i = p3.x; i <= p4.x; i++)
 	{
@@ -141,7 +146,9 @@ void Section::checkGrapple(const sf::Vector2f& p1, const sf::Vector2f& p2, std::
 		{
 			//if(grid1[(j*gDim.y) + i]->getCollidable() || grid1[(j*gDim.y) + i]->getGrappleable() )
 			if(grid1[(j*gDim.y) + i]->getFlags() & TILE::GRAPPLEABLEMASK)
+			{
 				nearTiles.push_back(grid1[(j*gDim.y) + i]);
+			}
 		}
 	}
 }

@@ -207,7 +207,9 @@
       <SubType>Designer</SubType>
     </Xml>
     <Xml Include="Sounds.xml" />
-    <Xml Include="PlayerAttributes.xml" />
+    <Xml Include="PlayerAttributes.xml">
+      <SubType>Designer</SubType>
+    </Xml>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

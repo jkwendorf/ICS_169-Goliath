@@ -24,8 +24,8 @@ void EnemyAI::executeMovement(Enemy* e, sf::Vector2f pPosition, float deltaTime)
 		{
 			moveToPlayer(e, pPosition, deltaTime);
 		}
-		elsenormalMove(e, deltaTime);
-	}
+		else*/normalMove(e, deltaTime);
+	/*}
 	else
 	{
 		

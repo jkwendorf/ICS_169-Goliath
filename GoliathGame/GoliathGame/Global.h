@@ -53,4 +53,6 @@ public :
 
 	sf::Sound test;
 
+	
+	sf::RectangleShape testingRect;
 };
