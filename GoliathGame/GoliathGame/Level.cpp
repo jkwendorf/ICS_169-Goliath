@@ -177,8 +177,11 @@ void Level::update(float deltaTime)
 			}
 		}
 
+		int i = 0;
+
 		for (auto& e : enemyList)
 		{
+			i++;
 			if(e->health > 0)
 			{
 				std::vector<Tile*> proTile;
@@ -222,6 +225,34 @@ void Level::update(float deltaTime)
 
 						collisionManager->checkEnemyBulletToPlayer(po, &p);
 					}
+				}
+
+				//ISILDOR LOOK HERE FOR RAYCAST CODE
+				Projectile& ray = e.get()->raycast;
+
+				if(ray.moving)
+				{
+					currentRoom->GetCollidableTiles(ray, sf::Vector2f(ray.sprite.getTexture()->getSize().x/10,
+							ray.sprite.getTexture()->getSize().y/10), proTile);
+
+						if(proTile.size() > 0)
+						{
+							collisionManager->setNearByTiles(proTile);
+						}
+						//std::cout << "Enemy " << i << " ray position: " << ray.sprite.getPosition().x << std::endl;
+						//std::cout << "Enemy " << i << " position: " << e.get()->sprite.getPosition().x << std::endl;
+						if(collisionManager->playerCollisionDetection(&ray))
+						{
+							e.get()->foundPlayer = false;
+							e.get()->resetRay();
+							std::cout << "Enemy " << i << " ray hit wall" << std::endl;
+						}
+						else if(collisionManager->checkIfEnemyInRange(ray, &p))
+						{
+							std::cout << "Enemy " << i << " ray hit player" << std::endl;
+							e.get()->resetRay();
+							e.get()->foundPlayer = true;
+						}
 				}
 			}
 		}
