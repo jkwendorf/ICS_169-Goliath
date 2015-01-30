@@ -26,6 +26,7 @@ public:
 	void attack(sf::Vector2f pPosition, float deltaTime);
 	bool isMovingRight();
 	void changeMove();
+	void resetRay();
 
 	Projectile ammo[3];
 	Sword eSword;
@@ -34,6 +35,8 @@ public:
 	Projectile raycast;
 	int patrolRange;
 	sf::Vector2f initialPosition;
+	bool foundPlayer; 
+	float rayCool;
 
 private:
 	int weapon;

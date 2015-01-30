@@ -14,6 +14,8 @@ Level::Level(int levelNumber, int roomNumber)
 	p.init(collisionManager, new JumpingState());
 	currentRoom = new Room(levelNumber, roomNumber, enemyList);
 	background.setTexture(*TextureManager::GetInstance().retrieveTexture("banditCity"));
+	sf::Color color = background.getColor();
+	background.setColor(sf::Color(color.r, color.g, color.b, 200));
 	background.setPosition(-75,75);
 	background.scale(1.0, (float)(GAME_TILE_DIM * 22 + 100) / background.getTexture()->getSize().y);
 	loadingSprite.setTexture(*TextureManager::GetInstance().retrieveTexture("loading"));
@@ -75,7 +77,10 @@ void Level::update(float deltaTime)
 	{
 		if(nearTile == 18 || nearTile == 19)
 			changeRoom();
-		//else if (nearTile == 17)
+		else if (nearTile == 20)
+		{
+			p.takeDamage();
+		}
 			
 	}
 	if(!changeScreen)
@@ -172,8 +177,11 @@ void Level::update(float deltaTime)
 			}
 		}
 
+		int i = 0;
+
 		for (auto& e : enemyList)
 		{
+			i++;
 			if(e->health > 0)
 			{
 				std::vector<Tile*> proTile;
@@ -218,6 +226,34 @@ void Level::update(float deltaTime)
 						collisionManager->checkEnemyBulletToPlayer(po, &p);
 					}
 				}
+
+				//ISILDOR LOOK HERE FOR RAYCAST CODE
+				Projectile& ray = e.get()->raycast;
+
+				if(ray.moving)
+				{
+					currentRoom->GetCollidableTiles(ray, sf::Vector2f(ray.sprite.getTexture()->getSize().x/10,
+							ray.sprite.getTexture()->getSize().y/10), proTile);
+
+						if(proTile.size() > 0)
+						{
+							collisionManager->setNearByTiles(proTile);
+						}
+						//std::cout << "Enemy " << i << " ray position: " << ray.sprite.getPosition().x << std::endl;
+						//std::cout << "Enemy " << i << " position: " << e.get()->sprite.getPosition().x << std::endl;
+						if(collisionManager->playerCollisionDetection(&ray))
+						{
+							e.get()->foundPlayer = false;
+							e.get()->resetRay();
+							std::cout << "Enemy " << i << " ray hit wall" << std::endl;
+						}
+						else if(collisionManager->checkIfEnemyInRange(ray, &p))
+						{
+							std::cout << "Enemy " << i << " ray hit player" << std::endl;
+							e.get()->resetRay();
+							e.get()->foundPlayer = true;
+						}
+				}
 			}
 		}
 
@@ -246,7 +282,7 @@ void Level::draw(sf::RenderWindow& window)
 	//window.draw(r);
 	window.draw(background);
 
-	//window.draw(Global::GetInstance().testingRect);
+	window.draw(Global::GetInstance().testingRect);
 
 	currentRoom->draw(window);
 	p.draw(window);
