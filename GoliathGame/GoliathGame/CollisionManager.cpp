@@ -4,6 +4,7 @@
 CollisionManager::CollisionManager()
 {
 	addObserver(Global::GetInstance().inventory);
+
 }
 
 
@@ -69,7 +70,9 @@ Tile* CollisionManager::getCollidedTile(BaseObject p)
 {
 	for(Tile* b : tileList)
 		if(b->intersects(p.sprite.getGlobalBounds()))
+		{
 			return b;
+		}
 	return NULL;
 }
 

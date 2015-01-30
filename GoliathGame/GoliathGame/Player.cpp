@@ -6,7 +6,7 @@ Player::Player()
 	: BaseObject(0), grappleInProgress(false), facingRight(true),running(false), isVaulting(false), 
 	isHanging(false), shouldHang(false), health(Global::GetInstance().basePlayerStats[0]), 
 	stamina(Global::GetInstance().basePlayerStats[1]),	weaponCooldown(Global::GetInstance().basePlayerStats[4]), bottomPoint(0),
-	deathTimer(0.0f)
+	deathTimer(0.0f), currentState(nullptr)
 {
 	vel = sf::Vector2f(0.0,0.0);
 
@@ -42,6 +42,8 @@ Player::Player()
 
 void Player::init(CollisionManager* collisionManager_, BaseState* startState)
 {
+	if(currentState != nullptr)
+		delete currentState;
 	collisionManager = collisionManager_;
 	currentState = startState;
 }
@@ -315,6 +317,7 @@ void Player::grapple()
 void Player::resetPosition(sf::Vector2f& newPos)
 {
 	sprite.setPosition(newPos);
+	vel.x = 0;
 }
 
 void Player::jump()
@@ -605,4 +608,17 @@ void Player::interpolateVaultAboveGrappleTile()
 								sprite.getPosition().y - sprite.getGlobalBounds().height);
 
 	isVaulting = true;
+}
+
+void Player::onNotify(const BaseObject& entity, Util::Events e)
+{
+	switch (e)
+    {
+	case Util::Events::TAKEDAMAGE:
+		if (entity.objectNum == 0)
+		{
+			takeDamage();
+		}
+		break;
+    }
 }

@@ -81,7 +81,6 @@ int Room::NearInteractableTiles(BaseObject& obj)
 
 void Room::GetGrapplableTiles(Player& player, std::vector<Tile*>& nearTiles)
 {
-
 	//*Global::GetInstance().debugLog << "Player Pos: " << player.sprite.getPosition().x << ", " << player.sprite.getPosition().y << "---";
 	if(player.sprite.getPosition().y - PLAYER_DIM_Y/2 - player.hShot.grappleLength >= 0)
 	{
@@ -221,11 +220,12 @@ void Room::checkUpperLeftSameGrid(int currentGrid, sf::FloatRect& rect, const sf
 	{
 		if (grapple)
 		{		
-			//Set the top left y position = 0
-			sectList[currentGrid]->checkGrapple(sf::Vector2f(topLeft.x, 0), 
+			//Set the top left y position = 0	
+			sectList[currentGrid]->checkGrapple(sf::Vector2f(topLeft.x < 0 ? 0 : topLeft.x, topLeft.y < 0 ? 0 : topLeft.y), 
 				botRight - sectList[currentGrid]->getOffset(), nearTiles);
 			return;
 		}
+	
 	}
 }
 

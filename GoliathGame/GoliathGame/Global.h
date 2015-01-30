@@ -42,7 +42,7 @@ public :
 	int fps;
 	int xOffset;
 	int yOffset;
-	sf::Sprite* currentTileSheet[25];
+	sf::Sprite* currentTileSheet[TileSheetRows * TileSheetCols];
 
 	Global();
 	~Global();

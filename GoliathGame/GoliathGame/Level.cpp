@@ -129,7 +129,13 @@ void Level::update(float deltaTime)
 				//std::cout << "Falling Collision" << std::endl;
 				while(collisionManager->playerCollisionDetection(&p))
 				{
+					if((collisionManager->getCollidedTile(p) != nullptr) && 
+						((collisionManager->getCollidedTile(p)->getFlags() & TILE::HAZARDMASK) != 0))
+					{
+						p.takeDamage();
+					}
 					p.moveOutOfTile(collisionManager->getCollidedTile(p));
+					
 				}
 			}
 			else if(!collisionManager->tileBelowCharacter(&p))
@@ -141,11 +147,17 @@ void Level::update(float deltaTime)
 			{
 				if(p.hShot.isDisabled)
 					p.hShot.isDisabled = false;
-
+				if((collisionManager->getCollidedTile(p) != nullptr) && 
+					((collisionManager->getCollidedTile(p)->getFlags() & TILE::HAZARDMASK) != 0))
+				{
+					p.takeDamage();
+				}
 				//std::cout << "Ground Collision" << std::endl;
 				if(collisionManager->wallBlockingCharacter(&p))
 				{
-					p.move(moveOutOfTileHorizontally(p, collisionManager->getCollidedTile(p)));
+					
+					p.move(moveOutOfTileHorizontally(p, collisionManager->getCollidedTile(p)));	
+					
 				}
 			}
 		}
