@@ -107,16 +107,19 @@ void Enemy::update(float deltaTime)
 	for(int x = 0; x < 3; x++)
 	{
 		if(!ammo[x].moving)
-			ammo[x].setLocation(sprite.getPosition());
+			ammo[x].setLocation(sf::Vector2f(sprite.getPosition().x + 250, sprite.getPosition().y - 25));
 		ammo[x].update(deltaTime);
 	}
 
 	eSword.update(deltaTime);
+	
+	//ISILDOR LOOK HERE FOR RAYCAST CODE
+	rayCool += deltaTime;
 
-	if(!raycast.moving)
+	if(!raycast.moving && rayCool > 5.0f)
 	{
 		rayCool = 0;
-		raycast.setLocation(sprite.getPosition());
+		raycast.setLocation(sf::Vector2f(sprite.getPosition().x + 250, sprite.getPosition().y - 25));
 		if(isMovingRight())
 		{
 			raycast.setVelocity(sf::Vector2f(5.0f, 0));

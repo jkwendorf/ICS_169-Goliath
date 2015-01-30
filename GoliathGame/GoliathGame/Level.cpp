@@ -222,6 +222,7 @@ void Level::update(float deltaTime)
 					}
 				}
 
+				//ISILDOR LOOK HERE FOR RAYCAST CODE
 				Projectile& ray = e.get()->raycast;
 
 				if(ray.moving)
@@ -233,16 +234,18 @@ void Level::update(float deltaTime)
 						{
 							collisionManager->setNearByTiles(proTile);
 						}
-						std::cout << "Enemy " << i << " ray position: " << ray.sprite.getPosition().x << std::endl;
-						std::cout << "Enemy " << i << " position: " << e.get()->sprite.getPosition().x << std::endl;
+						//std::cout << "Enemy " << i << " ray position: " << ray.sprite.getPosition().x << std::endl;
+						//std::cout << "Enemy " << i << " position: " << e.get()->sprite.getPosition().x << std::endl;
 						if(collisionManager->playerCollisionDetection(&ray))
 						{
 							e.get()->foundPlayer = false;
 							e.get()->resetRay();
+							std::cout << "Enemy " << i << " ray hit wall" << std::endl;
 						}
-
-						if(collisionManager->checkIfEnemyInRange(ray, &p))
+						else if(collisionManager->checkIfEnemyInRange(ray, &p))
 						{
+							std::cout << "Enemy " << i << " ray hit player" << std::endl;
+							e.get()->resetRay();
 							e.get()->foundPlayer = true;
 						}
 				}
