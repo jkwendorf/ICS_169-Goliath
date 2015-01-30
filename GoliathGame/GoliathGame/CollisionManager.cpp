@@ -149,15 +149,11 @@ void CollisionManager::checkPlayerSwordToEnemies(Sword s, Enemy* enemy)
 
 void CollisionManager::checkEnemyBulletToPlayer(Projectile p, Player* player)
 {
-	//for(int x = 0; x < 3; x++)
-	
 		if(sqrt(pow(p.sprite.getPosition().x - player->sprite.getPosition().x, 2) + 
 			pow(p.sprite.getPosition().y - player->sprite.getPosition().y, 2)) < 50 && p.moving)
 		{
 			player->health -= p.damage;
 			p.moving = false;
-			//Convert to single projectile
-			//check if it collides with wall and make it disappear when it collides
 		}
 }
 
@@ -176,4 +172,15 @@ void CollisionManager::checkEnemySwordToPlayer(Sword s, Player* player)
 bool CollisionManager::isGrappleListEmpty()
 {
 	return grapplableTileList.empty();
+}
+
+
+bool CollisionManager::checkIfEnemyInRange(Projectile p, Player* player)
+{
+	if(sqrt(pow(p.sprite.getPosition().x - player->sprite.getPosition().x, 2) + 
+		pow(p.sprite.getPosition().y - player->sprite.getPosition().y, 2)) < 50 && p.moving)
+	{
+		return true;
+	}
+	else return false;
 }
