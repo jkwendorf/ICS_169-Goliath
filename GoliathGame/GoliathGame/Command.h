@@ -7,6 +7,7 @@ enum Input
 	NONE,
 	MOVELEFT,
 	MOVERIGHT,
+	NO_MOVE,
 	RUN,
 	JUMP,
 	GRAPPLE,

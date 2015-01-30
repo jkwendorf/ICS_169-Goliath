@@ -11,12 +11,23 @@ void JumpingState::enter()
 
 void JumpingState::handleInput(Player* player, Command* input) 
 {
-
+	if(input->inputCode == MOVELEFT ||
+		input->inputCode == MOVERIGHT ||
+		input->inputCode == NO_MOVE)
+	{
+		input->execute();
+	}
 }
 
 void JumpingState::update(Player* player, float deltaTime) 
 {
-	
+	player->verticalAcceleration(deltaTime);
+	player->move(player->vel*deltaTime);
+
+	while(player->collisionManager->playerCollisionDetection(player))
+	{
+		player->moveOutOfTile(player->collisionManager->getCollidedTile(*player));
+	}
 }
 
 void JumpingState::exit() 

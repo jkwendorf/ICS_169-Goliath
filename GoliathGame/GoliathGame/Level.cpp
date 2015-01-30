@@ -1,4 +1,5 @@
 #include "Level.h"
+#include "GrapplingState.h"
 
 Level::Level(void)
 	:changeScreen(false), enemyAI(collisionManager)
@@ -103,6 +104,8 @@ void Level::update(float deltaTime)
 				}
 				else
 					p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width/2, hookedTile->top + hookedTile->height));
+
+				p.newState = new GrapplingState();
 			}
 		}
 
@@ -115,14 +118,15 @@ void Level::update(float deltaTime)
 		p.playerUpdate(&view, sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()), deltaTime);
 
 		inputManager.update(p, &view, deltaTime);
-		if((!p.hShot.hookedOnSomething || !p.hShot.grappleInProgress) && !p.isHanging && !p.isVaulting)
+		p.handleInput();
+		/*if((!p.hShot.hookedOnSomething || !p.hShot.grappleInProgress) && !p.isHanging && !p.isVaulting)
 		{
 			collisionManager->checkTreasure(&p);
 			//std::cout << "Check Collision" << std::endl;
 			if(p.isFalling)
 			{
 				//std::cout << "Falling Collision" << std::endl;
-				while(collisionManager->playerCollisionDetection(&p))
+				/*while(collisionManager->playerCollisionDetection(&p))
 				{
 					p.moveOutOfTile(collisionManager->getCollidedTile(p));
 				}
@@ -143,7 +147,7 @@ void Level::update(float deltaTime)
 					p.move(moveOutOfTileHorizontally(p, collisionManager->getCollidedTile(p)));
 				}
 			}
-		}
+		}*/
 
 		for(Projectile& po : p.ammo)
 		{

@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "Global.h"
 #include "PhysicsManager.h"
+#include "IdleState.h"
 
 Player::Player() 
 	: BaseObject(0), grappleInProgress(false), facingRight(true),running(false), isVaulting(false), 
@@ -60,14 +61,18 @@ void Player::handleInput()
 
 void Player::update(float deltaTime)
 {
-	/*
-	while(!inputQueue.empty())
+	if(inputQueue.empty())
+		currentState->update(this, deltaTime);
+	else
 	{
-		state->update(*this, inputQueue.front(), deltaTime);
-		inputQueue.pop_front();
+		while(!inputQueue.empty())
+		{
+			//currentState->update(inputQueue.front(), deltaTime);
+			currentState->update(this, deltaTime);
+			delete inputQueue.front();
+			inputQueue.pop_front();
+		}
 	}
-	*/
-
 	//std::cout << sprite.getPosition().x << " " << sprite.getPosition().y << std::endl;
 	if(!hShot.grappleInProgress)
 	{
@@ -87,13 +92,7 @@ void Player::update(float deltaTime)
 		}
 	}
 
-	if((!hShot.hookedOnSomething || !hShot.grappleInProgress) && !isHanging)
-	{	
-		// Move the player
-		verticalAcceleration(deltaTime);
-		move(vel*deltaTime);
-	}
-	else if(hShot.grappleInProgress && hShot.hookedOnSomething)
+	/*if(hShot.grappleInProgress && hShot.hookedOnSomething)
 	{
 		vel.x = 0.f;
 		vel.y = 0.f;
@@ -122,7 +121,7 @@ void Player::update(float deltaTime)
 			}
 		}
 	}
-	else if(isHanging && isVaulting)
+	else */if(isHanging && isVaulting)
 	{
 		if(sprite.getPosition().y > vaultPos.y)
 		{
@@ -287,9 +286,12 @@ void Player::resetPosition(sf::Vector2f& newPos)
 
 void Player::jump()
 {
-	soundEffects[JUMPSOUND].play();
-	vel.y = JUMP_SPEED;
-	isFalling = true;
+	if(!isFalling)
+	{
+		soundEffects[JUMPSOUND].play();
+		vel.y = JUMP_SPEED;
+		isFalling = true;
+	}
 }
 
 void Player::playerUpdate(sf::View* view, sf::Vector2i roomSize, float deltaTime)
@@ -470,7 +472,16 @@ void Player::moveOutOfTile(Tile* t)
 	if(mini == left || mini == right)
 		move(moveOutOfTileHorizontally(*this, t));
 	else
+	{
 		move(moveOutOfTileVertically(*this, t));
+
+		if(!isFalling)
+		{
+			delete currentState;
+			//currentState = new IdleState();
+			currentState = new OnGroundState();
+		}
+	}
 }
 
 void Player::viewMove(float deltaTime, float& viewChanged_, LookDirection dir)

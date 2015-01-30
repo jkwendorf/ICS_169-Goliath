@@ -18,6 +18,5 @@ void MoveCommand::execute()
 		player->facingRight=true;
 	else if (dir==LEFT)
 		player->facingRight=false;
-	player->verticalAcceleration(deltaTime);
-	
+	//player->verticalAcceleration(deltaTime);	
 }

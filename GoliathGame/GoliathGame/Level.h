@@ -11,6 +11,7 @@
 #include <memory>
 #include "Town.h"
 #include "JumpingState.h"
+#include "IdleState.h"
 
 
 class Level : public BaseGameScreen
