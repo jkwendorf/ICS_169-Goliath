@@ -14,6 +14,8 @@ Level::Level(int levelNumber, int roomNumber)
 	p.init(collisionManager, new JumpingState());
 	currentRoom = new Room(levelNumber, roomNumber, enemyList);
 	background.setTexture(*TextureManager::GetInstance().retrieveTexture("banditCity"));
+	sf::Color color = background.getColor();
+	background.setColor(sf::Color(color.r, color.g, color.b, 200));
 	background.setPosition(-75,75);
 	background.scale(1.0, (float)(GAME_TILE_DIM * 22 + 100) / background.getTexture()->getSize().y);
 	loadingSprite.setTexture(*TextureManager::GetInstance().retrieveTexture("loading"));
@@ -75,7 +77,10 @@ void Level::update(float deltaTime)
 	{
 		if(nearTile == 18 || nearTile == 19)
 			changeRoom();
-		//else if (nearTile == 17)
+		else if (nearTile == 20)
+		{
+			p.takeDamage();
+		}
 			
 	}
 	if(!changeScreen)
@@ -245,6 +250,9 @@ void Level::draw(sf::RenderWindow& window)
 {
 	//window.draw(r);
 	window.draw(background);
+
+	window.draw(Global::GetInstance().testingRect);
+
 	currentRoom->draw(window);
 	p.draw(window);
 	//UNCOMMENT FOR TESTING
@@ -260,6 +268,7 @@ void Level::draw(sf::RenderWindow& window)
 	//	enemyNum++;
 	//	std::cout << "Enemy #" << enemyNum;
 	}
+	
 	
 	window.setView(view);
 	p.drawUI(window);

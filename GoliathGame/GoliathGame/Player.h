@@ -70,6 +70,7 @@ public:
 
 	void handleInput();
 	void update(float deltaTime);
+	void takeDamage();
 	void attack();
 	void move(float x, float y);
 	void move(sf::Vector2f& dist);
@@ -115,6 +116,7 @@ public:
 
 private:	
 	sf::Sound soundEffects[5];
+	float deathTimer;
 
 	void SetUpAugments();
 	void SetUpEffects();

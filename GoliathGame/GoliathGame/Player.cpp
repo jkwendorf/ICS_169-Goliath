@@ -5,7 +5,8 @@
 Player::Player() 
 	: BaseObject(0), grappleInProgress(false), facingRight(true),running(false), isVaulting(false), 
 	isHanging(false), shouldHang(false), health(Global::GetInstance().basePlayerStats[0]), 
-	stamina(Global::GetInstance().basePlayerStats[1]),	weaponCooldown(Global::GetInstance().basePlayerStats[4]), bottomPoint(0)
+	stamina(Global::GetInstance().basePlayerStats[1]),	weaponCooldown(Global::GetInstance().basePlayerStats[4]), bottomPoint(0),
+	deathTimer(0.0f)
 {
 	vel = sf::Vector2f(0.0,0.0);
 
@@ -67,6 +68,10 @@ void Player::handleInput()
 
 void Player::update(float deltaTime)
 {
+	if(deathTimer > 0)
+	{
+		deathTimer -= deltaTime;
+	}
 	/*
 	while(!inputQueue.empty())
 	{
@@ -74,7 +79,7 @@ void Player::update(float deltaTime)
 		inputQueue.pop_front();
 	}
 	*/
-
+	hShot.update(deltaTime);
 	//std::cout << sprite.getPosition().x << " " << sprite.getPosition().y << std::endl;
 	if(!hShot.grappleInProgress)
 	{
@@ -85,12 +90,13 @@ void Player::update(float deltaTime)
 	}
 	else
 	{
-		hShot.update(deltaTime);
+		//hShot.update(deltaTime);
 		if(sqrt(pow((std::abs(hShot.sprite.getPosition().x - sprite.getPosition().x)),2) + 
 			pow((std::abs(hShot.sprite.getPosition().y - sprite.getPosition().y)),2)) >= hShot.grappleLength || hShot.currentCooldown >= hShot.weaponCooldown)
 		{
 			hShot.grappleInProgress = false;
 			hShot.hookedOnSomething = false;
+			
 		}
 	}
 
@@ -192,6 +198,20 @@ void Player::update(float deltaTime)
 	ui->update(health, stamina);
 }
 
+void Player::takeDamage()
+{
+	//Player health decrease
+	if(deathTimer <= 0)
+	{
+		deathTimer = 1.0f;
+		//take dmg
+		std::cout << "Its a trap!" << std::endl;
+		return;
+	}
+	std::cout << "Not taking damage" << std::endl;
+
+}
+
 void Player::attack()
 {
 
@@ -268,14 +288,13 @@ void Player::draw(sf::RenderWindow& window)
 
 void Player::grapple()
 {
-
 	if(!collisionManager->isGrappleListEmpty())
 	{
 		if(!hShot.grappleInProgress && !isVaulting)
 		{
 			soundEffects[HOOKSOUND].play();
 			hShot.grappleInProgress = true;
-			Tile closestGrappleTile = collisionManager->getNearestGrappleTile(this);
+			Tile closestGrappleTile = collisionManager->getNearestGrappleTile(*this);
 			std::cout << closestGrappleTile.top << " " << closestGrappleTile.left << std::endl;
 			if(facingRight)
 			{

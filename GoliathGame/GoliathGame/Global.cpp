@@ -4,6 +4,11 @@ Global::Global()
 	:inventory(new PlayerInventory())
 {
 	test = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("GainItem")));
+
+	testingRect.setPosition(-100, -100);
+	testingRect.setOutlineColor(sf::Color::Red);
+	testingRect.setOutlineThickness(5);
+	testingRect.setOrigin(testingRect.getLocalBounds().left, testingRect.getLocalBounds().top);
 }
 
 Global::~Global()
