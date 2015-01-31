@@ -5,9 +5,17 @@
 Player::Player() 
 	: BaseObject(0), grappleInProgress(false), facingRight(true),running(false), isVaulting(false), 
 	isHanging(false), shouldHang(false), health(Global::GetInstance().basePlayerStats[0]), 
-	stamina(Global::GetInstance().basePlayerStats[1]),	weaponCooldown(Global::GetInstance().basePlayerStats[4]), bottomPoint(0)
+	stamina(Global::GetInstance().basePlayerStats[1]),	weaponCooldown(Global::GetInstance().basePlayerStats[4]), bottomPoint(0),
+	deathTimer(0.0f), currentState(nullptr)
 {
 	vel = sf::Vector2f(0.0,0.0);
+
+	jumpSpeed = Global::GetInstance().playerAttributes[1];
+	moveSpeed = Global::GetInstance().playerAttributes[0];
+	moveAccel = Global::GetInstance().playerAttributes[2];
+	boostSpeed = Global::GetInstance().playerAttributes[3];
+	grappleSpeed = Global::GetInstance().playerAttributes[4];
+	gravity = Global::GetInstance().playerAttributes[5];
 
 	sprite.setTexture(*TextureManager::GetInstance().retrieveTexture("David"));
 	//sprite.setPosition(64, 560);
@@ -34,6 +42,8 @@ Player::Player()
 
 void Player::init(CollisionManager* collisionManager_, BaseState* startState)
 {
+	if(currentState != nullptr)
+		delete currentState;
 	collisionManager = collisionManager_;
 	currentState = startState;
 }
@@ -60,6 +70,10 @@ void Player::handleInput()
 
 void Player::update(float deltaTime)
 {
+	if(deathTimer > 0)
+	{
+		deathTimer -= deltaTime;
+	}
 	/*
 	while(!inputQueue.empty())
 	{
@@ -67,7 +81,7 @@ void Player::update(float deltaTime)
 		inputQueue.pop_front();
 	}
 	*/
-
+	hShot.update(deltaTime);
 	//std::cout << sprite.getPosition().x << " " << sprite.getPosition().y << std::endl;
 	if(!hShot.grappleInProgress)
 	{
@@ -78,12 +92,13 @@ void Player::update(float deltaTime)
 	}
 	else
 	{
-		hShot.update(deltaTime);
+		//hShot.update(deltaTime);
 		if(sqrt(pow((std::abs(hShot.sprite.getPosition().x - sprite.getPosition().x)),2) + 
-			pow((std::abs(hShot.sprite.getPosition().y - sprite.getPosition().y)),2)) >= 275 || hShot.currentCooldown >= hShot.weaponCooldown)
+			pow((std::abs(hShot.sprite.getPosition().y - sprite.getPosition().y)),2)) >= hShot.grappleLength || hShot.currentCooldown >= hShot.weaponCooldown)
 		{
 			hShot.grappleInProgress = false;
 			hShot.hookedOnSomething = false;
+			
 		}
 	}
 
@@ -159,7 +174,7 @@ void Player::update(float deltaTime)
 	for(int x = 0; x < 3; x++)
 	{
 		if(!ammo[x].moving)
-			ammo[x].setLocation(sf::Vector2f(sprite.getPosition().x + 250, sprite.getPosition().y - 25));
+			ammo[x].setLocation(sf::Vector2f(sprite.getPosition().x + 300, sprite.getPosition().y - 25));
 		ammo[x].update(deltaTime);
 	}
 	
@@ -183,6 +198,20 @@ void Player::update(float deltaTime)
 			playerSword.hitBox.setPosition(sprite.getPosition().x - PLAYER_DIM_X*1.5, sprite.getPosition().y);
 	}
 	ui->update(health, stamina);
+}
+
+void Player::takeDamage()
+{
+	//Player health decrease
+	if(deathTimer <= 0)
+	{
+		deathTimer = 1.0f;
+		//take dmg
+		std::cout << "Its a trap!" << std::endl;
+		return;
+	}
+	std::cout << "Not taking damage" << std::endl;
+
 }
 
 void Player::attack()
@@ -261,34 +290,40 @@ void Player::draw(sf::RenderWindow& window)
 
 void Player::grapple()
 {
-	if(!hShot.grappleInProgress && !isVaulting)
+	if(!collisionManager->isGrappleListEmpty())
 	{
-		soundEffects[HOOKSOUND].play();
-		hShot.grappleInProgress = true;
-	
-		if(facingRight)
+		if(!hShot.grappleInProgress && !isVaulting)
 		{
-			hShot.startLocation = sf::Vector2f(sprite.getPosition().x + 60, sprite.getPosition().y - 15);
-			hShot.grappleToLocation(sf::Vector2f(sprite.getPosition().x + 300 , sprite.getPosition().y - 175));
+			soundEffects[HOOKSOUND].play();
+			hShot.grappleInProgress = true;
+			Tile closestGrappleTile = collisionManager->getNearestGrappleTile(*this);
+			std::cout << closestGrappleTile.top << " " << closestGrappleTile.left << std::endl;
+			if(facingRight)
+			{
+				hShot.startLocation = sf::Vector2f(sprite.getPosition().x + 60, sprite.getPosition().y - 15);
+				hShot.grappleToLocation(sf::Vector2f(closestGrappleTile.left + closestGrappleTile.width/2 , closestGrappleTile.top + closestGrappleTile.height/2));
+			}
+			else
+			{
+				hShot.startLocation = sf::Vector2f(sprite.getPosition().x - 60, sprite.getPosition().y - 15);
+				hShot.grappleToLocation(sf::Vector2f(closestGrappleTile.left + closestGrappleTile.width/2 , closestGrappleTile.top + closestGrappleTile.height/2));
+			}
+			hShot.fireRight = facingRight;
+			
 		}
-		else
-		{
-			hShot.startLocation = sf::Vector2f(sprite.getPosition().x - 60, sprite.getPosition().y - 15);
-			hShot.grappleToLocation(sf::Vector2f(sprite.getPosition().x - 300 , sprite.getPosition().y - 175));
-		}
-		hShot.fireRight = facingRight;
 	}
 }
 
 void Player::resetPosition(sf::Vector2f& newPos)
 {
 	sprite.setPosition(newPos);
+	vel.x = 0;
 }
 
 void Player::jump()
 {
 	soundEffects[JUMPSOUND].play();
-	vel.y = JUMP_SPEED;
+ 	vel.y = jumpSpeed;
 	isFalling = true;
 }
 
@@ -400,17 +435,17 @@ void Player::horizontalAcceleration(MovementDirection dir, float& deltaTime)
 	{
 		if(dir != STILL)
 		{
-			float maxSpeed = SPEED;
+			float maxSpeed = moveSpeed;
 			if(dir == LEFT)
 			{ 
 				maxSpeed = -1.f*maxSpeed;
 				if(running && stamina > 0)
 				{
-					maxSpeed -= BOOST;
-					vel.x += (MOVE_ACCEL+BOOST)*dir*deltaTime;
+					maxSpeed -= boostSpeed;
+					vel.x += (moveAccel+boostSpeed)*dir*deltaTime;
 				}
 				else
-					vel.x += MOVE_ACCEL*dir*deltaTime;
+					vel.x += moveAccel*dir*deltaTime;
 
 				vel.x = max(vel.x, maxSpeed);
 			}
@@ -418,11 +453,11 @@ void Player::horizontalAcceleration(MovementDirection dir, float& deltaTime)
 			{
 				if(running && stamina > 0)
 				{
-					maxSpeed += BOOST;
-					vel.x += (MOVE_ACCEL+BOOST)*dir*deltaTime;
+					maxSpeed += boostSpeed;
+					vel.x += (moveAccel+boostSpeed)*dir*deltaTime;
 				}
 				else
-					vel.x += MOVE_ACCEL*dir*deltaTime;
+					vel.x += moveAccel*dir*deltaTime;
 
 				vel.x = min(vel.x, maxSpeed);
 			}
@@ -431,13 +466,13 @@ void Player::horizontalAcceleration(MovementDirection dir, float& deltaTime)
 		{
 			if(vel.x > 0.f)
 			{
-				vel.x -= MOVE_ACCEL*deltaTime;
+				vel.x -= moveAccel*deltaTime;
 				if(vel.x <= 0.f)
 					vel.x = 0.f;
 			}
 			else if(vel.x < 0.f)
 			{
-				vel.x += MOVE_ACCEL*deltaTime;
+				vel.x += moveAccel*deltaTime;
 				if(vel.x >= 0.f)
 					vel.x = 0.f;
 			}
@@ -452,7 +487,7 @@ void Player::verticalAcceleration(float& deltaTime)
 		if(vel.y >= TERMINAL_VELOCITY)
 			vel.y = TERMINAL_VELOCITY;
 		else
-			vel.y += GRAVITY * deltaTime;
+			vel.y += gravity * deltaTime;
 	}
 }
 
@@ -573,4 +608,17 @@ void Player::interpolateVaultAboveGrappleTile()
 								sprite.getPosition().y - sprite.getGlobalBounds().height);
 
 	isVaulting = true;
+}
+
+void Player::onNotify(const BaseObject& entity, Util::Events e)
+{
+	switch (e)
+    {
+	case Util::Events::TAKEDAMAGE:
+		if (entity.objectNum == 0)
+		{
+			takeDamage();
+		}
+		break;
+    }
 }

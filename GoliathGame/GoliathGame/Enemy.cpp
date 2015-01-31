@@ -21,6 +21,10 @@ Enemy::Enemy(sf::String body, float x, float y) :
 	moveSpeed = Global::GetInstance().enemyAttributes[3];
 
 	initialPosition = sf::Vector2f(x,y);
+	raycast = Projectile(sprite.getPosition(), sf::Vector2f(0.0,0.0));
+	rayCool = 1.1f;
+
+	foundPlayer = false;
 
 	weaponCooldown = 2.0f;
 	currentCooldown = 2.0f;
@@ -51,9 +55,11 @@ Enemy::Enemy(sf::String body, float x, float y, float range) :
 	moveSpeed = 250;
 	initialPosition = sf::Vector2f(x,y);
 
+	raycast = Projectile(sprite.getPosition(), sf::Vector2f(0.0,0.0));
+	rayCool = 1.1f;
+
 	weaponCooldown = 2.0f;
 	currentCooldown = 2.0f;
-
 
 	//ND: Change Player dimensions to whatever floats your boat
 	sprite.setScale( (PLAYER_DIM_X / (float)sprite.getTexture()->getSize().x), (PLAYER_DIM_Y / (float)sprite.getTexture()->getSize().y));
@@ -80,6 +86,7 @@ Enemy::Enemy(sf::String body, float x, float y, float range, float jp, float ms,
 	sprite.setOrigin(sprite.getLocalBounds().width/2, sprite.getLocalBounds().height/2);
 	initialPosition = sf::Vector2f(x,y);
 
+	rayCool = 3.1f;
 	raycast = Projectile(sprite.getPosition(), sf::Vector2f(0.0,0.0));
 
 	for(int x = 0; x < 3; x++)
@@ -100,10 +107,31 @@ void Enemy::update(float deltaTime)
 	for(int x = 0; x < 3; x++)
 	{
 		if(!ammo[x].moving)
-			ammo[x].setLocation(sprite.getPosition());
+			ammo[x].setLocation(sf::Vector2f(sprite.getPosition().x + 250, sprite.getPosition().y - 25));
 		ammo[x].update(deltaTime);
 	}
+
 	eSword.update(deltaTime);
+	
+	//ISILDOR LOOK HERE FOR RAYCAST CODE
+	rayCool += deltaTime;
+
+	if(!raycast.moving && rayCool > 5.0f)
+	{
+		rayCool = 0;
+		raycast.setLocation(sf::Vector2f(sprite.getPosition().x + 250, sprite.getPosition().y - 25));
+		if(isMovingRight())
+		{
+			raycast.setVelocity(sf::Vector2f(5.0f, 0));
+		}
+		else
+		{
+			raycast.setVelocity(sf::Vector2f(-5.0f, 0));
+		}
+		raycast.moving = true;
+	}
+
+	raycast.update(deltaTime);
 }
 
 void Enemy::draw(sf::RenderWindow& window)
@@ -120,6 +148,9 @@ void Enemy::draw(sf::RenderWindow& window)
 			}
 		}
 		eSword.draw(window);
+
+		raycast.draw(window);
+		
 	}
 }
 
@@ -236,6 +267,12 @@ bool Enemy::isInScreen()
 		return true;
 	}
 	else return false;
+}
+
+void Enemy::resetRay()
+{
+	raycast.setLocation(sprite.getPosition());
+	raycast.moving = false;
 }
 
 bool Enemy::isMovingRight()

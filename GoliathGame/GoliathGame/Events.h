@@ -6,6 +6,7 @@ namespace Util
 	enum Events
 	{
 		PICK_UP_ITEM = 0,
+		TAKEDAMAGE = 1
 
 	};
 }

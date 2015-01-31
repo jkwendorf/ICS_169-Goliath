@@ -27,9 +27,11 @@ public :
 	std::map<std::string, std::vector<float>> augments;
 	float basePlayerStats[6];
 	int enemyAttributes[4];
+	int playerAttributes[6];
 	PlayerInventory* inventory;
 
 	void LoadEnemyAttributes();
+	void LoadPlayerAttribtues();
 	void SavePlayer();
 	void ParseXML();
 	void ParseLevelSizes(std::map<std::string, int>& mapToUpdate, std::string& fileName);
@@ -40,7 +42,7 @@ public :
 	int fps;
 	int xOffset;
 	int yOffset;
-	sf::Sprite* currentTileSheet[20];
+	sf::Sprite* currentTileSheet[TileSheetRows * TileSheetCols];
 
 	Global();
 	~Global();
@@ -51,4 +53,6 @@ public :
 
 	sf::Sound test;
 
+	
+	sf::RectangleShape testingRect;
 };

@@ -4,6 +4,9 @@
 #include <iterator>
 #include "BaseObject.h"
 #include "AudioManager.h"
+#include <string>
+#include <iostream>
+//#include <
 
 class PlayerInventory : public Observer
 {

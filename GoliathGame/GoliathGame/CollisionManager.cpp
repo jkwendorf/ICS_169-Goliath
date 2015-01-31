@@ -4,6 +4,7 @@
 CollisionManager::CollisionManager()
 {
 	addObserver(Global::GetInstance().inventory);
+
 }
 
 
@@ -36,6 +37,19 @@ bool CollisionManager::playerCollisionDetection(BaseObject* p)
 	return false;
 }
 
+Tile CollisionManager::getNearestGrappleTile(BaseObject p)
+{
+
+	Tile closestTile = *grapplableTileList.front();
+	for(Tile* b: grapplableTileList)
+		if(sqrt(pow(((b->top + b->height/2) - p.sprite.getPosition().y),2) + pow(((b->left + b->width/2)  - p.sprite.getPosition().x),2)) < 
+			sqrt(pow(((closestTile.top + closestTile.height/2) - p.sprite.getPosition().y),2) + pow(((closestTile.left + closestTile.width/2) - p.sprite.getPosition().x),2)))
+		{
+			closestTile = *b;
+		}
+
+	return closestTile;
+}
 void CollisionManager::checkTreasure(BaseObject* p)
 {
 	for(Tile* b : tileList)
@@ -56,7 +70,9 @@ Tile* CollisionManager::getCollidedTile(BaseObject p)
 {
 	for(Tile* b : tileList)
 		if(b->intersects(p.sprite.getGlobalBounds()))
+		{
 			return b;
+		}
 	return NULL;
 }
 
@@ -136,15 +152,11 @@ void CollisionManager::checkPlayerSwordToEnemies(Sword s, Enemy* enemy)
 
 void CollisionManager::checkEnemyBulletToPlayer(Projectile p, Player* player)
 {
-	//for(int x = 0; x < 3; x++)
-	
 		if(sqrt(pow(p.sprite.getPosition().x - player->sprite.getPosition().x, 2) + 
 			pow(p.sprite.getPosition().y - player->sprite.getPosition().y, 2)) < 50 && p.moving)
 		{
 			player->health -= p.damage;
 			p.moving = false;
-			//Convert to single projectile
-			//check if it collides with wall and make it disappear when it collides
 		}
 }
 
@@ -158,4 +170,20 @@ void CollisionManager::checkEnemySwordToPlayer(Sword s, Player* player)
 			player->health -= s.damage;
 		}
 	}
+}
+
+bool CollisionManager::isGrappleListEmpty()
+{
+	return grapplableTileList.empty();
+}
+
+
+bool CollisionManager::checkIfEnemyInRange(Projectile p, Player* player)
+{
+	if(sqrt(pow(p.sprite.getPosition().x - player->sprite.getPosition().x, 2) + 
+		pow(p.sprite.getPosition().y - player->sprite.getPosition().y, 2)) < 50 && p.moving)
+	{
+		return true;
+	}
+	else return false;
 }

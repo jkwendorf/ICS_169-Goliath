@@ -108,12 +108,14 @@
     <ClCompile Include="JumpCommand.cpp" />
     <ClCompile Include="JumpingState.cpp" />
     <ClCompile Include="Level.cpp" />
+    <ClCompile Include="LevelSelectState.cpp" />
     <ClCompile Include="LookCommand.cpp" />
     <ClCompile Include="LookingState.cpp" />
     <ClCompile Include="MoveCommand.cpp" />
     <ClCompile Include="OnGroundState.cpp" />
     <ClCompile Include="PauseGameState.cpp" />
     <ClCompile Include="PlayerInventory.cpp" />
+    <ClCompile Include="PopOut.cpp" />
     <ClCompile Include="pugixml.cpp" />
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="main.cpp" />
@@ -162,6 +164,7 @@
     <ClInclude Include="JumpCommand.h" />
     <ClInclude Include="JumpingState.h" />
     <ClInclude Include="Level.h" />
+    <ClInclude Include="LevelSelectState.h" />
     <ClInclude Include="LookCommand.h" />
     <ClInclude Include="LookingState.h" />
     <ClInclude Include="MoveCommand.h" />
@@ -169,6 +172,7 @@
     <ClInclude Include="OnGroundState.h" />
     <ClInclude Include="PauseGameState.h" />
     <ClInclude Include="PlayerInventory.h" />
+    <ClInclude Include="PopOut.h" />
     <ClInclude Include="pugiconfig.hpp" />
     <ClInclude Include="pugixml.hpp" />
     <ClInclude Include="Room.h" />
@@ -203,6 +207,12 @@
       <SubType>Designer</SubType>
     </Xml>
     <Xml Include="Sounds.xml" />
+    <Xml Include="PlayerAttributes.xml">
+      <SubType>Designer</SubType>
+    </Xml>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

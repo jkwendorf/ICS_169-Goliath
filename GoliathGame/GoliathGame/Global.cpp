@@ -4,6 +4,11 @@ Global::Global()
 	:inventory(new PlayerInventory())
 {
 	test = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("GainItem")));
+
+	testingRect.setPosition(-100, -100);
+	testingRect.setOutlineColor(sf::Color::Red);
+	testingRect.setOutlineThickness(5);
+	testingRect.setOrigin(testingRect.getLocalBounds().left, testingRect.getLocalBounds().top);
 }
 
 Global::~Global()
@@ -18,7 +23,7 @@ Global::~Global()
 
 void Global::CleanUp()
 {
-	for(int i = 0; i < 20; i++)
+	for(int i = 0; i < TileSheetRows * TileSheetCols; i++)
 	{
 		delete currentTileSheet[i];
 	}
@@ -133,6 +138,22 @@ void Global::SavePlayer() {
 	}
 	//doc.save_file(std::cout);
 	doc.save_file("PlayerStats.xml");
+}
+
+void Global::LoadPlayerAttribtues() {
+	pugi::xml_document doc;
+
+	pugi::xml_parse_result result = doc.load_file("PlayerAttributes.xml");
+	std::cout << result << std::endl;
+
+	pugi::xml_node playerAtt = doc.child("PlayerAttributes");
+
+	playerAttributes[0] = playerAtt.child("MoveSpeed").attribute("value").as_int();
+	playerAttributes[1] = playerAtt.child("JumpSpeed").attribute("value").as_int();
+	playerAttributes[2] = playerAtt.child("MoveAccel").attribute("value").as_int();
+	playerAttributes[3] = playerAtt.child("BoostSpeed").attribute("value").as_int();
+	playerAttributes[4] = playerAtt.child("GrappleSpeed").attribute("value").as_int();
+	playerAttributes[5] = playerAtt.child("Gravity").attribute("value").as_int();
 }
 
 void Global::LoadEnemyAttributes() {
