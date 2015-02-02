@@ -132,6 +132,7 @@
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="Town.cpp" />
     <ClCompile Include="UserInterface.cpp" />
+    <ClCompile Include="VaultingState.cpp" />
     <ClCompile Include="WalkingState.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -195,6 +196,7 @@
     <ClInclude Include="Town.h" />
     <ClInclude Include="UserInterface.h" />
     <ClInclude Include="Utility.h" />
+    <ClInclude Include="VaultingState.h" />
     <ClInclude Include="WalkingState.h" />
     <ClInclude Include="Weapon.h" />
   </ItemGroup>
@@ -207,7 +209,9 @@
       <SubType>Designer</SubType>
     </Xml>
     <Xml Include="Sounds.xml" />
-    <Xml Include="PlayerAttributes.xml" />
+    <Xml Include="PlayerAttributes.xml">
+      <SubType>Designer</SubType>
+    </Xml>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

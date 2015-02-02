@@ -60,7 +60,7 @@ class JumpingState;
 class Command;
 class CollisionManager;
 
-class Player : public BaseObject
+class Player : public BaseObject, public Observer
 {
 public:
 	// METHODS AND FUNCTIONS
@@ -70,6 +70,7 @@ public:
 
 	void handleInput();
 	void update(float deltaTime);
+	void takeDamage();
 	void attack();
 	void move(float x, float y);
 	void move(sf::Vector2f& dist);
@@ -89,6 +90,8 @@ public:
 
 	void viewMove(float deltaTime, float& viewChanged_, LookDirection dir);
 	void drawUI(sf::RenderWindow& window);
+
+	void onNotify(const BaseObject& entity, Util::Events e);
 
 	// VARIABLES
 	float stamina;
@@ -112,9 +115,12 @@ public:
 	BaseState* newState;
 	CollisionManager* collisionManager;
 	std::deque<Command*> inputQueue;
+	sf::Sprite crosshair;
+	Tile closestGrappleTile;
 
 private:	
 	sf::Sound soundEffects[5];
+	float deathTimer;
 
 	void SetUpAugments();
 	void SetUpEffects();

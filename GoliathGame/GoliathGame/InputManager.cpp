@@ -1,5 +1,6 @@
 #include "InputManager.h"
 #include "PhysicsManager.h"
+#include "JumpingState.h"
 
 InputManager::InputManager()
 {
@@ -23,6 +24,8 @@ InputManager::InputManager()
 	grappleCooldown = .5;
 	
 	viewChanged = 0;
+
+	//sch.moveCommand = new MoveCommand();
 }
 
 InputManager::InputManager(int controllerScheme)
@@ -46,13 +49,48 @@ void InputManager::update(Player& s, sf::View* v, float deltaTime)
 	*/
 
 	//change this when you want more complex movement
-	movement[0] = sf::Keyboard::isKeyPressed(sf::Keyboard::A) || (sf::Joystick::getAxisPosition(0, sf::Joystick::X) < -25);
-	movement[1] = sf::Keyboard::isKeyPressed(sf::Keyboard::D) || (sf::Joystick::getAxisPosition(0, sf::Joystick::X) > 25);
+	//movement[0] = sf::Keyboard::isKeyPressed(sf::Keyboard::A) || (sf::Joystick::getAxisPosition(0, sf::Joystick::X) < -25);
+	//movement[1] = sf::Keyboard::isKeyPressed(sf::Keyboard::D) || (sf::Joystick::getAxisPosition(0, sf::Joystick::X) > 25);
+
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::A) || (sf::Joystick::getAxisPosition(0, sf::Joystick::X) < -25))
+	{
+		MoveCommand* move = new MoveCommand();
+		move->init(&s, LEFT, deltaTime, MOVELEFT);
+		s.inputQueue.push_back(move);
+		//sch.moveCommand->init(&s, MovementDirection::LEFT, deltaTime, MOVELEFT);
+		//s.inputQueue.push_back(sch.moveCommand);
+	}
+	else if(sf::Keyboard::isKeyPressed(sf::Keyboard::D) || (sf::Joystick::getAxisPosition(0, sf::Joystick::X) > 25))
+	{
+		MoveCommand* move = new MoveCommand();
+		move->init(&s, RIGHT, deltaTime, MOVERIGHT);
+		s.inputQueue.push_back(move);
+		//sch.moveCommand->init(&s, MovementDirection::RIGHT, deltaTime, MOVERIGHT);
+		//s.inputQueue.push_back(sch.moveCommand);
+	}
+	else
+	{
+		MoveCommand* move = new MoveCommand();
+		move->init(&s, STILL, deltaTime, NO_MOVE);
+		s.inputQueue.push_back(move);
+	}
 
 	//utility[0] = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift);
 	
 	s.running = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Joystick::getAxisPosition(0, sf::Joystick::Z) > 25;
 	utility[1] = (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || sf::Joystick::isButtonPressed(0, 0)) && !utility[1] ? true : false;
+	if((sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || sf::Joystick::isButtonPressed(0, 0)) && !utility[1])
+	{
+		if(s.isHanging)
+		{
+			s.inputQueue.push_back(new ClimbCommand(&s, CLIMB));
+		}
+		else
+		{
+			JumpCommand* jump = new JumpCommand(&s, JUMP);
+			s.inputQueue.push_back(jump);
+		}
+	}
 	/*
 	{
 		if(!s.isHanging && !s.isFalling)
@@ -67,8 +105,8 @@ void InputManager::update(Player& s, sf::View* v, float deltaTime)
 	utility[2] = (sf::Mouse::isButtonPressed(sf::Mouse::Right) || sf::Joystick::isButtonPressed(0, 1)) && !utility[2] ? true : false;
 	utility[3] = (sf::Mouse::isButtonPressed(sf::Mouse::Left) || sf::Joystick::isButtonPressed(0, 2)) && !utility[3] ? true : false;
 	utility[4] = (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || sf::Joystick::isButtonPressed(0, 3)) && !utility[4] ? true : false;
-	utility[5] = (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Joystick::getAxisPosition(0, sf::Joystick::Y) < -25) && !utility[6] ? true : false;
-	utility[6] = (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Joystick::getAxisPosition(0, sf::Joystick::Y) > 25) && !utility[5] ? true : false;
+	utility[5] = (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Joystick::getAxisPosition(0, sf::Joystick::Y) < -50) && !utility[6] ? true : false;
+	utility[6] = (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Joystick::getAxisPosition(0, sf::Joystick::Y) > 50) && !utility[5] ? true : false;
 
 	playerMove(s, deltaTime);
 	viewMove(v, s, deltaTime);
@@ -103,7 +141,7 @@ void InputManager::playerMove(Player& player, float deltaTime)
 	}*/
 
 	/* HANDLE LEFT AND RIGHT MOTION*/
-	if(movement[0])
+/*	if(movement[0])
 	{
 		if((!player.hShot.grappleInProgress || !player.hShot.hookedOnSomething) && !player.isHanging)
 		{
@@ -124,17 +162,17 @@ void InputManager::playerMove(Player& player, float deltaTime)
 		 }
 	}
 	else
-		player.horizontalAcceleration(STILL, deltaTime);
+		player.horizontalAcceleration(STILL, deltaTime);*/
 
 	if(utility[1])
 	{
-		if(!player.isHanging && !player.isFalling)
-			player.jump();
-		else if(player.isHanging && !player.isVaulting)
+		//if(!player.isHanging && !player.isFalling)
+			//player.jump();
+		/*else if(player.isHanging && !player.isVaulting)
 		{
 			player.interpolateVaultAboveGrappleTile();
 			//s.instantVaultAboveGrappleTile();
-		}
+		}*/
 	}
 	if(utility[2])
 	{
@@ -146,7 +184,10 @@ void InputManager::playerMove(Player& player, float deltaTime)
 				{
 					if(!player.grappleInProgress && !player.isHanging && !player.isVaulting)
 					{
-						player.grapple();
+						//player.grapple();
+						GrappleCommand* grapple = new GrappleCommand(&player, GRAPPLE);
+						player.inputQueue.push_back(grapple);
+
 						currentGrappleCooldown = 0;
 					}
 					else
@@ -156,6 +197,12 @@ void InputManager::playerMove(Player& player, float deltaTime)
 				{
 					player.isHanging = false;
 					player.hShot.isDisabled = true;
+
+					delete player.currentState;
+					player.currentState = new JumpingState();
+					player.isFalling = true;
+
+					//player.inputQueue.push_back(new ClimbCommand(&player, CLIMB));
 				}
 			}
 		}

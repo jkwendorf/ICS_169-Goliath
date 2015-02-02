@@ -1,11 +1,14 @@
 #include "Player.h"
 #include "Global.h"
 #include "PhysicsManager.h"
+#include "IdleState.h"
+#include "VaultingState.h"
 
 Player::Player() 
 	: BaseObject(0), grappleInProgress(false), facingRight(true),running(false), isVaulting(false), 
 	isHanging(false), shouldHang(false), health(Global::GetInstance().basePlayerStats[0]), 
-	stamina(Global::GetInstance().basePlayerStats[1]),	weaponCooldown(Global::GetInstance().basePlayerStats[4]), bottomPoint(0)
+	stamina(Global::GetInstance().basePlayerStats[1]),	weaponCooldown(Global::GetInstance().basePlayerStats[4]), bottomPoint(0),
+	deathTimer(0.0f), currentState(nullptr)
 {
 	vel = sf::Vector2f(0.0,0.0);
 
@@ -17,6 +20,9 @@ Player::Player()
 	gravity = Global::GetInstance().playerAttributes[5];
 
 	sprite.setTexture(*TextureManager::GetInstance().retrieveTexture("David"));
+	crosshair.setTexture(*TextureManager::GetInstance().retrieveTexture("crosshair"));
+	crosshair.setPosition(-1000,-1000);
+	crosshair.setScale(1.2,1.2);
 	//sprite.setPosition(64, 560);
 	sprite.setPosition(150, 64);
 	sprite.setScale( (PLAYER_DIM_X / (float)sprite.getTexture()->getSize().x), (PLAYER_DIM_Y / (float)sprite.getTexture()->getSize().y));
@@ -41,6 +47,8 @@ Player::Player()
 
 void Player::init(CollisionManager* collisionManager_, BaseState* startState)
 {
+	if(currentState != nullptr)
+		delete currentState;
 	collisionManager = collisionManager_;
 	currentState = startState;
 }
@@ -55,6 +63,7 @@ void Player::handleInput()
 {
 	for(std::deque<Command*>::iterator it = inputQueue.begin(); it != inputQueue.end(); it++)
 	{
+		std::cout << inputQueue.size() << std::endl;
 		currentState->handleInput(this, *it);
 		if(newState != NULL)
 		{
@@ -63,18 +72,38 @@ void Player::handleInput()
 			newState = NULL;
 		}
 	}
+	while(!inputQueue.empty())
+	{
+		delete inputQueue.front();
+		inputQueue.pop_front();
+	}
 }
 
 void Player::update(float deltaTime)
 {
+	if(deathTimer > 0)
+	{
+		deathTimer -= deltaTime;
+	}
+
+	currentState->update(this, deltaTime);
+
 	/*
 	while(!inputQueue.empty())
+	//if(inputQueue.empty())
+		currentState->update(this, deltaTime);
+	/*else
 	{
-		state->update(*this, inputQueue.front(), deltaTime);
-		inputQueue.pop_front();
-	}
-	*/
-
+		while(!inputQueue.empty())
+		{
+			//currentState->update(inputQueue.front(), deltaTime);
+			currentState->update(this, deltaTime);
+			delete inputQueue.front();
+			inputQueue.pop_front();
+		}
+	}*/
+	
+	hShot.update(deltaTime);
 	//std::cout << sprite.getPosition().x << " " << sprite.getPosition().y << std::endl;
 	if(!hShot.grappleInProgress)
 	{
@@ -85,22 +114,16 @@ void Player::update(float deltaTime)
 	}
 	else
 	{
-		hShot.update(deltaTime);
+		//hShot.update(deltaTime);
 		if(sqrt(pow((std::abs(hShot.sprite.getPosition().x - sprite.getPosition().x)),2) + 
 			pow((std::abs(hShot.sprite.getPosition().y - sprite.getPosition().y)),2)) >= hShot.grappleLength || hShot.currentCooldown >= hShot.weaponCooldown)
 		{
 			hShot.grappleInProgress = false;
-			hShot.hookedOnSomething = false;
+			hShot.hookedOnSomething = false;			
 		}
 	}
 
-	if((!hShot.hookedOnSomething || !hShot.grappleInProgress) && !isHanging)
-	{	
-		// Move the player
-		verticalAcceleration(deltaTime);
-		move(vel*deltaTime);
-	}
-	else if(hShot.grappleInProgress && hShot.hookedOnSomething)
+	/*if(hShot.grappleInProgress && hShot.hookedOnSomething)
 	{
 		vel.x = 0.f;
 		vel.y = 0.f;
@@ -129,39 +152,7 @@ void Player::update(float deltaTime)
 			}
 		}
 	}
-	else if(isHanging && isVaulting)
-	{
-		if(sprite.getPosition().y > vaultPos.y)
-		{
-			move(0.f, -300.f*deltaTime);
-
-			if(sprite.getPosition().y <= vaultPos.y)
-				sprite.setPosition(sprite.getPosition().x, vaultPos.y);
-		}
-		else if(sprite.getPosition().y == vaultPos.y)
-		{
-			if(hShot.fireRight)
-			{
-				move(300.f*deltaTime, 0.f);
-
-				if(sprite.getPosition().x >= vaultPos.x)
-					sprite.setPosition(vaultPos.x, sprite.getPosition().y);
-			}
-			else
-			{
-				move(-300.f*deltaTime, 0.f);
-				
-				if(sprite.getPosition().x <= vaultPos.x)
-					sprite.setPosition(vaultPos.x, sprite.getPosition().y);
-			}
-		}
-
-		if(vaultPos == sprite.getPosition())
-		{
-			isHanging = false;
-			isVaulting = false;
-		}
-	}
+	else */
 
 	for(int x = 0; x < 3; x++)
 	{
@@ -190,6 +181,29 @@ void Player::update(float deltaTime)
 			playerSword.hitBox.setPosition(sprite.getPosition().x - PLAYER_DIM_X*1.5, sprite.getPosition().y);
 	}
 	ui->update(health, stamina);
+	
+	if(!collisionManager->isGrappleListEmpty())
+	{
+		closestGrappleTile = collisionManager->getNearestGrappleTile(*this);
+		crosshair.setPosition(closestGrappleTile.left, closestGrappleTile.top);
+		crosshair.setColor(sf::Color(crosshair.getColor().r, crosshair.getColor().g,crosshair.getColor().b, crosshair.getColor().a - 10));
+		if(crosshair.getColor().a < 0)
+			crosshair.setColor(sf::Color(crosshair.getColor().r, crosshair.getColor().g,crosshair.getColor().b, 255));
+	}
+}
+
+void Player::takeDamage()
+{
+	//Player health decrease
+	if(deathTimer <= 0)
+	{
+		deathTimer = 1.0f;
+		//take dmg
+		std::cout << "Its a trap!" << std::endl;
+		return;
+	}
+	std::cout << "Not taking damage" << std::endl;
+
 }
 
 void Player::attack()
@@ -258,6 +272,7 @@ void Player::draw(sf::RenderWindow& window)
 		if(ammo[x].moving)
 			ammo[x].draw(window);
 
+	window.draw(crosshair);
 	/* //TESTING CIRCLE
 	sf::CircleShape circle = sf::CircleShape(5.0);
 	circle.setPosition(sprite.getPosition());
@@ -268,14 +283,12 @@ void Player::draw(sf::RenderWindow& window)
 
 void Player::grapple()
 {
-
 	if(!collisionManager->isGrappleListEmpty())
 	{
 		if(!hShot.grappleInProgress && !isVaulting)
 		{
 			soundEffects[HOOKSOUND].play();
 			hShot.grappleInProgress = true;
-			Tile closestGrappleTile = collisionManager->getNearestGrappleTile(this);
 			std::cout << closestGrappleTile.top << " " << closestGrappleTile.left << std::endl;
 			if(facingRight)
 			{
@@ -296,13 +309,17 @@ void Player::grapple()
 void Player::resetPosition(sf::Vector2f& newPos)
 {
 	sprite.setPosition(newPos);
+	vel.x = 0;
 }
 
 void Player::jump()
 {
-	soundEffects[JUMPSOUND].play();
- 	vel.y = jumpSpeed;
-	isFalling = true;
+	if(!isHanging && !isFalling)
+	{
+		soundEffects[JUMPSOUND].play();
+ 		vel.y = jumpSpeed;
+		isFalling = true;
+	}
 }
 
 void Player::playerUpdate(sf::View* view, sf::Vector2i roomSize, float deltaTime)
@@ -483,7 +500,16 @@ void Player::moveOutOfTile(Tile* t)
 	if(mini == left || mini == right)
 		move(moveOutOfTileHorizontally(*this, t));
 	else
+	{
 		move(moveOutOfTileVertically(*this, t));
+
+		if(!isFalling)
+		{
+			delete currentState;
+			//currentState = new IdleState();
+			currentState = new OnGroundState();
+		}
+	}
 }
 
 void Player::viewMove(float deltaTime, float& viewChanged_, LookDirection dir)
@@ -578,12 +604,30 @@ void Player::instantVaultAboveGrappleTile()
 
 void Player::interpolateVaultAboveGrappleTile()
 {
-	if(hShot.fireRight)
-		vaultPos = sf::Vector2f(sprite.getPosition().x + sprite.getGlobalBounds().width/2 + GAME_TILE_DIM/2, 
-								sprite.getPosition().y - sprite.getGlobalBounds().height);
-	else
-		vaultPos = sf::Vector2f(sprite.getPosition().x - sprite.getGlobalBounds().width/2 - GAME_TILE_DIM/2, 
-								sprite.getPosition().y - sprite.getGlobalBounds().height);
+	if(!isVaulting)
+	{
+		if(hShot.fireRight)
+			vaultPos = sf::Vector2f(sprite.getPosition().x + sprite.getGlobalBounds().width/2 + GAME_TILE_DIM/2, 
+									sprite.getPosition().y - sprite.getGlobalBounds().height);
+		else
+			vaultPos = sf::Vector2f(sprite.getPosition().x - sprite.getGlobalBounds().width/2 - GAME_TILE_DIM/2, 
+									sprite.getPosition().y - sprite.getGlobalBounds().height);
 
-	isVaulting = true;
+		isVaulting = true;
+		//currentState = new VaultingState();
+		newState = new VaultingState();
+	}
+}
+
+void Player::onNotify(const BaseObject& entity, Util::Events e)
+{
+	switch (e)
+    {
+	case Util::Events::TAKEDAMAGE:
+		if (entity.objectNum == 0)
+		{
+			takeDamage();
+		}
+		break;
+    }
 }
