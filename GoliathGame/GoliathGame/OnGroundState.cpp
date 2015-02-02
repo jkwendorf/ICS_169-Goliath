@@ -7,7 +7,7 @@
 
 void OnGroundState::handleInput(Player* player, Command* input)
 {
-	if (input->inputCode == MOVELEFT || input->inputCode == MOVERIGHT || input->inputCode == NO_MOVE)
+	if ((input->inputCode == MOVELEFT || input->inputCode == MOVERIGHT || input->inputCode == NO_MOVE) && !player->hShot.hookedOnSomething)
 	{
 		player->newState = new WalkingState();
 		input->execute();

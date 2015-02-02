@@ -2,7 +2,7 @@
 
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 720
-#define FPS 30
+#define FPS 60
 #define	EDITOR_TILE_WIDTH 100
 #define EDITOR_TILE_HEIGHT 100
 #define GAME_TILE_DIM 64

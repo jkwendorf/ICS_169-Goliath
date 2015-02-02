@@ -10,6 +10,7 @@ enum Input
 	NO_MOVE,
 	RUN,
 	JUMP,
+	CLIMB,
 	GRAPPLE,
 	ATTACK,
 	LOOKUP,

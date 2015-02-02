@@ -8,7 +8,7 @@ Projectile::Projectile()
 Projectile::Projectile(sf::Vector2f startPos, sf::Vector2f vel) :
 	startLocation(startPos), velocity(vel), moving(false)
 {
-	bulletAnimation = Animation(10, 1, 64, 64, .015);
+	bulletAnimation = Animation(10, 1, 64, 64, .10);
 	//source = sf::Vector2i(0,0);
 	//projectileTexture = TextureManager::GetInstance().retrieveTexture("haduken");
 	sprite.setTexture(*TextureManager::GetInstance().retrieveTexture("haduken2"));

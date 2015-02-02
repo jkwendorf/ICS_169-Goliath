@@ -195,6 +195,12 @@
     <ClCompile Include="LevelSelectState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PopOut.cpp">
+      <Filter>Source Files\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="VaultingState.cpp">
+      <Filter>Source Files\Player\Player States</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="State.h">
@@ -380,6 +386,12 @@
     <ClInclude Include="LevelSelectState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PopOut.h">
+      <Filter>Header Files\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="VaultingState.h">
+      <Filter>Header Files\Player\Player States</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Levels.xml">
@@ -394,5 +406,11 @@
     <Xml Include="EnemyAttributes.xml">
       <Filter>Resource Files</Filter>
     </Xml>
+    <Xml Include="PlayerAttributes.xml">
+      <Filter>Resource Files</Filter>
+    </Xml>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

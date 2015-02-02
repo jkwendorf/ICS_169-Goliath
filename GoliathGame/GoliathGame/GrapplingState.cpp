@@ -2,6 +2,9 @@
 //#include "Utility.h"
 #include "PhysicsManager.h"
 #include "HangingState.h"
+#include "JumpingState.h"
+#include "ClimbCommand.h"
+#include "VaultingState.h"
 
 GrapplingState::GrapplingState()
 {}
@@ -12,14 +15,16 @@ void GrapplingState::enter(Player* player)
 
 void GrapplingState::handleInput(Player* player, Command* input) 
 {
-	if(input->inputCode == JUMP)
+	/*if(input->inputCode == JUMP)
 	{
 		
 	}
 	else
 	{
 		
-	}
+	}*/
+	if(input->inputCode == CLIMB)
+		input->execute();
 }
 
 void GrapplingState::update(Player* player, float deltaTime) 
@@ -47,11 +52,13 @@ void GrapplingState::update(Player* player, float deltaTime)
 			// JW: Will need to think of a way of altering this so it's a command
 			if(sf::Mouse::isButtonPressed(sf::Mouse::Right) || sf::Joystick::isButtonPressed(0, 1))
 			{
-				player->interpolateVaultAboveGrappleTile();
+				player->inputQueue.push_back(new ClimbCommand(player, CLIMB));
 			}
 			else
 				player->newState = new HangingState();
 		}
+		else
+			player->newState = new JumpingState();
 	}
 }
 

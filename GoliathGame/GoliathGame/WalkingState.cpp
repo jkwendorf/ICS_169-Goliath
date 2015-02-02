@@ -22,6 +22,7 @@ void WalkingState::update(Player* player, float deltaTime)
 	{
 		//std::cout << "Start Falling" << std::endl;
 		player->isFalling = true;
+		delete player->currentState;
 		player->currentState = new JumpingState();
 	}
 	else if(player->collisionManager->tileBelowCharacter(player))

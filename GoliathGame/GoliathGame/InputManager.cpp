@@ -1,5 +1,6 @@
 #include "InputManager.h"
 #include "PhysicsManager.h"
+#include "JumpingState.h"
 
 InputManager::InputManager()
 {
@@ -80,8 +81,15 @@ void InputManager::update(Player& s, sf::View* v, float deltaTime)
 	utility[1] = (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || sf::Joystick::isButtonPressed(0, 0)) && !utility[1] ? true : false;
 	if((sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || sf::Joystick::isButtonPressed(0, 0)) && !utility[1])
 	{
-		JumpCommand* jump = new JumpCommand(&s, JUMP);
-		s.inputQueue.push_back(jump);
+		if(s.isHanging)
+		{
+			s.inputQueue.push_back(new ClimbCommand(&s, CLIMB));
+		}
+		else
+		{
+			JumpCommand* jump = new JumpCommand(&s, JUMP);
+			s.inputQueue.push_back(jump);
+		}
 	}
 	/*
 	{
@@ -97,8 +105,8 @@ void InputManager::update(Player& s, sf::View* v, float deltaTime)
 	utility[2] = (sf::Mouse::isButtonPressed(sf::Mouse::Right) || sf::Joystick::isButtonPressed(0, 1)) && !utility[2] ? true : false;
 	utility[3] = (sf::Mouse::isButtonPressed(sf::Mouse::Left) || sf::Joystick::isButtonPressed(0, 2)) && !utility[3] ? true : false;
 	utility[4] = (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || sf::Joystick::isButtonPressed(0, 3)) && !utility[4] ? true : false;
-	utility[5] = (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Joystick::getAxisPosition(0, sf::Joystick::Y) < -25) && !utility[6] ? true : false;
-	utility[6] = (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Joystick::getAxisPosition(0, sf::Joystick::Y) > 25) && !utility[5] ? true : false;
+	utility[5] = (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Joystick::getAxisPosition(0, sf::Joystick::Y) < -50) && !utility[6] ? true : false;
+	utility[6] = (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Joystick::getAxisPosition(0, sf::Joystick::Y) > 50) && !utility[5] ? true : false;
 
 	playerMove(s, deltaTime);
 	viewMove(v, s, deltaTime);
@@ -189,6 +197,12 @@ void InputManager::playerMove(Player& player, float deltaTime)
 				{
 					player.isHanging = false;
 					player.hShot.isDisabled = true;
+
+					delete player.currentState;
+					player.currentState = new JumpingState();
+					player.isFalling = true;
+
+					//player.inputQueue.push_back(new ClimbCommand(&player, CLIMB));
 				}
 			}
 		}

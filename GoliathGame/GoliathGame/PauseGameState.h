@@ -3,6 +3,7 @@
 #include "ButtonManager.h"
 #include "Global.h"
 #include "StateManager.h"
+#include "PopOut.h"s
 
 class PauseGameState : public State
 {
@@ -17,10 +18,12 @@ public:
 	void loadContent();
 	void unloadContent();
 	void setToQuit();
+	void changeSaved();
 
 private:
 	ButtonManager* bM;
+	PopOut* pO;
 	sf::Font* f;
-	bool isPressedUp, isPressedDown;
+	bool isPressedUp, isPressedDown, saved;
 };
 

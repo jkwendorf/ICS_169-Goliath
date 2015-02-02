@@ -11,17 +11,23 @@ void JumpingState::enter()
 
 void JumpingState::handleInput(Player* player, Command* input) 
 {
-	if(input->inputCode == MOVELEFT ||
+	if((input->inputCode == MOVELEFT ||
 		input->inputCode == MOVERIGHT ||
-		input->inputCode == NO_MOVE)
+		input->inputCode == NO_MOVE) && !player->isHanging)
 	{
 		input->execute();
 	}
+	else if(input->inputCode == GRAPPLE)
+		input->execute();
 }
 
 void JumpingState::update(Player* player, float deltaTime) 
 {
-	player->verticalAcceleration(deltaTime);
+	if(!player->isFalling)
+		player->isFalling = true;
+
+	if(!player->isVaulting)
+		player->verticalAcceleration(deltaTime);
 	player->move(player->vel*deltaTime);
 
 	while(player->collisionManager->playerCollisionDetection(player))
