@@ -81,7 +81,6 @@ int Room::NearInteractableTiles(BaseObject& obj)
 
 void Room::GetGrapplableTiles(Player& player, std::vector<Tile*>& nearTiles)
 {
-
 	//*Global::GetInstance().debugLog << "Player Pos: " << player.sprite.getPosition().x << ", " << player.sprite.getPosition().y << "---";
 	if(player.sprite.getPosition().y - PLAYER_DIM_Y/2 - player.hShot.grappleLength >= 0)
 	{
@@ -94,7 +93,7 @@ void Room::GetGrapplableTiles(Player& player, std::vector<Tile*>& nearTiles)
 		}
 		else
 		{
-			sf::FloatRect rect(sf::Vector2f(player.sprite.getPosition().x + PLAYER_DIM_X/2, player.sprite.getPosition().y - PLAYER_DIM_Y/2 - player.hShot.grappleLength),
+			sf::FloatRect rect(sf::Vector2f(player.sprite.getPosition().x, player.sprite.getPosition().y - PLAYER_DIM_Y/2 - player.hShot.grappleLength),
 				sf::Vector2f(player.hShot.grappleLength + PLAYER_DIM_X/2, player.hShot.grappleLength + PLAYER_DIM_Y/2));
 			GetNearTiles(rect, nearTiles, true, true);
 			return;
@@ -102,6 +101,7 @@ void Room::GetGrapplableTiles(Player& player, std::vector<Tile*>& nearTiles)
 	}
 	else
 	{
+		//These two cases do not work need to fix the Grant Walker
 		if (!player.facingRight)
 		{
 			sf::FloatRect rect(sf::Vector2f(player.sprite.getPosition().x - PLAYER_DIM_X/2 - player.hShot.grappleLength, 0),
@@ -220,11 +220,12 @@ void Room::checkUpperLeftSameGrid(int currentGrid, sf::FloatRect& rect, const sf
 	{
 		if (grapple)
 		{		
-			//Set the top left y position = 0
-			sectList[currentGrid]->checkGrapple(sf::Vector2f(topLeft.x, 0), 
+			//Set the top left y position = 0	
+			sectList[currentGrid]->checkGrapple(sf::Vector2f(topLeft.x < 0 ? 0 : topLeft.x, topLeft.y < 0 ? 0 : topLeft.y), 
 				botRight - sectList[currentGrid]->getOffset(), nearTiles);
 			return;
 		}
+	
 	}
 }
 

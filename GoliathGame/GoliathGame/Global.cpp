@@ -23,7 +23,7 @@ Global::~Global()
 
 void Global::CleanUp()
 {
-	for(int i = 0; i < 20; i++)
+	for(int i = 0; i < TileSheetRows * TileSheetCols; i++)
 	{
 		delete currentTileSheet[i];
 	}

@@ -7,7 +7,8 @@
 Player::Player() 
 	: BaseObject(0), grappleInProgress(false), facingRight(true),running(false), isVaulting(false), 
 	isHanging(false), shouldHang(false), health(Global::GetInstance().basePlayerStats[0]), 
-	stamina(Global::GetInstance().basePlayerStats[1]),	weaponCooldown(Global::GetInstance().basePlayerStats[4]), bottomPoint(0)
+	stamina(Global::GetInstance().basePlayerStats[1]),	weaponCooldown(Global::GetInstance().basePlayerStats[4]), bottomPoint(0),
+	deathTimer(0.0f), currentState(nullptr)
 {
 	vel = sf::Vector2f(0.0,0.0);
 
@@ -43,6 +44,8 @@ Player::Player()
 
 void Player::init(CollisionManager* collisionManager_, BaseState* startState)
 {
+	if(currentState != nullptr)
+		delete currentState;
 	collisionManager = collisionManager_;
 	currentState = startState;
 }
@@ -75,6 +78,15 @@ void Player::handleInput()
 
 void Player::update(float deltaTime)
 {
+	if(deathTimer > 0)
+	{
+		deathTimer -= deltaTime;
+	}
+
+	currentState->update(this, deltaTime);
+
+	/*
+	while(!inputQueue.empty())
 	//if(inputQueue.empty())
 		currentState->update(this, deltaTime);
 	/*else
@@ -166,6 +178,20 @@ void Player::update(float deltaTime)
 			playerSword.hitBox.setPosition(sprite.getPosition().x - PLAYER_DIM_X*1.5, sprite.getPosition().y);
 	}
 	ui->update(health, stamina);
+}
+
+void Player::takeDamage()
+{
+	//Player health decrease
+	if(deathTimer <= 0)
+	{
+		deathTimer = 1.0f;
+		//take dmg
+		std::cout << "Its a trap!" << std::endl;
+		return;
+	}
+	std::cout << "Not taking damage" << std::endl;
+
 }
 
 void Player::attack()
@@ -271,6 +297,7 @@ void Player::grapple()
 void Player::resetPosition(sf::Vector2f& newPos)
 {
 	sprite.setPosition(newPos);
+	vel.x = 0;
 }
 
 void Player::jump()
@@ -578,4 +605,17 @@ void Player::interpolateVaultAboveGrappleTile()
 		//currentState = new VaultingState();
 		newState = new VaultingState();
 	}
+}
+
+void Player::onNotify(const BaseObject& entity, Util::Events e)
+{
+	switch (e)
+    {
+	case Util::Events::TAKEDAMAGE:
+		if (entity.objectNum == 0)
+		{
+			takeDamage();
+		}
+		break;
+    }
 }
