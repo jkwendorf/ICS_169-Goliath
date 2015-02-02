@@ -20,6 +20,9 @@ Player::Player()
 	gravity = Global::GetInstance().playerAttributes[5];
 
 	sprite.setTexture(*TextureManager::GetInstance().retrieveTexture("David"));
+	crosshair.setTexture(*TextureManager::GetInstance().retrieveTexture("crosshair"));
+	crosshair.setPosition(-1000,-1000);
+	crosshair.setScale(1.2,1.2);
 	//sprite.setPosition(64, 560);
 	sprite.setPosition(150, 64);
 	sprite.setScale( (PLAYER_DIM_X / (float)sprite.getTexture()->getSize().x), (PLAYER_DIM_Y / (float)sprite.getTexture()->getSize().y));
@@ -178,6 +181,15 @@ void Player::update(float deltaTime)
 			playerSword.hitBox.setPosition(sprite.getPosition().x - PLAYER_DIM_X*1.5, sprite.getPosition().y);
 	}
 	ui->update(health, stamina);
+	
+	if(!collisionManager->isGrappleListEmpty())
+	{
+		closestGrappleTile = collisionManager->getNearestGrappleTile(*this);
+		crosshair.setPosition(closestGrappleTile.left, closestGrappleTile.top);
+		crosshair.setColor(sf::Color(crosshair.getColor().r, crosshair.getColor().g,crosshair.getColor().b, crosshair.getColor().a - 10));
+		if(crosshair.getColor().a < 0)
+			crosshair.setColor(sf::Color(crosshair.getColor().r, crosshair.getColor().g,crosshair.getColor().b, 255));
+	}
 }
 
 void Player::takeDamage()
@@ -260,6 +272,7 @@ void Player::draw(sf::RenderWindow& window)
 		if(ammo[x].moving)
 			ammo[x].draw(window);
 
+	window.draw(crosshair);
 	/* //TESTING CIRCLE
 	sf::CircleShape circle = sf::CircleShape(5.0);
 	circle.setPosition(sprite.getPosition());
@@ -276,7 +289,6 @@ void Player::grapple()
 		{
 			soundEffects[HOOKSOUND].play();
 			hShot.grappleInProgress = true;
-			Tile closestGrappleTile = collisionManager->getNearestGrappleTile(*this);
 			std::cout << closestGrappleTile.top << " " << closestGrappleTile.left << std::endl;
 			if(facingRight)
 			{

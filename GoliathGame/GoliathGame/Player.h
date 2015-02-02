@@ -115,6 +115,8 @@ public:
 	BaseState* newState;
 	CollisionManager* collisionManager;
 	std::deque<Command*> inputQueue;
+	sf::Sprite crosshair;
+	Tile closestGrappleTile;
 
 private:	
 	sf::Sound soundEffects[5];
