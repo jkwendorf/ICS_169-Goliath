@@ -100,9 +100,12 @@ void StateManager::DeleteAllStates()
 		{
 			iter->second->DeleteState();
 			delete iter->second;
+			
 		}
 		iter++;
 	}
+	stateMap.clear();
+	std::cout << "deleting all remaining states" << std::endl;
 }
 
 bool StateManager::shouldQuit()
