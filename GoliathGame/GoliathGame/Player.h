@@ -93,6 +93,9 @@ public:
 
 	void onNotify(const BaseObject& entity, Util::Events e);
 
+	bool checkDead();
+	void resetHealth();
+
 	// VARIABLES
 	float stamina;
 	float health;

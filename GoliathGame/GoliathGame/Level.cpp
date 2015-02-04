@@ -127,6 +127,13 @@ void Level::update(float deltaTime)
 
 		inputManager.update(p, &view, deltaTime);
 		p.handleInput();
+		//Check to see if the player has died
+		if(p.checkDead())
+		{
+			p.resetPosition(currentRoom->getStartPos());
+			p.resetHealth();
+		}
+
 		/*if((!p.hShot.hookedOnSomething || !p.hShot.grappleInProgress) && !p.isHanging && !p.isVaulting)
 		{
 			collisionManager->checkTreasure(&p);
