@@ -11,6 +11,7 @@
 #include "Sword.h"
 #include "CollisionManager.h"
 #include "Command.h"
+#include "Animation.h"
 
 //#include "CrossBow.h"
 
@@ -117,6 +118,7 @@ public:
 	std::deque<Command*> inputQueue;
 	sf::Sprite crosshair;
 	Tile closestGrappleTile;
+	Animation player;
 
 private:	
 	sf::Sound soundEffects[5];
