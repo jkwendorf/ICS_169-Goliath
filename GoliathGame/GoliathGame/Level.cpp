@@ -72,7 +72,6 @@ void Level::changeRoom()
 
 void Level::update(float deltaTime)
 {
-	
 	if((p.sprite.getPosition().y + PLAYER_DIM_Y/2) >= currentRoom->getroomHeight())
 	{
 		p.resetPosition(currentRoom->getStartPos() + sf::Vector2f(50, -10));
