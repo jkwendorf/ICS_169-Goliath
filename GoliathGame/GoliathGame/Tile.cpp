@@ -19,7 +19,7 @@ int Tile::getTileNum()
 
 uint8 Tile::getFlags()
 {
-   	return flags;
+`   	return flags;
 }
 
 void Tile::changeOpened()
