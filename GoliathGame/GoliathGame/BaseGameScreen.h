@@ -10,5 +10,5 @@ public:
 	virtual void update(float deltaTime) {};
 	virtual void draw(sf::RenderWindow& window) {};
 	virtual void DeleteLevel() {};
-	virtual void CheckChangeScreen(BaseGameScreen*& newScreen) {};
+	virtual bool CheckChangeScreen() {return false;};
 };

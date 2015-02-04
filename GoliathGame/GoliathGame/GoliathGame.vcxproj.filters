@@ -242,9 +242,6 @@
     <ClInclude Include="Level.h">
       <Filter>Header Files\Level Stuff</Filter>
     </ClInclude>
-    <ClInclude Include="UserInterface.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Town.h">
       <Filter>Header Files\Level Stuff</Filter>
     </ClInclude>
@@ -391,6 +388,9 @@
     </ClInclude>
     <ClInclude Include="VaultingState.h">
       <Filter>Header Files\Player\Player States</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface.h">
+      <Filter>Header Files\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -273,7 +273,7 @@ void Room::checkLowerRightNextGrid(int currentGrid, sf::FloatRect& rect, const s
 	}
 	else
 	{
-		std::cout << "Testing: " << botRight.x << " : " << sectList[currentGrid]->getWidth() << std::endl;
+		//std::cout << "Testing: " << botRight.x << " : " << sectList[currentGrid]->getWidth() << std::endl;
 		if (grapple)
 		{			
 			sectList[currentGrid]->checkGrapple(topLeft - sectList[currentGrid]->getOffset(), sf::Vector2f(sectList[currentGrid]->getOffset().x + sectList[currentGrid]->getWidth() ,botRight.y), nearTiles);
