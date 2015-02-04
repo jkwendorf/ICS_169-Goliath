@@ -341,7 +341,7 @@ void Player::playerUpdate(sf::View* view, sf::Vector2i roomSize, float deltaTime
 
 void Player::viewCheck(sf::View* view, int width, int height)
 {
-	if(facingRight)
+	/*if(facingRight)
 	{
 		if(sprite.getPosition().x > SCREEN_WIDTH - Global::GetInstance().xOffset + Global::GetInstance().topLeft.x)
 		{
@@ -354,7 +354,9 @@ void Player::viewCheck(sf::View* view, int width, int height)
 		{
 			Global::GetInstance().topLeft.x = sprite.getPosition().x - Global::GetInstance().xOffset;
 		}
-	}
+	}*/
+
+	Global::GetInstance().topLeft.x = sprite.getPosition().x - Global::GetInstance().xOffset;
 
 	if(Global::GetInstance().topLeft.x < 0)
 	{
