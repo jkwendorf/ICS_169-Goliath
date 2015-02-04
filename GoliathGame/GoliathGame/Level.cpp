@@ -13,7 +13,7 @@ Level::Level(int levelNumber, int roomNumber)
 	enemyAI(collisionManager)
 {
 	p.init(collisionManager, new JumpingState());
-	currentRoom = new Room(levelNumber, roomNumber, enemyList);
+	currentRoom = new Room(levelNumber, roomNumber, enemyList, arrowTileList);
 	background.setTexture(*TextureManager::GetInstance().retrieveTexture("banditCity"));
 	sf::Color color = background.getColor();
 	background.setColor(sf::Color(color.r, color.g, color.b, 200));
@@ -51,7 +51,8 @@ void Level::changeRoom()
 	{
 		delete currentRoom;
 		enemyList.clear();
-		currentRoom = new Room(levelNum, ++roomNum, enemyList);
+		arrowTileList.clear();
+		currentRoom = new Room(levelNum, ++roomNum, enemyList, arrowTileList);
 		//Move player to the start pos in new room
 		p.resetPosition(currentRoom->getStartPos());
 		p.init(collisionManager, new JumpingState());
