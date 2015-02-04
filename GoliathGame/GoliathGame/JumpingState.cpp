@@ -32,6 +32,11 @@ void JumpingState::update(Player* player, float deltaTime)
 
 	while(player->collisionManager->playerCollisionDetection(player))
 	{
+		if((player->collisionManager->getCollidedTile(*player) != nullptr) && 
+			((player->collisionManager->getCollidedTile(*player)->getFlags() & TILE::HAZARDMASK) != 0))
+		{
+			player->takeDamage();
+		}
 		player->moveOutOfTile(player->collisionManager->getCollidedTile(*player));
 	}
 }
