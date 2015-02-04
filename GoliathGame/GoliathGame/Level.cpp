@@ -39,6 +39,7 @@ Level::~Level(void)
 void Level::DeleteLevel()
 {
 	enemyList.clear();
+	arrowTileList.clear();
 	delete currentRoom;
 	delete collisionManager;
 }
@@ -61,6 +62,7 @@ void Level::changeRoom()
 	{
 		//delete currentRoom;
 		enemyList.clear();
+		arrowTileList.clear();
 		changeScreen = true;
 		
 	}
@@ -73,6 +75,11 @@ void Level::changeRoom()
 
 void Level::update(float deltaTime)
 {
+	if((p.sprite.getPosition().y + PLAYER_DIM_Y/2) >= currentRoom->getroomHeight())
+	{
+		p.resetPosition(currentRoom->getStartPos() + sf::Vector2f(50, -10));
+	}
+
 	std::vector<Tile*> nearTiles, nearTiles2, enemyTiles;
 	currentRoom->GetGrapplableTiles(p, nearTiles2);
 	int nearTile = currentRoom->NearInteractableTiles(p);
@@ -88,6 +95,7 @@ void Level::update(float deltaTime)
 	}
 	if(!changeScreen)
 	{
+		
 		currentRoom->GetCollidableTiles(p, sf::Vector2f(PLAYER_DIM_X, PLAYER_DIM_Y), nearTiles);
 
 		collisionManager->setNearByTiles(nearTiles);
@@ -128,6 +136,13 @@ void Level::update(float deltaTime)
 
 		inputManager.update(p, &view, deltaTime);
 		p.handleInput();
+		//Check to see if the player has died
+		if(p.checkDead())
+		{
+			p.resetPosition(currentRoom->getStartPos());
+			p.resetHealth();
+		}
+
 		/*if((!p.hShot.hookedOnSomething || !p.hShot.grappleInProgress) && !p.isHanging && !p.isVaulting)
 		{
 			collisionManager->checkTreasure(&p);

@@ -65,6 +65,8 @@ void Player::handleInput()
 {
 	for(std::deque<Command*>::iterator it = inputQueue.begin(); it != inputQueue.end(); it++)
 	{
+
+		//std::cout << inputQueue.size() << std::endl;
 		currentState->handleInput(this, *it);
 		if(newState != NULL)
 		{
@@ -207,7 +209,7 @@ void Player::takeDamage()
 	if(deathTimer <= 0)
 	{
 		deathTimer = 1.0f;
-		//take dmg
+		health -= 100;
 		std::cout << "Its a trap!" << std::endl;
 		return;
 	}
@@ -643,4 +645,17 @@ void Player::onNotify(const BaseObject& entity, Util::Events e)
 		}
 		break;
     }
+}
+
+bool Player::checkDead()
+{
+	if(health <= 0)
+		return true;
+	return false;
+}
+
+void Player::resetHealth()
+{
+	health = 100;
+	ui->resetUI();
 }

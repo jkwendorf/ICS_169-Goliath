@@ -34,6 +34,15 @@ UserInterface::~UserInterface()
 	//delete staminaBar;
 }
 
+void UserInterface::resetUI()
+{
+	showHealth1 = true;
+	showHealth2 = true;
+	showHealth3 = true;
+	showHealth4 = true;
+
+}
+
 void UserInterface::draw(sf::RenderWindow& window)
 {
 	if(showHealth1)
