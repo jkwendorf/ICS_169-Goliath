@@ -339,7 +339,7 @@ int Room::getroomWidth()
 
 int Room::getroomHeight()
 {
-	return roomHeight;
+	return sectList[0]->getHeight();
 }
 
 sf::Vector2f Room::getStartPos()
