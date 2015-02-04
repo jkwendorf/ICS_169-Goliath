@@ -63,7 +63,6 @@ void Player::handleInput()
 {
 	for(std::deque<Command*>::iterator it = inputQueue.begin(); it != inputQueue.end(); it++)
 	{
-		std::cout << inputQueue.size() << std::endl;
 		currentState->handleInput(this, *it);
 		if(newState != NULL)
 		{
@@ -330,7 +329,7 @@ void Player::playerUpdate(sf::View* view, sf::Vector2i roomSize, float deltaTime
 
 void Player::viewCheck(sf::View* view, int width, int height)
 {
-	if(facingRight)
+	/*if(facingRight)
 	{
 		if(sprite.getPosition().x > SCREEN_WIDTH - Global::GetInstance().xOffset + Global::GetInstance().topLeft.x)
 		{
@@ -343,7 +342,9 @@ void Player::viewCheck(sf::View* view, int width, int height)
 		{
 			Global::GetInstance().topLeft.x = sprite.getPosition().x - Global::GetInstance().xOffset;
 		}
-	}
+	}*/
+
+	Global::GetInstance().topLeft.x = sprite.getPosition().x - Global::GetInstance().xOffset;
 
 	if(Global::GetInstance().topLeft.x < 0)
 	{
