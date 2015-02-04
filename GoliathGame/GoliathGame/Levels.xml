@@ -9,7 +9,7 @@
     <Room number="2" size="1"></Room>
     <Room number="3" size="1"></Room>
     <Room number="4" size="1"></Room>
-	<Room number="5" size="1"></Room>
+	  <Room number="5" size="1"></Room>
   </Level> 
 
 </Game>
