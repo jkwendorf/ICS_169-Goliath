@@ -18,15 +18,17 @@ Player::Player()
 	boostSpeed = Global::GetInstance().playerAttributes[3];
 	grappleSpeed = Global::GetInstance().playerAttributes[4];
 	gravity = Global::GetInstance().playerAttributes[5];
-
-	sprite.setTexture(*TextureManager::GetInstance().retrieveTexture("David"));
+	player = Animation(4, 4, 90, 120, .10); 
+	sprite.setTexture(*TextureManager::GetInstance().retrieveTexture("David_Run2"));
 	crosshair.setTexture(*TextureManager::GetInstance().retrieveTexture("crosshair"));
 	crosshair.setPosition(-1000,-1000);
 	crosshair.setScale(1.2,1.2);
 	//sprite.setPosition(64, 560);
-	sprite.setPosition(150, 64);
-	sprite.setScale( (PLAYER_DIM_X / (float)sprite.getTexture()->getSize().x), (PLAYER_DIM_Y / (float)sprite.getTexture()->getSize().y));
-	sprite.setOrigin(sprite.getLocalBounds().width/2, sprite.getLocalBounds().height/2);
+	//sprite.setPosition(500, 64);
+	//sprite.setScale( (PLAYER_DIM_X / (float)sprite.getTexture()->getSize().x), (PLAYER_DIM_Y / (float)sprite.getTexture()->getSize().y));
+	sprite.setOrigin(45,60);
+	sprite.setTextureRect(sf::IntRect(0, 0, 90,120));
+	
 	weapon = SWORD;
 
 	isFalling = true;
@@ -63,7 +65,6 @@ void Player::handleInput()
 {
 	for(std::deque<Command*>::iterator it = inputQueue.begin(); it != inputQueue.end(); it++)
 	{
-		std::cout << inputQueue.size() << std::endl;
 		currentState->handleInput(this, *it);
 		if(newState != NULL)
 		{
@@ -182,6 +183,7 @@ void Player::update(float deltaTime)
 	}
 	ui->update(health, stamina);
 	
+	//Check for nearest grappleTile
 	if(!collisionManager->isGrappleListEmpty())
 	{
 		closestGrappleTile = collisionManager->getNearestGrappleTile(*this);
@@ -190,6 +192,13 @@ void Player::update(float deltaTime)
 		if(crosshair.getColor().a < 0)
 			crosshair.setColor(sf::Color(crosshair.getColor().r, crosshair.getColor().g,crosshair.getColor().b, 255));
 	}
+	else
+		crosshair.setPosition(-1000,-1000);
+
+
+	//Animated sprite update
+	player.update(deltaTime, sprite, 1, facingRight);
+
 }
 
 void Player::takeDamage()
@@ -273,6 +282,8 @@ void Player::draw(sf::RenderWindow& window)
 			ammo[x].draw(window);
 
 	window.draw(crosshair);
+	
+	
 	/* //TESTING CIRCLE
 	sf::CircleShape circle = sf::CircleShape(5.0);
 	circle.setPosition(sprite.getPosition());

@@ -61,6 +61,7 @@ void Level::changeRoom()
 		//delete currentRoom;
 		enemyList.clear();
 		changeScreen = true;
+		
 	}
 	Global::GetInstance().topLeft.x = 0;
 	Global::GetInstance().topLeft.y = 0;
@@ -323,12 +324,9 @@ void Level::draw(sf::RenderWindow& window)
 	p.drawUI(window);
 }
 
-void Level::CheckChangeScreen(BaseGameScreen* newScreen)
+bool Level::CheckChangeScreen()
 {
-	if(changeScreen)
-	{
-		newScreen = new Town();
-	}
+	return changeScreen;
 }
 
 void Level::CleanUp()

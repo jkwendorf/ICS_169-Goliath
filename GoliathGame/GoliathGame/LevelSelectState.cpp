@@ -107,7 +107,7 @@ void LevelSelectState::loadContent()
 
 void LevelSelectState::unloadContent()
 {
-
+	inputCoolDown = 0.25;
 }
 
 void LevelSelectState::setToQuit()
