@@ -12,6 +12,7 @@
 #include "Town.h"
 #include "JumpingState.h"
 #include "IdleState.h"
+#include "Tile.h"
 
 
 class Level : public BaseGameScreen
@@ -21,6 +22,7 @@ private:
 	float loading;
 	int levelNum, maxRooms;
 	std::vector<std::shared_ptr<Enemy>> enemyList;
+	std::vector<Tile*> arrowTileList;
 	Player p;
 	Room* currentRoom;
 	sf::View view;

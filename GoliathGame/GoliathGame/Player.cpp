@@ -29,6 +29,7 @@ Player::Player()
 	sprite.setOrigin(45,60);
 	sprite.setTextureRect(sf::IntRect(0, 0, 90,120));
 	
+	sprite.setScale( (GAME_TILE_DIM / 90.0f), 1);
 	weapon = SWORD;
 
 	isFalling = true;
@@ -90,7 +91,7 @@ void Player::update(float deltaTime)
 	}
 
 	currentState->update(this, deltaTime);
-
+	//std::cout << sprite.getPosition().x << ", " << sprite.getPosition().y << std::endl;
 	/*
 	while(!inputQueue.empty())
 	//if(inputQueue.empty())
@@ -282,7 +283,7 @@ void Player::draw(sf::RenderWindow& window)
 	for(int x = 0; x < 3; x++)
 		if(ammo[x].moving)
 			ammo[x].draw(window);
-
+	
 	window.draw(crosshair);
 	
 	

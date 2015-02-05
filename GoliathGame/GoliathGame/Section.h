@@ -20,12 +20,12 @@ private:
 	std::string pathToText;
 
 	Section();
-	void LoadTileMap(std::vector<std::shared_ptr<Enemy>> &enemyList);
+	void LoadTileMap(std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList);
 	void Tokenize(const std::string& str,
                       std::vector<std::string>& tokens,
                       const std::string& delimiters = " ");
 public:
-	Section(int sectionNumber, std::string& s, sf::Vector2f& offset, std::vector<std::shared_ptr<Enemy>> &enemyList);
+	Section(int sectionNumber, std::string& s, sf::Vector2f& offset, std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList);
 	~Section();
 	sf::Vector2f getOffset();
 	sf::Vector2i getGridDim();
