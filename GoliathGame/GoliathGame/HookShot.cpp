@@ -22,21 +22,25 @@ void HookShot::draw(sf::RenderWindow& window)
 
 void HookShot::update(float deltaTime)
 {
+	//std::cout << currentCooldown << " not hooked on something " << std::endl;
 	if(!hookedOnSomething)
 	{
 		sprite.move((grappleLocation.x - sprite.getPosition().x)*5*deltaTime, (grappleLocation.y - sprite.getPosition().y)*5*deltaTime);	
 	}
+	else
+		currentCooldown = 0.0;
 	if(grappleInProgress)
 	{
 		currentCooldown += deltaTime;
+
+		//std::cout << "Grapple cooldown: " << currentCooldown << std::endl;
 		if(currentCooldown > weaponCooldown)
 		{
 			currentCooldown = 0.0;
 			grappleInProgress = false;
 		}
 	}
-	//else
-	//	grappleLocation = sprite.getPosition();
+	//std::cout << hookedOnSomething << " " << grappleInProgress << std::endl;
 }
 
 void HookShot::update(sf::Vector2f pos)

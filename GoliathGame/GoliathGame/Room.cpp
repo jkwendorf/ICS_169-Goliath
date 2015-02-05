@@ -1,11 +1,11 @@
 
 #include "Room.h"
 
-Room::Room(int levelNumber, int roomNumber, std::vector<std::shared_ptr<Enemy>> &enemyList)
+Room::Room(int levelNumber, int roomNumber, std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList)
 	:roomNum(roomNumber), numSect(Global::GetInstance().roomSizes.at("Room " + std::to_string(roomNumber))),
 	roomWidth(0), roomHeight(0), loadedTitles(false)
 {
-	LoadRoom(levelNumber, enemyList);
+	LoadRoom(levelNumber, enemyList, arrowTileList);
 	//Music
 	if (!roomMusic.openFromFile("media/sound/Testlevel1SoTC.wav"))
 	{
@@ -27,7 +27,7 @@ Room::~Room()
 Room::Room()
 {}
 	
-void Room::LoadRoom(int levelNumber, std::vector<std::shared_ptr<Enemy>> &enemyList)
+void Room::LoadRoom(int levelNumber, std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList)
 {
 	sectList = new Section*[numSect];
 	int totalWidth = 0;
@@ -36,13 +36,13 @@ void Room::LoadRoom(int levelNumber, std::vector<std::shared_ptr<Enemy>> &enemyL
 		std::string temp = "level" + std::to_string(levelNumber) + "room" + std::to_string(roomNum) + "section" + std::to_string(i+1);
 		if(i==0)
 		{
-			sectList[i] = new Section(i, temp, sf::Vector2f(0,0), enemyList);
+			sectList[i] = new Section(i, temp, sf::Vector2f(0,0), enemyList, arrowTileList);
 			if(sectList[i]->getStartPos().x != -999)
 				startPos = sectList[i]->getStartPos();
 		}
 		else
 		{
-			sectList[i] = new Section(i, temp, sf::Vector2f(roomWidth, 0), enemyList);
+			sectList[i] = new Section(i, temp, sf::Vector2f(roomWidth, 0), enemyList, arrowTileList);
 			if(sectList[i]->getStartPos().x != -999)
 				startPos = sectList[i]->getStartPos();
 		}
@@ -65,6 +65,8 @@ bool Room::CheckSectionOnScreen(int sectionNum)
 void Room::GetCollidableTiles(BaseObject& obj, sf::Vector2f& dim, std::vector<Tile*>& nearTiles)
 {
 	//sf::FloatRect rect(sf::Vector2f(obj.sprite.getPosition().x - dim.x/2, obj.sprite.getPosition().y - dim.y/2), sf::Vector2f(dim.x, dim.y));
+	std::cout << obj.sprite.getGlobalBounds().left << ", " << obj.sprite.getGlobalBounds().top << ", " << obj.sprite.getGlobalBounds().width << ", ";
+	std::cout <<  obj.sprite.getGlobalBounds().height << std::endl;
 	GetNearTiles(obj.sprite.getGlobalBounds(), nearTiles);
 	return;
 }
@@ -81,8 +83,7 @@ int Room::NearInteractableTiles(BaseObject& obj)
 
 void Room::GetGrapplableTiles(Player& player, std::vector<Tile*>& nearTiles)
 {
-	//std::cout << player.sprite.getPosition().y - PLAYER_DIM/2 << std::endl;
-	//std::cout << player.hShot.grappleLength << std::endl;
+	//*Global::GetInstance().debugLog << "Player Pos: " << player.sprite.getPosition().x << ", " << player.sprite.getPosition().y << "---";
 	if(player.sprite.getPosition().y - PLAYER_DIM_Y/2 - player.hShot.grappleLength >= 0)
 	{
 		if (!player.facingRight)
@@ -94,7 +95,7 @@ void Room::GetGrapplableTiles(Player& player, std::vector<Tile*>& nearTiles)
 		}
 		else
 		{
-			sf::FloatRect rect(sf::Vector2f(player.sprite.getPosition().x + PLAYER_DIM_X/2, player.sprite.getPosition().y - PLAYER_DIM_Y/2 - player.hShot.grappleLength),
+			sf::FloatRect rect(sf::Vector2f(player.sprite.getPosition().x, player.sprite.getPosition().y - PLAYER_DIM_Y/2 - player.hShot.grappleLength),
 				sf::Vector2f(player.hShot.grappleLength + PLAYER_DIM_X/2, player.hShot.grappleLength + PLAYER_DIM_Y/2));
 			GetNearTiles(rect, nearTiles, true, true);
 			return;
@@ -102,17 +103,18 @@ void Room::GetGrapplableTiles(Player& player, std::vector<Tile*>& nearTiles)
 	}
 	else
 	{
+		//These two cases do not work need to fix the Grant Walker
 		if (!player.facingRight)
 		{
-			sf::FloatRect rect(sf::Vector2f(player.sprite.getPosition().x - PLAYER_DIM_X/2 - player.hShot.grappleLength, player.sprite.getPosition().y - PLAYER_DIM_Y/2),
-				sf::Vector2f(player.hShot.grappleLength, 0));
+			sf::FloatRect rect(sf::Vector2f(player.sprite.getPosition().x - PLAYER_DIM_X/2 - player.hShot.grappleLength, 0),
+				sf::Vector2f(player.hShot.grappleLength, player.sprite.getPosition().y - PLAYER_DIM_Y/2));
 			GetNearTiles(rect, nearTiles, true, true);
 			return;
 		}
 		else
 		{
-			sf::FloatRect rect(sf::Vector2f(player.sprite.getPosition().x + PLAYER_DIM_X/2, player.sprite.getPosition().y - PLAYER_DIM_Y/2),
-				sf::Vector2f(player.hShot.grappleLength, 0));
+			sf::FloatRect rect(sf::Vector2f(player.sprite.getPosition().x + PLAYER_DIM_X/2, 0),
+				sf::Vector2f(player.hShot.grappleLength, player.sprite.getPosition().y - PLAYER_DIM_Y/2));
 			GetNearTiles(rect, nearTiles, true, true);
 			return;
 		}
@@ -215,10 +217,18 @@ void Room::checkUpperLeftSameGrid(int currentGrid, sf::FloatRect& rect, const sf
 			return;
 		}
 	}
-	//else
-	//{
-	//	std::cout << std::endl;
-	//}
+	//If the top right corner is not in the grid 
+	else
+	{
+		if (grapple)
+		{		
+			//Set the top left y position = 0	
+			sectList[currentGrid]->checkGrapple(sf::Vector2f(topLeft.x < 0 ? 0 : topLeft.x, topLeft.y < 0 ? 0 : topLeft.y), 
+				botRight - sectList[currentGrid]->getOffset(), nearTiles);
+			return;
+		}
+	
+	}
 }
 
 void Room::checkLowerRightNextGrid(int currentGrid, sf::FloatRect& rect, const sf::Vector2f& topLeft, 
@@ -226,6 +236,7 @@ void Room::checkLowerRightNextGrid(int currentGrid, sf::FloatRect& rect, const s
 														bool checkBoxOnly, bool grapple)
 {
 	Global g = Global::GetInstance();
+	//If check to see if it is not the last grid
 	if(currentGrid + 1 < numSect)
 	{
 		if(g.checkPoint(botRight, sf::FloatRect(sectList[currentGrid+1]->getOffset(), sf::Vector2f(sectList[currentGrid+1]->getWidth(), sectList[currentGrid+1]->getHeight()))))
@@ -261,6 +272,16 @@ void Room::checkLowerRightNextGrid(int currentGrid, sf::FloatRect& rect, const s
 				}
 			}
 		}
+	}
+	else
+	{
+		//std::cout << "Testing: " << botRight.x << " : " << sectList[currentGrid]->getWidth() << std::endl;
+		if (grapple)
+		{			
+			sectList[currentGrid]->checkGrapple(topLeft - sectList[currentGrid]->getOffset(), sf::Vector2f(sectList[currentGrid]->getOffset().x + sectList[currentGrid]->getWidth() ,botRight.y), nearTiles);
+			return;
+		}
+
 	}
 }
 
@@ -320,7 +341,7 @@ int Room::getroomWidth()
 
 int Room::getroomHeight()
 {
-	return roomHeight;
+	return sectList[0]->getHeight();
 }
 
 sf::Vector2f Room::getStartPos()

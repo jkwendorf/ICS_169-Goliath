@@ -1,4 +1,5 @@
 #include "Level.h"
+#include "GrapplingState.h"
 
 Level::Level(void)
 	:changeScreen(false), enemyAI(collisionManager)
@@ -12,8 +13,10 @@ Level::Level(int levelNumber, int roomNumber)
 	enemyAI(collisionManager)
 {
 	p.init(collisionManager, new JumpingState());
-	currentRoom = new Room(levelNumber, roomNumber, enemyList);
+	currentRoom = new Room(levelNumber, roomNumber, enemyList, arrowTileList);
 	background.setTexture(*TextureManager::GetInstance().retrieveTexture("banditCity"));
+	sf::Color color = background.getColor();
+	background.setColor(sf::Color(color.r, color.g, color.b, 200));
 	background.setPosition(-75,75);
 	background.scale(1.0, (float)(GAME_TILE_DIM * 22 + 100) / background.getTexture()->getSize().y);
 	loadingSprite.setTexture(*TextureManager::GetInstance().retrieveTexture("loading"));
@@ -36,6 +39,7 @@ Level::~Level(void)
 void Level::DeleteLevel()
 {
 	enemyList.clear();
+	arrowTileList.clear();
 	delete currentRoom;
 	delete collisionManager;
 }
@@ -48,7 +52,8 @@ void Level::changeRoom()
 	{
 		delete currentRoom;
 		enemyList.clear();
-		currentRoom = new Room(levelNum, ++roomNum, enemyList);
+		arrowTileList.clear();
+		currentRoom = new Room(levelNum, ++roomNum, enemyList, arrowTileList);
 		//Move player to the start pos in new room
 		p.resetPosition(currentRoom->getStartPos());
 		p.init(collisionManager, new JumpingState());
@@ -57,7 +62,9 @@ void Level::changeRoom()
 	{
 		//delete currentRoom;
 		enemyList.clear();
+		arrowTileList.clear();
 		changeScreen = true;
+		
 	}
 	Global::GetInstance().topLeft.x = 0;
 	Global::GetInstance().topLeft.y = 0;
@@ -68,6 +75,11 @@ void Level::changeRoom()
 
 void Level::update(float deltaTime)
 {
+	if((p.sprite.getPosition().y + PLAYER_DIM_Y/2) >= currentRoom->getroomHeight())
+	{
+		p.resetPosition(currentRoom->getStartPos() + sf::Vector2f(50, -10));
+	}
+
 	std::vector<Tile*> nearTiles, nearTiles2, enemyTiles;
 	currentRoom->GetGrapplableTiles(p, nearTiles2);
 	int nearTile = currentRoom->NearInteractableTiles(p);
@@ -75,11 +87,15 @@ void Level::update(float deltaTime)
 	{
 		if(nearTile == 18 || nearTile == 19)
 			changeRoom();
-		//else if (nearTile == 17)
+		else if (nearTile == 20)
+		{
+			p.takeDamage();
+		}
 			
 	}
 	if(!changeScreen)
 	{
+		
 		currentRoom->GetCollidableTiles(p, sf::Vector2f(PLAYER_DIM_X, PLAYER_DIM_Y), nearTiles);
 
 		collisionManager->setNearByTiles(nearTiles);
@@ -103,6 +119,10 @@ void Level::update(float deltaTime)
 				}
 				else
 					p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width/2, hookedTile->top + hookedTile->height));
+
+				//p.newState = new GrapplingState();
+				delete p.currentState;
+				p.currentState = new GrapplingState();
 			}
 		}
 
@@ -115,16 +135,30 @@ void Level::update(float deltaTime)
 		p.playerUpdate(&view, sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()), deltaTime);
 
 		inputManager.update(p, &view, deltaTime);
-		if((!p.hShot.hookedOnSomething || !p.hShot.grappleInProgress) && !p.isHanging && !p.isVaulting)
+		p.handleInput();
+		//Check to see if the player has died
+		if(p.checkDead())
+		{
+			p.resetPosition(currentRoom->getStartPos());
+			p.resetHealth();
+		}
+
+		/*if((!p.hShot.hookedOnSomething || !p.hShot.grappleInProgress) && !p.isHanging && !p.isVaulting)
 		{
 			collisionManager->checkTreasure(&p);
 			//std::cout << "Check Collision" << std::endl;
 			if(p.isFalling)
 			{
 				//std::cout << "Falling Collision" << std::endl;
-				while(collisionManager->playerCollisionDetection(&p))
+				/*while(collisionManager->playerCollisionDetection(&p))
 				{
+					if((collisionManager->getCollidedTile(p) != nullptr) && 
+						((collisionManager->getCollidedTile(p)->getFlags() & TILE::HAZARDMASK) != 0))
+					{
+						p.takeDamage();
+					}
 					p.moveOutOfTile(collisionManager->getCollidedTile(p));
+					
 				}
 			}
 			else if(!collisionManager->tileBelowCharacter(&p))
@@ -136,14 +170,20 @@ void Level::update(float deltaTime)
 			{
 				if(p.hShot.isDisabled)
 					p.hShot.isDisabled = false;
-
+				if((collisionManager->getCollidedTile(p) != nullptr) && 
+					((collisionManager->getCollidedTile(p)->getFlags() & TILE::HAZARDMASK) != 0))
+				{
+					p.takeDamage();
+				}
 				//std::cout << "Ground Collision" << std::endl;
 				if(collisionManager->wallBlockingCharacter(&p))
 				{
-					p.move(moveOutOfTileHorizontally(p, collisionManager->getCollidedTile(p)));
+					
+					p.move(moveOutOfTileHorizontally(p, collisionManager->getCollidedTile(p)));	
+					
 				}
 			}
-		}
+		}*/
 
 		for(Projectile& po : p.ammo)
 		{
@@ -172,8 +212,11 @@ void Level::update(float deltaTime)
 			}
 		}
 
+		int i = 0;
+
 		for (auto& e : enemyList)
 		{
+			i++;
 			if(e->health > 0)
 			{
 				std::vector<Tile*> proTile;
@@ -218,6 +261,34 @@ void Level::update(float deltaTime)
 						collisionManager->checkEnemyBulletToPlayer(po, &p);
 					}
 				}
+
+				//ISILDOR LOOK HERE FOR RAYCAST CODE
+				Projectile& ray = e.get()->raycast;
+
+				if(ray.moving)
+				{
+					currentRoom->GetCollidableTiles(ray, sf::Vector2f(ray.sprite.getTexture()->getSize().x/10,
+							ray.sprite.getTexture()->getSize().y/10), proTile);
+
+						if(proTile.size() > 0)
+						{
+							collisionManager->setNearByTiles(proTile);
+						}
+						//std::cout << "Enemy " << i << " ray position: " << ray.sprite.getPosition().x << std::endl;
+						//std::cout << "Enemy " << i << " position: " << e.get()->sprite.getPosition().x << std::endl;
+						if(collisionManager->playerCollisionDetection(&ray))
+						{
+							e.get()->foundPlayer = false;
+							e.get()->resetRay();
+							std::cout << "Enemy " << i << " ray hit wall" << std::endl;
+						}
+						else if(collisionManager->checkIfEnemyInRange(ray, &p))
+						{
+							std::cout << "Enemy " << i << " ray hit player" << std::endl;
+							e.get()->resetRay();
+							e.get()->foundPlayer = true;
+						}
+				}
 			}
 		}
 
@@ -245,6 +316,9 @@ void Level::draw(sf::RenderWindow& window)
 {
 	//window.draw(r);
 	window.draw(background);
+
+	//window.draw(Global::GetInstance().testingRect);
+
 	currentRoom->draw(window);
 	p.draw(window);
 	//UNCOMMENT FOR TESTING
@@ -261,16 +335,14 @@ void Level::draw(sf::RenderWindow& window)
 	//	std::cout << "Enemy #" << enemyNum;
 	}
 	
+	
 	window.setView(view);
 	p.drawUI(window);
 }
 
-void Level::CheckChangeScreen(BaseGameScreen* newScreen)
+bool Level::CheckChangeScreen()
 {
-	if(changeScreen)
-	{
-		newScreen = new Town();
-	}
+	return changeScreen;
 }
 
 void Level::CleanUp()

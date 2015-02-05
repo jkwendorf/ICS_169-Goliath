@@ -7,7 +7,7 @@
 
 void OnGroundState::handleInput(Player* player, Command* input)
 {
-	if (input->inputCode == MOVELEFT || input->inputCode == MOVERIGHT)
+	if ((input->inputCode == MOVELEFT || input->inputCode == MOVERIGHT || input->inputCode == NO_MOVE) && !player->hShot.hookedOnSomething)
 	{
 		player->newState = new WalkingState();
 		input->execute();
@@ -24,7 +24,7 @@ void OnGroundState::handleInput(Player* player, Command* input)
 	}
 	else if (input->inputCode == GRAPPLE)
 	{
-		player->newState = new GrapplingState();
+		//player->newState = new GrapplingState();
 		input->execute();
 	}
 	else
@@ -36,9 +36,12 @@ void OnGroundState::handleInput(Player* player, Command* input)
 
 void OnGroundState::update(Player* player, float deltaTime) 
 {
-	if(player->facingRight)
-		player->hShot.update(sf::Vector2f(player->sprite.getPosition().x + 60, player->sprite.getPosition().y - 15));
-	else
-		player->hShot.update(sf::Vector2f(player->sprite.getPosition().x - 60, player->sprite.getPosition().y - 15));
+	if(!player->hShot.grappleInProgress)
+	{
+		if(player->facingRight)
+			player->hShot.update(sf::Vector2f(player->sprite.getPosition().x + 60, player->sprite.getPosition().y - 15));
+		else
+			player->hShot.update(sf::Vector2f(player->sprite.getPosition().x - 60, player->sprite.getPosition().y - 15));
+	}
 	player->move(player->vel*deltaTime);
 }

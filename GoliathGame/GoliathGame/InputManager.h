@@ -43,4 +43,6 @@ public:
 	float viewDifference, viewChanged;
 	float grappleCooldown, currentGrappleCooldown;
 	
+private:
+	StaticCommandHolder sch;
 };

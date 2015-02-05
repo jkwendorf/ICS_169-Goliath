@@ -42,7 +42,7 @@ public :
 	int fps;
 	int xOffset;
 	int yOffset;
-	sf::Sprite* currentTileSheet[20];
+	sf::Sprite* currentTileSheet[TileSheetRows * TileSheetCols];
 
 	Global();
 	~Global();
@@ -53,4 +53,6 @@ public :
 
 	sf::Sound test;
 
+	
+	sf::RectangleShape testingRect;
 };

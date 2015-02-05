@@ -13,6 +13,7 @@ namespace TILE
 		INTERACTABLEMASK = 0x04,
 		TREASUREMASK = 0x08,
 		OPENEDMASK = 0x10,
+		HAZARDMASK = 0X20
 
 	};
 }
@@ -22,6 +23,7 @@ class Tile : public sf::FloatRect
 private:
 	int tileNum;
 	bool collidable, grappleable, interactable, treasure;
+	sf::Vector2f dir;
 	uint8 flags;
 	
 public:
@@ -30,5 +32,7 @@ public:
 	~Tile();
 	int getTileNum();
 	uint8 getFlags();
+	sf::Vector2f getDirection();
+	void setDirection(sf::Vector2f dir);
 	void changeOpened();
 };
