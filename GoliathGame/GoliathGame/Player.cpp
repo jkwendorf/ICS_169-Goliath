@@ -25,7 +25,7 @@ Player::Player()
 	crosshair.setScale(1.2,1.2);
 	//sprite.setPosition(64, 560);
 	//sprite.setPosition(500, 64);
-	//sprite.setScale( (PLAYER_DIM_X / (float)sprite.getTexture()->getSize().x), (PLAYER_DIM_Y / (float)sprite.getTexture()->getSize().y));
+	sprite.setScale(.5,.5);
 	sprite.setOrigin(45,60);
 	sprite.setTextureRect(sf::IntRect(0, 0, 90,120));
 	
