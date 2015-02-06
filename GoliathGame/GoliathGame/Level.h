@@ -32,11 +32,13 @@ private:
 	CollisionManager* collisionManager;
 	InputManager inputManager;
 	EnemyAI enemyAI;
+	std::vector<Projectile*> arrows;
 
 	void viewCheck();
 	void playerCheck();
 	void changeRoom();
 	void CleanUp();
+	void setArrowTileArrows();
 public:
 	Level();
 	Level(int levelNumber, int roomNumber);

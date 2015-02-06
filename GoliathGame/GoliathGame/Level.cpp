@@ -27,6 +27,7 @@ Level::Level(int levelNumber, int roomNumber)
 	view.reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y, SCREEN_WIDTH, SCREEN_HEIGHT));
 	view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
 	p.resetPosition(currentRoom->getStartPos());
+	setArrowTileArrows();
 	//realEnemyList.push_back(new Enemy("Test",200,200, 10));
 
 }
@@ -299,6 +300,29 @@ void Level::update(float deltaTime)
 			collisionManager->checkEnemySwordToPlayer(e.get()->eSword, &p);
 		}
 
+		for(auto& a : arrows)
+		{
+			std::vector<Tile*> proTile;
+			a->update(deltaTime);
+			if(a->moving)
+			{
+				currentRoom->GetCollidableTiles(*a, sf::Vector2f(a->sprite.getTexture()->getSize().x/10,
+					a->sprite.getTexture()->getSize().y/10), proTile);
+
+				if(proTile.size() > 0)
+				{
+					collisionManager->setNearByTiles(proTile);
+				}
+
+				if(collisionManager->playerCollisionDetection(a))
+				{
+					a->moving = false;
+				}
+
+				collisionManager->checkEnemyBulletToPlayer(*a, &p);
+			}
+		}
+
 		/*
 		enemyAI.executeMovement(realEnemyList.at(0), p.sprite.getPosition(), deltaTime);
 		collisionManager->checkPlayerBulletToEnemies(p.ammo, realEnemyList.front());
@@ -318,7 +342,7 @@ void Level::draw(sf::RenderWindow& window)
 	//window.draw(r);
 	window.draw(background);
 
-	//window.draw(Global::GetInstance().testingRect);
+	window.draw(Global::GetInstance().testingRect);
 
 	currentRoom->draw(window);
 	p.draw(window);
@@ -336,7 +360,14 @@ void Level::draw(sf::RenderWindow& window)
 	//	std::cout << "Enemy #" << enemyNum;
 	}
 	
-	
+	for (auto& a : arrows)
+	{
+		if(a->moving)
+		{
+			a->draw(window);
+		}
+	}
+
 	window.setView(view);
 	p.drawUI(window);
 }
@@ -348,4 +379,13 @@ bool Level::CheckChangeScreen()
 
 void Level::CleanUp()
 {
+}
+
+void Level::setArrowTileArrows()
+{
+	for(auto& a : arrowTileList)
+	{
+		Projectile* pro = new Projectile(sf::Vector2f(a->top, a->left), a->getDirection());
+		arrows.push_back(pro);
+	}
 }

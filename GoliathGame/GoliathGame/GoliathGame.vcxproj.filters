@@ -66,9 +66,6 @@
     <ClCompile Include="Button.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="HookShot.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Section.cpp">
       <Filter>Source Files\Level Stuff</Filter>
     </ClCompile>
@@ -200,6 +197,9 @@
     </ClCompile>
     <ClCompile Include="VaultingState.cpp">
       <Filter>Source Files\Player\Player States</Filter>
+    </ClCompile>
+    <ClCompile Include="HookShot.cpp">
+      <Filter>Source Files\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
