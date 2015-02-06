@@ -187,3 +187,11 @@ bool CollisionManager::checkIfEnemyInRange(Projectile p, Player* player)
 	}
 	else return false;
 }
+
+bool CollisionManager::playerSwordCollideWithTile(Sword s, Tile* t)
+{
+	if(s.hitBox.getGlobalBounds().intersects(sf::FloatRect(t->left, t->top, t->width, t->height)))
+		return true;
+
+	return false;
+}

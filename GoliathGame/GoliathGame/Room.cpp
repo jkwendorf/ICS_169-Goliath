@@ -1,11 +1,11 @@
 
 #include "Room.h"
 
-Room::Room(int levelNumber, int roomNumber, std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList)
+Room::Room(int levelNumber, int roomNumber, std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList)
 	:roomNum(roomNumber), numSect(Global::GetInstance().roomSizes.at("Room " + std::to_string(roomNumber))),
 	roomWidth(0), roomHeight(0), loadedTitles(false)
 {
-	LoadRoom(levelNumber, enemyList, arrowTileList);
+	LoadRoom(levelNumber, enemyList, arrowTileList, destructTileList);
 	//Music
 	if (!roomMusic.openFromFile("media/sound/Testlevel1SoTC.wav"))
 	{
@@ -27,7 +27,7 @@ Room::~Room()
 Room::Room()
 {}
 	
-void Room::LoadRoom(int levelNumber, std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList)
+void Room::LoadRoom(int levelNumber, std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList)
 {
 	sectList = new Section*[numSect];
 	int totalWidth = 0;
@@ -36,13 +36,13 @@ void Room::LoadRoom(int levelNumber, std::vector<std::shared_ptr<Enemy>> &enemyL
 		std::string temp = "level" + std::to_string(levelNumber) + "room" + std::to_string(roomNum) + "section" + std::to_string(i+1);
 		if(i==0)
 		{
-			sectList[i] = new Section(i, temp, sf::Vector2f(0,0), enemyList, arrowTileList);
+			sectList[i] = new Section(i, temp, sf::Vector2f(0,0), enemyList, arrowTileList, destructTileList);
 			if(sectList[i]->getStartPos().x != -999)
 				startPos = sectList[i]->getStartPos();
 		}
 		else
 		{
-			sectList[i] = new Section(i, temp, sf::Vector2f(roomWidth, 0), enemyList, arrowTileList);
+			sectList[i] = new Section(i, temp, sf::Vector2f(roomWidth, 0), enemyList, arrowTileList, destructTileList);
 			if(sectList[i]->getStartPos().x != -999)
 				startPos = sectList[i]->getStartPos();
 		}
