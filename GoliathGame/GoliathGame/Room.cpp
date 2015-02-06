@@ -84,19 +84,21 @@ int Room::NearInteractableTiles(BaseObject& obj)
 void Room::GetGrapplableTiles(Player& player, std::vector<Tile*>& nearTiles)
 {
 	//*Global::GetInstance().debugLog << "Player Pos: " << player.sprite.getPosition().x << ", " << player.sprite.getPosition().y << "---";
-	if(player.sprite.getPosition().y - PLAYER_DIM_Y/2 - player.hShot.grappleLength >= 0)
+	if(player.sprite.getPosition().y - PLAYER_DIM_Y/2 - player.hShot.grappleBox >= 0)
 	{
 		if (!player.facingRight)
 		{
-			sf::FloatRect rect(sf::Vector2f(player.sprite.getPosition().x - PLAYER_DIM_X/2 - player.hShot.grappleLength, player.sprite.getPosition().y - PLAYER_DIM_Y/2 - player.hShot.grappleLength),
-				sf::Vector2f(player.hShot.grappleLength + PLAYER_DIM_X/2, player.hShot.grappleLength + PLAYER_DIM_Y/2));
+			sf::FloatRect rect(sf::Vector2f(player.sprite.getPosition().x /*- PLAYER_DIM_X/2 */ - player.hShot.grappleBox, 
+				player.sprite.getPosition().y /*- PLAYER_DIM_Y/2 */ - player.hShot.grappleBox),
+				sf::Vector2f(player.hShot.grappleBox, player.hShot.grappleBox));
 			GetNearTiles(rect, nearTiles, true, true);
 			return;
 		}
 		else
 		{
-			sf::FloatRect rect(sf::Vector2f(player.sprite.getPosition().x, player.sprite.getPosition().y - PLAYER_DIM_Y/2 - player.hShot.grappleLength),
-				sf::Vector2f(player.hShot.grappleLength + PLAYER_DIM_X/2, player.hShot.grappleLength + PLAYER_DIM_Y/2));
+			sf::FloatRect rect(sf::Vector2f(player.sprite.getPosition().x,
+				player.sprite.getPosition().y /*- PLAYER_DIM_Y/2 */ - player.hShot.grappleBox),
+				sf::Vector2f(player.hShot.grappleBox, player.hShot.grappleBox));
 			GetNearTiles(rect, nearTiles, true, true);
 			return;
 		}
@@ -106,15 +108,15 @@ void Room::GetGrapplableTiles(Player& player, std::vector<Tile*>& nearTiles)
 		//These two cases do not work need to fix the Grant Walker
 		if (!player.facingRight)
 		{
-			sf::FloatRect rect(sf::Vector2f(player.sprite.getPosition().x - PLAYER_DIM_X/2 - player.hShot.grappleLength, 0),
-				sf::Vector2f(player.hShot.grappleLength, player.sprite.getPosition().y - PLAYER_DIM_Y/2));
+			sf::FloatRect rect(sf::Vector2f(player.sprite.getPosition().x /*- PLAYER_DIM_X/2 */ - player.hShot.grappleBox, 0),
+				sf::Vector2f(player.hShot.grappleBox, player.sprite.getPosition().y));
 			GetNearTiles(rect, nearTiles, true, true);
 			return;
 		}
 		else
 		{
 			sf::FloatRect rect(sf::Vector2f(player.sprite.getPosition().x + PLAYER_DIM_X/2, 0),
-				sf::Vector2f(player.hShot.grappleLength, player.sprite.getPosition().y - PLAYER_DIM_Y/2));
+				sf::Vector2f(player.hShot.grappleBox, player.sprite.getPosition().y));
 			GetNearTiles(rect, nearTiles, true, true);
 			return;
 		}

@@ -2,7 +2,7 @@
 #include "StateManager.h"
 
 MainMenuState::MainMenuState(void)
-	: isPressedUp(false), isPressedDown(false)
+	: isPressedUp(false), isPressedDown(false), inputCoolDown(0.25)
 	//:play(new Button(sf::Vector2f(SCREEN_WIDTH/2, SCREEN_HEIGHT/3), TextureManager::GetInstance().retrieveTexture("PlayButton"), m.changeToState(GAME)))
 {
 	f = new sf::Font();
@@ -33,42 +33,49 @@ void MainMenuState::DeleteState()
 
 void MainMenuState::update(float deltaTime)
 {
-	/*if(sf::Keyboard::isKeyPressed(sf::Keyboard::P))
+	if(inputCoolDown <= 0)
 	{
-		StateManager::getInstance().changeToState(GAME, false);
-	}*/
-	/*if(sf::Keyboard::isKeyPressed(sf::Keyboard::O) && !isPressed)
-	{
- 		StateManager::getInstance().deleteState(GAME);
-		StateManager::getInstance().addState(GAME, new GameState());
-		isPressed = true;
-	}
-	else if(!sf::Keyboard::isKeyPressed(sf::Keyboard::O))
-		isPressed = false;*/
+		/*if(sf::Keyboard::isKeyPressed(sf::Keyboard::P))
+		{
+			StateManager::getInstance().changeToState(GAME, false);
+		}*/
+		/*if(sf::Keyboard::isKeyPressed(sf::Keyboard::O) && !isPressed)
+		{
+ 			StateManager::getInstance().deleteState(GAME);
+			StateManager::getInstance().addState(GAME, new GameState());
+			isPressed = true;
+		}
+		else if(!sf::Keyboard::isKeyPressed(sf::Keyboard::O))
+			isPressed = false;*/
 
-	if((sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Joystick::getAxisPosition(0, sf::Joystick::Y) < -25) && !isPressedUp)
-	{
-		bM->scrollUp();
-		isPressedUp = true;
-	}
-	else if((!sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && sf::Joystick::getAxisPosition(0, sf::Joystick::Y) > -25) && isPressedUp)
-	{
-		isPressedUp = false;
-	}
+		if((sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Joystick::getAxisPosition(0, sf::Joystick::Y) < -25) && !isPressedUp)
+		{
+			bM->scrollUp();
+			isPressedUp = true;
+		}
+		else if((!sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && sf::Joystick::getAxisPosition(0, sf::Joystick::Y) > -25) && isPressedUp)
+		{
+			isPressedUp = false;
+		}
 	
-	if((sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || sf::Joystick::getAxisPosition(0, sf::Joystick::Y) > 25) &&!isPressedDown)
-	{
-		bM->scrollDown();
-		isPressedDown = true;
-	}
-	else if((!sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && sf::Joystick::getAxisPosition(0, sf::Joystick::Y) < 25) && isPressedDown)
-	{
-		isPressedDown = false;
-	}
+		if((sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || sf::Joystick::getAxisPosition(0, sf::Joystick::Y) > 25) &&!isPressedDown)
+		{
+			bM->scrollDown();
+			isPressedDown = true;
+		}
+		else if((!sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && sf::Joystick::getAxisPosition(0, sf::Joystick::Y) < 25) && isPressedDown)
+		{
+			isPressedDown = false;
+		}
 
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Return) || sf::Joystick::isButtonPressed(0, 0))
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Return) || sf::Joystick::isButtonPressed(0, 0))
+		{
+			bM->pressSelectedButton();
+		}
+	}
+	else
 	{
-		bM->pressSelectedButton();
+		inputCoolDown -= deltaTime;
 	}
 }
 
@@ -91,7 +98,7 @@ void MainMenuState::loadContent()
 
 void MainMenuState::unloadContent()
 {
-
+	inputCoolDown = 0.25;
 }
 
 void MainMenuState::setToQuit()

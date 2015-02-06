@@ -22,5 +22,6 @@ private:
 	ButtonManager* bM;
 	sf::Font* f;
 	bool isPressedUp, isPressedDown;
+	float inputCoolDown;
 };
 
