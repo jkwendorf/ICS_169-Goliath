@@ -19,8 +19,8 @@ void OnGroundState::handleInput(Player* player, Command* input)
 	}
 	else if (input->inputCode == JUMP)
 	{
-		player->newState = new JumpingState();
 		input->execute();
+		player->newState = new JumpingState();
 	}
 	else if (input->inputCode == GRAPPLE)
 	{
