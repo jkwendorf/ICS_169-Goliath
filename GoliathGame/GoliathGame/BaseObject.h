@@ -24,5 +24,5 @@ public:
 	bool collidable;
 	bool grappleable;
 	bool interactable;
-	int objectNum, testingNum, jumpSpeed, moveSpeed, moveAccel, boostSpeed, grappleSpeed, gravity;
+	int objectNum, testingNum, jumpSpeed, moveSpeed, moveAccel, boostSpeed, grappleSpeed, gravity, fallSpeed;
 };

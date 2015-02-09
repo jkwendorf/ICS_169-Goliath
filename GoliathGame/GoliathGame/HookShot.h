@@ -7,6 +7,7 @@ public:
 	sf::Vector2f grappleLocation;
 	sf::Vector2f startLocation;
 	int grappleLength;
+	int grappleBox;
 
 	HookShot();
 	~HookShot();

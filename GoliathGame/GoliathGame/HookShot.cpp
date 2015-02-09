@@ -8,6 +8,7 @@ HookShot::HookShot() :
 	sprite.setOrigin(sprite.getLocalBounds().width/2, sprite.getLocalBounds().height/2);
 	currentCooldown = 0.0;
 	weaponCooldown = 1.0;
+	grappleBox = grappleLength/sqrt(2);
 }
 
 HookShot::~HookShot()

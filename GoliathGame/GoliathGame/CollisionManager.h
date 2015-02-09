@@ -35,6 +35,8 @@ public:
 	void checkEnemyBulletToPlayer(Projectile p, Player* player);
 	void checkEnemySwordToPlayer(Sword s, Player* player);
 
+	bool playerSwordCollideWithTile(Sword s, Tile* t);
+
 	bool isGrappleListEmpty();
 
 	bool checkIfEnemyInRange(Projectile p, Player* player);

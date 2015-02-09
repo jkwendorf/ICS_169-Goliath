@@ -18,6 +18,7 @@ Player::Player()
 	boostSpeed = Global::GetInstance().playerAttributes[3];
 	grappleSpeed = Global::GetInstance().playerAttributes[4];
 	gravity = Global::GetInstance().playerAttributes[5];
+	fallSpeed = Global::GetInstance().playerAttributes[6];
 	player = Animation(4, 4, 90, 120, .10); 
 	sprite.setTexture(*TextureManager::GetInstance().retrieveTexture("David_Run2"));
 	crosshair.setTexture(*TextureManager::GetInstance().retrieveTexture("crosshair"));
@@ -495,8 +496,8 @@ void Player::verticalAcceleration(float& deltaTime)
 {
 	if(isFalling && !isHanging)
 	{
-		if(vel.y >= TERMINAL_VELOCITY)
-			vel.y = TERMINAL_VELOCITY;
+		if(vel.y >= fallSpeed)
+			vel.y = fallSpeed;
 		else
 			vel.y += gravity * deltaTime;
 	}

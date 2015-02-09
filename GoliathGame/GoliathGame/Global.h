@@ -27,7 +27,7 @@ public :
 	std::map<std::string, std::vector<float>> augments;
 	float basePlayerStats[6];
 	int enemyAttributes[4];
-	int playerAttributes[6];
+	int playerAttributes[7];
 	PlayerInventory* inventory;
 
 	void LoadEnemyAttributes();
