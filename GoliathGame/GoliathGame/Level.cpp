@@ -41,6 +41,7 @@ void Level::DeleteLevel()
 {
 	enemyList.clear();
 	arrowTileList.clear();
+	arrows.clear();
 	destructTileList.clear();
 	delete currentRoom;
 	delete collisionManager;
@@ -55,6 +56,7 @@ void Level::changeRoom()
 		delete currentRoom;
 		enemyList.clear();
 		arrowTileList.clear();
+		arrows.clear();
 		destructTileList.clear();
 		currentRoom = new Room(levelNum, ++roomNum, enemyList, arrowTileList, destructTileList);
 		//Move player to the start pos in new room
@@ -66,6 +68,7 @@ void Level::changeRoom()
 		//delete currentRoom;
 		enemyList.clear();
 		arrowTileList.clear();
+		arrows.clear();
 		destructTileList.clear();
 		changeScreen = true;
 		
@@ -99,7 +102,7 @@ void Level::update(float deltaTime)
 	}
 	if(!changeScreen)
 	{
-		
+
 		currentRoom->GetCollidableTiles(p, sf::Vector2f(PLAYER_DIM_X, PLAYER_DIM_Y), nearTiles);
 
 		collisionManager->setNearByTiles(nearTiles);
@@ -124,7 +127,7 @@ void Level::update(float deltaTime)
 					p.shouldHang = true;
 				}
 				else
-					p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width/2, hookedTile->top + hookedTile->height));
+					p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width/2, hookedTile->top));
 
 				//p.newState = new GrapplingState();
 				delete p.currentState;
@@ -196,6 +199,7 @@ void Level::update(float deltaTime)
 			std::vector<Tile*> proTile;
 			if(po.moving)
 			{
+				std::cout << "Projectile position: " << po.sprite.getPosition().x << " " << po.sprite.getPosition().y << std::endl;	
 				currentRoom->GetCollidableTiles(po, sf::Vector2f(po.sprite.getTexture()->getSize().x/10,
 					po.sprite.getTexture()->getSize().y/10), proTile);
 				for(auto& t : proTile)
@@ -218,11 +222,8 @@ void Level::update(float deltaTime)
 			}
 		}
 
-		int i = 0;
-
 		for (auto& e : enemyList)
 		{
-			i++;
 			if(e->health > 0)
 			{
 				std::vector<Tile*> proTile;
@@ -286,11 +287,9 @@ void Level::update(float deltaTime)
 						{
 							e.get()->foundPlayer = false;
 							e.get()->resetRay();
-							std::cout << "Enemy " << i << " ray hit wall" << std::endl;
 						}
 						else if(collisionManager->checkIfEnemyInRange(ray, &p))
 						{
-							std::cout << "Enemy " << i << " ray hit player" << std::endl;
 							e.get()->resetRay();
 							e.get()->foundPlayer = true;
 						}
@@ -304,12 +303,16 @@ void Level::update(float deltaTime)
 			collisionManager->checkEnemySwordToPlayer(e.get()->eSword, &p);
 		}
 
+		int i = 0;
+		//std::cout << "Player position:" << p.sprite.getPosition().x << " " << p.sprite.getPosition().y << std::endl;
 		checkDestructableTiles();
 
 		for(auto& a : arrows)
 		{
+			i++;
 			std::vector<Tile*> proTile;
 			a->update(deltaTime);
+			//std::cout << "ARROW " << i << " position:" << a->sprite.getPosition().x << " " << a->sprite.getPosition().y << std::endl;	
 			if(a->moving)
 			{
 				currentRoom->GetCollidableTiles(*a, sf::Vector2f(a->sprite.getTexture()->getSize().x/10,
@@ -323,9 +326,23 @@ void Level::update(float deltaTime)
 				if(collisionManager->playerCollisionDetection(a))
 				{
 					a->moving = false;
+					a->startTime = 0.0;
+					a->setLocation(a->startLocation);
 				}
 
-				collisionManager->checkEnemyBulletToPlayer(*a, &p);
+				if(collisionManager->checkIfEnemyInRange(*a, &p))
+				{
+					p.health -= a->damage;
+					a->moving = false;
+					a->startTime = 0.0;
+					a->setLocation(a->startLocation);
+					std::cout << "ARROW " << i << " hit player" << std::endl;
+				}
+			}
+			else 
+			{
+				a->setLocation(a->startLocation);
+				a->moving = true;
 			}
 		}
 
@@ -387,12 +404,36 @@ void Level::CleanUp()
 {
 }
 
+// Creates arrows based off positions of arrow shooter tiles
 void Level::setArrowTileArrows()
 {
 	for(auto& a : arrowTileList)
 	{
-		Projectile* pro = new Projectile(sf::Vector2f(a->top, a->left), a->getDirection());
-		arrows.push_back(pro);
+		if(a->getDirection().x == 1.0)
+		{
+			Projectile* pro = new Projectile(sf::Vector2f(a->left, a->top), a->getDirection());
+			pro->damage = 25;
+			arrows.push_back(pro);
+		}
+		else if(a->getDirection().x == -1.0)
+		{
+			Projectile* pro = new Projectile(sf::Vector2f(a->left, a->top), a->getDirection());
+			pro->damage = 25;
+			arrows.push_back(pro);
+		}
+		else if(a->getDirection().y == 1.0)
+		{
+			Projectile* pro = new Projectile(sf::Vector2f(a->left, a->top), a->getDirection());
+			pro->damage = 25;
+			arrows.push_back(pro); 
+		}
+		else if(a->getDirection().y == -1.0)
+		{
+			Projectile* pro = new Projectile(sf::Vector2f(a->left, a->top), a->getDirection());
+			pro->damage = 25;
+			arrows.push_back(pro);
+		}
+
 	}
 }
 

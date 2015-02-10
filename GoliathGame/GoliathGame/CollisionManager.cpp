@@ -103,10 +103,13 @@ bool CollisionManager::tileBelowCharacter(BaseObject* p)
 	for(Tile* b : tileList)
 	{
 		//if(b->intersects(p->sprite.getGlobalBounds()) && b->top >= p->sprite.getPosition().y)
-		if(b->top >= p->sprite.getPosition().y + p->sprite.getGlobalBounds().height/2)
+		if(b->top >= p->sprite.getPosition().y + p->sprite.getGlobalBounds().height/2 && 
+			b->top - (p->sprite.getPosition().y + p->sprite.getGlobalBounds().height/2) < GAME_TILE_DIM)
+		{
 			if((b->left <= left && b->left + b->width >= left) ||
 				(b->left <= right && b->left + b->width >= right))
 				return true;
+		}
 	}
 	return false;
 }

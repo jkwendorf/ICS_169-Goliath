@@ -29,15 +29,23 @@ void JumpingState::update(Player* player, float deltaTime)
 	if(!player->isVaulting)
 		player->verticalAcceleration(deltaTime);
 	player->move(player->vel*deltaTime);
-
-	while(player->collisionManager->playerCollisionDetection(player))
+	
+	if(player->collisionManager->playerCollisionDetection(player))
 	{
-		if((player->collisionManager->getCollidedTile(*player) != nullptr) && 
-			((player->collisionManager->getCollidedTile(*player)->getFlags() & TILE::HAZARDMASK) != 0))
+		while(player->collisionManager->playerCollisionDetection(player))
 		{
-			player->takeDamage();
+			if((player->collisionManager->getCollidedTile(*player) != nullptr) && 
+				((player->collisionManager->getCollidedTile(*player)->getFlags() & TILE::HAZARDMASK) != 0))
+			{
+				player->takeDamage();
+			}
+			player->moveOutOfTile(player->collisionManager->getCollidedTile(*player));
 		}
-		player->moveOutOfTile(player->collisionManager->getCollidedTile(*player));
+	}
+	else
+	{
+		player->collidingRight = false;
+		player->collidingLeft = false;
 	}
 }
 
