@@ -23,7 +23,7 @@ Player::Player()
 	sprite.setTexture(*TextureManager::GetInstance().retrieveTexture("David_Run2"));
 	crosshair.setTexture(*TextureManager::GetInstance().retrieveTexture("crosshair"));
 	crosshair.setPosition(-1000,-1000);
-	crosshair.setScale(1.2,1.2);
+	//crosshair.setScale(1.2,1.2);
 	//sprite.setPosition(64, 560);
 	//sprite.setPosition(500, 64);
 	//sprite.setScale( (PLAYER_DIM_X / (float)sprite.getTexture()->getSize().x), (PLAYER_DIM_Y / (float)sprite.getTexture()->getSize().y));
@@ -191,7 +191,7 @@ void Player::update(float deltaTime)
 	if(!collisionManager->isGrappleListEmpty())
 	{
 		closestGrappleTile = collisionManager->getNearestGrappleTile(*this);
-		crosshair.setPosition(closestGrappleTile.left, closestGrappleTile.top);
+		crosshair.setPosition(closestGrappleTile.left - 17, closestGrappleTile.top - 17);
 		crosshair.setColor(sf::Color(crosshair.getColor().r, crosshair.getColor().g,crosshair.getColor().b, crosshair.getColor().a - 10));
 		if(crosshair.getColor().a < 0)
 			crosshair.setColor(sf::Color(crosshair.getColor().r, crosshair.getColor().g,crosshair.getColor().b, 255));
