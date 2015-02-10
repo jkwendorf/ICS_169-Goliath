@@ -51,7 +51,7 @@ void Projectile::update(float deltaTime)
 
 void Projectile::draw(sf::RenderWindow& window)
 {
-	window.draw(sprite);
+	//window.draw(sprite);
 	sf::RectangleShape rectangle = sf::RectangleShape(sf::Vector2f(36,36));
 	rectangle.setPosition(sprite.getPosition().x, sprite.getPosition().y);
 	rectangle.setFillColor(sf::Color::Red);
