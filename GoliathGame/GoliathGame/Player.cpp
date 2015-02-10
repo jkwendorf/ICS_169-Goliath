@@ -86,6 +86,7 @@ void Player::handleInput()
 
 void Player::update(float deltaTime)
 {
+
 	if(deathTimer > 0)
 	{
 		deathTimer -= deltaTime;
@@ -162,7 +163,7 @@ void Player::update(float deltaTime)
 	for(int x = 0; x < 3; x++)
 	{
 		if(!ammo[x].moving)
-			ammo[x].setLocation(sf::Vector2f(sprite.getPosition().x + 300, sprite.getPosition().y - 25));
+			ammo[x].setLocation(sf::Vector2f(sprite.getPosition().x, sprite.getPosition().y - 25));
 		ammo[x].update(deltaTime);
 	}
 	
@@ -286,7 +287,10 @@ void Player::draw(sf::RenderWindow& window)
 			ammo[x].draw(window);
 	
 	window.draw(crosshair);
-	
+	sf::RectangleShape rectangle = sf::RectangleShape(sf::Vector2f(36, 36));
+	rectangle.setPosition(sprite.getPosition().x, sprite.getPosition().y);
+	rectangle.setFillColor(sf::Color::Blue);
+	window.draw(rectangle);
 	
 	/* //TESTING CIRCLE
 	sf::CircleShape circle = sf::CircleShape(5.0);

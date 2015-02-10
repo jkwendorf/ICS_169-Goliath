@@ -3,7 +3,7 @@
 #include "ButtonManager.h"
 #include "Global.h"
 #include "StateManager.h"
-#include "PopOut.h"s
+#include "PopOut.h"
 
 class PauseGameState : public State
 {
