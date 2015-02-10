@@ -5,6 +5,7 @@
 #include <fstream>
 #include "TextureManager.h"
 #include <vector>
+#include <list>
 #include <memory>
 #include "Tile.h"
 #include "Enemy.h"
@@ -20,12 +21,12 @@ private:
 	std::string pathToText;
 
 	Section();
-	void LoadTileMap(std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList);
+	void LoadTileMap(std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList);
 	void Tokenize(const std::string& str,
                       std::vector<std::string>& tokens,
                       const std::string& delimiters = " ");
 public:
-	Section(int sectionNumber, std::string& s, sf::Vector2f& offset, std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList);
+	Section(int sectionNumber, std::string& s, sf::Vector2f& offset, std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList);
 	~Section();
 	sf::Vector2f getOffset();
 	sf::Vector2i getGridDim();

@@ -23,6 +23,7 @@ private:
 	int levelNum, maxRooms;
 	std::vector<std::shared_ptr<Enemy>> enemyList;
 	std::vector<Tile*> arrowTileList;
+	std::list<Tile*> destructTileList;
 	Player p;
 	Room* currentRoom;
 	sf::View view;
@@ -39,6 +40,8 @@ private:
 	void changeRoom();
 	void CleanUp();
 	void setArrowTileArrows();
+	void checkDestructableTiles();
+
 public:
 	Level();
 	Level(int levelNumber, int roomNumber);

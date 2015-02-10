@@ -94,10 +94,13 @@ bool CollisionManager::tileBelowCharacter(BaseObject* p)
 	for(Tile* b : tileList)
 	{
 		//if(b->intersects(p->sprite.getGlobalBounds()) && b->top >= p->sprite.getPosition().y)
-		if(b->top >= p->sprite.getPosition().y + p->sprite.getGlobalBounds().height/2)
+		if(b->top >= p->sprite.getPosition().y + p->sprite.getGlobalBounds().height/2 && 
+			b->top - (p->sprite.getPosition().y + p->sprite.getGlobalBounds().height/2) < GAME_TILE_DIM)
+		{
 			if((b->left <= left && b->left + b->width >= left) ||
 				(b->left <= right && b->left + b->width >= right))
 				return true;
+		}
 	}
 	return false;
 }
@@ -186,4 +189,12 @@ bool CollisionManager::checkIfEnemyInRange(Projectile p, Player* player)
 		return true;
 	}
 	else return false;
+}
+
+bool CollisionManager::playerSwordCollideWithTile(Sword s, Tile* t)
+{
+	if(s.hitBox.getGlobalBounds().intersects(sf::FloatRect(t->left, t->top, t->width, t->height)))
+		return true;
+
+	return false;
 }

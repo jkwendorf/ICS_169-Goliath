@@ -17,7 +17,7 @@ private:
 	sf::Music roomMusic;
 
 	Room();
-	void LoadRoom(int levelNumber, std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList);
+	void LoadRoom(int levelNumber, std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList);
 	bool CheckSectionOnScreen(int sectionNum);
 	std::vector<Tile*> checkBotRight(int i, sf::FloatRect& rect);
 	std::vector<sf::Vector2f> inSameGrid(const sf::Vector2f& p1, const sf::Vector2f& p2);
@@ -38,7 +38,7 @@ private:
 
 public:
 	//Player player;
-	Room(int levelNumber, int roomNumber, std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList);
+	Room(int levelNumber, int roomNumber, std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList);
 	~Room();
 	
 	void GetCollidableTiles(BaseObject& obj, sf::Vector2f& dim, std::vector<Tile*>& nearTiles);
