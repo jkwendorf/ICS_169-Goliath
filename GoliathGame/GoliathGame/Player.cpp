@@ -466,7 +466,12 @@ void Player::horizontalAcceleration(MovementDirection dir, float& deltaTime)
 					}
 					else
 					{
-						if(running && stamina > 0)
+						if(isFalling)
+						{
+							maxSpeed *= 0.75;
+							vel.x += 0.75*(moveAccel)*dir*deltaTime;
+						}
+						else if(running && stamina > 0)
 						{
 							maxSpeed -= boostSpeed;
 							vel.x += 3*(moveAccel+boostSpeed)*dir*deltaTime;
@@ -487,7 +492,12 @@ void Player::horizontalAcceleration(MovementDirection dir, float& deltaTime)
 				{
 					if(vel.x >= 0)
 					{
-						if(running && stamina > 0)
+						if(isFalling)
+						{
+							maxSpeed *= 0.75;
+							vel.x += 0.75*(moveAccel)*dir*deltaTime;
+						}
+						else if(running && stamina > 0)
 						{
 							maxSpeed += boostSpeed;
 							vel.x += (moveAccel+boostSpeed)*dir*deltaTime;
@@ -517,13 +527,21 @@ void Player::horizontalAcceleration(MovementDirection dir, float& deltaTime)
 		{
 			if(vel.x > 0.f)
 			{
-				vel.x -= 2*moveAccel*deltaTime;
+				if(isFalling)
+					vel.x -= 0.75*moveAccel*deltaTime;
+				else
+					vel.x -= 2*moveAccel*deltaTime;
+
 				if(vel.x <= 0.f)
 					vel.x = 0.f;
 			}
 			else if(vel.x < 0.f)
 			{
-				vel.x += 2*moveAccel*deltaTime;
+				if(isFalling)
+					vel.x += 0.75*moveAccel*deltaTime;
+				else
+					vel.x += 2*moveAccel*deltaTime;
+
 				if(vel.x >= 0.f)
 					vel.x = 0.f;
 			}
