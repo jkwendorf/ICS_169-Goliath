@@ -110,6 +110,7 @@ void Level::update(float deltaTime)
 	
 		if(p.hShot.grappleInProgress)
 		{
+			p.hShot.hitNonGrappleTile = collisionManager->hShotHitNonGrappleTile(p.hShot);
 			if(!p.hShot.hookedOnSomething && collisionManager->hookCollisionDetection(p.hShot))
 			{
 				p.hShot.hookedOnSomething = true;
@@ -410,25 +411,25 @@ void Level::setArrowTileArrows()
 	{
 		if(a->getDirection().x == 1.0)
 		{
-			Projectile* pro = new Projectile(sf::Vector2f(a->left, a->top), a->getDirection());
+			Projectile* pro = new Projectile(sf::Vector2f(a->left + (GAME_TILE_DIM), a->top), a->getDirection());
 			pro->damage = 25;
 			arrows.push_back(pro);
 		}
 		else if(a->getDirection().x == -1.0)
 		{
-			Projectile* pro = new Projectile(sf::Vector2f(a->left, a->top), a->getDirection());
+			Projectile* pro = new Projectile(sf::Vector2f(a->left - (GAME_TILE_DIM), a->top), a->getDirection());
 			pro->damage = 25;
 			arrows.push_back(pro);
 		}
 		else if(a->getDirection().y == 1.0)
 		{
-			Projectile* pro = new Projectile(sf::Vector2f(a->left, a->top), a->getDirection());
+			Projectile* pro = new Projectile(sf::Vector2f(a->left, a->top + (GAME_TILE_DIM)), a->getDirection());
 			pro->damage = 25;
 			arrows.push_back(pro); 
 		}
 		else if(a->getDirection().y == -1.0)
 		{
-			Projectile* pro = new Projectile(sf::Vector2f(a->left, a->top), a->getDirection());
+			Projectile* pro = new Projectile(sf::Vector2f(a->left, a->top - (GAME_TILE_DIM)), a->getDirection());
 			pro->damage = 25;
 			arrows.push_back(pro);
 		}

@@ -145,7 +145,8 @@ void Section::checkGrapple(const sf::Vector2f& p1, const sf::Vector2f& p2, std::
 		for (int j = p3.y; j <= p4.y; j++)
 		{
 			//if(grid1[(j*gDim.y) + i]->getCollidable() || grid1[(j*gDim.y) + i]->getGrappleable() )
-			if((grid1[(j*gDim.y) + i]->getFlags() & TILE::GRAPPLEABLEMASK) != 0)
+			if(((grid1[(j*gDim.y) + i]->getFlags() & TILE::GRAPPLEABLEMASK) != 0) || 
+ 				((grid1[(j*gDim.y) + i]->getFlags() & TILE::COLLIDABLEMASK) != 0))
 			{
 				nearTiles.push_back(grid1[(j*gDim.y) + i]);
 			}
