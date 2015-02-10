@@ -13,7 +13,7 @@ Level::Level(int levelNumber, int roomNumber)
 	enemyAI(collisionManager)
 {
 	p.init(collisionManager, new JumpingState());
-	currentRoom = new Room(levelNumber, roomNumber, enemyList, arrowTileList);
+	currentRoom = new Room(levelNumber, roomNumber, enemyList, arrowTileList, destructTileList);
 	background.setTexture(*TextureManager::GetInstance().retrieveTexture("banditCity"));
 	sf::Color color = background.getColor();
 	background.setColor(sf::Color(color.r, color.g, color.b, 200));
@@ -41,6 +41,7 @@ void Level::DeleteLevel()
 {
 	enemyList.clear();
 	arrowTileList.clear();
+	destructTileList.clear();
 	delete currentRoom;
 	delete collisionManager;
 }
@@ -54,7 +55,8 @@ void Level::changeRoom()
 		delete currentRoom;
 		enemyList.clear();
 		arrowTileList.clear();
-		currentRoom = new Room(levelNum, ++roomNum, enemyList, arrowTileList);
+		destructTileList.clear();
+		currentRoom = new Room(levelNum, ++roomNum, enemyList, arrowTileList, destructTileList);
 		//Move player to the start pos in new room
 		p.resetPosition(currentRoom->getStartPos());
 		p.init(collisionManager, new JumpingState());
@@ -64,6 +66,7 @@ void Level::changeRoom()
 		//delete currentRoom;
 		enemyList.clear();
 		arrowTileList.clear();
+		destructTileList.clear();
 		changeScreen = true;
 		
 	}
@@ -120,7 +123,7 @@ void Level::update(float deltaTime)
 					p.shouldHang = true;
 				}
 				else
-					p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width/2, hookedTile->top + hookedTile->height));
+					p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width/2, hookedTile->top));
 
 				//p.newState = new GrapplingState();
 				delete p.currentState;
@@ -300,6 +303,8 @@ void Level::update(float deltaTime)
 			collisionManager->checkEnemySwordToPlayer(e.get()->eSword, &p);
 		}
 
+		checkDestructableTiles();
+
 		for(auto& a : arrows)
 		{
 			std::vector<Tile*> proTile;
@@ -387,5 +392,23 @@ void Level::setArrowTileArrows()
 	{
 		Projectile* pro = new Projectile(sf::Vector2f(a->top, a->left), a->getDirection());
 		arrows.push_back(pro);
+	}
+}
+
+// Goes through each destructable tile within the level and checks to see if we should destroy them
+void Level::checkDestructableTiles()
+{
+	for (auto it = destructTileList.begin(); it != destructTileList.end();)
+	{
+		if(collisionManager->playerSwordCollideWithTile(p.playerSword, *it))
+		{
+			auto itToErase = it;
+			it++;
+			delete (*itToErase);
+			*itToErase = new Tile();
+			destructTileList.erase(itToErase);
+			continue;
+		}
+		it++;
 	}
 }
