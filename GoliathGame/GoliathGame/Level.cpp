@@ -123,7 +123,7 @@ void Level::update(float deltaTime)
 					p.shouldHang = true;
 				}
 				else
-					p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width/2, hookedTile->top + hookedTile->height));
+					p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width/2, hookedTile->top));
 
 				//p.newState = new GrapplingState();
 				delete p.currentState;
