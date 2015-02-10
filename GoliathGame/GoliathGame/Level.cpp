@@ -312,7 +312,6 @@ void Level::update(float deltaTime)
 			std::vector<Tile*> proTile;
 			a->update(deltaTime);
 			//std::cout << "ARROW " << i << " position:" << a->sprite.getPosition().x << " " << a->sprite.getPosition().y << std::endl;	
-	
 			if(a->moving)
 			{
 				currentRoom->GetCollidableTiles(*a, sf::Vector2f(a->sprite.getTexture()->getSize().x/10,
@@ -404,6 +403,7 @@ void Level::CleanUp()
 {
 }
 
+// Creates arrows based off positions of arrow shooter tiles
 void Level::setArrowTileArrows()
 {
 	for(auto& a : arrowTileList)
