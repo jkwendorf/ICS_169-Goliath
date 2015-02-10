@@ -390,8 +390,9 @@ void Level::setArrowTileArrows()
 {
 	for(auto& a : arrowTileList)
 	{
-		Projectile* pro = new Projectile(sf::Vector2f(a->top, a->left), a->getDirection());
+		Projectile* pro = new Projectile(sf::Vector2f(a->left, a->top), a->getDirection());
 		arrows.push_back(pro);
+		
 	}
 }
 
