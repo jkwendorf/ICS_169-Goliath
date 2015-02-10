@@ -107,6 +107,7 @@ void Level::update(float deltaTime)
 	
 		if(p.hShot.grappleInProgress)
 		{
+			p.hShot.hitNonGrappleTile = collisionManager->hShotHitNonGrappleTile(p.hShot);
 			if(!p.hShot.hookedOnSomething && collisionManager->hookCollisionDetection(p.hShot))
 			{
 				p.hShot.hookedOnSomething = true;

@@ -40,12 +40,21 @@ bool CollisionManager::playerCollisionDetection(BaseObject* p)
 Tile CollisionManager::getNearestGrappleTile(BaseObject p)
 {
 
-	Tile closestTile = *grapplableTileList.front();
+	/* using flags
+	->getFlags()
+	& TILE::COLLIDABLEMASK) != 0
+	will tell you if it is collidable
+
+	*/
+	Tile closestTile;
+	if((grapplableTileList.front()->getFlags() & TILE::GRAPPLEABLEMASK) != 0)
+		closestTile = *grapplableTileList.front();
 	for(Tile* b: grapplableTileList)
 		if(sqrt(pow(((b->top + b->height/2) - p.sprite.getPosition().y),2) + pow(((b->left + b->width/2)  - p.sprite.getPosition().x),2)) < 
-			sqrt(pow(((closestTile.top + closestTile.height/2) - p.sprite.getPosition().y),2) + pow(((closestTile.left + closestTile.width/2) - p.sprite.getPosition().x),2)))
+			sqrt(pow(((closestTile.top + closestTile.height/2) - p.sprite.getPosition().y),2) + pow(((closestTile.left + closestTile.width/2) - p.sprite.getPosition().x),2)) )
 		{
-			closestTile = *b;
+			if(((b->getFlags() & TILE::GRAPPLEABLEMASK) != 0))
+				closestTile = *b;
 		}
 
 	return closestTile;
@@ -174,7 +183,10 @@ void CollisionManager::checkEnemySwordToPlayer(Sword s, Player* player)
 
 bool CollisionManager::isGrappleListEmpty()
 {
-	return grapplableTileList.empty();
+	for(Tile* tempTile : grapplableTileList)
+		if(((tempTile->getFlags() & TILE::GRAPPLEABLEMASK) != 0))
+			return false;
+	return true;
 }
 
 
@@ -194,4 +206,24 @@ bool CollisionManager::playerSwordCollideWithTile(Sword s, Tile* t)
 		return true;
 
 	return false;
+}
+
+bool CollisionManager::hShotHitNonGrappleTile(HookShot p)
+{
+	bool temp = false;
+	for(Tile* tempTile : grapplableTileList)
+	{
+		
+		if(tempTile->intersects(p.sprite.getGlobalBounds()) && 
+			((tempTile->getFlags() & TILE::COLLIDABLEMASK) != 0) &&
+			!((tempTile->getFlags() & TILE::GRAPPLEABLEMASK) != 0))
+		{
+			std::cout << "A tile Collision Occured" << std::endl;
+			std::cout << "TempTile position" << std::endl;
+			std::cout << tempTile->top << " " << tempTile->left << std::endl;
+			return true;
+		}
+			
+	}
+	return temp;
 }
