@@ -287,8 +287,8 @@ void Player::draw(sf::RenderWindow& window)
 			ammo[x].draw(window);
 	
 	window.draw(crosshair);
-	sf::RectangleShape rectangle = sf::RectangleShape(sf::Vector2f(36, 36));
-	rectangle.setPosition(sprite.getPosition().x, sprite.getPosition().y);
+	rectangle = sf::RectangleShape(sf::Vector2f(36, 36));
+	rectangle.setPosition(sprite.getPosition().x - 20, sprite.getPosition().y - 40);
 	rectangle.setFillColor(sf::Color::Blue);
 	window.draw(rectangle);
 	
