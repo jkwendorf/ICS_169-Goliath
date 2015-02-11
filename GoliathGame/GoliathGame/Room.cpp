@@ -2,7 +2,7 @@
 #include "Room.h"
 
 Room::Room(int levelNumber, int roomNumber, std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList)
-	:roomNum(roomNumber), numSect(Global::GetInstance().roomSizes.at("Room " + std::to_string(roomNumber))),
+	:roomNum(roomNumber), numSect(Global::GetInstance().roomSizes.at("Level " + std::to_string(levelNumber) + " Room " + std::to_string(roomNumber))),
 	roomWidth(0), roomHeight(0), loadedTitles(false)
 {
 	LoadRoom(levelNumber, enemyList, arrowTileList, destructTileList);
@@ -53,7 +53,8 @@ void Room::LoadRoom(int levelNumber, std::vector<std::shared_ptr<Enemy>> &enemyL
 	}
 	
 	//std::cout << Global::GetInstance().roomTileSheets. << std::endl;
-	sf::Texture* texture = TextureManager::GetInstance().retrieveTexture(Global::GetInstance().roomTileSheets.at("Room " + std::to_string(roomNum)));
+	sf::Texture* texture = TextureManager::GetInstance().retrieveTexture(
+		Global::GetInstance().roomTileSheets.at("Level " + std::to_string(levelNumber) + " Room " + std::to_string(roomNum)));
 	Global::GetInstance().SetUpTileSheet(texture);
 }
 
@@ -91,6 +92,7 @@ void Room::GetGrapplableTiles(Player& player, std::vector<Tile*>& nearTiles)
 			sf::FloatRect rect(sf::Vector2f(player.sprite.getPosition().x /*- PLAYER_DIM_X/2 */ - player.hShot.grappleBox, 
 				player.sprite.getPosition().y /*- PLAYER_DIM_Y/2 */ - player.hShot.grappleBox),
 				sf::Vector2f(player.hShot.grappleBox, player.hShot.grappleBox));
+			std::cout << "Facing Left and greater than 0: " << rect.left << ", " << rect.top << std::endl;
 			GetNearTiles(rect, nearTiles, true, true);
 			return;
 		}
@@ -99,6 +101,7 @@ void Room::GetGrapplableTiles(Player& player, std::vector<Tile*>& nearTiles)
 			sf::FloatRect rect(sf::Vector2f(player.sprite.getPosition().x,
 				player.sprite.getPosition().y /*- PLAYER_DIM_Y/2 */ - player.hShot.grappleBox),
 				sf::Vector2f(player.hShot.grappleBox, player.hShot.grappleBox));
+			std::cout << "Facing right and greater than 0: " << rect.left << ", " << rect.top << std::endl;
 			GetNearTiles(rect, nearTiles, true, true);
 			return;
 		}
@@ -110,6 +113,7 @@ void Room::GetGrapplableTiles(Player& player, std::vector<Tile*>& nearTiles)
 		{
 			sf::FloatRect rect(sf::Vector2f(player.sprite.getPosition().x /*- PLAYER_DIM_X/2 */ - player.hShot.grappleBox, 0),
 				sf::Vector2f(player.hShot.grappleBox, player.sprite.getPosition().y));
+			std::cout << "Facing Left and less than 0: " << rect.left << ", " << rect.top << std::endl;
 			GetNearTiles(rect, nearTiles, true, true);
 			return;
 		}
@@ -131,8 +135,10 @@ void Room::GetNearTiles(sf::FloatRect& rect, std::vector<Tile*>& nearTiles, bool
 	
 	for (int i = 0; i < numSect; i++)
 	{
+		std::cout << "Checking if section " << i << " is in window" << std::endl;
 		if (sectList[i]->inWindow())
 		{
+			std::cout << "section " << i << " is in window" << std::endl;
 			//Check and see if the top left of the box is in the current grid
 			if(i == 1 && topLeft.x < 0)
 			{
@@ -199,6 +205,8 @@ void Room::checkUpperLeftSameGrid(int currentGrid, sf::FloatRect& rect, const sf
 				{
 					if (grapple)
 					{
+						if((topLeft.x - sectList[currentGrid]->getOffset().x) < 0)
+							std::cout << "Something is wrong here" << std::endl;
 						sectList[currentGrid]->checkGrapple(topLeft - sectList[currentGrid]->getOffset(), botRight - sectList[currentGrid]->getOffset(), nearTiles);
 						return;
 					}
@@ -224,7 +232,13 @@ void Room::checkUpperLeftSameGrid(int currentGrid, sf::FloatRect& rect, const sf
 	{
 		if (grapple)
 		{		
-			//Set the top left y position = 0	
+			//Set the top left y position = 0
+			if((botRight.x - sectList[currentGrid]->getOffset().x) < 0)
+			{
+				std::cout << "Something is wrong here" << std::endl;
+				std::cout << sectList[currentGrid]->getOffset().x << std::endl;
+				return;
+			}
 			sectList[currentGrid]->checkGrapple(sf::Vector2f(topLeft.x < 0 ? 0 : topLeft.x, topLeft.y < 0 ? 0 : topLeft.y), 
 				botRight - sectList[currentGrid]->getOffset(), nearTiles);
 			return;
@@ -256,6 +270,8 @@ void Room::checkLowerRightNextGrid(int currentGrid, sf::FloatRect& rect, const s
 			{
 				if (grapple)
 				{
+					if((topLeft.x - sectList[currentGrid]->getOffset().x) < 0)
+						std::cout << "Something is wrong here" << std::endl;
 					sectList[currentGrid]->checkGrapple(topLeft - sectList[currentGrid]->getOffset(), sf::Vector2f(sectList[currentGrid]->getWidth()-1, topLeft.y), nearTiles);
 					//std::vector<Tile*> t1;
 					sectList[currentGrid+1]->checkGrapple(sf::Vector2f(0, topLeft.y), 
@@ -268,7 +284,7 @@ void Room::checkLowerRightNextGrid(int currentGrid, sf::FloatRect& rect, const s
 					sectList[currentGrid]->checkInteractable(topLeft - sectList[currentGrid]->getOffset(), sf::Vector2f(sectList[currentGrid]->getWidth()-1, topLeft.y), nearTiles);
 					//std::vector<Tile*> t1;
 					sectList[currentGrid+1]->checkInteractable(sf::Vector2f(0, topLeft.y), 
-								sf::Vector2f(botRight.x - sectList[currentGrid+1]->getOffset().x, botRight.x),nearTiles);
+								sf::Vector2f(botRight.x - sectList[currentGrid+1]->getOffset().x, botRight.y), nearTiles);
 					//nearTiles.insert(nearTiles.end(), t1.begin(), t1.end());
 					return;
 				}
@@ -280,7 +296,9 @@ void Room::checkLowerRightNextGrid(int currentGrid, sf::FloatRect& rect, const s
 		//std::cout << "Testing: " << botRight.x << " : " << sectList[currentGrid]->getWidth() << std::endl;
 		if (grapple)
 		{			
-			sectList[currentGrid]->checkGrapple(topLeft - sectList[currentGrid]->getOffset(), sf::Vector2f(sectList[currentGrid]->getOffset().x + sectList[currentGrid]->getWidth() ,botRight.y), nearTiles);
+			if((topLeft.x - sectList[currentGrid]->getOffset().x) < 0)
+				std::cout << "Something is wrong here" << std::endl;
+			sectList[currentGrid]->checkGrapple(topLeft - sectList[currentGrid]->getOffset(), sf::Vector2f(sectList[currentGrid]->getOffset().x + sectList[currentGrid]->getWidth(), botRight.y), nearTiles);
 			return;
 		}
 

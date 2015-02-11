@@ -52,7 +52,7 @@ void Global::ParseXML() {
 		for (pugi::xml_node room = level.child("Room"); room; room = room.next_sibling("Room")) {
 			std::cout << "Room Number: " << room.attribute("number").value() << std::endl;
 			std::string roomNumber = room.attribute("number").as_string();
-			std::string str2 = "Room " + roomNumber;
+			std::string str2 = "Level " + levelNumber + " Room " + roomNumber;
 			int roomSize = room.attribute("size").as_int();
 			roomSizes[str2] = roomSize;
 			roomTileSheets[str2] = tilesheetName;

@@ -134,11 +134,21 @@ void Section::checkGrapple(const sf::Vector2f& p1, const sf::Vector2f& p2, std::
 {
 	sf::Vector2f p3 = sf::Vector2f(p1.x / GAME_TILE_DIM, p1.y / GAME_TILE_DIM);
 	sf::Vector2f p4 = sf::Vector2f(p2.x / GAME_TILE_DIM, p2.y / GAME_TILE_DIM);
+	//This is not a valid fix just want to test and see if this will remedy the problem atm
+	if(p2.x - p1.x < 0)
+	{
+		std::cout << "Something is wrong here" << std::endl;
+		return;
+	}
 	Global::GetInstance().testingRect.setPosition(p1.x, p1.y);
 	Global::GetInstance().testingRect.setSize(sf::Vector2f(p2.x - p1.x, p2.y - p1.y));
 
 	sf::Vector2f temp = Global::GetInstance().testingRect.getPosition();
 	sf::Vector2f temp2 = Global::GetInstance().testingRect.getSize();
+	std::cout << "Grapple Rect: " << temp.x << ", " << temp.y << "::" << temp2.x << ", " << temp2.y << std::endl;
+	if(temp2.x < 0)
+		std::cout << "Something is wrong here" << std::endl;
+
 
 	for(int i = p3.x; i <= p4.x; i++)
 	{
@@ -206,6 +216,7 @@ void Section::print()
 //Continues through the file until it hits the end of the file and creates tiles based off information parsed in
 void Section::LoadTileMap(std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList)
 {
+	std::cout << "Loading section: " << sectionNum << std::endl; 
 	std::ifstream ifs;
 	ifs.open("media/levels/" + pathToText + ".txt");
 	std::string str;
@@ -246,6 +257,9 @@ void Section::LoadTileMap(std::vector<std::shared_ptr<Enemy>> &enemyList, std::v
 
 	token.clear();
 	float ratio = (float)GAME_TILE_DIM / 100;
+	
+	if(sectionNum == 1)
+		std::cout << "need to break" <<std::endl;
 
 	while(!ifs.eof()) 
 	{
