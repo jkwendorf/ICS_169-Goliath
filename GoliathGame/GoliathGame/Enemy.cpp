@@ -107,7 +107,7 @@ void Enemy::update(float deltaTime)
 	for(int x = 0; x < 3; x++)
 	{
 		if(!ammo[x].moving)
-			ammo[x].setLocation(sf::Vector2f(sprite.getPosition().x + 250, sprite.getPosition().y - 25));
+			ammo[x].setLocation(sf::Vector2f(sprite.getPosition().x, sprite.getPosition().y - 25));
 		ammo[x].update(deltaTime);
 	}
 
@@ -119,7 +119,7 @@ void Enemy::update(float deltaTime)
 	if(!raycast.moving && rayCool > 5.0f)
 	{
 		rayCool = 0;
-		raycast.setLocation(sf::Vector2f(sprite.getPosition().x + 250, sprite.getPosition().y - 25));
+		raycast.setLocation(sf::Vector2f(sprite.getPosition().x, sprite.getPosition().y - 25));
 		if(isMovingRight())
 		{
 			raycast.setVelocity(sf::Vector2f(5.0f, 0));

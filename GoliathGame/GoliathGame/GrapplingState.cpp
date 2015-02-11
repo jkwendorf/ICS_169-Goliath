@@ -44,7 +44,7 @@ void GrapplingState::update(Player* player, float deltaTime)
 		player->isFalling = true;
 		player->grappleDir.y = 100;
 			
-		if(player->shouldHang)
+		/*if(player->shouldHang)
 		{
 			player->shouldHang = false;
 			player->isHanging = true;
@@ -58,7 +58,9 @@ void GrapplingState::update(Player* player, float deltaTime)
 				player->newState = new HangingState();
 		}
 		else
-			player->newState = new JumpingState();
+			player->newState = new JumpingState();*/
+
+		 player->newState = new JumpingState();
 	}
 }
 

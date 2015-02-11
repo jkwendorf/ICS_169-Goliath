@@ -2,7 +2,7 @@
 #include "Room.h"
 
 Room::Room(int levelNumber, int roomNumber, std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList)
-	:roomNum(roomNumber), numSect(Global::GetInstance().roomSizes.at("Room " + std::to_string(roomNumber))),
+	:roomNum(roomNumber), numSect(Global::GetInstance().roomSizes.at("Level " + std::to_string(levelNumber) + " Room " + std::to_string(roomNumber))),
 	roomWidth(0), roomHeight(0), loadedTitles(false)
 {
 	LoadRoom(levelNumber, enemyList, arrowTileList, destructTileList);
@@ -53,7 +53,7 @@ void Room::LoadRoom(int levelNumber, std::vector<std::shared_ptr<Enemy>> &enemyL
 	}
 	
 	//std::cout << Global::GetInstance().roomTileSheets. << std::endl;
-	sf::Texture* texture = TextureManager::GetInstance().retrieveTexture(Global::GetInstance().roomTileSheets.at("Room " + std::to_string(roomNum)));
+	sf::Texture* texture = TextureManager::GetInstance().retrieveTexture(Global::GetInstance().roomTileSheets.at("Level " + std::to_string(levelNumber) + " Room " + std::to_string(roomNum)));
 	Global::GetInstance().SetUpTileSheet(texture);
 }
 

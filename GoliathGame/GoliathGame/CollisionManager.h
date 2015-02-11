@@ -40,7 +40,7 @@ public:
 	bool isGrappleListEmpty();
 
 	bool checkIfEnemyInRange(Projectile p, Player* player);
-
+	bool hShotHitNonGrappleTile(HookShot hs);
 private:
 	std::vector<Tile*> tileList;
 	std::vector<Tile*> grapplableTileList;

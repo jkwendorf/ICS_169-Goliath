@@ -122,7 +122,7 @@ public:
 	sf::Sprite crosshair;
 	Tile closestGrappleTile;
 	Animation player;
-
+	sf::RectangleShape rectangle;
 private:	
 	sf::Sound soundEffects[5];
 	float deathTimer;

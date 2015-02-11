@@ -145,7 +145,8 @@ void Section::checkGrapple(const sf::Vector2f& p1, const sf::Vector2f& p2, std::
 		for (int j = p3.y; j <= p4.y; j++)
 		{
 			//if(grid1[(j*gDim.y) + i]->getCollidable() || grid1[(j*gDim.y) + i]->getGrappleable() )
-			if((grid1[(j*gDim.y) + i]->getFlags() & TILE::GRAPPLEABLEMASK) != 0)
+			if(((grid1[(j*gDim.y) + i]->getFlags() & TILE::GRAPPLEABLEMASK) != 0) || 
+ 				((grid1[(j*gDim.y) + i]->getFlags() & TILE::COLLIDABLEMASK) != 0))
 			{
 				nearTiles.push_back(grid1[(j*gDim.y) + i]);
 			}
@@ -280,16 +281,16 @@ void Section::LoadTileMap(std::vector<std::shared_ptr<Enemy>> &enemyList, std::v
 					tileType, 0x02);
 				break;
 			case 6:
-				//Grappleable and collidable LEFT
+				//Grappleable LEFT
 				delete grid1[(y*gDim.y) + x];
 				grid1[(y*gDim.y) + x] = new Tile(sf::Vector2f(x * GAME_TILE_DIM + offset.x, y * GAME_TILE_DIM + offset.y), 
-					tileType, 0x03);
+					tileType, 0x02);
 				break;
 			case 7:
-				//Grappleable and collidable RIGHT
+				//Grappleable RIGHT
 				delete grid1[(y*gDim.y) + x];
 				grid1[(y*gDim.y) + x] = new Tile(sf::Vector2f(x * GAME_TILE_DIM + offset.x, y * GAME_TILE_DIM + offset.y), 
-					tileType, 0x03);
+					tileType, 0x02);
 				break;
 			case 17:
 				//Treasure
