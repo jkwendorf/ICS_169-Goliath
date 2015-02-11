@@ -18,7 +18,6 @@ int main()
 	//StateManager::getInstance().addState(GAME, new GameState());
 	//StateManager::getInstance().addState(END_GAME, new EndGameState());
 
-	float maxTime = 1.f/FPS;
 	sf::Clock deltaTimer;
     while (window.isOpen())
     {
@@ -30,14 +29,16 @@ int main()
             if (event.type == sf::Event::Closed)
                 window.close();
 			if (event.type == sf::Event::GainedFocus)
+			{
 				infocus = true;
+				deltaTime = deltaTimer.restart().asSeconds();
+			}
 			if (event.type == sf::Event::LostFocus)
 				infocus = false;
 			//infocus = event.type == sf::Event::GainedFocus ? true: false;
 			StateManager::getInstance().getCurrentState()->handleEvent(event);
         }
-		deltaTime = min(deltaTime, maxTime);
-		//std::cout<< deltaTime << std::endl;
+
 		if(infocus)
 		{
 			StateManager::getInstance().getCurrentState()->update(deltaTime);

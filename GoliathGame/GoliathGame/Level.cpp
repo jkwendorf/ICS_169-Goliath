@@ -59,6 +59,7 @@ void Level::changeRoom()
 		arrows.clear();
 		destructTileList.clear();
 		currentRoom = new Room(levelNum, ++roomNum, enemyList, arrowTileList, destructTileList);
+		setArrowTileArrows();
 		//Move player to the start pos in new room
 		p.resetPosition(currentRoom->getStartPos());
 		p.init(collisionManager, new JumpingState());
@@ -77,6 +78,7 @@ void Level::changeRoom()
 	Global::GetInstance().topLeft.y = 0;
 	view.reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y, SCREEN_WIDTH, SCREEN_HEIGHT));
 	p.isFalling = true;
+
 	//p.playerUpdate(&view, sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()), 0.5f);
 }
 
@@ -116,7 +118,7 @@ void Level::update(float deltaTime)
 				p.hShot.hookedOnSomething = true;
 				Tile* hookedTile = collisionManager->getHookedTile(p.hShot);
 				
-				if(hookedTile->getTileNum() == 6)
+				/*if(hookedTile->getTileNum() == 6)
 				{
 					p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width + p.sprite.getGlobalBounds().width/2, hookedTile->top + hookedTile->height/2));
 					p.shouldHang = true;
@@ -125,7 +127,11 @@ void Level::update(float deltaTime)
 				{
 					p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left - p.sprite.getGlobalBounds().width/2, hookedTile->top + hookedTile->height/2));
 					p.shouldHang = true;
-				}
+				}*/
+				if(hookedTile->getTileNum() == 6)
+					p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left - hookedTile->width/2, hookedTile->top - hookedTile->height/2 - 20));
+				else if(hookedTile->getTileNum() == 7)
+					p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width/2 + GAME_TILE_DIM - 5, hookedTile->top - hookedTile->height/2 - 20));
 				else
 					p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width/2, hookedTile->top));
 
@@ -326,7 +332,6 @@ void Level::update(float deltaTime)
 				if(collisionManager->playerCollisionDetection(a))
 				{
 					a->moving = false;
-					a->startTime = 0.0;
 					a->setLocation(a->startLocation);
 				}
 
@@ -334,7 +339,6 @@ void Level::update(float deltaTime)
 				{
 					p.health -= a->damage;
 					a->moving = false;
-					a->startTime = 0.0;
 					a->setLocation(a->startLocation);
 					std::cout << "ARROW " << i << " hit player" << std::endl;
 				}
