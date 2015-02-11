@@ -58,17 +58,17 @@ void UserInterface::draw(sf::RenderWindow& window)
 
 void UserInterface::update(float h, float s)
 {
-	if(h < 75)
+	if(h < 76)
 	{
 		showHealth4 = false;
 	}
 
-	if(h < 50)
+	if(h < 51)
 	{
 		showHealth3 = false;
 	}
 
-	if(h < 25)
+	if(h < 26)
 	{
 		showHealth2 = false;
 	}
@@ -96,6 +96,26 @@ void UserInterface::update(float h, float s)
 
 void UserInterface::updateDifferent(float h, float s, float offset)
 {
+	if(h < 76)
+	{
+		showHealth4 = false;
+	}
+
+	if(h < 51)
+	{
+		showHealth3 = false;
+	}
+
+	if(h < 26)
+	{
+		showHealth2 = false;
+	}
+
+	if(h < 1)
+	{
+		showHealth1 = false;
+	}
+
 	healthBar1.setFillColor(sf::Color(255, 0, 0, 125));
 	healthBar1.setPosition(Global::GetInstance().topLeft.x + 20, Global::GetInstance().topLeft.y + 20);
 	

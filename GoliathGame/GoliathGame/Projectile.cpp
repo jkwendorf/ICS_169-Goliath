@@ -51,7 +51,7 @@ void Projectile::update(float deltaTime)
 
 void Projectile::draw(sf::RenderWindow& window)
 {
-	//window.draw(sprite);
+	window.draw(sprite);
 	
 	//rectangle.setFillColor(sf::Color::Red);
 	//window.draw(rectangle);

@@ -59,6 +59,7 @@ void Level::changeRoom()
 		arrows.clear();
 		destructTileList.clear();
 		currentRoom = new Room(levelNum, ++roomNum, enemyList, arrowTileList, destructTileList);
+		setArrowTileArrows();
 		//Move player to the start pos in new room
 		p.resetPosition(currentRoom->getStartPos());
 		p.init(collisionManager, new JumpingState());
@@ -77,6 +78,7 @@ void Level::changeRoom()
 	Global::GetInstance().topLeft.y = 0;
 	view.reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y, SCREEN_WIDTH, SCREEN_HEIGHT));
 	p.isFalling = true;
+
 	//p.playerUpdate(&view, sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()), 0.5f);
 }
 
@@ -330,7 +332,6 @@ void Level::update(float deltaTime)
 				if(collisionManager->playerCollisionDetection(a))
 				{
 					a->moving = false;
-					a->startTime = 0.0;
 					a->setLocation(a->startLocation);
 				}
 
@@ -338,7 +339,6 @@ void Level::update(float deltaTime)
 				{
 					p.health -= a->damage;
 					a->moving = false;
-					a->startTime = 0.0;
 					a->setLocation(a->startLocation);
 					std::cout << "ARROW " << i << " hit player" << std::endl;
 				}
