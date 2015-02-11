@@ -43,7 +43,7 @@ int main()
 			StateManager::getInstance().getCurrentState()->update(deltaTime);
 		}
 
-		window.clear(sf::Color::White);
+		window.clear(sf::Color::Black);
 		StateManager::getInstance().getCurrentState()->draw(window);
 		window.display();
 
