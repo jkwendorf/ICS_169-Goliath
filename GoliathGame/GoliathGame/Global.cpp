@@ -52,7 +52,8 @@ void Global::ParseXML() {
 		for (pugi::xml_node room = level.child("Room"); room; room = room.next_sibling("Room")) {
 			std::cout << "Room Number: " << room.attribute("number").value() << std::endl;
 			std::string roomNumber = room.attribute("number").as_string();
-			std::string str2 = "Room " + roomNumber;
+			std::string levelNumber = room.parent().attribute("number").as_string();
+			std::string str2 ="Level "+ levelNumber + " Room " + roomNumber;
 			int roomSize = room.attribute("size").as_int();
 			roomSizes[str2] = roomSize;
 			roomTileSheets[str2] = tilesheetName;
@@ -154,6 +155,7 @@ void Global::LoadPlayerAttribtues() {
 	playerAttributes[3] = playerAtt.child("BoostSpeed").attribute("value").as_int();
 	playerAttributes[4] = playerAtt.child("GrappleSpeed").attribute("value").as_int();
 	playerAttributes[5] = playerAtt.child("Gravity").attribute("value").as_int();
+	playerAttributes[6] = playerAtt.child("FallSpeed").attribute("value").as_int();
 }
 
 void Global::LoadEnemyAttributes() {

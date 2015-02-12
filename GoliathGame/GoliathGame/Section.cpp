@@ -1,10 +1,10 @@
 #include "Section.h"
 // include more tiles
 
-Section::Section(int sectionNumber, std::string& s, sf::Vector2f& offset, std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList)
+Section::Section(int sectionNumber, std::string& s, sf::Vector2f& offset, std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList)
 	:sectionNum(sectionNumber), pathToText(s), offset(offset), startPos(-999.0, -999.0)
 {
-	LoadTileMap(enemyList, arrowTileList);
+	LoadTileMap(enemyList, arrowTileList, destructTileList);
 }
 
 Section::~Section()
@@ -145,7 +145,8 @@ void Section::checkGrapple(const sf::Vector2f& p1, const sf::Vector2f& p2, std::
 		for (int j = p3.y; j <= p4.y; j++)
 		{
 			//if(grid1[(j*gDim.y) + i]->getCollidable() || grid1[(j*gDim.y) + i]->getGrappleable() )
-			if((grid1[(j*gDim.y) + i]->getFlags() & TILE::GRAPPLEABLEMASK) != 0)
+			if(((grid1[(j*gDim.y) + i]->getFlags() & TILE::GRAPPLEABLEMASK) != 0) || 
+ 				((grid1[(j*gDim.y) + i]->getFlags() & TILE::COLLIDABLEMASK) != 0))
 			{
 				nearTiles.push_back(grid1[(j*gDim.y) + i]);
 			}
@@ -204,7 +205,7 @@ void Section::print()
 //Loading is the text file from the given file path
 //Parses the first line of the file to get information about the rest of the file.
 //Continues through the file until it hits the end of the file and creates tiles based off information parsed in
-void Section::LoadTileMap(std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList)
+void Section::LoadTileMap(std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList)
 {
 	std::ifstream ifs;
 	ifs.open("media/levels/" + pathToText + ".txt");
@@ -274,18 +275,22 @@ void Section::LoadTileMap(std::vector<std::shared_ptr<Enemy>> &enemyList, std::v
 				startPos = sf::Vector2f(x * GAME_TILE_DIM + offset.x, y * GAME_TILE_DIM + offset.y);
 				break;
 			case 5:
-			case 6:
 				//Grappleable
 				delete grid1[(y*gDim.y) + x];
 				grid1[(y*gDim.y) + x] = new Tile(sf::Vector2f(x * GAME_TILE_DIM + offset.x, y * GAME_TILE_DIM + offset.y), 
 					tileType, 0x02);
-		
 				break;
-			case 7:
-				//Grappleable and collidable
+			case 6:
+				//Grappleable LEFT
 				delete grid1[(y*gDim.y) + x];
 				grid1[(y*gDim.y) + x] = new Tile(sf::Vector2f(x * GAME_TILE_DIM + offset.x, y * GAME_TILE_DIM + offset.y), 
-					tileType, 0x03);
+					tileType, 0x02);
+				break;
+			case 7:
+				//Grappleable RIGHT
+				delete grid1[(y*gDim.y) + x];
+				grid1[(y*gDim.y) + x] = new Tile(sf::Vector2f(x * GAME_TILE_DIM + offset.x, y * GAME_TILE_DIM + offset.y), 
+					tileType, 0x02);
 				break;
 			case 17:
 				//Treasure
@@ -337,6 +342,13 @@ void Section::LoadTileMap(std::vector<std::shared_ptr<Enemy>> &enemyList, std::v
 					tileType, 0x01);
 				grid1[(y*gDim.y) + x]->setDirection(sf::Vector2f(0, 1));
 				arrowTileList.push_back(grid1[(y*gDim.y)+x]);
+				break;
+			case 25:
+				// Destructable Tile
+				delete grid1[(y*gDim.y) + x];
+				grid1[(y*gDim.y) + x] = new Tile(sf::Vector2f(x * GAME_TILE_DIM + offset.x, y * GAME_TILE_DIM + offset.y), 
+					tileType, 0x31);
+				destructTileList.push_back(grid1[(y*gDim.y)+x]);
 				break;
 			default:
 				delete grid1[(y*gDim.y) + x];

@@ -107,7 +107,7 @@ public:
 	HookShot hShot;
 	sf::Vector2f grappleDir, vaultPos;
 
-	bool grappleInProgress, facingRight, running, shouldHang, isHanging, isVaulting;
+	bool grappleInProgress, facingRight, running, shouldHang, isHanging, isVaulting, collidingLeft, collidingRight;
 	Projectile ammo[3];
 	void viewCheck(sf::View* view, int width, int height);
 	Sword playerSword;
@@ -122,7 +122,7 @@ public:
 	sf::Sprite crosshair;
 	Tile closestGrappleTile;
 	Animation player;
-
+	sf::RectangleShape rectangle;
 private:	
 	sf::Sound soundEffects[5];
 	float deathTimer;

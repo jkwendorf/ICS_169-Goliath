@@ -8,7 +8,7 @@ Player::Player()
 	: BaseObject(0), grappleInProgress(false), facingRight(true),running(false), isVaulting(false), 
 	isHanging(false), shouldHang(false), health(Global::GetInstance().basePlayerStats[0]), 
 	stamina(Global::GetInstance().basePlayerStats[1]),	weaponCooldown(Global::GetInstance().basePlayerStats[4]), bottomPoint(0),
-	deathTimer(0.0f), currentState(nullptr)
+	deathTimer(0.0f), currentState(nullptr), collidingLeft(false), collidingRight(false)
 {
 	vel = sf::Vector2f(0.0,0.0);
 
@@ -18,14 +18,15 @@ Player::Player()
 	boostSpeed = Global::GetInstance().playerAttributes[3];
 	grappleSpeed = Global::GetInstance().playerAttributes[4];
 	gravity = Global::GetInstance().playerAttributes[5];
+	fallSpeed = Global::GetInstance().playerAttributes[6];
 	player = Animation(4, 4, 90, 120, .10); 
 	sprite.setTexture(*TextureManager::GetInstance().retrieveTexture("David_Run2"));
 	crosshair.setTexture(*TextureManager::GetInstance().retrieveTexture("crosshair"));
 	crosshair.setPosition(-1000,-1000);
-	crosshair.setScale(1.2,1.2);
+	//crosshair.setScale(1.2,1.2);
 	//sprite.setPosition(64, 560);
 	//sprite.setPosition(500, 64);
-	//sprite.setScale( (PLAYER_DIM_X / (float)sprite.getTexture()->getSize().x), (PLAYER_DIM_Y / (float)sprite.getTexture()->getSize().y));
+	sprite.setScale(.5,.5);
 	sprite.setOrigin(45,60);
 	sprite.setTextureRect(sf::IntRect(0, 0, 90,120));
 	
@@ -46,6 +47,8 @@ Player::Player()
 
 	ui = new UserInterface(health, stamina);
 	SetUpEffects();
+
+	rectangle = sf::RectangleShape(sf::Vector2f(36, 36));
 }
 
 void Player::init(CollisionManager* collisionManager_, BaseState* startState)
@@ -85,6 +88,7 @@ void Player::handleInput()
 
 void Player::update(float deltaTime)
 {
+
 	if(deathTimer > 0)
 	{
 		deathTimer -= deltaTime;
@@ -161,7 +165,7 @@ void Player::update(float deltaTime)
 	for(int x = 0; x < 3; x++)
 	{
 		if(!ammo[x].moving)
-			ammo[x].setLocation(sf::Vector2f(sprite.getPosition().x + 300, sprite.getPosition().y - 25));
+			ammo[x].setLocation(sf::Vector2f(sprite.getPosition().x, sprite.getPosition().y - 25));
 		ammo[x].update(deltaTime);
 	}
 	
@@ -190,7 +194,7 @@ void Player::update(float deltaTime)
 	if(!collisionManager->isGrappleListEmpty())
 	{
 		closestGrappleTile = collisionManager->getNearestGrappleTile(*this);
-		crosshair.setPosition(closestGrappleTile.left, closestGrappleTile.top);
+		crosshair.setPosition(closestGrappleTile.left - 17, closestGrappleTile.top - 17);
 		crosshair.setColor(sf::Color(crosshair.getColor().r, crosshair.getColor().g,crosshair.getColor().b, crosshair.getColor().a - 10));
 		if(crosshair.getColor().a < 0)
 			crosshair.setColor(sf::Color(crosshair.getColor().r, crosshair.getColor().g,crosshair.getColor().b, 255));
@@ -201,7 +205,8 @@ void Player::update(float deltaTime)
 
 	//Animated sprite update
 	player.update(deltaTime, sprite, 1, facingRight);
-
+	rectangle.setPosition(sprite.getPosition().x - 20, sprite.getPosition().y - 40);
+	rectangle.setFillColor(sf::Color::Blue);
 }
 
 void Player::takeDamage()
@@ -285,7 +290,7 @@ void Player::draw(sf::RenderWindow& window)
 			ammo[x].draw(window);
 	
 	window.draw(crosshair);
-	
+	//window.draw(rectangle);
 	
 	/* //TESTING CIRCLE
 	sf::CircleShape circle = sf::CircleShape(5.0);
@@ -449,41 +454,98 @@ void Player::horizontalAcceleration(MovementDirection dir, float& deltaTime)
 			float maxSpeed = moveSpeed;
 			if(dir == LEFT)
 			{ 
-				maxSpeed = -1.f*maxSpeed;
-				if(running && stamina > 0)
+				if(!collidingLeft)
 				{
-					maxSpeed -= boostSpeed;
-					vel.x += (moveAccel+boostSpeed)*dir*deltaTime;
-				}
-				else
-					vel.x += moveAccel*dir*deltaTime;
+					maxSpeed = -1.f*maxSpeed;
+					
+					if(vel.x <= 0)
+					{
+						if(running && stamina > 0)
+						{
+							maxSpeed -= boostSpeed;
+							vel.x += (moveAccel+boostSpeed)*dir*deltaTime;
+						}
+						else
+							vel.x += moveAccel*dir*deltaTime;
+					}
+					else
+					{
+						if(isFalling)
+						{
+							maxSpeed *= 0.75;
+							vel.x += 0.75*(moveAccel)*dir*deltaTime;
+						}
+						else if(running && stamina > 0)
+						{
+							maxSpeed -= boostSpeed;
+							vel.x += 3*(moveAccel+boostSpeed)*dir*deltaTime;
+						}
+						else
+							vel.x += 3*moveAccel*dir*deltaTime;	
+					}
 
-				vel.x = max(vel.x, maxSpeed);
+					vel.x = max(vel.x, maxSpeed);
+
+					if(collidingRight)
+						collidingRight = false;
+				}
 			}
 			else
 			{
-				if(running && stamina > 0)
+				if(!collidingRight)
 				{
-					maxSpeed += boostSpeed;
-					vel.x += (moveAccel+boostSpeed)*dir*deltaTime;
-				}
-				else
-					vel.x += moveAccel*dir*deltaTime;
+					if(vel.x >= 0)
+					{
+						if(isFalling)
+						{
+							maxSpeed *= 0.75;
+							vel.x += 0.75*(moveAccel)*dir*deltaTime;
+						}
+						else if(running && stamina > 0)
+						{
+							maxSpeed += boostSpeed;
+							vel.x += (moveAccel+boostSpeed)*dir*deltaTime;
+						}
+						else
+							vel.x += moveAccel*dir*deltaTime;
+					}
+					else
+					{
+						if(running && stamina > 0)
+						{
+							maxSpeed += boostSpeed;
+							vel.x += 3*(moveAccel+boostSpeed)*dir*deltaTime;
+						}
+						else
+							vel.x += 3*moveAccel*dir*deltaTime;					
+					}
 
-				vel.x = min(vel.x, maxSpeed);
+					vel.x = min(vel.x, maxSpeed);
+
+					if(collidingLeft)
+						collidingLeft = false;
+				}
 			}
 		}
 		else
 		{
 			if(vel.x > 0.f)
 			{
-				vel.x -= moveAccel*deltaTime;
+				if(isFalling)
+					vel.x -= 0.75*moveAccel*deltaTime;
+				else
+					vel.x -= 2*moveAccel*deltaTime;
+
 				if(vel.x <= 0.f)
 					vel.x = 0.f;
 			}
 			else if(vel.x < 0.f)
 			{
-				vel.x += moveAccel*deltaTime;
+				if(isFalling)
+					vel.x += 0.75*moveAccel*deltaTime;
+				else
+					vel.x += 2*moveAccel*deltaTime;
+
 				if(vel.x >= 0.f)
 					vel.x = 0.f;
 			}
@@ -495,18 +557,18 @@ void Player::verticalAcceleration(float& deltaTime)
 {
 	if(isFalling && !isHanging)
 	{
-		if(vel.y >= TERMINAL_VELOCITY)
-			vel.y = TERMINAL_VELOCITY;
+		if(vel.y >= fallSpeed)
+			vel.y = fallSpeed;
 		else
 			vel.y += gravity * deltaTime;
 	}
 }
 
-void Player::moveOutOfTile(Tile* t)
+/*void Player::moveOutOfTile(Tile* t)
 {
 	float left = (sprite.getPosition().x + sprite.getGlobalBounds().width/2) - t->left, 
 		right = (t->left + t->width) - (sprite.getPosition().x - sprite.getGlobalBounds().width/2), 
-		up = (sprite.getPosition().y + sprite.getGlobalBounds().height/2) - t->top, 
+		up = (sprite.getPosition().y + sprite.getGlobalBounds().height/2 + 0.1f) - t->top, 
 		down = (t->top + t->height) - (sprite.getPosition().y - sprite.getGlobalBounds().height/2); 
 
 	float mini = min(up, down);
@@ -524,6 +586,63 @@ void Player::moveOutOfTile(Tile* t)
 			delete currentState;
 			//currentState = new IdleState();
 			currentState = new OnGroundState();
+		}
+	}
+}*/
+
+void Player::moveOutOfTile(Tile* t)
+{
+	float left = (sprite.getPosition().x + sprite.getGlobalBounds().width/2) - t->left, 
+		right = (t->left + t->width) - (sprite.getPosition().x - sprite.getGlobalBounds().width/2), 
+		up = (sprite.getPosition().y + sprite.getGlobalBounds().height/2.f + 0.1f) - t->top, 
+		down = (t->top + t->height) - (sprite.getPosition().y - sprite.getGlobalBounds().height/2); 
+
+	float mini = min(up, down);
+	mini = min(right, mini); 
+	mini = min(left, mini);
+
+	if(mini == left)
+	{
+		move(sf::Vector2f(-left, 0.f));
+
+		if(!collisionManager->playerCollisionDetection(this))
+		{
+			vel.x = 0;
+			collidingRight = true;
+		}
+	}
+	else if (mini == right)
+	{
+		move(sf::Vector2f(right, 0.f));
+
+		if(!collisionManager->playerCollisionDetection(this))
+		{
+			vel.x = 0;
+			collidingLeft = true;
+		}
+	}
+	else if(mini == up)
+	{
+		move(sf::Vector2f(0.f, -up));
+
+		if(vel.y >= 0)
+		{
+			if(!collisionManager->playerCollisionDetection(this))
+			{
+				vel.y = 0;
+				isFalling = false;
+				delete currentState;
+				currentState = new OnGroundState();
+			}
+		}
+	}
+	else
+	{
+		move(sf::Vector2f(0.f, down));
+		
+		if(!collisionManager->playerCollisionDetection(this))
+		{
+			vel.y = 0;
 		}
 	}
 }

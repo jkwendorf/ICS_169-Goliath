@@ -40,12 +40,21 @@ bool CollisionManager::playerCollisionDetection(BaseObject* p)
 Tile CollisionManager::getNearestGrappleTile(BaseObject p)
 {
 
-	Tile closestTile = *grapplableTileList.front();
+	/* using flags
+	->getFlags()
+	& TILE::COLLIDABLEMASK) != 0
+	will tell you if it is collidable
+
+	*/
+	Tile closestTile;
+	if((grapplableTileList.front()->getFlags() & TILE::GRAPPLEABLEMASK) != 0)
+		closestTile = *grapplableTileList.front();
 	for(Tile* b: grapplableTileList)
 		if(sqrt(pow(((b->top + b->height/2) - p.sprite.getPosition().y),2) + pow(((b->left + b->width/2)  - p.sprite.getPosition().x),2)) < 
-			sqrt(pow(((closestTile.top + closestTile.height/2) - p.sprite.getPosition().y),2) + pow(((closestTile.left + closestTile.width/2) - p.sprite.getPosition().x),2)))
+			sqrt(pow(((closestTile.top + closestTile.height/2) - p.sprite.getPosition().y),2) + pow(((closestTile.left + closestTile.width/2) - p.sprite.getPosition().x),2)) )
 		{
-			closestTile = *b;
+			if(((b->getFlags() & TILE::GRAPPLEABLEMASK) != 0))
+				closestTile = *b;
 		}
 
 	return closestTile;
@@ -94,10 +103,13 @@ bool CollisionManager::tileBelowCharacter(BaseObject* p)
 	for(Tile* b : tileList)
 	{
 		//if(b->intersects(p->sprite.getGlobalBounds()) && b->top >= p->sprite.getPosition().y)
-		if(b->top >= p->sprite.getPosition().y + p->sprite.getGlobalBounds().height/2)
+		if(b->top >= p->sprite.getPosition().y + p->sprite.getGlobalBounds().height/2 && 
+			b->top - (p->sprite.getPosition().y + p->sprite.getGlobalBounds().height/2) < GAME_TILE_DIM)
+		{
 			if((b->left <= left && b->left + b->width >= left) ||
 				(b->left <= right && b->left + b->width >= right))
 				return true;
+		}
 	}
 	return false;
 }
@@ -152,9 +164,11 @@ void CollisionManager::checkPlayerSwordToEnemies(Sword s, Enemy* enemy)
 
 void CollisionManager::checkEnemyBulletToPlayer(Projectile p, Player* player)
 {
-		if(sqrt(pow(p.sprite.getPosition().x - player->sprite.getPosition().x, 2) + 
-			pow(p.sprite.getPosition().y - player->sprite.getPosition().y, 2)) < 50 && p.moving)
+	if(sqrt(pow(p.rectangle.getPosition().x - player->rectangle.getPosition().x, 2) + 
+		pow(p.rectangle.getPosition().y - player->rectangle.getPosition().y, 2)) < 50 && p.moving)
 		{
+			std::cout << p.rectangle.getPosition().x << " " << p.rectangle.getPosition().y << std::endl;
+			std::cout << player->rectangle.getPosition().x << " " << player->rectangle.getPosition().x << std::endl;
 			player->health -= p.damage;
 			p.moving = false;
 		}
@@ -174,16 +188,50 @@ void CollisionManager::checkEnemySwordToPlayer(Sword s, Player* player)
 
 bool CollisionManager::isGrappleListEmpty()
 {
-	return grapplableTileList.empty();
+	for(Tile* tempTile : grapplableTileList)
+		if(((tempTile->getFlags() & TILE::GRAPPLEABLEMASK) != 0))
+			return false;
+	return true;
 }
 
 
 bool CollisionManager::checkIfEnemyInRange(Projectile p, Player* player)
 {
-	if(sqrt(pow(p.sprite.getPosition().x - player->sprite.getPosition().x, 2) + 
-		pow(p.sprite.getPosition().y - player->sprite.getPosition().y, 2)) < 50 && p.moving)
+	if(sqrt(pow(p.rectangle.getPosition().x - player->rectangle.getPosition().x, 2) + 
+		pow(p.rectangle.getPosition().y - player->rectangle.getPosition().y, 2)) < 50 && p.moving)
 	{
+		std::cout << p.rectangle.getPosition().x << " " << p.rectangle.getPosition().y << std::endl;
+		std::cout << player->rectangle.getPosition().x << " " << player->rectangle.getPosition().x << std::endl;
+		std::cout << "Player was hit by arrow" << std::endl;
 		return true;
 	}
 	else return false;
+}
+
+bool CollisionManager::playerSwordCollideWithTile(Sword s, Tile* t)
+{
+	if(s.hitBox.getGlobalBounds().intersects(sf::FloatRect(t->left, t->top, t->width, t->height)))
+		return true;
+
+	return false;
+}
+
+bool CollisionManager::hShotHitNonGrappleTile(HookShot p)
+{
+	bool temp = false;
+	for(Tile* tempTile : grapplableTileList)
+	{
+		
+		if(tempTile->intersects(p.sprite.getGlobalBounds()) && 
+			((tempTile->getFlags() & TILE::COLLIDABLEMASK) != 0) &&
+			!((tempTile->getFlags() & TILE::GRAPPLEABLEMASK) != 0))
+		{
+			std::cout << "A tile Collision Occured" << std::endl;
+			std::cout << "TempTile position" << std::endl;
+			std::cout << tempTile->top << " " << tempTile->left << std::endl;
+			return true;
+		}
+			
+	}
+	return temp;
 }

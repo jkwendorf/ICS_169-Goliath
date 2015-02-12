@@ -13,7 +13,7 @@ Level::Level(int levelNumber, int roomNumber)
 	enemyAI(collisionManager)
 {
 	p.init(collisionManager, new JumpingState());
-	currentRoom = new Room(levelNumber, roomNumber, enemyList, arrowTileList);
+	currentRoom = new Room(levelNumber, roomNumber, enemyList, arrowTileList, destructTileList);
 	background.setTexture(*TextureManager::GetInstance().retrieveTexture("banditCity"));
 	sf::Color color = background.getColor();
 	background.setColor(sf::Color(color.r, color.g, color.b, 200));
@@ -27,6 +27,7 @@ Level::Level(int levelNumber, int roomNumber)
 	view.reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y, SCREEN_WIDTH, SCREEN_HEIGHT));
 	view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
 	p.resetPosition(currentRoom->getStartPos());
+	setArrowTileArrows();
 	//realEnemyList.push_back(new Enemy("Test",200,200, 10));
 
 }
@@ -40,6 +41,8 @@ void Level::DeleteLevel()
 {
 	enemyList.clear();
 	arrowTileList.clear();
+	arrows.clear();
+	destructTileList.clear();
 	delete currentRoom;
 	delete collisionManager;
 }
@@ -53,7 +56,10 @@ void Level::changeRoom()
 		delete currentRoom;
 		enemyList.clear();
 		arrowTileList.clear();
-		currentRoom = new Room(levelNum, ++roomNum, enemyList, arrowTileList);
+		arrows.clear();
+		destructTileList.clear();
+		currentRoom = new Room(levelNum, ++roomNum, enemyList, arrowTileList, destructTileList);
+		setArrowTileArrows();
 		//Move player to the start pos in new room
 		p.resetPosition(currentRoom->getStartPos());
 		p.init(collisionManager, new JumpingState());
@@ -63,6 +69,8 @@ void Level::changeRoom()
 		//delete currentRoom;
 		enemyList.clear();
 		arrowTileList.clear();
+		arrows.clear();
+		destructTileList.clear();
 		changeScreen = true;
 		
 	}
@@ -70,6 +78,7 @@ void Level::changeRoom()
 	Global::GetInstance().topLeft.y = 0;
 	view.reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y, SCREEN_WIDTH, SCREEN_HEIGHT));
 	p.isFalling = true;
+
 	//p.playerUpdate(&view, sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()), 0.5f);
 }
 
@@ -95,7 +104,7 @@ void Level::update(float deltaTime)
 	}
 	if(!changeScreen)
 	{
-		
+
 		currentRoom->GetCollidableTiles(p, sf::Vector2f(PLAYER_DIM_X, PLAYER_DIM_Y), nearTiles);
 
 		collisionManager->setNearByTiles(nearTiles);
@@ -103,22 +112,28 @@ void Level::update(float deltaTime)
 	
 		if(p.hShot.grappleInProgress)
 		{
+			p.hShot.hitNonGrappleTile = collisionManager->hShotHitNonGrappleTile(p.hShot);
 			if(!p.hShot.hookedOnSomething && collisionManager->hookCollisionDetection(p.hShot))
 			{
 				p.hShot.hookedOnSomething = true;
 				Tile* hookedTile = collisionManager->getHookedTile(p.hShot);
 				
-				if(hookedTile->getTileNum() == 7)
+				/*if(hookedTile->getTileNum() == 6)
 				{
-					if(p.hShot.fireRight)
-						p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left - p.sprite.getGlobalBounds().width/2, hookedTile->top + hookedTile->height/2));
-					else
-						p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width + p.sprite.getGlobalBounds().width/2, hookedTile->top + hookedTile->height/2));
-					
+					p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width + p.sprite.getGlobalBounds().width/2, hookedTile->top + hookedTile->height/2));
 					p.shouldHang = true;
 				}
+				else if(hookedTile->getTileNum() == 7)
+				{
+					p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left - p.sprite.getGlobalBounds().width/2, hookedTile->top + hookedTile->height/2));
+					p.shouldHang = true;
+				}*/
+				if(hookedTile->getTileNum() == 6)
+					p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left - hookedTile->width/2, hookedTile->top - hookedTile->height/2 - 20));
+				else if(hookedTile->getTileNum() == 7)
+					p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width/2 + GAME_TILE_DIM - 5, hookedTile->top - hookedTile->height/2 - 20));
 				else
-					p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width/2, hookedTile->top + hookedTile->height));
+					p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width/2, hookedTile->top));
 
 				//p.newState = new GrapplingState();
 				delete p.currentState;
@@ -190,6 +205,7 @@ void Level::update(float deltaTime)
 			std::vector<Tile*> proTile;
 			if(po.moving)
 			{
+				std::cout << "Projectile position: " << po.sprite.getPosition().x << " " << po.sprite.getPosition().y << std::endl;	
 				currentRoom->GetCollidableTiles(po, sf::Vector2f(po.sprite.getTexture()->getSize().x/10,
 					po.sprite.getTexture()->getSize().y/10), proTile);
 				for(auto& t : proTile)
@@ -212,11 +228,8 @@ void Level::update(float deltaTime)
 			}
 		}
 
-		int i = 0;
-
 		for (auto& e : enemyList)
 		{
-			i++;
 			if(e->health > 0)
 			{
 				std::vector<Tile*> proTile;
@@ -280,11 +293,9 @@ void Level::update(float deltaTime)
 						{
 							e.get()->foundPlayer = false;
 							e.get()->resetRay();
-							std::cout << "Enemy " << i << " ray hit wall" << std::endl;
 						}
 						else if(collisionManager->checkIfEnemyInRange(ray, &p))
 						{
-							std::cout << "Enemy " << i << " ray hit player" << std::endl;
 							e.get()->resetRay();
 							e.get()->foundPlayer = true;
 						}
@@ -296,6 +307,47 @@ void Level::update(float deltaTime)
 		{
 			collisionManager->checkPlayerSwordToEnemies(p.playerSword, e.get());
 			collisionManager->checkEnemySwordToPlayer(e.get()->eSword, &p);
+		}
+
+		int i = 0;
+		//std::cout << "Player position:" << p.sprite.getPosition().x << " " << p.sprite.getPosition().y << std::endl;
+		checkDestructableTiles();
+
+		for(auto& a : arrows)
+		{
+			i++;
+			std::vector<Tile*> proTile;
+			a->update(deltaTime);
+			//std::cout << "ARROW " << i << " position:" << a->sprite.getPosition().x << " " << a->sprite.getPosition().y << std::endl;	
+			if(a->moving)
+			{
+				currentRoom->GetCollidableTiles(*a, sf::Vector2f(a->sprite.getTexture()->getSize().x/10,
+					a->sprite.getTexture()->getSize().y/10), proTile);
+
+				if(proTile.size() > 0)
+				{
+					collisionManager->setNearByTiles(proTile);
+				}
+
+				if(collisionManager->playerCollisionDetection(a))
+				{
+					a->moving = false;
+					a->setLocation(a->startLocation);
+				}
+
+				if(collisionManager->checkIfEnemyInRange(*a, &p))
+				{
+					p.health -= a->damage;
+					a->moving = false;
+					a->setLocation(a->startLocation);
+					std::cout << "ARROW " << i << " hit player" << std::endl;
+				}
+			}
+			else 
+			{
+				a->setLocation(a->startLocation);
+				a->moving = true;
+			}
 		}
 
 		/*
@@ -317,7 +369,7 @@ void Level::draw(sf::RenderWindow& window)
 	//window.draw(r);
 	window.draw(background);
 
-	//window.draw(Global::GetInstance().testingRect);
+	window.draw(Global::GetInstance().testingRect);
 
 	currentRoom->draw(window);
 	p.draw(window);
@@ -335,7 +387,14 @@ void Level::draw(sf::RenderWindow& window)
 	//	std::cout << "Enemy #" << enemyNum;
 	}
 	
-	
+	for (auto& a : arrows)
+	{
+		if(a->moving)
+		{
+			a->draw(window);
+		}
+	}
+
 	window.setView(view);
 	p.drawUI(window);
 }
@@ -347,4 +406,55 @@ bool Level::CheckChangeScreen()
 
 void Level::CleanUp()
 {
+}
+
+// Creates arrows based off positions of arrow shooter tiles
+void Level::setArrowTileArrows()
+{
+	for(auto& a : arrowTileList)
+	{
+		if(a->getDirection().x == 1.0)
+		{
+			Projectile* pro = new Projectile(sf::Vector2f(a->left + (GAME_TILE_DIM), a->top), a->getDirection());
+			pro->damage = 25;
+			arrows.push_back(pro);
+		}
+		else if(a->getDirection().x == -1.0)
+		{
+			Projectile* pro = new Projectile(sf::Vector2f(a->left - (GAME_TILE_DIM), a->top), a->getDirection());
+			pro->damage = 25;
+			arrows.push_back(pro);
+		}
+		else if(a->getDirection().y == 1.0)
+		{
+			Projectile* pro = new Projectile(sf::Vector2f(a->left, a->top + (GAME_TILE_DIM)), a->getDirection());
+			pro->damage = 25;
+			arrows.push_back(pro); 
+		}
+		else if(a->getDirection().y == -1.0)
+		{
+			Projectile* pro = new Projectile(sf::Vector2f(a->left, a->top - (GAME_TILE_DIM)), a->getDirection());
+			pro->damage = 25;
+			arrows.push_back(pro);
+		}
+
+	}
+}
+
+// Goes through each destructable tile within the level and checks to see if we should destroy them
+void Level::checkDestructableTiles()
+{
+	for (auto it = destructTileList.begin(); it != destructTileList.end();)
+	{
+		if(collisionManager->playerSwordCollideWithTile(p.playerSword, *it))
+		{
+			auto itToErase = it;
+			it++;
+			delete (*itToErase);
+			*itToErase = new Tile();
+			destructTileList.erase(itToErase);
+			continue;
+		}
+		it++;
+	}
 }
