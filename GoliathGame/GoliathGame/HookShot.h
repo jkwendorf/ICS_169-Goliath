@@ -1,5 +1,6 @@
 #pragma once
 #include "Weapon.h"
+
  
 class HookShot : public Weapon
 {
@@ -16,5 +17,5 @@ public:
 	void draw(sf::RenderWindow& window);
 	void attack();
 	void grappleToLocation(sf::Vector2f location);
-	bool hookedOnSomething, grappleInProgress, fireRight, isDisabled;
+	bool hookedOnSomething, grappleInProgress, fireRight, isDisabled, hitNonGrappleTile;
 };

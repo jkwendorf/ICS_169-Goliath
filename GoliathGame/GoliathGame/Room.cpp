@@ -53,6 +53,7 @@ void Room::LoadRoom(int levelNumber, std::vector<std::shared_ptr<Enemy>> &enemyL
 	}
 	
 	//std::cout << Global::GetInstance().roomTileSheets. << std::endl;
+
 	sf::Texture* texture = TextureManager::GetInstance().retrieveTexture(
 		Global::GetInstance().roomTileSheets.at("Level " + std::to_string(levelNumber) + " Room " + std::to_string(roomNum)));
 	Global::GetInstance().SetUpTileSheet(texture);
@@ -135,10 +136,8 @@ void Room::GetNearTiles(sf::FloatRect& rect, std::vector<Tile*>& nearTiles, bool
 	
 	for (int i = 0; i < numSect; i++)
 	{
-		std::cout << "Checking if section " << i << " is in window" << std::endl;
 		if (sectList[i]->inWindow())
 		{
-			std::cout << "section " << i << " is in window" << std::endl;
 			//Check and see if the top left of the box is in the current grid
 			if(i == 1 && topLeft.x < 0)
 			{

@@ -26,6 +26,6 @@ public:
 	sf::Vector2i source;
 	bool spriteLeftSwitch, spriteRightSwitch;
 	int width;
-
+	sf::RectangleShape rectangle;
 	Animation bulletAnimation;
 };
