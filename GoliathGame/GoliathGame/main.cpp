@@ -18,12 +18,25 @@ int main()
 	//StateManager::getInstance().addState(GAME, new GameState());
 	//StateManager::getInstance().addState(END_GAME, new EndGameState());
 
+	int frame = 0;
+	float time = 0;
+
 	sf::Clock deltaTimer;
     while (window.isOpen())
     {
 		float deltaTime = deltaTimer.restart().asSeconds();
+		time += deltaTime;
+		frame++;
+		
+		if(time >= 1.0f)
+		{
+			time -= 1.0f;
+			std::cout << "Frames: " << frame << std::endl;
+			frame = 0;
+		}
 
         sf::Event event;
+
         while (window.pollEvent(event))
         {
             if (event.type == sf::Event::Closed)
@@ -35,6 +48,7 @@ int main()
 			}
 			if (event.type == sf::Event::LostFocus)
 				infocus = false;
+
 			//infocus = event.type == sf::Event::GainedFocus ? true: false;
 			StateManager::getInstance().getCurrentState()->handleEvent(event);
         }
