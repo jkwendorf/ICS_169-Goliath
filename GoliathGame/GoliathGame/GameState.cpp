@@ -33,6 +33,7 @@ void GameState::update(float deltaTime)
 	if(currentScreen->CheckChangeScreen())
 	{
 		StateManager::getInstance().changeToState(MAIN_MENU, true);
+		StateManager::getInstance().deleteState(GAME);
 	}
 
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || sf::Joystick::isButtonPressed(0, 7))

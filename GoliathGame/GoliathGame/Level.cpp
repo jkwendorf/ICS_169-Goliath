@@ -14,7 +14,7 @@ Level::Level(int levelNumber, int roomNumber)
 {
 	p.init(collisionManager, new JumpingState());
 	currentRoom = new Room(levelNumber, roomNumber, enemyList, arrowTileList, destructTileList);
-	background.setTexture(*TextureManager::GetInstance().retrieveTexture("banditCity"));
+	background.setTexture(*TextureManager::GetInstance().retrieveTexture("bandit canyon level"));
 	sf::Color color = background.getColor();
 	background.setColor(sf::Color(color.r, color.g, color.b, 200));
 	background.setPosition(-75,75);
@@ -129,11 +129,11 @@ void Level::update(float deltaTime)
 					p.shouldHang = true;
 				}*/
 				if(hookedTile->getTileNum() == 6)
-					p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left - hookedTile->width/2, hookedTile->top - hookedTile->height/2 - 20));
+					p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left - hookedTile->width/2, hookedTile->top - hookedTile->height/2 - 28));
 				else if(hookedTile->getTileNum() == 7)
-					p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width/2 + GAME_TILE_DIM - 5, hookedTile->top - hookedTile->height/2 - 20));
+					p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width/2 + GAME_TILE_DIM - 5, hookedTile->top - hookedTile->height/2 - 28));
 				else
-					p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width/2, hookedTile->top));
+					p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width/2, hookedTile->top + 5));
 
 				//p.newState = new GrapplingState();
 				delete p.currentState;
@@ -369,7 +369,7 @@ void Level::draw(sf::RenderWindow& window)
 	//window.draw(r);
 	window.draw(background);
 
-	window.draw(Global::GetInstance().testingRect);
+	//window.draw(Global::GetInstance().testingRect);
 
 	currentRoom->draw(window);
 	p.draw(window);
