@@ -13,6 +13,7 @@ void StateManager::addState(StateEnum state, State* s, bool makeCurrent)
 		currentState = s;
 		currentStateEnum = state;
 		currentState->loadContent();
+		setTimeReset(true);
 	}
 }
 
@@ -111,4 +112,14 @@ void StateManager::DeleteAllStates()
 bool StateManager::shouldQuit()
 {
 	return currentState->shouldQuit;
+}
+
+bool StateManager::shouldResetTime()
+{
+	return resetTime;
+}
+
+void StateManager::setTimeReset(bool reset)
+{
+	resetTime = reset;
 }
