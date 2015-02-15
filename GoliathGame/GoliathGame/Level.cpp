@@ -10,7 +10,7 @@ Level::Level(void)
 Level::Level(int levelNumber, int roomNumber)
 	:changeScreen(false), levelNum(levelNumber), p(), collisionManager(new CollisionManager()), inputManager(),
 	maxRooms(Global::GetInstance().levelSizes.at("Level " + std::to_string(levelNum))), loading(1.0),
-	enemyAI(collisionManager)
+	enemyAI(collisionManager), arrowCool(2.0f)
 {
 	p.init(collisionManager, new JumpingState());
 	currentRoom = new Room(levelNumber, roomNumber, enemyList, arrowTileList, destructTileList);
@@ -313,6 +313,8 @@ void Level::update(float deltaTime)
 		//std::cout << "Player position:" << p.sprite.getPosition().x << " " << p.sprite.getPosition().y << std::endl;
 		checkDestructableTiles();
 
+		arrowCool += deltaTime;
+
 		for(auto& a : arrows)
 		{
 			i++;
@@ -343,11 +345,16 @@ void Level::update(float deltaTime)
 					std::cout << "ARROW " << i << " hit player" << std::endl;
 				}
 			}
-			else 
+			else if(arrowCool > 2.0f)
 			{
 				a->setLocation(a->startLocation);
 				a->moving = true;
 			}
+		}
+
+		if(arrowCool > 2.0f)
+		{
+			arrowCool = 0.0f;
 		}
 
 		/*

@@ -29,6 +29,7 @@ private:
 	sf::View view;
 	sf::RenderWindow win;
 	sf::Sprite background, loadingSprite;
+	float arrowCool;
 
 	CollisionManager* collisionManager;
 	InputManager inputManager;

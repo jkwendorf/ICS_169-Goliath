@@ -28,7 +28,7 @@ void HookShot::update(float deltaTime)
 
 	if(!hookedOnSomething)
 	{
-		sprite.move((grappleLocation.x - sprite.getPosition().x)*5*deltaTime, (grappleLocation.y - sprite.getPosition().y)*5*deltaTime);	
+		sprite.move((grappleLocation.x - sprite.getPosition().x)*25*deltaTime, (grappleLocation.y - sprite.getPosition().y)*25*deltaTime);	
 	}
 	else
 		currentCooldown = 0.0;
