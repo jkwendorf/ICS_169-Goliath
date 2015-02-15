@@ -69,7 +69,7 @@ void InputManager::update(Player& s, sf::View* v, float deltaTime)
 		//sch.moveCommand->init(&s, MovementDirection::RIGHT, deltaTime, MOVERIGHT);
 		//s.inputQueue.push_back(sch.moveCommand);
 	}
-	else
+	else if(s.vel.x != 0)
 	{
 		MoveCommand* move = new MoveCommand();
 		move->init(&s, STILL, deltaTime, NO_MOVE);
