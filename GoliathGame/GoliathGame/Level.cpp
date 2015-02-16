@@ -94,7 +94,7 @@ void Level::update(float deltaTime)
 	//SCREENSHAKE CODE
 	if(currentScreenShakeCooldown <= screenShakeDuration)
 	{
-		std::cout << "ScreenShake should occur" << std::endl;
+		//std::cout << "ScreenShake should occur" << std::endl;
 		viewChangeOffset.x = rand() % 50 - 25;
 		viewChangeOffset.y = rand() % 50 - 25;
 		view.move(viewChangeOffset);
@@ -102,7 +102,7 @@ void Level::update(float deltaTime)
 	}
 	else if(currentScreenShakeCooldown > screenShakeDuration && currentScreenShakeCooldown <= screenShakeCooldown)
 	{
-		std::cout << "Should be normal view" << std::endl;
+		//std::cout << "Should be normal view" << std::endl;
 		view.reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y, SCREEN_WIDTH, SCREEN_HEIGHT));
 		
 	}
