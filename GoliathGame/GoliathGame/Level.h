@@ -37,6 +37,8 @@ private:
 	EnemyAI enemyAI;
 	std::vector<Projectile*> arrows;
 
+	bool arrowsCanFire;
+
 	void viewCheck();
 	void playerCheck();
 	void changeRoom();

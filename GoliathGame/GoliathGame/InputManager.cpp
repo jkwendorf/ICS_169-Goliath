@@ -264,7 +264,7 @@ void InputManager::viewMove(sf::View* v, Player& s, float deltaTime)
 			if(s.atBottomEdge)
 			{
 				v->reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y + viewChangedY, SCREEN_WIDTH, SCREEN_HEIGHT));
-				s.ui->updateDifferent(s.health, s.stamina, Global::GetInstance().topLeft.y + viewChangedY);
+				s.updateUI(sf::Vector2f(0, viewChangedY));
 			}
 		}
 		else if(utility[6])
@@ -279,7 +279,7 @@ void InputManager::viewMove(sf::View* v, Player& s, float deltaTime)
 			if(s.atTopEdge || !s.atTheBottom)
 			{
 				v->reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y + viewChangedY, SCREEN_WIDTH, SCREEN_HEIGHT));
-				s.ui->updateDifferent(s.health, s.stamina, Global::GetInstance().topLeft.y + viewChangedY);
+				s.updateUI(sf::Vector2f(0, viewChangedY));
 			}
 		}
 		else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::N))
@@ -287,6 +287,7 @@ void InputManager::viewMove(sf::View* v, Player& s, float deltaTime)
 			viewChangedY = rand() % 50;
 			viewChangedX = rand() % 50;
 			v->reset(sf::FloatRect(Global::GetInstance().topLeft.x + viewChangedX, Global::GetInstance().topLeft.y + viewChangedY, SCREEN_WIDTH, SCREEN_HEIGHT));
+			s.updateUI(sf::Vector2f(viewChangedX, viewChangedY));
 		}
 		else
 		{

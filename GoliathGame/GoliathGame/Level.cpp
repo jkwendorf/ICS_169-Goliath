@@ -10,7 +10,8 @@ Level::Level(void)
 Level::Level(int levelNumber, int roomNumber)
 	:changeScreen(false), levelNum(levelNumber), p(), collisionManager(new CollisionManager()), inputManager(),
 	maxRooms(Global::GetInstance().levelSizes.at("Level " + std::to_string(levelNum))), loading(1.0),
-	enemyAI(collisionManager), arrowCool(2.0f), screenShakeDuration(.5f), screenShakeCooldown(4.0f), currentScreenShakeCooldown(0.0f)
+	enemyAI(collisionManager), arrowCool(2.0f), screenShakeDuration(.5f), screenShakeCooldown(4.0f), currentScreenShakeCooldown(0.0f),
+	arrowsCanFire(true)
 {
 	p.init(collisionManager, new JumpingState());
 	currentRoom = new Room(levelNumber, roomNumber, enemyList, arrowTileList, destructTileList);
@@ -98,13 +99,13 @@ void Level::update(float deltaTime)
 		viewChangeOffset.x = rand() % 50 - 25;
 		viewChangeOffset.y = rand() % 50 - 25;
 		view.move(viewChangeOffset);
-
+		p.updateUI(viewChangeOffset);
 	}
 	else if(currentScreenShakeCooldown > screenShakeDuration && currentScreenShakeCooldown <= screenShakeCooldown)
 	{
 		//std::cout << "Should be normal view" << std::endl;
 		view.reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y, SCREEN_WIDTH, SCREEN_HEIGHT));
-		
+		p.updateUI();
 	}
 	else if(currentScreenShakeCooldown >= screenShakeCooldown)
 	{
@@ -342,6 +343,17 @@ void Level::update(float deltaTime)
 		//std::cout << "Player position:" << p.sprite.getPosition().x << " " << p.sprite.getPosition().y << std::endl;
 		checkDestructableTiles();
 
+		//CODE TO DISABLE ARROW SHOOTER
+		//NEEDS TO BE REPLACED WITH SWITCH POSITION
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::M))
+		{
+			arrowsCanFire = !arrowsCanFire;
+			if(arrowsCanFire == true)
+			{
+				arrowCool = 2.1f;
+			}
+		}
+
 		arrowCool += deltaTime;
 
 		for(auto& a : arrows)
@@ -374,7 +386,7 @@ void Level::update(float deltaTime)
 					std::cout << "ARROW " << i << " hit player" << std::endl;
 				}
 			}
-			else if(arrowCool > 2.0f)
+			else if(arrowCool > 2.0f && arrowsCanFire)
 			{
 				a->setLocation(a->startLocation);
 				a->moving = true;
