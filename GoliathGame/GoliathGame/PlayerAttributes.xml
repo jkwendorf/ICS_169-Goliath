@@ -4,7 +4,7 @@
   <JumpSpeed value="-800"></JumpSpeed>
   <MoveAccel value="768"></MoveAccel>
   <BoostSpeed value="128"></BoostSpeed>
-  <GrappleSpeed value="1000"></GrappleSpeed>
+  <GrappleSpeed value="1500"></GrappleSpeed>
   <Gravity value="2000"></Gravity>
   <FallSpeed value="900"></FallSpeed>
 </PlayerAttributes>
