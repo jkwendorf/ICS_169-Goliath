@@ -112,7 +112,9 @@ public:
 	void viewCheck(sf::View* view, int width, int height);
 	Sword playerSword;
 	bool atTopEdge, atBottomEdge, atTheBottom;
-	UserInterface* ui;
+
+	void updateUI();
+	void updateUI(sf::Vector2f offset);
 
 	sf::View* view;
 	BaseState* currentState;
@@ -127,6 +129,7 @@ private:
 	sf::Sound soundEffects[5];
 	float deathTimer;
 
+	UserInterface* ui;
 	void SetUpAugments();
 	void SetUpEffects();
 };
