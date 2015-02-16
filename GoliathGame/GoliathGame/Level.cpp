@@ -10,7 +10,7 @@ Level::Level(void)
 Level::Level(int levelNumber, int roomNumber)
 	:changeScreen(false), levelNum(levelNumber), p(), collisionManager(new CollisionManager()), inputManager(),
 	maxRooms(Global::GetInstance().levelSizes.at("Level " + std::to_string(levelNum))), loading(1.0),
-	enemyAI(collisionManager), arrowCool(2.0f)
+	enemyAI(collisionManager), arrowCool(2.0f), screenShakeDuration(.5f), screenShakeCooldown(4.0f), currentScreenShakeCooldown(0.0f)
 {
 	p.init(collisionManager, new JumpingState());
 	currentRoom = new Room(levelNumber, roomNumber, enemyList, arrowTileList, destructTileList);
@@ -29,7 +29,8 @@ Level::Level(int levelNumber, int roomNumber)
 	p.resetPosition(currentRoom->getStartPos());
 	setArrowTileArrows();
 	//realEnemyList.push_back(new Enemy("Test",200,200, 10));
-
+	particle = Particle("rock", sf::Vector2f(50, 100), sf::Vector2f(0, 1), 5, 250);
+	particleEmitter = ParticleEmitter("rock", sf::Vector2f(0, -400), sf::Vector2f(0, 1), 5, 350, 30);
 }
 
 Level::~Level(void)
@@ -45,6 +46,7 @@ void Level::DeleteLevel()
 	destructTileList.clear();
 	delete currentRoom;
 	delete collisionManager;
+	//particleEmitter.~ParticleEmitter();
 }
 
 void Level::changeRoom()
@@ -84,6 +86,33 @@ void Level::changeRoom()
 
 void Level::update(float deltaTime)
 {
+	particleEmitter.update(deltaTime);
+	particle.update(deltaTime);
+	currentScreenShakeCooldown += deltaTime;
+
+
+	//SCREENSHAKE CODE
+	if(currentScreenShakeCooldown <= screenShakeDuration)
+	{
+		std::cout << "ScreenShake should occur" << std::endl;
+		viewChangeOffset.x = rand() % 50 - 25;
+		viewChangeOffset.y = rand() % 50 - 25;
+		view.move(viewChangeOffset);
+
+	}
+	else if(currentScreenShakeCooldown > screenShakeDuration && currentScreenShakeCooldown <= screenShakeCooldown)
+	{
+		std::cout << "Should be normal view" << std::endl;
+		view.reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y, SCREEN_WIDTH, SCREEN_HEIGHT));
+		
+	}
+	else if(currentScreenShakeCooldown >= screenShakeCooldown)
+	{
+		currentScreenShakeCooldown = 0;
+	}
+
+
+
 	if((p.sprite.getPosition().y + PLAYER_DIM_Y/2) >= currentRoom->getroomHeight())
 	{
 		p.resetPosition(currentRoom->getStartPos() + sf::Vector2f(50, -10));
@@ -401,7 +430,8 @@ void Level::draw(sf::RenderWindow& window)
 			a->draw(window);
 		}
 	}
-
+	particle.draw(window);
+	particleEmitter.draw(window);
 	window.setView(view);
 	p.drawUI(window);
 }

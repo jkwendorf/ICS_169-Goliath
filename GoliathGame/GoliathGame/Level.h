@@ -13,7 +13,8 @@
 #include "JumpingState.h"
 #include "IdleState.h"
 #include "Tile.h"
-
+#include "Particle.h"
+#include "ParticleEmitter.h"
 
 class Level : public BaseGameScreen
 {
@@ -43,6 +44,10 @@ private:
 	void setArrowTileArrows();
 	void checkDestructableTiles();
 
+	sf::Vector2f viewChangeOffset;
+	float screenShakeDuration;
+	float screenShakeCooldown, currentScreenShakeCooldown;
+
 public:
 	Level();
 	Level(int levelNumber, int roomNumber);
@@ -51,4 +56,7 @@ public:
 	void draw(sf::RenderWindow& window);
 	void DeleteLevel();
 	bool CheckChangeScreen();
+	//checking if particle works
+	Particle particle;
+	ParticleEmitter particleEmitter;
 };

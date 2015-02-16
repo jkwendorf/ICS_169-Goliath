@@ -441,7 +441,8 @@ void Player::viewCheck(sf::View* view, int width, int height)
 		}
 	}
 
-	view->reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y, SCREEN_WIDTH, SCREEN_HEIGHT));
+	//view->reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y, SCREEN_WIDTH, SCREEN_HEIGHT));
+	ui->updateDifferent(health, stamina, Global::GetInstance().topLeft.y);
 }
 
 void Player::viewMove(float deltaTime, float& viewChanged_, LookDirection dir)

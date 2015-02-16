@@ -113,6 +113,8 @@
     <ClCompile Include="LookingState.cpp" />
     <ClCompile Include="MoveCommand.cpp" />
     <ClCompile Include="OnGroundState.cpp" />
+    <ClCompile Include="Particle.cpp" />
+    <ClCompile Include="ParticleEmitter.cpp" />
     <ClCompile Include="PauseGameState.cpp" />
     <ClCompile Include="PlayerInventory.cpp" />
     <ClCompile Include="PopOut.cpp" />
@@ -171,6 +173,8 @@
     <ClInclude Include="MoveCommand.h" />
     <ClInclude Include="Observer.h" />
     <ClInclude Include="OnGroundState.h" />
+    <ClInclude Include="Particle.h" />
+    <ClInclude Include="ParticleEmitter.h" />
     <ClInclude Include="PauseGameState.h" />
     <ClInclude Include="PlayerInventory.h" />
     <ClInclude Include="PopOut.h" />

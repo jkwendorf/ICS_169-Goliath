@@ -248,6 +248,7 @@ void InputManager::playerMove(Player& player, float deltaTime)
 
 void InputManager::viewMove(sf::View* v, Player& s, float deltaTime)
 {
+	
 	viewDifference = 100.0f*deltaTime;	
 	if(s.vel.x == 0 && s.vel.y == 0 && !s.grappleInProgress)
 	{
@@ -302,4 +303,5 @@ void InputManager::viewMove(sf::View* v, Player& s, float deltaTime)
 		Global::GetInstance().topLeft.y -= viewChangedY;
 		viewChangedY = 0;
 	}
+	
 }
