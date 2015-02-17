@@ -62,6 +62,7 @@ void Player::init(CollisionManager* collisionManager_, BaseState* startState)
 Player::~Player() 
 {
 	delete ui;
+	delete newState;
 	delete currentState;
 }
 
@@ -88,7 +89,6 @@ void Player::handleInput()
 
 void Player::update(float deltaTime)
 {
-
 	if(deathTimer > 0)
 	{
 		deathTimer -= deltaTime;
