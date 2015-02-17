@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Game>
-  <Level number="1" tilesheet="BanditTile" size="5">
-    <Room number="1" size="2" nonMoving="TestingBackground">
-      <MovingLayer image="TestingBackground2" velScale="2.0"/>
-      <MovingLayer image="TestingBackground3" velScale="1.0"/>
-      <MovingLayer image="banditCity" velScale="0.2"/>
+  <Level number="1" tilesheet="BanditTile" size="7">
+    <Room number="1" size="1" nonMoving="bandit canyon level">
+      <!--<MovingLayer image="TestingBackground2" velScaleX="2.0" velScaleY="0.0"/>
+      <MovingLayer image="TestingBackground3" velScaleX="1.0" velScaleY="0.0"/>
+      <MovingLayer image="banditCity" velScaleX="0.2" velScaleY="2.0"/>-->
     </Room>
-    <Room number="2" size="1" nonMoving="banditCity"></Room>
-    <Room number="3" size="1" nonMoving="banditCity"></Room>
-    <Room number="4" size="1" nonMoving="banditCity"></Room>
-    <Room number="5" size="1" nonMoving="banditCity"></Room>
+    <Room number="2" size="1" nonMoving="bandit canyon level"></Room>
+    <Room number="3" size="1" nonMoving="bandit canyon level"></Room>
+    <Room number="4" size="1" nonMoving="bandit canyon level"></Room>
+    <Room number="5" size="1" nonMoving="bandit canyon level"></Room>
+    <Room number="6" size="1" nonMoving="bandit canyon level"></Room>
+    <Room number="7" size="1" nonMoving="GoliathFootTest">
+      <MovingLayer image="GoliathGroundBackground" velScaleX="0.0" velScaleY="2.0" />
+    </Room>
   </Level>
   <Level number="2" tilesheet="BanditTile" size="4">
     <Room number="1" size="1" nonMoving="banditCity"></Room>

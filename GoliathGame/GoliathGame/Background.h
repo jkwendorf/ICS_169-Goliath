@@ -6,7 +6,7 @@
 struct Layer
 {
 	sf::Sprite image;
-	float scale;
+	sf::Vector2f scale;
 	int layerNum;
 };
 
@@ -16,6 +16,7 @@ private:
 	sf::Sprite nonMovingLayer;
 	std::vector<Layer> movingLayers;
 	sf::Vector2f vel;
+	sf::Clock clock;
 
 	Background();
 public:
