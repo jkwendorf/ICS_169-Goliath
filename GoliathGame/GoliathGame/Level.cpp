@@ -15,14 +15,13 @@ Level::Level(int levelNumber, int roomNumber)
 {
 	p.init(collisionManager, new JumpingState());
 	currentRoom = new Room(levelNumber, roomNumber, enemyList, arrowTileList, destructTileList);
-	background.setTexture(*TextureManager::GetInstance().retrieveTexture("bandit canyon level"));
-	sf::Color color = background.getColor();
-	background.setColor(sf::Color(color.r, color.g, color.b, 200));
-	background.setPosition(-75,75);
-	background.scale(1.0, (float)(GAME_TILE_DIM * 22 + 100) / background.getTexture()->getSize().y);
+	//background.setTexture(*TextureManager::GetInstance().retrieveTexture("bandit canyon level"));
+	//sf::Color color = background.getColor();
+	//background.setColor(sf::Color(color.r, color.g, color.b, 200));
+	//background.setPosition(-75,75);
+	//background.scale(1.0, (float)(GAME_TILE_DIM * 22 + 100) / background.getTexture()->getSize().y);
 	loadingSprite.setTexture(*TextureManager::GetInstance().retrieveTexture("loading"));
 	loadingSprite.setPosition(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y);
-	background.scale(1.0, (float)(GAME_TILE_DIM * 22 + 100) / background.getTexture()->getSize().y);
 	Global::GetInstance().topLeft.x = 0;
 	Global::GetInstance().topLeft.y = 0;
 	view.reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y, SCREEN_WIDTH, SCREEN_HEIGHT));
@@ -91,11 +90,11 @@ void Level::update(float deltaTime)
 	particle.update(deltaTime);
 	currentScreenShakeCooldown += deltaTime;
 
-
+	currentRoom->update(deltaTime);
 	//SCREENSHAKE CODE
 	if(currentScreenShakeCooldown <= screenShakeDuration)
 	{
-		std::cout << "ScreenShake should occur" << std::endl;
+		//std::cout << "ScreenShake should occur" << std::endl;
 		viewChangeOffset.x = rand() % 50 - 25;
 		viewChangeOffset.y = rand() % 50 - 25;
 		view.move(viewChangeOffset);
@@ -103,7 +102,7 @@ void Level::update(float deltaTime)
 	}
 	else if(currentScreenShakeCooldown > screenShakeDuration && currentScreenShakeCooldown <= screenShakeCooldown)
 	{
-		std::cout << "Should be normal view" << std::endl;
+		//std::cout << "Should be normal view" << std::endl;
 		view.reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y, SCREEN_WIDTH, SCREEN_HEIGHT));
 		p.updateUI();
 	}
@@ -111,8 +110,6 @@ void Level::update(float deltaTime)
 	{
 		currentScreenShakeCooldown = 0;
 	}
-
-
 
 	if((p.sprite.getPosition().y + PLAYER_DIM_Y/2) >= currentRoom->getroomHeight())
 	{
@@ -415,7 +412,7 @@ void Level::update(float deltaTime)
 void Level::draw(sf::RenderWindow& window)
 {
 	//window.draw(r);
-	window.draw(background);
+	//window.draw(background);
 
 	//window.draw(Global::GetInstance().testingRect);
 
