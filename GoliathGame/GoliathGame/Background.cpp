@@ -5,7 +5,7 @@
 Background::Background(int levelNum, int roomNum)
 	:nonMovingLayer(*TextureManager::GetInstance().retrieveTexture(
 	Global::GetInstance().roomSizes.at("Level"+ std::to_string(levelNum) + "Room" + std::to_string(roomNum)).nonMovinglayer)),
-	vel(-100.0f, 0.0f)
+	vel(-100.0f, -100.0f)
 {
 	RoomStruct temp = Global::GetInstance().roomSizes.at("Level"+ std::to_string(levelNum) + "Room" + std::to_string(roomNum));
 	for (int i = 0; i < temp.movingLayers.size(); i++)
@@ -31,15 +31,15 @@ void Background::setScale(int layerNum, float xScale, float yScale)
 		std::cout << "This is not in the list" << std::endl;
 		return;
 	}
-	movingLayers[layerNum].scale = xScale;
+	movingLayers[layerNum].scale.x = xScale;
+	movingLayers[layerNum].scale.y = yScale;
 }
 	
 void Background::update(float deltaTime)
 {
 	for (int i = 0; i < movingLayers.size(); i++)
 	{
-		float testing = vel.x * movingLayers[i].scale * deltaTime;
-		movingLayers[i].image.move(vel * movingLayers[i].scale * deltaTime);
+		movingLayers[i].image.move(sf::Vector2f(vel.x * movingLayers[i].scale.x * deltaTime, vel.y * movingLayers[i].scale.y * deltaTime));
 	}
 }
 	

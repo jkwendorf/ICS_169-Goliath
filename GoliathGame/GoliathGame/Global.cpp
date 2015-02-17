@@ -61,7 +61,7 @@ void Global::ParseXML() {
 			{
 				LayerStruct l;
 				l.imageName = layer.attribute("image").as_string();
-				l.scale = layer.attribute("velScale").as_float();
+				l.scale = sf::Vector2f(layer.attribute("velScaleX").as_float(), layer.attribute("velScaleY").as_float());
 				roomStruct.movingLayers.push_back(l);
 			}
 			roomSizes[str2] = roomStruct;
