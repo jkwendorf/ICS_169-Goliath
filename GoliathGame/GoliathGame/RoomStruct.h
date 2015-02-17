@@ -2,10 +2,11 @@
 
 #include <string> 
 #include <vector>
+#include "LayerStruct.h"
 
 struct RoomStruct
 {
 	int roomSize;
 	std::string nonMovinglayer;
-	std::vector<std::string> movingLayers;
+	std::vector<LayerStruct> movingLayers;
 };

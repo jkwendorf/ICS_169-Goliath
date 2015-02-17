@@ -2,9 +2,9 @@
 <Game>
   <Level number="1" tilesheet="BanditTile" size="5">
     <Room number="1" size="2" nonMoving="TestingBackground">
-      <MovingLayer image="TestingBackground2"/>
-      <MovingLayer image="TestingBackground3"/>
-      <MovingLayer image="banditCity"/>
+      <MovingLayer image="TestingBackground2" velScale="2.0"/>
+      <MovingLayer image="TestingBackground3" velScale="1.0"/>
+      <MovingLayer image="banditCity" velScale="0.2"/>
     </Room>
     <Room number="2" size="1" nonMoving="banditCity"></Room>
     <Room number="3" size="1" nonMoving="banditCity"></Room>

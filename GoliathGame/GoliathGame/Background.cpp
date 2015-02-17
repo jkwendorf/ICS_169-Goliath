@@ -5,15 +5,15 @@
 Background::Background(int levelNum, int roomNum)
 	:nonMovingLayer(*TextureManager::GetInstance().retrieveTexture(
 	Global::GetInstance().roomSizes.at("Level"+ std::to_string(levelNum) + "Room" + std::to_string(roomNum)).nonMovinglayer)),
-	vel(-10.0f, 0.0f)
+	vel(-100.0f, 0.0f)
 {
 	RoomStruct temp = Global::GetInstance().roomSizes.at("Level"+ std::to_string(levelNum) + "Room" + std::to_string(roomNum));
 	for (int i = 0; i < temp.movingLayers.size(); i++)
 	{
 		Layer l;
-		l.image = sf::Sprite(*TextureManager::GetInstance().retrieveTexture(temp.movingLayers[i]));
+		l.image = sf::Sprite(*TextureManager::GetInstance().retrieveTexture(temp.movingLayers[i].imageName));
 		l.image.setPosition(0.0f, 0.0f);
-		l.scale = 1.0f;
+		l.scale = temp.movingLayers[i].scale;
 		movingLayers.push_back(l);
 	}
 }
@@ -50,4 +50,12 @@ void Background::draw(sf::RenderWindow& window)
 		window.draw(movingLayers[i].image);
 	}
 	window.draw(nonMovingLayer);
+}
+
+void Background::reset()
+{
+	for (int i = 0; i < movingLayers.size(); i++)
+	{
+		movingLayers[i].image.setPosition(0,0);
+	}
 }

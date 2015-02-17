@@ -168,6 +168,7 @@
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="JumpCommand.h" />
     <ClInclude Include="JumpingState.h" />
+    <ClInclude Include="LayerStruct.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="LevelSelectState.h" />
     <ClInclude Include="LookCommand.h" />

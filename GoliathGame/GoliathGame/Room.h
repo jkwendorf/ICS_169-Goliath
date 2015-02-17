@@ -14,7 +14,7 @@ private:
 	Section** sectList;
 	int numSect, roomNum, roomWidth, roomHeight;
 	bool loadedTitles;
-	Background bg;
+	
 	sf::Vector2f startPos;
 	sf::Music roomMusic;
 
@@ -39,6 +39,7 @@ private:
 	void GetNearTiles(sf::FloatRect& player, std::vector<Tile*>& nearTiles, bool checkBoxOnly = false, bool grapple = false);
 
 public:
+	Background bg;
 	//Player player;
 	Room(int levelNumber, int roomNumber, std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList);
 	~Room();

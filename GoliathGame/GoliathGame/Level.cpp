@@ -11,7 +11,7 @@ Level::Level(int levelNumber, int roomNumber)
 	:changeScreen(false), levelNum(levelNumber), p(), collisionManager(new CollisionManager()), inputManager(),
 	maxRooms(Global::GetInstance().levelSizes.at("Level " + std::to_string(levelNum))), loading(1.0),
 	enemyAI(collisionManager), arrowCool(2.0f), screenShakeDuration(.5f), screenShakeCooldown(4.0f), currentScreenShakeCooldown(0.0f),
-	arrowsCanFire(true)
+	arrowsCanFire(true), fixedTime(0.0f)
 {
 	p.init(collisionManager, new JumpingState());
 	currentRoom = new Room(levelNumber, roomNumber, enemyList, arrowTileList, destructTileList);
@@ -187,6 +187,7 @@ void Level::update(float deltaTime)
 			p.resetHealth();
 			delete p.currentState;
 			p.currentState = new JumpingState();
+			currentRoom->bg.reset();
 		}
 
 		/*if((!p.hShot.hookedOnSomething || !p.hShot.grappleInProgress) && !p.isHanging && !p.isVaulting)
@@ -230,6 +231,11 @@ void Level::update(float deltaTime)
 				}
 			}
 		}*/
+
+fixedTime += deltaTime;
+if(fixedTime >= 50.0f)
+{
+		fixedTime -= 50.0f;
 
 		for(Projectile& po : p.ammo)
 		{
@@ -339,6 +345,7 @@ void Level::update(float deltaTime)
 			collisionManager->checkPlayerSwordToEnemies(p.playerSword, e.get());
 			collisionManager->checkEnemySwordToPlayer(e.get()->eSword, &p);
 		}
+}
 
 		int i = 0;
 		//std::cout << "Player position:" << p.sprite.getPosition().x << " " << p.sprite.getPosition().y << std::endl;
