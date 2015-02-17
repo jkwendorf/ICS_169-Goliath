@@ -2,8 +2,8 @@
 #include "Room.h"
 
 Room::Room(int levelNumber, int roomNumber, std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList)
-	:roomNum(roomNumber), numSect(Global::GetInstance().roomSizes.at("Level " + std::to_string(levelNumber) + " Room " + std::to_string(roomNumber))),
-	roomWidth(0), roomHeight(0), loadedTitles(false)
+	:roomNum(roomNumber), numSect(Global::GetInstance().roomSizes.at("Level" + std::to_string(levelNumber) + "Room" + std::to_string(roomNumber)).roomSize),
+	roomWidth(0), roomHeight(0), loadedTitles(false), bg(levelNumber, roomNumber)
 {
 	LoadRoom(levelNumber, enemyList, arrowTileList, destructTileList);
 	//Music
@@ -23,9 +23,6 @@ Room::~Room()
 	delete[] sectList;
 	roomMusic.stop();
 }
-
-Room::Room()
-{}
 	
 void Room::LoadRoom(int levelNumber, std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList)
 {
@@ -53,7 +50,7 @@ void Room::LoadRoom(int levelNumber, std::vector<std::shared_ptr<Enemy>> &enemyL
 	}
 	
 	//std::cout << Global::GetInstance().roomTileSheets. << std::endl;
-	sf::Texture* texture = TextureManager::GetInstance().retrieveTexture(Global::GetInstance().roomTileSheets.at("Level " + std::to_string(levelNumber) + " Room " + std::to_string(roomNum)));
+	sf::Texture* texture = TextureManager::GetInstance().retrieveTexture(Global::GetInstance().roomTileSheets.at("Level" + std::to_string(levelNumber) + "Room" + std::to_string(roomNum)));
 	Global::GetInstance().SetUpTileSheet(texture);
 }
 
@@ -153,16 +150,12 @@ void Room::GetNearTiles(sf::FloatRect& rect, std::vector<Tile*>& nearTiles, bool
 
 void Room::update(float deltaTime)
 {
-	//player.update(deltaTime);
-	for(int i = 0; i < numSect; i++)
-	{
-		sectList[i]->update(deltaTime);
-	}
+	bg.update(deltaTime);
 }
 
 void Room::draw(sf::RenderWindow& w)
 {
-	//player.draw(w);
+	bg.draw(w);
 	for(int i = 0; i < numSect; i++)
 	{
 		sectList[i]->draw(w);

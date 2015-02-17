@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "Global.h"
 #include "Enemy.h"
+#include "Background.h"
 #include <memory>
 #include <SFML\Audio\Music.hpp>
 
@@ -13,6 +14,7 @@ private:
 	Section** sectList;
 	int numSect, roomNum, roomWidth, roomHeight;
 	bool loadedTitles;
+	Background bg;
 	sf::Vector2f startPos;
 	sf::Music roomMusic;
 
