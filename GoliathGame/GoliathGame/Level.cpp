@@ -11,7 +11,7 @@ Level::Level(int levelNumber, int roomNumber)
 	:changeScreen(false), levelNum(levelNumber), p(), collisionManager(new CollisionManager()), inputManager(),
 	maxRooms(Global::GetInstance().levelSizes.at("Level " + std::to_string(levelNum))), loading(1.0),
 	enemyAI(collisionManager), arrowCool(2.0f), screenShakeDuration(.5f), screenShakeCooldown(4.0f), currentScreenShakeCooldown(0.0f),
-	arrowsCanFire(true)
+	arrowsCanFire(true), fixedTime(0.0f)
 {
 	p.init(collisionManager, new JumpingState());
 	currentRoom = new Room(levelNumber, roomNumber, enemyList, arrowTileList, destructTileList);
@@ -97,7 +97,8 @@ void Level::update(float deltaTime)
 		//std::cout << "ScreenShake should occur" << std::endl;
 		viewChangeOffset.x = rand() % 50 - 25;
 		viewChangeOffset.y = rand() % 50 - 25;
-		view.move(viewChangeOffset);
+		view.reset(sf::FloatRect(Global::GetInstance().topLeft.x + viewChangeOffset.x, Global::GetInstance().topLeft.y + viewChangeOffset.y, SCREEN_WIDTH, SCREEN_HEIGHT));
+		//view.move(viewChangeOffset);
 		p.updateUI(viewChangeOffset);
 	}
 	else if(currentScreenShakeCooldown > screenShakeDuration && currentScreenShakeCooldown <= screenShakeCooldown)
@@ -160,7 +161,8 @@ void Level::update(float deltaTime)
 				else if(hookedTile->getTileNum() == 7)
 					p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width/2 + GAME_TILE_DIM - 5, hookedTile->top - hookedTile->height/2 - 28));
 				else
-					p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width/2, hookedTile->top + 5));
+					//p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width/2, hookedTile->top + 5));
+					p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width/2, hookedTile->top + hookedTile->height));
 
 				//p.newState = new GrapplingState();
 				delete p.currentState;
@@ -183,6 +185,8 @@ void Level::update(float deltaTime)
 		{
 			p.resetPosition(currentRoom->getStartPos());
 			p.resetHealth();
+			delete p.currentState;
+			p.currentState = new JumpingState();
 			currentRoom->bg.reset();
 		}
 
@@ -227,6 +231,11 @@ void Level::update(float deltaTime)
 				}
 			}
 		}*/
+
+fixedTime += deltaTime;
+if(fixedTime >= 50.0f)
+{
+		fixedTime -= 50.0f;
 
 		for(Projectile& po : p.ammo)
 		{
@@ -336,6 +345,7 @@ void Level::update(float deltaTime)
 			collisionManager->checkPlayerSwordToEnemies(p.playerSword, e.get());
 			collisionManager->checkEnemySwordToPlayer(e.get()->eSword, &p);
 		}
+}
 
 		int i = 0;
 		//std::cout << "Player position:" << p.sprite.getPosition().x << " " << p.sprite.getPosition().y << std::endl;
