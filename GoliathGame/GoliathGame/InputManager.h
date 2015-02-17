@@ -40,7 +40,7 @@ public:
 
 	float inputCooldown, currentInputCooldown;
 	float weaponSwitchCooldown, currentWeaponSwitchCooldown;
-	float viewDifference, viewChanged;
+	float viewDifference, viewChangedY, viewChangedX;
 	float grappleCooldown, currentGrappleCooldown;
 	
 private:

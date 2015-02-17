@@ -1,4 +1,5 @@
 #include "LevelSelectState.h"
+#include "LoadingState.h"
 #include "Global.h"
 #include "StateManager.h"
 
@@ -17,7 +18,7 @@ LevelSelectState::LevelSelectState(void)
 			int numRooms = Global::GetInstance().levelSizes.at("Level " + std::to_string(level));
 			for (int room = 1; room <= numRooms; room++)
 			{
-				bM->createButton("Level " + std::to_string(level) + "-" + std::to_string(room), [=] {StateManager::getInstance().addState(GAME, new GameState(level, room), true);});
+				bM->createButton("Level " + std::to_string(level) + "-" + std::to_string(room), [=] {StateManager::getInstance().addState(TRANSITION, new LoadingState(level, room), true);});
 			}
 		}
 	}

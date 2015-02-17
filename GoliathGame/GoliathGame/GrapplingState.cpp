@@ -59,8 +59,13 @@ void GrapplingState::update(Player* player, float deltaTime)
 		}
 		else
 			player->newState = new JumpingState();*/
+		//if(player->newState)
 
-		 player->newState = new JumpingState();
+		//std::cout << "Created new state" << std::endl;
+		//if(player->newState == NULL)
+			//player->newState = new JumpingState();
+		delete player->currentState;
+		player->currentState = new JumpingState();
 	}
 }
 

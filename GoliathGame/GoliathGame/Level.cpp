@@ -10,18 +10,18 @@ Level::Level(void)
 Level::Level(int levelNumber, int roomNumber)
 	:changeScreen(false), levelNum(levelNumber), p(), collisionManager(new CollisionManager()), inputManager(),
 	maxRooms(Global::GetInstance().levelSizes.at("Level " + std::to_string(levelNum))), loading(1.0),
-	enemyAI(collisionManager)
+	enemyAI(collisionManager), arrowCool(2.0f), screenShakeDuration(.65f), screenShakeCooldown(10.0f), currentScreenShakeCooldown(0.0f),
+	arrowsCanFire(true), fixedTime(0.0f)
 {
 	p.init(collisionManager, new JumpingState());
 	currentRoom = new Room(levelNumber, roomNumber, enemyList, arrowTileList, destructTileList);
-	background.setTexture(*TextureManager::GetInstance().retrieveTexture("bandit canyon level"));
-	sf::Color color = background.getColor();
-	background.setColor(sf::Color(color.r, color.g, color.b, 200));
-	background.setPosition(-75,75);
-	background.scale(1.0, (float)(GAME_TILE_DIM * 22 + 100) / background.getTexture()->getSize().y);
+	//background.setTexture(*TextureManager::GetInstance().retrieveTexture("bandit canyon level"));
+	//sf::Color color = background.getColor();
+	//background.setColor(sf::Color(color.r, color.g, color.b, 200));
+	//background.setPosition(-75,75);
+	//background.scale(1.0, (float)(GAME_TILE_DIM * 22 + 100) / background.getTexture()->getSize().y);
 	loadingSprite.setTexture(*TextureManager::GetInstance().retrieveTexture("loading"));
 	loadingSprite.setPosition(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y);
-	background.scale(1.0, (float)(GAME_TILE_DIM * 22 + 100) / background.getTexture()->getSize().y);
 	Global::GetInstance().topLeft.x = 0;
 	Global::GetInstance().topLeft.y = 0;
 	view.reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y, SCREEN_WIDTH, SCREEN_HEIGHT));
@@ -29,7 +29,8 @@ Level::Level(int levelNumber, int roomNumber)
 	p.resetPosition(currentRoom->getStartPos());
 	setArrowTileArrows();
 	//realEnemyList.push_back(new Enemy("Test",200,200, 10));
-
+	particle = Particle("rock", sf::Vector2f(50, 100), sf::Vector2f(0, 1), 5, 250);
+	particleEmitter = ParticleEmitter("rock", sf::Vector2f(0, -400), sf::Vector2f(0, 1), 10, 350, 30);
 }
 
 Level::~Level(void)
@@ -45,6 +46,7 @@ void Level::DeleteLevel()
 	destructTileList.clear();
 	delete currentRoom;
 	delete collisionManager;
+	//particleEmitter.~ParticleEmitter();
 }
 
 void Level::changeRoom()
@@ -84,6 +86,32 @@ void Level::changeRoom()
 
 void Level::update(float deltaTime)
 {
+	particleEmitter.update(deltaTime);
+	particle.update(deltaTime);
+	currentScreenShakeCooldown += deltaTime;
+
+	currentRoom->update(deltaTime);
+	//SCREENSHAKE CODE
+	if(currentScreenShakeCooldown <= screenShakeDuration)
+	{
+		//std::cout << "ScreenShake should occur" << std::endl;
+		viewChangeOffset.x = rand() % 50 - 25;
+		viewChangeOffset.y = rand() % 50 - 25;
+		view.reset(sf::FloatRect(Global::GetInstance().topLeft.x + viewChangeOffset.x, Global::GetInstance().topLeft.y + viewChangeOffset.y, SCREEN_WIDTH, SCREEN_HEIGHT));
+		//view.move(viewChangeOffset);
+		p.updateUI(viewChangeOffset);
+	}
+	else if(currentScreenShakeCooldown > screenShakeDuration && currentScreenShakeCooldown <= screenShakeCooldown)
+	{
+		//std::cout << "Should be normal view" << std::endl;
+		view.reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y, SCREEN_WIDTH, SCREEN_HEIGHT));
+		p.updateUI();
+	}
+	else if(currentScreenShakeCooldown >= screenShakeCooldown)
+	{
+		currentScreenShakeCooldown = 0;
+	}
+
 	if((p.sprite.getPosition().y + PLAYER_DIM_Y/2) >= currentRoom->getroomHeight())
 	{
 		p.resetPosition(currentRoom->getStartPos() + sf::Vector2f(50, -10));
@@ -129,11 +157,12 @@ void Level::update(float deltaTime)
 					p.shouldHang = true;
 				}*/
 				if(hookedTile->getTileNum() == 6)
-					p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left - hookedTile->width/2, hookedTile->top - hookedTile->height/2 - 20));
+					p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left - hookedTile->width/2, hookedTile->top - hookedTile->height/2 - 28));
 				else if(hookedTile->getTileNum() == 7)
-					p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width/2 + GAME_TILE_DIM - 5, hookedTile->top - hookedTile->height/2 - 20));
+					p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width/2 + GAME_TILE_DIM - 5, hookedTile->top - hookedTile->height/2 - 28));
 				else
-					p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width/2, hookedTile->top));
+					//p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width/2, hookedTile->top + 5));
+					p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width/2, hookedTile->top + hookedTile->height));
 
 				//p.newState = new GrapplingState();
 				delete p.currentState;
@@ -156,6 +185,9 @@ void Level::update(float deltaTime)
 		{
 			p.resetPosition(currentRoom->getStartPos());
 			p.resetHealth();
+			delete p.currentState;
+			p.currentState = new JumpingState();
+			//currentRoom->bg.reset();
 		}
 
 		/*if((!p.hShot.hookedOnSomething || !p.hShot.grappleInProgress) && !p.isHanging && !p.isVaulting)
@@ -199,6 +231,11 @@ void Level::update(float deltaTime)
 				}
 			}
 		}*/
+
+fixedTime += deltaTime;
+if(fixedTime >= 50.0f)
+{
+		fixedTime -= 50.0f;
 
 		for(Projectile& po : p.ammo)
 		{
@@ -308,10 +345,24 @@ void Level::update(float deltaTime)
 			collisionManager->checkPlayerSwordToEnemies(p.playerSword, e.get());
 			collisionManager->checkEnemySwordToPlayer(e.get()->eSword, &p);
 		}
+}
 
 		int i = 0;
 		//std::cout << "Player position:" << p.sprite.getPosition().x << " " << p.sprite.getPosition().y << std::endl;
 		checkDestructableTiles();
+
+		//CODE TO DISABLE ARROW SHOOTER
+		//NEEDS TO BE REPLACED WITH SWITCH POSITION
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::M))
+		{
+			arrowsCanFire = !arrowsCanFire;
+			if(arrowsCanFire == true)
+			{
+				arrowCool = 2.1f;
+			}
+		}
+
+		arrowCool += deltaTime;
 
 		for(auto& a : arrows)
 		{
@@ -343,11 +394,16 @@ void Level::update(float deltaTime)
 					std::cout << "ARROW " << i << " hit player" << std::endl;
 				}
 			}
-			else 
+			else if(arrowCool > 2.0f && arrowsCanFire)
 			{
 				a->setLocation(a->startLocation);
 				a->moving = true;
 			}
+		}
+
+		if(arrowCool > 2.0f)
+		{
+			arrowCool = 0.0f;
 		}
 
 		/*
@@ -367,7 +423,7 @@ void Level::update(float deltaTime)
 void Level::draw(sf::RenderWindow& window)
 {
 	//window.draw(r);
-	window.draw(background);
+	//window.draw(background);
 
 	//window.draw(Global::GetInstance().testingRect);
 
@@ -394,7 +450,8 @@ void Level::draw(sf::RenderWindow& window)
 			a->draw(window);
 		}
 	}
-
+	particle.draw(window);
+	particleEmitter.draw(window);
 	window.setView(view);
 	p.drawUI(window);
 }

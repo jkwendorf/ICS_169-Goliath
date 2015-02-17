@@ -62,6 +62,7 @@ void Player::init(CollisionManager* collisionManager_, BaseState* startState)
 Player::~Player() 
 {
 	delete ui;
+	delete newState;
 	delete currentState;
 }
 
@@ -88,7 +89,6 @@ void Player::handleInput()
 
 void Player::update(float deltaTime)
 {
-
 	if(deathTimer > 0)
 	{
 		deathTimer -= deltaTime;
@@ -188,7 +188,6 @@ void Player::update(float deltaTime)
 		else
 			playerSword.hitBox.setPosition(sprite.getPosition().x - PLAYER_DIM_X*1.5, sprite.getPosition().y);
 	}
-	ui->update(health, stamina);
 	
 	//Check for nearest grappleTile
 	if(!collisionManager->isGrappleListEmpty())
@@ -391,7 +390,7 @@ void Player::viewCheck(sf::View* view, int width, int height)
 		//std::cout << bottomPoint << std::endl;
 	}
 
-	if(sprite.getPosition().y - (PLAYER_DIM_Y / 2) < 0 + Global::GetInstance().yOffset)
+	if(sprite.getPosition().y - (PLAYER_DIM_Y / 2) < Global::GetInstance().yOffset)
 	{
 		Global::GetInstance().topLeft.y = sprite.getPosition().y - (PLAYER_DIM_Y / 2) - Global::GetInstance().yOffset;
 		atTopEdge = true;
@@ -441,7 +440,18 @@ void Player::viewCheck(sf::View* view, int width, int height)
 		}
 	}
 
-	view->reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y, SCREEN_WIDTH, SCREEN_HEIGHT));
+	//view->reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y, SCREEN_WIDTH, SCREEN_HEIGHT));
+
+}
+
+void Player::updateUI()
+{
+	ui->update(health, stamina);
+}
+
+void Player::updateUI(sf::Vector2f offset)
+{
+	ui->updateDifferent(health, stamina, offset);
 }
 
 void Player::horizontalAcceleration(MovementDirection dir, float& deltaTime)
@@ -647,41 +657,7 @@ void Player::moveOutOfTile(Tile* t)
 	}
 }
 
-void Player::viewMove(float deltaTime, float& viewChanged_, LookDirection dir)
-{
-	float viewDifference = 100.0f*deltaTime;	
-	if(dir == UP)
-	{
-		viewChanged_ -= viewDifference;
-		if(viewChanged_ < Global::GetInstance().yOffset * (-4) && viewChanged_ < 0)
-		{
-			viewDifference = 0;
-			viewChanged_ = Global::GetInstance().yOffset * -4;
-		}
-		Global::GetInstance().topLeft.y -= viewDifference;
-		if(atBottomEdge)
-		{
-			view->reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y + viewChanged_, SCREEN_WIDTH, SCREEN_HEIGHT));
-			ui->updateDifferent(health, stamina, Global::GetInstance().topLeft.y + viewChanged_);
-		}
-	}
-	else
-	{
-		viewChanged_ += viewDifference;
-		if(viewChanged_ > Global::GetInstance().yOffset * 4 && viewChanged_ > 0)
-		{
-			viewDifference = 0;
-			viewChanged_ = Global::GetInstance().yOffset * 4;
-		}
-		Global::GetInstance().topLeft.y += viewDifference;
-		if(atTopEdge || !atTheBottom)
-		{
-			view->reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y + viewChanged_, SCREEN_WIDTH, SCREEN_HEIGHT));
-			ui->updateDifferent(health, stamina, Global::GetInstance().topLeft.y + viewChanged_);
-		}
-	}		
 
-}
 
 void Player::drawUI(sf::RenderWindow& window)
 {

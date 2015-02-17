@@ -94,7 +94,7 @@ void UserInterface::update(float h, float s)
 	staminaBar.setPosition(Global::GetInstance().topLeft.x + 20, Global::GetInstance().topLeft.y + 90);
 }
 
-void UserInterface::updateDifferent(float h, float s, float offset)
+void UserInterface::updateDifferent(float h, float s, sf::Vector2f offset)
 {
 	if(h < 76)
 	{
@@ -117,17 +117,17 @@ void UserInterface::updateDifferent(float h, float s, float offset)
 	}
 
 	healthBar1.setFillColor(sf::Color(255, 0, 0, 125));
-	healthBar1.setPosition(Global::GetInstance().topLeft.x + 20, Global::GetInstance().topLeft.y + 20);
+	healthBar1.setPosition(Global::GetInstance().topLeft.x + 20 + offset.x, Global::GetInstance().topLeft.y + 20 + offset.y);
 	
 	healthBar2.setFillColor(sf::Color(255, 0, 0, 125));
-	healthBar2.setPosition(Global::GetInstance().topLeft.x + 40 + 100, Global::GetInstance().topLeft.y + 20);
+	healthBar2.setPosition(Global::GetInstance().topLeft.x + 40 + 100 + offset.x, Global::GetInstance().topLeft.y + 20 + offset.y);
 	
 	healthBar3.setFillColor(sf::Color(255, 0, 0, 125));
-	healthBar3.setPosition(Global::GetInstance().topLeft.x + 60 + 200, Global::GetInstance().topLeft.y + 20);
+	healthBar3.setPosition(Global::GetInstance().topLeft.x + 60 + 200 + offset.x, Global::GetInstance().topLeft.y + 20 + offset.y);
 
 	healthBar4.setFillColor(sf::Color(255, 0, 0, 125));
-	healthBar4.setPosition(Global::GetInstance().topLeft.x + 80 + 300, Global::GetInstance().topLeft.y + 20);
+	healthBar4.setPosition(Global::GetInstance().topLeft.x + 80 + 300 + offset.x, Global::GetInstance().topLeft.y + 20 + offset.y);
 
 	staminaBar.setSize(sf::Vector2f((s * 6), 50));
-	staminaBar.setPosition(Global::GetInstance().topLeft.x + 20, offset + 90);
+	staminaBar.setPosition(Global::GetInstance().topLeft.x + 20 + offset.x, Global::GetInstance().topLeft.y + 90 + offset.y);
 }

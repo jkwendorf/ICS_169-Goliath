@@ -8,6 +8,8 @@
 #include <SFML/Graphics.hpp>
 #include "AudioManager.h"
 #include "PlayerInventory.h"
+#include "RoomStruct.h"
+
 // JW: In the future, we might want to make Global a static class so we can alter values
 
 
@@ -21,7 +23,7 @@ public :
 	}
 
 	std::map<std::string, int> levelSizes;
-	std::map<std::string, int> roomSizes;
+	std::map<std::string, RoomStruct> roomSizes;
 	std::map<std::string, std::string> roomTileSheets;
 
 	std::map<std::string, std::vector<float>> augments;

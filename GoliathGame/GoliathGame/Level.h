@@ -13,7 +13,8 @@
 #include "JumpingState.h"
 #include "IdleState.h"
 #include "Tile.h"
-
+#include "Particle.h"
+#include "ParticleEmitter.h"
 
 class Level : public BaseGameScreen
 {
@@ -27,13 +28,16 @@ private:
 	Player p;
 	Room* currentRoom;
 	sf::View view;
-	sf::RenderWindow win;
-	sf::Sprite background, loadingSprite;
+	//sf::RenderWindow win;
+	sf::Sprite loadingSprite;
+	float arrowCool;
 
 	CollisionManager* collisionManager;
 	InputManager inputManager;
 	EnemyAI enemyAI;
 	std::vector<Projectile*> arrows;
+
+	bool arrowsCanFire;
 
 	void viewCheck();
 	void playerCheck();
@@ -41,6 +45,10 @@ private:
 	void CleanUp();
 	void setArrowTileArrows();
 	void checkDestructableTiles();
+
+	sf::Vector2f viewChangeOffset;
+	float screenShakeDuration;
+	float screenShakeCooldown, currentScreenShakeCooldown;
 
 public:
 	Level();
@@ -50,4 +58,8 @@ public:
 	void draw(sf::RenderWindow& window);
 	void DeleteLevel();
 	bool CheckChangeScreen();
+	//checking if particle works
+	Particle particle;
+	ParticleEmitter particleEmitter;
+	float fixedTime;
 };

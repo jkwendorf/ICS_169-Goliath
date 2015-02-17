@@ -23,7 +23,8 @@ InputManager::InputManager()
 	currentGrappleCooldown = .5;
 	grappleCooldown = .5;
 	
-	viewChanged = 0;
+	viewChangedX = 0;
+	viewChangedY = 0;
 
 	//sch.moveCommand = new MoveCommand();
 }
@@ -68,7 +69,7 @@ void InputManager::update(Player& s, sf::View* v, float deltaTime)
 		//sch.moveCommand->init(&s, MovementDirection::RIGHT, deltaTime, MOVERIGHT);
 		//s.inputQueue.push_back(sch.moveCommand);
 	}
-	else
+	else if(s.vel.x != 0)
 	{
 		MoveCommand* move = new MoveCommand();
 		move->init(&s, STILL, deltaTime, NO_MOVE);
@@ -247,43 +248,52 @@ void InputManager::playerMove(Player& player, float deltaTime)
 
 void InputManager::viewMove(sf::View* v, Player& s, float deltaTime)
 {
+	
 	viewDifference = 100.0f*deltaTime;	
 	if(s.vel.x == 0 && s.vel.y == 0 && !s.grappleInProgress)
 	{
 		if(utility[5])
 		{
-			viewChanged -= viewDifference;
-			if(viewChanged < Global::GetInstance().yOffset * (-4) && viewChanged < 0)
+			viewChangedY -= viewDifference;
+			if(viewChangedY < Global::GetInstance().yOffset * (-4) && viewChangedY < 0)
 			{
 				viewDifference = 0;
-				viewChanged = Global::GetInstance().yOffset * -4;
+				viewChangedY = Global::GetInstance().yOffset * -4;
 			}
 			Global::GetInstance().topLeft.y -= viewDifference;
 			if(s.atBottomEdge)
 			{
-				v->reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y + viewChanged, SCREEN_WIDTH, SCREEN_HEIGHT));
-				s.ui->updateDifferent(s.health, s.stamina, Global::GetInstance().topLeft.y + viewChanged);
+				v->reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y + viewChangedY, SCREEN_WIDTH, SCREEN_HEIGHT));
+				s.updateUI(sf::Vector2f(0, viewChangedY));
 			}
 		}
 		else if(utility[6])
 		{
-			viewChanged += viewDifference;
-			if(viewChanged > Global::GetInstance().yOffset * 4 && viewChanged > 0)
+			viewChangedY += viewDifference;
+			if(viewChangedY > Global::GetInstance().yOffset * 4 && viewChangedY > 0)
 			{
 				viewDifference = 0;
-				viewChanged = Global::GetInstance().yOffset * 4;
+				viewChangedY = Global::GetInstance().yOffset * 4;
 			}
 			Global::GetInstance().topLeft.y += viewDifference;
 			if(s.atTopEdge || !s.atTheBottom)
 			{
-				v->reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y + viewChanged, SCREEN_WIDTH, SCREEN_HEIGHT));
-				s.ui->updateDifferent(s.health, s.stamina, Global::GetInstance().topLeft.y + viewChanged);
+				v->reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y + viewChangedY, SCREEN_WIDTH, SCREEN_HEIGHT));
+				s.updateUI(sf::Vector2f(0, viewChangedY));
 			}
-		}		
+		}
+		else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::N))
+		{
+			viewChangedY = rand() % 50;
+			viewChangedX = rand() % 50;
+			v->reset(sf::FloatRect(Global::GetInstance().topLeft.x + viewChangedX, Global::GetInstance().topLeft.y + viewChangedY, SCREEN_WIDTH, SCREEN_HEIGHT));
+			s.updateUI(sf::Vector2f(viewChangedX, viewChangedY));
+		}
 		else
 		{
-			Global::GetInstance().topLeft.y -= viewChanged;
-			viewChanged = 0;
+			Global::GetInstance().topLeft.y -= viewChangedY;
+			viewChangedY = 0;
+			viewChangedX = 0;
 		}
 
 		//std::cout << viewChanged << std::endl;
@@ -291,7 +301,8 @@ void InputManager::viewMove(sf::View* v, Player& s, float deltaTime)
 	}
 	else
 	{
-		Global::GetInstance().topLeft.y -= viewChanged;
-		viewChanged = 0;
+		Global::GetInstance().topLeft.y -= viewChangedY;
+		viewChangedY = 0;
 	}
+	
 }

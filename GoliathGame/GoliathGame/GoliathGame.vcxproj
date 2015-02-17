@@ -114,6 +114,8 @@
     <ClCompile Include="LookingState.cpp" />
     <ClCompile Include="MoveCommand.cpp" />
     <ClCompile Include="OnGroundState.cpp" />
+    <ClCompile Include="Particle.cpp" />
+    <ClCompile Include="ParticleEmitter.cpp" />
     <ClCompile Include="PauseGameState.cpp" />
     <ClCompile Include="PlayerInventory.cpp" />
     <ClCompile Include="PopOut.cpp" />
@@ -126,6 +128,7 @@
     <ClCompile Include="RunCommand.cpp" />
     <ClCompile Include="RunningState.cpp" />
     <ClCompile Include="Section.cpp" />
+    <ClCompile Include="LoadingState.cpp" />
     <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="SwitchWeaponCommand.cpp" />
     <ClCompile Include="Sword.cpp" />
@@ -166,13 +169,17 @@
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="JumpCommand.h" />
     <ClInclude Include="JumpingState.h" />
+    <ClInclude Include="LayerStruct.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="LevelSelectState.h" />
+    <ClInclude Include="LoadingState.h" />
     <ClInclude Include="LookCommand.h" />
     <ClInclude Include="LookingState.h" />
     <ClInclude Include="MoveCommand.h" />
     <ClInclude Include="Observer.h" />
     <ClInclude Include="OnGroundState.h" />
+    <ClInclude Include="Particle.h" />
+    <ClInclude Include="ParticleEmitter.h" />
     <ClInclude Include="PauseGameState.h" />
     <ClInclude Include="PlayerInventory.h" />
     <ClInclude Include="PopOut.h" />
@@ -182,6 +189,7 @@
     <ClInclude Include="PhysicsManager.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Projectile.h" />
+    <ClInclude Include="RoomStruct.h" />
     <ClInclude Include="RunCommand.h" />
     <ClInclude Include="RunningState.h" />
     <ClInclude Include="Section.h" />

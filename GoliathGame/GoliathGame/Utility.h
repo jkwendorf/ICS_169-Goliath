@@ -44,3 +44,4 @@ inline float max(float& val, float& max)
 {
 	return val > max ? val : max;
 }
+

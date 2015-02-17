@@ -30,8 +30,7 @@ void Global::CleanUp()
 	delete inventory;
 }
 
-void Global::ParseXML() 
-{
+void Global::ParseXML() {
 	pugi::xml_document doc;
 
 	pugi::xml_parse_result result = doc.load_file("Levels.xml");
@@ -39,8 +38,7 @@ void Global::ParseXML()
 
 	pugi::xml_node gameNode = doc.child("Game");
 
-	for(pugi::xml_node level = gameNode.child("Level"); level; level = level.next_sibling("Level")) 
-	{
+	for(pugi::xml_node level = gameNode.child("Level"); level; level = level.next_sibling("Level")) {
 		std::cout << "Level Number: " << level.attribute("number").value() << std::endl;
 		//std::string str = "Level ";st
 		std::string levelNumber = level.attribute("number").as_string();
@@ -54,10 +52,19 @@ void Global::ParseXML()
 		for (pugi::xml_node room = level.child("Room"); room; room = room.next_sibling("Room")) {
 			std::cout << "Room Number: " << room.attribute("number").value() << std::endl;
 			std::string roomNumber = room.attribute("number").as_string();
-			
-			std::string str2 = "Level " + levelNumber + " Room " + roomNumber;
-			int roomSize = room.attribute("size").as_int();
-			roomSizes[str2] = roomSize;
+			std::string levelNumber = room.parent().attribute("number").as_string();
+			std::string str2 = "Level"+ levelNumber + "Room" + roomNumber;
+			RoomStruct roomStruct;
+			roomStruct.roomSize = room.attribute("size").as_int();
+			roomStruct.nonMovinglayer = room.attribute("nonMoving").as_string();
+			for (pugi::xml_node layer = room.child("MovingLayer"); layer; layer = layer.next_sibling("MovingLayer"))
+			{
+				LayerStruct l;
+				l.imageName = layer.attribute("image").as_string();
+				l.scale = sf::Vector2f(layer.attribute("velScaleX").as_float(), layer.attribute("velScaleY").as_float());
+				roomStruct.movingLayers.push_back(l);
+			}
+			roomSizes[str2] = roomStruct;
 			roomTileSheets[str2] = tilesheetName;
 			//std::cout << std::endl;
 		}
