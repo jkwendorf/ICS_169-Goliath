@@ -7,7 +7,7 @@
 Player::Player() 
 	: BaseObject(0), grappleInProgress(false), facingRight(true),running(false), isVaulting(false), 
 	isHanging(false), shouldHang(false), health(Global::GetInstance().basePlayerStats[0]), 
-	stamina(Global::GetInstance().basePlayerStats[1]),	weaponCooldown(Global::GetInstance().basePlayerStats[4]), bottomPoint(0),
+	stamina(Global::GetInstance().basePlayerStats[1]), weaponCooldown(Global::GetInstance().basePlayerStats[4]), bottomPoint(0),
 	deathTimer(0.0f), currentState(nullptr), collidingLeft(false), collidingRight(false)
 {
 	vel = sf::Vector2f(0.0,0.0);

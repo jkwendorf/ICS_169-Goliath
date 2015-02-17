@@ -30,7 +30,8 @@ void Global::CleanUp()
 	delete inventory;
 }
 
-void Global::ParseXML() {
+void Global::ParseXML() 
+{
 	pugi::xml_document doc;
 
 	pugi::xml_parse_result result = doc.load_file("Levels.xml");
@@ -38,7 +39,8 @@ void Global::ParseXML() {
 
 	pugi::xml_node gameNode = doc.child("Game");
 
-	for(pugi::xml_node level = gameNode.child("Level"); level; level = level.next_sibling("Level")) {
+	for(pugi::xml_node level = gameNode.child("Level"); level; level = level.next_sibling("Level")) 
+	{
 		std::cout << "Level Number: " << level.attribute("number").value() << std::endl;
 		//std::string str = "Level ";st
 		std::string levelNumber = level.attribute("number").as_string();

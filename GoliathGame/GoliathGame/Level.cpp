@@ -14,7 +14,7 @@ Level::Level(int levelNumber, int roomNumber)
 {
 	p.init(collisionManager, new JumpingState());
 	currentRoom = new Room(levelNumber, roomNumber, enemyList, arrowTileList, destructTileList);
-	background.setTexture(*TextureManager::GetInstance().retrieveTexture("banditCity"));
+	background.setTexture(*TextureManager::GetInstance().retrieveTexture("bandit canyon level"));
 	sf::Color color = background.getColor();
 	background.setColor(sf::Color(color.r, color.g, color.b, 200));
 	background.setPosition(-75,75);
@@ -369,7 +369,7 @@ void Level::draw(sf::RenderWindow& window)
 	//window.draw(r);
 	window.draw(background);
 
-	window.draw(Global::GetInstance().testingRect);
+	//window.draw(Global::GetInstance().testingRect);
 
 	currentRoom->draw(window);
 	p.draw(window);

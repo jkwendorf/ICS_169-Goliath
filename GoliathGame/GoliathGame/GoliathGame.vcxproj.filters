@@ -201,6 +201,9 @@
     <ClCompile Include="HookShot.cpp">
       <Filter>Source Files\Player</Filter>
     </ClCompile>
+    <ClCompile Include="Background.cpp">
+      <Filter>Source Files\Level Stuff</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="State.h">
@@ -391,6 +394,9 @@
     </ClInclude>
     <ClInclude Include="UserInterface.h">
       <Filter>Header Files\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Background.h">
+      <Filter>Header Files\Level Stuff</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

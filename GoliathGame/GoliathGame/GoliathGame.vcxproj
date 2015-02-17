@@ -88,6 +88,7 @@
     <ClCompile Include="AttackCommand.cpp" />
     <ClCompile Include="AttackState.cpp" />
     <ClCompile Include="AudioManager.cpp" />
+    <ClCompile Include="Background.cpp" />
     <ClCompile Include="BaseObject.cpp" />
     <ClCompile Include="Boss.cpp" />
     <ClCompile Include="Button.cpp" />
@@ -140,6 +141,7 @@
     <ClInclude Include="AttackCommand.h" />
     <ClInclude Include="AttackState.h" />
     <ClInclude Include="AudioManager.h" />
+    <ClInclude Include="Background.h" />
     <ClInclude Include="BaseGameScreen.h" />
     <ClInclude Include="BaseObject.h" />
     <ClInclude Include="BaseState.h" />
