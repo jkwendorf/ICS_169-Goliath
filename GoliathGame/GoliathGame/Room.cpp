@@ -151,17 +151,11 @@ void Room::GetNearTiles(sf::FloatRect& rect, std::vector<Tile*>& nearTiles, bool
 void Room::update(float deltaTime)
 {
 	bg.update(deltaTime);
-	//player.update(deltaTime);
-	//for(int i = 0; i < numSect; i++)
-	//{
-	//	sectList[i]->update(deltaTime);
-	//}
 }
 
 void Room::draw(sf::RenderWindow& w)
 {
 	bg.draw(w);
-	//player.draw(w);
 	for(int i = 0; i < numSect; i++)
 	{
 		sectList[i]->draw(w);
