@@ -28,8 +28,8 @@ private:
 	Player p;
 	Room* currentRoom;
 	sf::View view;
-	sf::RenderWindow win;
-	sf::Sprite background, loadingSprite;
+	//sf::RenderWindow win;
+	sf::Sprite loadingSprite;
 	float arrowCool;
 
 	CollisionManager* collisionManager;
@@ -61,4 +61,5 @@ public:
 	//checking if particle works
 	Particle particle;
 	ParticleEmitter particleEmitter;
+	float fixedTime;
 };

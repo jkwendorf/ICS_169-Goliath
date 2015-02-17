@@ -1,0 +1,59 @@
+#include "LoadingState.h"
+#include "StateManager.h"
+
+LoadingState::LoadingState(int level, int room) :
+	levelNumber(level), roomNumber(room)
+{
+	f = new sf::Font();
+
+	if(f->loadFromFile("media/fonts/arial.ttf"))
+	{
+		t.setString("LOADING...");
+		t.setFont(*f);
+		t.setPosition(580, 320);
+	}
+	shouldQuit = false;
+}
+
+LoadingState::~LoadingState()
+{
+}
+
+void LoadingState::DeleteState()
+{
+	delete f;
+}
+
+void LoadingState::update(float deltaTime)
+{
+	StateManager::getInstance().addState(GAME, new GameState(levelNumber, roomNumber), false);
+	StateManager::getInstance().changeToState(GAME, true);
+}
+
+void LoadingState::draw(sf::RenderWindow& window)
+{
+	sf::View v = window.getView();
+	v.reset(sf::FloatRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
+	window.setView(v);
+	window.draw(t);
+}
+
+void LoadingState::handleEvent(sf::Event event)
+{}
+
+void LoadingState::loadContent()
+{
+
+}
+
+void LoadingState::unloadContent()
+{
+	inputCoolDown = 0.25;
+}
+
+void LoadingState::setToQuit()
+{
+	shouldQuit = true;
+}
+
+//once you load a level, return true and change it over

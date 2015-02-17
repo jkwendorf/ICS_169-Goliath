@@ -88,6 +88,7 @@
     <ClCompile Include="AttackCommand.cpp" />
     <ClCompile Include="AttackState.cpp" />
     <ClCompile Include="AudioManager.cpp" />
+    <ClCompile Include="Background.cpp" />
     <ClCompile Include="BaseObject.cpp" />
     <ClCompile Include="Boss.cpp" />
     <ClCompile Include="Button.cpp" />
@@ -127,6 +128,7 @@
     <ClCompile Include="RunCommand.cpp" />
     <ClCompile Include="RunningState.cpp" />
     <ClCompile Include="Section.cpp" />
+    <ClCompile Include="LoadingState.cpp" />
     <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="SwitchWeaponCommand.cpp" />
     <ClCompile Include="Sword.cpp" />
@@ -142,6 +144,7 @@
     <ClInclude Include="AttackCommand.h" />
     <ClInclude Include="AttackState.h" />
     <ClInclude Include="AudioManager.h" />
+    <ClInclude Include="Background.h" />
     <ClInclude Include="BaseGameScreen.h" />
     <ClInclude Include="BaseObject.h" />
     <ClInclude Include="BaseState.h" />
@@ -166,8 +169,10 @@
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="JumpCommand.h" />
     <ClInclude Include="JumpingState.h" />
+    <ClInclude Include="LayerStruct.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="LevelSelectState.h" />
+    <ClInclude Include="LoadingState.h" />
     <ClInclude Include="LookCommand.h" />
     <ClInclude Include="LookingState.h" />
     <ClInclude Include="MoveCommand.h" />
@@ -184,6 +189,7 @@
     <ClInclude Include="PhysicsManager.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Projectile.h" />
+    <ClInclude Include="RoomStruct.h" />
     <ClInclude Include="RunCommand.h" />
     <ClInclude Include="RunningState.h" />
     <ClInclude Include="Section.h" />

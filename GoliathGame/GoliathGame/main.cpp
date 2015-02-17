@@ -26,7 +26,7 @@ int main()
     while (window.isOpen())
     {
 		float deltaTime = deltaTimer.restart().asSeconds();
-		/*time += deltaTime;
+		time += deltaTime;
 		frame++;
 		
 		if(time >= 1.0f)
@@ -34,7 +34,7 @@ int main()
 			time -= 1.0f;
 			std::cout << "Frames: " << frame << std::endl;
 			frame = 0;
-		}*/
+		}
 
         sf::Event event;
         while (window.pollEvent(event))
@@ -49,7 +49,6 @@ int main()
 			if (event.type == sf::Event::LostFocus)
 			{
 				infocus = false;
-				std::cout << "Lost Focus" << std::endl;
 			}
 
 			//infocus = event.type == sf::Event::GainedFocus ? true: false;
@@ -81,8 +80,8 @@ int main()
 	Global::GetInstance().SavePlayer();
 	Global::GetInstance().CleanUp();
 
-	std::cout << "\n Press ENTER to continue...";
-	std::cin.ignore( std::numeric_limits<std::streamsize>::max(), '\n' );
+	//std::cout << "\n Press ENTER to continue...";
+	//std::cin.ignore();
 
     return 0;
 }
