@@ -5,6 +5,6 @@
 struct LayerStruct
 {
 	std::string imageName;
-	float scale;
+	sf::Vector2f scale;
 
 };

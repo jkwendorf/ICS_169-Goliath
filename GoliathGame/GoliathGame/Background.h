@@ -6,7 +6,7 @@
 struct Layer
 {
 	sf::Sprite image;
-	float scale;
+	sf::Vector2f scale;
 	int layerNum;
 };
 
