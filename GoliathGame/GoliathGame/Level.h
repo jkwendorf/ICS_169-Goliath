@@ -61,4 +61,5 @@ public:
 	//checking if particle works
 	Particle particle;
 	ParticleEmitter particleEmitter;
+	float fixedTime;
 };
