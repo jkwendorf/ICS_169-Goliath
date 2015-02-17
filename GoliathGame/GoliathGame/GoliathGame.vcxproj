@@ -128,6 +128,7 @@
     <ClCompile Include="RunCommand.cpp" />
     <ClCompile Include="RunningState.cpp" />
     <ClCompile Include="Section.cpp" />
+    <ClCompile Include="LoadingState.cpp" />
     <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="SwitchWeaponCommand.cpp" />
     <ClCompile Include="Sword.cpp" />
@@ -171,6 +172,7 @@
     <ClInclude Include="LayerStruct.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="LevelSelectState.h" />
+    <ClInclude Include="LoadingState.h" />
     <ClInclude Include="LookCommand.h" />
     <ClInclude Include="LookingState.h" />
     <ClInclude Include="MoveCommand.h" />

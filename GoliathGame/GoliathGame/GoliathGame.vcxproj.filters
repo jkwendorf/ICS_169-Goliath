@@ -210,6 +210,9 @@
     <ClCompile Include="Background.cpp">
       <Filter>Source Files\Level Stuff</Filter>
     </ClCompile>
+    <ClCompile Include="LoadingState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="State.h">
@@ -415,6 +418,9 @@
     </ClInclude>
     <ClInclude Include="LayerStruct.h">
       <Filter>Header Files\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadingState.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
