@@ -413,6 +413,9 @@
     <ClInclude Include="Background.h">
       <Filter>Header Files\Level Stuff</Filter>
     </ClInclude>
+    <ClInclude Include="LayerStruct.h">
+      <Filter>Header Files\Util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Levels.xml">

@@ -59,7 +59,10 @@ void Global::ParseXML() {
 			roomStruct.nonMovinglayer = room.attribute("nonMoving").as_string();
 			for (pugi::xml_node layer = room.child("MovingLayer"); layer; layer = layer.next_sibling("MovingLayer"))
 			{
-				roomStruct.movingLayers.push_back(layer.attribute("image").as_string());
+				LayerStruct l;
+				l.imageName = layer.attribute("image").as_string();
+				l.scale = layer.attribute("velScale").as_float();
+				roomStruct.movingLayers.push_back(l);
 			}
 			roomSizes[str2] = roomStruct;
 			roomTileSheets[str2] = tilesheetName;

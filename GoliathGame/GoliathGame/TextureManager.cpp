@@ -5,6 +5,7 @@
 
 TextureManager::~TextureManager()
 {
+	std::cout << "Destructor for Texture manager" << std::endl;
 	for(std::map<std::string, sf::Texture*>::iterator iterator = texManager.begin(); iterator != texManager.end(); iterator++) 
 	{
 		delete iterator->second;

@@ -183,6 +183,7 @@ void Level::update(float deltaTime)
 		{
 			p.resetPosition(currentRoom->getStartPos());
 			p.resetHealth();
+			currentRoom->bg.reset();
 		}
 
 		/*if((!p.hShot.hookedOnSomething || !p.hShot.grappleInProgress) && !p.isHanging && !p.isVaulting)
