@@ -97,7 +97,8 @@ void Level::update(float deltaTime)
 		//std::cout << "ScreenShake should occur" << std::endl;
 		viewChangeOffset.x = rand() % 50 - 25;
 		viewChangeOffset.y = rand() % 50 - 25;
-		view.move(viewChangeOffset);
+		view.reset(sf::FloatRect(Global::GetInstance().topLeft.x + viewChangeOffset.x, Global::GetInstance().topLeft.y + viewChangeOffset.y, SCREEN_WIDTH, SCREEN_HEIGHT));
+		//view.move(viewChangeOffset);
 		p.updateUI(viewChangeOffset);
 	}
 	else if(currentScreenShakeCooldown > screenShakeDuration && currentScreenShakeCooldown <= screenShakeCooldown)
