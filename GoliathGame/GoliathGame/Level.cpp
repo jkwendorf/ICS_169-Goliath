@@ -160,7 +160,8 @@ void Level::update(float deltaTime)
 				else if(hookedTile->getTileNum() == 7)
 					p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width/2 + GAME_TILE_DIM - 5, hookedTile->top - hookedTile->height/2 - 28));
 				else
-					p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width/2, hookedTile->top + 5));
+					//p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width/2, hookedTile->top + 5));
+					p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width/2, hookedTile->top + hookedTile->height));
 
 				//p.newState = new GrapplingState();
 				delete p.currentState;
@@ -183,6 +184,8 @@ void Level::update(float deltaTime)
 		{
 			p.resetPosition(currentRoom->getStartPos());
 			p.resetHealth();
+			delete p.currentState;
+			p.currentState = new JumpingState();
 		}
 
 		/*if((!p.hShot.hookedOnSomething || !p.hShot.grappleInProgress) && !p.isHanging && !p.isVaulting)
