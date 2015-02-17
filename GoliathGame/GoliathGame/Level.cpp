@@ -97,7 +97,8 @@ void Level::update(float deltaTime)
 		//std::cout << "ScreenShake should occur" << std::endl;
 		viewChangeOffset.x = rand() % 50 - 25;
 		viewChangeOffset.y = rand() % 50 - 25;
-		view.move(viewChangeOffset);
+		view.reset(sf::FloatRect(Global::GetInstance().topLeft.x + viewChangeOffset.x, Global::GetInstance().topLeft.y + viewChangeOffset.y, SCREEN_WIDTH, SCREEN_HEIGHT));
+		//view.move(viewChangeOffset);
 		p.updateUI(viewChangeOffset);
 	}
 	else if(currentScreenShakeCooldown > screenShakeDuration && currentScreenShakeCooldown <= screenShakeCooldown)
@@ -160,7 +161,8 @@ void Level::update(float deltaTime)
 				else if(hookedTile->getTileNum() == 7)
 					p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width/2 + GAME_TILE_DIM - 5, hookedTile->top - hookedTile->height/2 - 28));
 				else
-					p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width/2, hookedTile->top + 5));
+					//p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width/2, hookedTile->top + 5));
+					p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width/2, hookedTile->top + hookedTile->height));
 
 				//p.newState = new GrapplingState();
 				delete p.currentState;
@@ -183,6 +185,8 @@ void Level::update(float deltaTime)
 		{
 			p.resetPosition(currentRoom->getStartPos());
 			p.resetHealth();
+			delete p.currentState;
+			p.currentState = new JumpingState();
 		}
 
 		/*if((!p.hShot.hookedOnSomething || !p.hShot.grappleInProgress) && !p.isHanging && !p.isVaulting)
