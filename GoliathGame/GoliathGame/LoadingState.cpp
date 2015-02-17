@@ -10,7 +10,8 @@ LoadingState::LoadingState(int level, int room) :
 	{
 		t.setString("LOADING...");
 		t.setFont(*f);
-		t.setPosition(580, 320);
+		t.setCharacterSize(50);
+		t.setPosition(520, 320);
 	}
 	shouldQuit = false;
 }
