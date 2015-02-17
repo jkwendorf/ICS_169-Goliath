@@ -91,15 +91,15 @@ void Level::update(float deltaTime)
 	particle.update(deltaTime);
 	currentScreenShakeCooldown += deltaTime;
 
-
+	
 	//SCREENSHAKE CODE
 	if(currentScreenShakeCooldown <= screenShakeDuration)
 	{
 		//std::cout << "ScreenShake should occur" << std::endl;
-		viewChangeOffset.x = rand() % 50 - 25;
-		viewChangeOffset.y = rand() % 50 - 25;
-		view.move(viewChangeOffset);
-		p.updateUI(viewChangeOffset);
+	//	viewChangeOffset.x = rand() % 50 - 25;
+	//	viewChangeOffset.y = rand() % 50 - 25;
+	//	view.move(viewChangeOffset);
+	//	p.updateUI(viewChangeOffset);
 	}
 	else if(currentScreenShakeCooldown > screenShakeDuration && currentScreenShakeCooldown <= screenShakeCooldown)
 	{
@@ -112,7 +112,7 @@ void Level::update(float deltaTime)
 		currentScreenShakeCooldown = 0;
 	}
 
-
+	
 
 	if((p.sprite.getPosition().y + PLAYER_DIM_Y/2) >= currentRoom->getroomHeight())
 	{
