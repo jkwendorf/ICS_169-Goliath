@@ -5,7 +5,7 @@
 Background::Background(int levelNum, int roomNum)
 	:nonMovingLayer(*TextureManager::GetInstance().retrieveTexture(
 	Global::GetInstance().roomSizes.at("Level"+ std::to_string(levelNum) + "Room" + std::to_string(roomNum)).nonMovinglayer)),
-	vel(-100.0f, 0.0f)
+	vel(0.0f, -100.0f), clock()
 {
 	RoomStruct temp = Global::GetInstance().roomSizes.at("Level"+ std::to_string(levelNum) + "Room" + std::to_string(roomNum));
 	for (int i = 0; i < temp.movingLayers.size(); i++)
@@ -13,9 +13,11 @@ Background::Background(int levelNum, int roomNum)
 		Layer l;
 		l.image = sf::Sprite(*TextureManager::GetInstance().retrieveTexture(temp.movingLayers[i].imageName));
 		l.image.setPosition(0.0f, 0.0f);
+		l.image.scale(2.0f, 2.0f);
 		l.scale = temp.movingLayers[i].scale;
 		movingLayers.push_back(l);
 	}
+	nonMovingLayer.setPosition(320.0f, 0.0f);
 }
 
 
@@ -40,6 +42,17 @@ void Background::update(float deltaTime)
 	{
 		float testing = vel.x * movingLayers[i].scale * deltaTime;
 		movingLayers[i].image.move(vel * movingLayers[i].scale * deltaTime);
+		if (movingLayers[i].image.getPosition().y + movingLayers[i].image.getGlobalBounds().height 
+			< nonMovingLayer.getPosition().y + nonMovingLayer.getGlobalBounds().height)
+		{
+			//reset();
+			vel.y *= -1;
+			std::cout << "Time: " << clock.restart().asSeconds() << std::endl;
+
+		}
+		else if (movingLayers[i].image.getPosition().y > nonMovingLayer.getPosition().y) {
+			vel.y *= -1;
+		}
 	}
 }
 	
