@@ -181,19 +181,21 @@ void Section::update(float deltaTime)
 void Section::draw(sf::RenderWindow& w)
 {
 	sf::FloatRect window(w.getView().getCenter().x - SCREEN_WIDTH/2, w.getView().getCenter().y - SCREEN_HEIGHT/2,
-	SCREEN_WIDTH, SCREEN_HEIGHT);
+						SCREEN_WIDTH, SCREEN_HEIGHT);
 
-	//std::cout << "Viewport: " << w.getViewport(w.getView()).left << " , " << w.getViewport(w.getView()).top << std::endl;
-	global = Global::GetInstance();
+	//global = Global::GetInstance();
 	
 	for(int i = 0; i < gDim.x * gDim.y; i++)
 	{
 		if(grid1[i]->getTileNum() >= 0)
 		{
-			if(window.intersects(sf::FloatRect(grid1[i]->left, grid1[i]->top, grid1[i]->width, grid1[i]->height)))
+			if(!(window.left > grid1[i]->left + GAME_TILE_DIM ||
+				window.left + SCREEN_WIDTH < grid1[i]->left ||
+				window.top > grid1[i]->top + GAME_TILE_DIM ||
+				window.top + SCREEN_HEIGHT < grid1[i]->top))
 			{
-				global.currentTileSheet[grid1[i]->getTileNum()]->setPosition(sf::Vector2f(grid1[i]->left, grid1[i]->top));
-				w.draw(*global.currentTileSheet[grid1[i]->getTileNum()]);
+				Global::GetInstance().currentTileSheet[grid1[i]->getTileNum()]->setPosition(sf::Vector2f(grid1[i]->left, grid1[i]->top));
+				w.draw(*Global::GetInstance().currentTileSheet[grid1[i]->getTileNum()]);
 			}
 		}
 	//if(grid[i]->objectNum != -999)
