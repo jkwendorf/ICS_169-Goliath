@@ -47,7 +47,7 @@ void Background::update(float deltaTime)
 		{
 			//reset();
 			vel.y *= -1;
-
+		
 		}
 		else if (movingLayers[i].image.getPosition().y > nonMovingLayer.getPosition().y) {
 			vel.y *= -1;
