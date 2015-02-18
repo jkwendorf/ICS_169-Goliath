@@ -6,10 +6,12 @@
 #include "EndGameState.h"
 #include "PauseGameState.h"
 #include "LevelSelectState.h"
+#include "ControlsState.h"
 
 enum StateEnum
 {
 	MAIN_MENU,
+	CONTROLS,
 	GAME,
 	TRANSITION,
 	PAUSE_GAME,
