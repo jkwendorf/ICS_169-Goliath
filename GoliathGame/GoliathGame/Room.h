@@ -14,6 +14,7 @@ private:
 	Section** sectList;
 	int numSect, roomNum, roomWidth, roomHeight;
 	bool loadedTitles;
+	Global g;
 	
 	sf::Vector2f startPos;
 	sf::Music roomMusic;
