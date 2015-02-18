@@ -180,13 +180,13 @@ void Section::update(float deltaTime)
 
 void Section::draw(sf::RenderWindow& w)
 {
-	Global g = Global::GetInstance();
+	Global global = Global::GetInstance();
 	for(int i = 0; i < gDim.x * gDim.y; i++)
 	{
 		if(grid1[i]->getTileNum() >= 0)
 		{
-			g.currentTileSheet[grid1[i]->getTileNum()]->setPosition(sf::Vector2f(grid1[i]->left, grid1[i]->top));
-			w.draw(*g.currentTileSheet[grid1[i]->getTileNum()]);
+			global.currentTileSheet[grid1[i]->getTileNum()]->setPosition(sf::Vector2f(grid1[i]->left, grid1[i]->top));
+			w.draw(*global.currentTileSheet[grid1[i]->getTileNum()]);
 		}
 		//if(grid[i]->objectNum != -999)
 		//	grid[i]->draw(w);
