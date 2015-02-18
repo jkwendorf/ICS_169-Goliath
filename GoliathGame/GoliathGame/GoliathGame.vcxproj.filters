@@ -213,6 +213,9 @@
     <ClCompile Include="LoadingState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ControlsState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="State.h">
@@ -420,6 +423,9 @@
       <Filter>Header Files\Util</Filter>
     </ClInclude>
     <ClInclude Include="LoadingState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ControlsState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

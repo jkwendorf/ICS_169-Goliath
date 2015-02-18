@@ -12,7 +12,8 @@ MainMenuState::MainMenuState(void)
 		bM = new ButtonManager(sf::Vector2f(SCREEN_WIDTH/2 - 100, SCREEN_HEIGHT/4 - 33), 15, sf::Vector2f(200, 66), TextureManager::GetInstance().retrieveTexture("ButtonTest"), f); 
 		bM->createButton("Play Game", [] {StateManager::getInstance().addState(TRANSITION, new LoadingState(1, 1), true);});
 		bM->createButton("Level Select", [] {StateManager::getInstance().changeToState(LEVEL_SELECT, false);});
-		bM->createButton("Options", [] {});
+		//bM->createButton("Options", [] {});
+		bM->createButton("Controls", [] {StateManager::getInstance().changeToState(CONTROLS, false);});
 		bM->createButton("Quit", [&] {setToQuit();});
 	}
 
