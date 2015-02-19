@@ -48,7 +48,8 @@ Player::Player()
 	ui = new UserInterface(health, stamina);
 	SetUpEffects();
 
-	rectangle = sf::RectangleShape(sf::Vector2f(36, 36));
+	hitbox = sf::RectangleShape(sf::Vector2f(GAME_TILE_DIM-10, PLAYER_DIM_Y-10));
+	hitbox.setOrigin(hitbox.getLocalBounds().width/2, hitbox.getLocalBounds().height/2);
 }
 
 void Player::init(CollisionManager* collisionManager_, BaseState* startState)
@@ -204,8 +205,8 @@ void Player::update(float deltaTime)
 
 	//Animated sprite update
 	player.update(deltaTime, sprite, 1, facingRight);
-	rectangle.setPosition(sprite.getPosition().x - 20, sprite.getPosition().y - 40);
-	rectangle.setFillColor(sf::Color::Blue);
+	hitbox.setPosition(sprite.getPosition().x, sprite.getPosition().y);
+	hitbox.setFillColor(sf::Color::Blue);
 }
 
 void Player::takeDamage()
@@ -289,7 +290,7 @@ void Player::draw(sf::RenderWindow& window)
 			ammo[x].draw(window);
 	
 	window.draw(crosshair);
-	//window.draw(rectangle);
+	window.draw(hitbox);
 	
 	/* //TESTING CIRCLE
 	sf::CircleShape circle = sf::CircleShape(5.0);
