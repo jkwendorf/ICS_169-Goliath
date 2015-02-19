@@ -61,11 +61,17 @@ bool Room::CheckSectionOnScreen(int sectionNum)
 	return sectList[sectionNum]->inWindow();
 }
 
-void Room::GetCollidableTiles(BaseObject& obj, sf::Vector2f& dim, std::vector<Tile*>& nearTiles)
+void Room::GetCollidableTiles(BaseObject& obj, sf::Vector2f& dim, std::vector<Tile*>& nearTiles, bool player)
 {
 	//sf::FloatRect rect(sf::Vector2f(obj.sprite.getPosition().x - dim.x/2, obj.sprite.getPosition().y - dim.y/2), sf::Vector2f(dim.x, dim.y));
 	//std::cout << obj.sprite.getGlobalBounds().left << ", " << obj.sprite.getGlobalBounds().top << ", " << obj.sprite.getGlobalBounds().width << ", ";
 	//std::cout <<  obj.sprite.getGlobalBounds().height << std::endl;
+	if(player)
+	{
+		//std::cout << obj.hitbox.getGlobalBounds().left << ", " << obj.hitbox.getGlobalBounds().top << ", " << obj.hitbox.getGlobalBounds().width << ", ";
+		//std::cout <<  obj.hitbox.getGlobalBounds().height << std::endl;
+		GetNearTiles(obj.hitbox.getGlobalBounds(), nearTiles);
+	}
 	GetNearTiles(obj.sprite.getGlobalBounds(), nearTiles);
 	return;
 }

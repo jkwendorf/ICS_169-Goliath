@@ -164,11 +164,11 @@ void CollisionManager::checkPlayerSwordToEnemies(Sword s, Enemy* enemy)
 
 void CollisionManager::checkEnemyBulletToPlayer(Projectile p, Player* player)
 {
-	if(sqrt(pow(p.rectangle.getPosition().x - player->rectangle.getPosition().x, 2) + 
-		pow(p.rectangle.getPosition().y - player->rectangle.getPosition().y, 2)) < 50 && p.moving)
+	if(sqrt(pow(p.rectangle.getPosition().x - player->hitbox.getPosition().x, 2) + 
+		pow(p.rectangle.getPosition().y - player->hitbox.getPosition().y, 2)) < 50 && p.moving)
 		{
 			std::cout << p.rectangle.getPosition().x << " " << p.rectangle.getPosition().y << std::endl;
-			std::cout << player->rectangle.getPosition().x << " " << player->rectangle.getPosition().x << std::endl;
+			std::cout << player->hitbox.getPosition().x << " " << player->hitbox.getPosition().x << std::endl;
 			player->health -= p.damage;
 			p.moving = false;
 		}
@@ -197,11 +197,11 @@ bool CollisionManager::isGrappleListEmpty()
 
 bool CollisionManager::checkIfEnemyInRange(Projectile p, Player* player)
 {
-	if(sqrt(pow(p.rectangle.getPosition().x - player->rectangle.getPosition().x, 2) + 
-		pow(p.rectangle.getPosition().y - player->rectangle.getPosition().y, 2)) < 50 && p.moving)
+	if(sqrt(pow(p.rectangle.getPosition().x - player->hitbox.getPosition().x, 2) + 
+		pow(p.rectangle.getPosition().y - player->hitbox.getPosition().y, 2)) < 50 && p.moving)
 	{
 		std::cout << p.rectangle.getPosition().x << " " << p.rectangle.getPosition().y << std::endl;
-		std::cout << player->rectangle.getPosition().x << " " << player->rectangle.getPosition().x << std::endl;
+		std::cout << player->hitbox.getPosition().x << " " << player->hitbox.getPosition().x << std::endl;
 		std::cout << "Player was hit by arrow" << std::endl;
 		return true;
 	}

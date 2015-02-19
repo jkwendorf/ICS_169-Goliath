@@ -135,7 +135,7 @@ void Level::update(float deltaTime)
 	if(!changeScreen)
 	{
 
-		currentRoom->GetCollidableTiles(p, sf::Vector2f(PLAYER_DIM_X, PLAYER_DIM_Y), nearTiles);
+		currentRoom->GetCollidableTiles(p, sf::Vector2f(PLAYER_DIM_X, PLAYER_DIM_Y), nearTiles, true);
 
 		collisionManager->setNearByTiles(nearTiles);
 		collisionManager->setGrapplableTiles(nearTiles2);
