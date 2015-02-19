@@ -10,7 +10,7 @@ Level::Level(void)
 Level::Level(int levelNumber, int roomNumber)
 	:changeScreen(false), levelNum(levelNumber), p(), collisionManager(new CollisionManager()), inputManager(),
 	maxRooms(Global::GetInstance().levelSizes.at("Level " + std::to_string(levelNum))), loading(1.0),
-	enemyAI(collisionManager), arrowCool(2.0f), screenShakeDuration(.5f), screenShakeCooldown(4.0f), currentScreenShakeCooldown(0.0f),
+	enemyAI(collisionManager), arrowCool(2.0f), screenShakeDuration(.65f), screenShakeCooldown(10.0f), currentScreenShakeCooldown(0.0f),
 	arrowsCanFire(true), fixedTime(0.0f)
 {
 	p.init(collisionManager, new JumpingState());
@@ -30,7 +30,7 @@ Level::Level(int levelNumber, int roomNumber)
 	setArrowTileArrows();
 	//realEnemyList.push_back(new Enemy("Test",200,200, 10));
 	particle = Particle("rock", sf::Vector2f(50, 100), sf::Vector2f(0, 1), 5, 250);
-	particleEmitter = ParticleEmitter("rock", sf::Vector2f(0, -400), sf::Vector2f(0, 1), 5, 350, 30);
+	particleEmitter = ParticleEmitter("rock", sf::Vector2f(0, -400), sf::Vector2f(0, 1), 10, 350, 30);
 }
 
 Level::~Level(void)
@@ -95,6 +95,7 @@ void Level::update(float deltaTime)
 	if(currentScreenShakeCooldown <= screenShakeDuration)
 	{
 		//std::cout << "ScreenShake should occur" << std::endl;
+		//currentRoom->bg.setScale(0, 0.0f, 1.0f);
 		viewChangeOffset.x = rand() % 50 - 25;
 		viewChangeOffset.y = rand() % 50 - 25;
 		view.reset(sf::FloatRect(Global::GetInstance().topLeft.x + viewChangeOffset.x, Global::GetInstance().topLeft.y + viewChangeOffset.y, SCREEN_WIDTH, SCREEN_HEIGHT));
@@ -106,6 +107,7 @@ void Level::update(float deltaTime)
 		//std::cout << "Should be normal view" << std::endl;
 		view.reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y, SCREEN_WIDTH, SCREEN_HEIGHT));
 		p.updateUI();
+		//currentRoom->bg.setScale(0, 0.0f, -1.0f);
 	}
 	else if(currentScreenShakeCooldown >= screenShakeCooldown)
 	{
@@ -133,7 +135,7 @@ void Level::update(float deltaTime)
 	if(!changeScreen)
 	{
 
-		currentRoom->GetCollidableTiles(p, sf::Vector2f(PLAYER_DIM_X, PLAYER_DIM_Y), nearTiles);
+		currentRoom->GetCollidableTiles(p, sf::Vector2f(PLAYER_DIM_X, PLAYER_DIM_Y), nearTiles, true);
 
 		collisionManager->setNearByTiles(nearTiles);
 		collisionManager->setGrapplableTiles(nearTiles2);
@@ -187,7 +189,7 @@ void Level::update(float deltaTime)
 			p.resetHealth();
 			delete p.currentState;
 			p.currentState = new JumpingState();
-			currentRoom->bg.reset();
+			//currentRoom->bg.reset();
 		}
 
 		/*if((!p.hShot.hookedOnSomething || !p.hShot.grappleInProgress) && !p.isHanging && !p.isVaulting)

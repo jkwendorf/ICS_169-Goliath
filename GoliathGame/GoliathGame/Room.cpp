@@ -5,12 +5,14 @@ Room::Room(int levelNumber, int roomNumber, std::vector<std::shared_ptr<Enemy>> 
 	:roomNum(roomNumber), numSect(Global::GetInstance().roomSizes.at("Level" + std::to_string(levelNumber) + "Room" + std::to_string(roomNumber)).roomSize),
 	roomWidth(0), roomHeight(0), loadedTitles(false), bg(levelNumber, roomNumber)
 {
+	
 	LoadRoom(levelNumber, enemyList, arrowTileList, destructTileList);
 	//Music
 	if (!roomMusic.openFromFile("media/sound/Testlevel1SoTC.wav"))
 	{
 		std::cout << "Error for loading file" << std::endl;
 	}
+	g = Global::GetInstance();
 	roomMusic.setLoop(true);
 	roomMusic.play();
 }
@@ -59,11 +61,17 @@ bool Room::CheckSectionOnScreen(int sectionNum)
 	return sectList[sectionNum]->inWindow();
 }
 
-void Room::GetCollidableTiles(BaseObject& obj, sf::Vector2f& dim, std::vector<Tile*>& nearTiles)
+void Room::GetCollidableTiles(BaseObject& obj, sf::Vector2f& dim, std::vector<Tile*>& nearTiles, bool player)
 {
 	//sf::FloatRect rect(sf::Vector2f(obj.sprite.getPosition().x - dim.x/2, obj.sprite.getPosition().y - dim.y/2), sf::Vector2f(dim.x, dim.y));
 	//std::cout << obj.sprite.getGlobalBounds().left << ", " << obj.sprite.getGlobalBounds().top << ", " << obj.sprite.getGlobalBounds().width << ", ";
 	//std::cout <<  obj.sprite.getGlobalBounds().height << std::endl;
+	if(player)
+	{
+		//std::cout << obj.hitbox.getGlobalBounds().left << ", " << obj.hitbox.getGlobalBounds().top << ", " << obj.hitbox.getGlobalBounds().width << ", ";
+		//std::cout <<  obj.hitbox.getGlobalBounds().height << std::endl;
+		GetNearTiles(obj.hitbox.getGlobalBounds(), nearTiles);
+	}
 	GetNearTiles(obj.sprite.getGlobalBounds(), nearTiles);
 	return;
 }
@@ -167,7 +175,7 @@ void Room::checkUpperLeftSameGrid(int currentGrid, sf::FloatRect& rect, const sf
 													   const sf::Vector2f& botRight, std::vector<Tile*>& nearTiles, 
 													   bool checkBoxOnly, bool grapple)
 {
-	Global g = Global::GetInstance();
+	
 	if(g.checkPoint(topLeft, sf::FloatRect(sectList[currentGrid]->getOffset(), sf::Vector2f(sectList[currentGrid]->getWidth(), sectList[currentGrid]->getHeight()))))
 	{
 		//Check to see if the bottom right is in the same grid
@@ -230,7 +238,6 @@ void Room::checkLowerRightNextGrid(int currentGrid, sf::FloatRect& rect, const s
 														const sf::Vector2f& botRight, std::vector<Tile*>& nearTiles,
 														bool checkBoxOnly, bool grapple)
 {
-	Global g = Global::GetInstance();
 	//If check to see if it is not the last grid
 	if(currentGrid + 1 < numSect)
 	{
