@@ -17,7 +17,7 @@ void JumpingState::handleInput(Player* player, Command* input)
 	{
 		input->execute();
 	}
-	else if(input->inputCode == GRAPPLE)
+	if(input->inputCode == GRAPPLE)
 		input->execute();
 }
 
