@@ -13,15 +13,29 @@ int main()
 	sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Goliath Game");
 	// JW: Setting the framerate to 30, but this should be set by a global variable
 	window.setFramerateLimit(FPS);
+	window.setVerticalSyncEnabled(true);
 	StateManager::getInstance().addState(MAIN_MENU, new MainMenuState(), true);
 	StateManager::getInstance().addState(LEVEL_SELECT, new LevelSelectState());
+	StateManager::getInstance().addState(CONTROLS, new ControlsState());
 	//StateManager::getInstance().addState(GAME, new GameState());
 	//StateManager::getInstance().addState(END_GAME, new EndGameState());
+
+	int frame = 0;
+	float time = 0;
 
 	sf::Clock deltaTimer;
     while (window.isOpen())
     {
 		float deltaTime = deltaTimer.restart().asSeconds();
+		time += deltaTime;
+		frame++;
+		
+		if(time >= 1.0f)
+		{
+			time -= 1.0f;
+			std::cout << "Frames: " << frame << std::endl;
+			frame = 0;
+		}
 
         sf::Event event;
         while (window.pollEvent(event))
@@ -34,7 +48,10 @@ int main()
 				deltaTime = deltaTimer.restart().asSeconds();
 			}
 			if (event.type == sf::Event::LostFocus)
+			{
 				infocus = false;
+			}
+
 			//infocus = event.type == sf::Event::GainedFocus ? true: false;
 			StateManager::getInstance().getCurrentState()->handleEvent(event);
         }
@@ -50,6 +67,11 @@ int main()
 
 		if(StateManager::getInstance().shouldQuit())
 			window.close();
+		if(StateManager::getInstance().shouldResetTime())
+		{
+			deltaTimer.restart();
+			StateManager::getInstance().setTimeReset(false);
+		}
     }
 
 	window.close();
@@ -59,8 +81,8 @@ int main()
 	Global::GetInstance().SavePlayer();
 	Global::GetInstance().CleanUp();
 
-	std::cout << "\n Press ENTER to continue...";
-	std::cin.ignore( std::numeric_limits<std::streamsize>::max(), '\n' );
+	//std::cout << "\n Press ENTER to continue...";
+	//std::cin.ignore();
 
     return 0;
 }

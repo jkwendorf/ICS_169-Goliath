@@ -134,11 +134,11 @@ void Section::checkGrapple(const sf::Vector2f& p1, const sf::Vector2f& p2, std::
 {
 	sf::Vector2f p3 = sf::Vector2f(p1.x / GAME_TILE_DIM, p1.y / GAME_TILE_DIM);
 	sf::Vector2f p4 = sf::Vector2f(p2.x / GAME_TILE_DIM, p2.y / GAME_TILE_DIM);
-	Global::GetInstance().testingRect.setPosition(p1.x, p1.y);
-	Global::GetInstance().testingRect.setSize(sf::Vector2f(p2.x - p1.x, p2.y - p1.y));
+	//Global::GetInstance().testingRect.setPosition(p1.x, p1.y);
+	//Global::GetInstance().testingRect.setSize(sf::Vector2f(p2.x - p1.x, p2.y - p1.y));
 
-	sf::Vector2f temp = Global::GetInstance().testingRect.getPosition();
-	sf::Vector2f temp2 = Global::GetInstance().testingRect.getSize();
+	//sf::Vector2f temp = Global::GetInstance().testingRect.getPosition();
+	//sf::Vector2f temp2 = Global::GetInstance().testingRect.getSize();
 
 	for(int i = p3.x; i <= p4.x; i++)
 	{
@@ -180,16 +180,26 @@ void Section::update(float deltaTime)
 
 void Section::draw(sf::RenderWindow& w)
 {
-	Global g = Global::GetInstance();
+	sf::FloatRect window(w.getView().getCenter().x - SCREEN_WIDTH/2, w.getView().getCenter().y - SCREEN_HEIGHT/2,
+						SCREEN_WIDTH, SCREEN_HEIGHT);
+
+	//global = Global::GetInstance();
+	
 	for(int i = 0; i < gDim.x * gDim.y; i++)
 	{
 		if(grid1[i]->getTileNum() >= 0)
 		{
-			g.currentTileSheet[grid1[i]->getTileNum()]->setPosition(sf::Vector2f(grid1[i]->left, grid1[i]->top));
-			w.draw(*g.currentTileSheet[grid1[i]->getTileNum()]);
+			if(!(window.left > grid1[i]->left + GAME_TILE_DIM ||
+				window.left + SCREEN_WIDTH < grid1[i]->left ||
+				window.top > grid1[i]->top + GAME_TILE_DIM ||
+				window.top + SCREEN_HEIGHT < grid1[i]->top))
+			{
+				Global::GetInstance().currentTileSheet[grid1[i]->getTileNum()]->setPosition(sf::Vector2f(grid1[i]->left, grid1[i]->top));
+				w.draw(*Global::GetInstance().currentTileSheet[grid1[i]->getTileNum()]);
+			}
 		}
-		//if(grid[i]->objectNum != -999)
-		//	grid[i]->draw(w);
+	//if(grid[i]->objectNum != -999)
+	// grid[i]->draw(w);
 	}
 }
 
@@ -380,3 +390,4 @@ void Section::Tokenize(const std::string& str,
         pos = str.find_first_of(delimiters, lastPos);
     }
 }
+

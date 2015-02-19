@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "Global.h"
 #include "Enemy.h"
+#include "Background.h"
 #include <memory>
 #include <SFML\Audio\Music.hpp>
 
@@ -13,6 +14,8 @@ private:
 	Section** sectList;
 	int numSect, roomNum, roomWidth, roomHeight;
 	bool loadedTitles;
+	Global g;
+	
 	sf::Vector2f startPos;
 	sf::Music roomMusic;
 
@@ -37,11 +40,12 @@ private:
 	void GetNearTiles(sf::FloatRect& player, std::vector<Tile*>& nearTiles, bool checkBoxOnly = false, bool grapple = false);
 
 public:
+	Background bg;
 	//Player player;
 	Room(int levelNumber, int roomNumber, std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList);
 	~Room();
 	
-	void GetCollidableTiles(BaseObject& obj, sf::Vector2f& dim, std::vector<Tile*>& nearTiles);
+	void GetCollidableTiles(BaseObject& obj, sf::Vector2f& dim, std::vector<Tile*>& nearTiles, bool player=false);
 	//These two functions only works for player 
 	int NearInteractableTiles(BaseObject& obj);
 	void GetGrapplableTiles(Player& player, std::vector<Tile*>& nearTiles);

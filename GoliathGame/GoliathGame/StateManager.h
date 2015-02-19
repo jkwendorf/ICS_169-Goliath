@@ -6,10 +6,12 @@
 #include "EndGameState.h"
 #include "PauseGameState.h"
 #include "LevelSelectState.h"
+#include "ControlsState.h"
 
 enum StateEnum
 {
 	MAIN_MENU,
+	CONTROLS,
 	GAME,
 	TRANSITION,
 	PAUSE_GAME,
@@ -36,6 +38,8 @@ public:
 	State* getCurrentState();
 	bool shouldQuit();
 	void DeleteAllStates();
+	bool shouldResetTime();
+	void setTimeReset(bool reset);
 
 private:
 	StateManager(void) {};
@@ -46,5 +50,6 @@ private:
 	std::map<StateEnum, State*> stateMap;
 	State* currentState;
 	StateEnum currentStateEnum;
+	bool resetTime;
 };
 

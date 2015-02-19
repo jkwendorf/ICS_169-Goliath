@@ -53,9 +53,18 @@ void Global::ParseXML() {
 			std::cout << "Room Number: " << room.attribute("number").value() << std::endl;
 			std::string roomNumber = room.attribute("number").as_string();
 			std::string levelNumber = room.parent().attribute("number").as_string();
-			std::string str2 ="Level "+ levelNumber + " Room " + roomNumber;
-			int roomSize = room.attribute("size").as_int();
-			roomSizes[str2] = roomSize;
+			std::string str2 = "Level"+ levelNumber + "Room" + roomNumber;
+			RoomStruct roomStruct;
+			roomStruct.roomSize = room.attribute("size").as_int();
+			roomStruct.nonMovinglayer = room.attribute("nonMoving").as_string();
+			for (pugi::xml_node layer = room.child("MovingLayer"); layer; layer = layer.next_sibling("MovingLayer"))
+			{
+				LayerStruct l;
+				l.imageName = layer.attribute("image").as_string();
+				l.scale = sf::Vector2f(layer.attribute("velScaleX").as_float(), layer.attribute("velScaleY").as_float());
+				roomStruct.movingLayers.push_back(l);
+			}
+			roomSizes[str2] = roomStruct;
 			roomTileSheets[str2] = tilesheetName;
 			//std::cout << std::endl;
 		}
