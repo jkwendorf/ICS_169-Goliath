@@ -243,9 +243,9 @@ void Level::update(float deltaTime)
 			}
 		}*/
 
-fixedTime += deltaTime;
-if(fixedTime >= 50.0f)
-{
+	fixedTime += deltaTime;
+	if(fixedTime >= 50.0f)
+	{
 		fixedTime -= 50.0f;
 
 		for(Projectile& po : p.ammo)
@@ -441,7 +441,7 @@ void Level::draw(sf::RenderWindow& window)
 	//window.draw(r);
 	//window.draw(background);
 
-	//window.draw(Global::GetInstance().testingRect);
+	
 
 	currentRoom->draw(window);
 	p.draw(window);

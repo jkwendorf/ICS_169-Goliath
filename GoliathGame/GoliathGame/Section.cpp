@@ -140,6 +140,7 @@ void Section::checkGrapple(const sf::Vector2f& p1, const sf::Vector2f& p2, std::
 	//sf::Vector2f temp = Global::GetInstance().testingRect.getPosition();
 	//sf::Vector2f temp2 = Global::GetInstance().testingRect.getSize();
 
+
 	for(int i = p3.x; i <= p4.x; i++)
 	{
 		for (int j = p3.y; j <= p4.y; j++)
@@ -220,6 +221,7 @@ void Section::print()
 //Continues through the file until it hits the end of the file and creates tiles based off information parsed in
 void Section::LoadTileMap(std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList)
 {
+	std::cout << "Loading section: " << sectionNum << std::endl; 
 	std::ifstream ifs;
 	ifs.open("media/levels/" + pathToText + ".txt");
 	std::string str;
@@ -260,6 +262,9 @@ void Section::LoadTileMap(std::vector<std::shared_ptr<Enemy>> &enemyList, std::v
 
 	token.clear();
 	float ratio = (float)GAME_TILE_DIM / 100;
+	
+	if(sectionNum == 1)
+		std::cout << "need to break" <<std::endl;
 
 	while(!ifs.eof()) 
 	{
