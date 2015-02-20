@@ -37,7 +37,7 @@ void Background::update(float deltaTime)
 	for (int i = 0; i < movingLayers.size(); i++)
 	{
 		movingLayers[i].update(deltaTime, vel);
-		if (movingLayers[i].image[0].getPosition().y + movingLayers[i].image[0].getGlobalBounds().height 
+		if (movingLayers[i].image[i].getPosition().y + movingLayers[i].image[i].getGlobalBounds().height 
 			< nonMovingLayer.getPosition().y + nonMovingLayer.getGlobalBounds().height)
 		{
 			//reset();
@@ -50,7 +50,7 @@ void Background::update(float deltaTime)
 			//}
 		
 		}
-		else if (movingLayers[i].image[0].getPosition().y > nonMovingLayer.getPosition().y) 
+		else if (movingLayers[i].image[i].getPosition().y > nonMovingLayer.getPosition().y) 
 		{
 			vel.y *= -1;
 			
