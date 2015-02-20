@@ -216,6 +216,9 @@
     <ClCompile Include="Projectile.cpp">
       <Filter>Source Files\Player</Filter>
     </ClCompile>
+    <ClCompile Include="Layer.cpp">
+      <Filter>Source Files\Level Stuff</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="State.h">
@@ -427,6 +430,9 @@
     </ClInclude>
     <ClInclude Include="RoomStruct.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Layer.h">
+      <Filter>Header Files\Level Stuff</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

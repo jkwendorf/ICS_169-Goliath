@@ -46,7 +46,7 @@ void BaseObject::update(float deltaTime)
 void BaseObject::draw(sf::RenderWindow& window)
 {
 	window.draw(sprite);
-	window.draw(hitbox);
+	//window.draw(hitbox);
 }
 
 void BaseObject::print()

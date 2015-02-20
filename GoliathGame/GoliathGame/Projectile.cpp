@@ -58,17 +58,13 @@ void Projectile::update(float deltaTime)
 void Projectile::draw(sf::RenderWindow& window)
 {
 	window.draw(sprite);
-	//std::cout << "Sprite: " << sprite.getGlobalBounds().left << ", " << sprite.getGlobalBounds().top << std::endl;
-	//std::cout << "Hitbox: " << hitbox.getGlobalBounds().left << ", " << hitbox.getGlobalBounds().top << std::endl;
 	//window.draw(hitbox);
-	//BaseObject::draw(window);
-	//rectangle.setFillColor(sf::Color::Red);
-	//window.draw(rectangle);
 }
 
 void Projectile::setLocation(sf::Vector2f pos)
 {
 	sprite.setPosition(pos);
+	startTime = 0.0;
 }
 
 void Projectile::setVelocity(sf::Vector2f vel)

@@ -48,7 +48,7 @@ Player::Player()
 	ui = new UserInterface(health, stamina);
 	SetUpEffects();
 
-	hitbox = sf::RectangleShape(sf::Vector2f(PLAYER_DIM_X - 30, PLAYER_DIM_Y-10));
+	hitbox = sf::RectangleShape(sf::Vector2f(PLAYER_DIM_X - PLAYER_DIM_X/2, PLAYER_DIM_Y-10));
 	hitbox.setOrigin(hitbox.getLocalBounds().width/2, hitbox.getLocalBounds().height/2);
 }
 
@@ -302,7 +302,7 @@ void Player::move(sf::Vector2f& distance)
 void Player::draw(sf::RenderWindow& window)
 {
 	//ui->draw(window);
-	window.draw(sprite);
+	BaseObject::draw(window);
 	window.draw(hShot.sprite);
 	playerSword.draw(window);
 	for(int x = 0; x < 3; x++)

@@ -2,17 +2,7 @@
 
 #include "Global.h"
 #include "RoomStruct.h"
-
-struct Layer
-{
-	sf::Sprite image;
-	sf::Vector2f scale;
-	int layerNum;
-	float degrees;
-	float timeToRotate;
-	float currentDegrees;
-	bool rotateForward;
-};
+#include "Layer.h"
 
 class Background
 {
