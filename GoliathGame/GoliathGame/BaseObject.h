@@ -25,4 +25,6 @@ public:
 	bool grappleable;
 	bool interactable;
 	int objectNum, testingNum, jumpSpeed, moveSpeed, moveAccel, boostSpeed, grappleSpeed, gravity, fallSpeed;
+
+	sf::RectangleShape hitbox;
 };

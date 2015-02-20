@@ -48,7 +48,8 @@ Player::Player()
 	ui = new UserInterface(health, stamina);
 	SetUpEffects();
 
-	rectangle = sf::RectangleShape(sf::Vector2f(36, 36));
+	hitbox = sf::RectangleShape(sf::Vector2f(PLAYER_DIM_X - 30, PLAYER_DIM_Y-10));
+	hitbox.setOrigin(hitbox.getLocalBounds().width/2, hitbox.getLocalBounds().height/2);
 }
 
 void Player::init(CollisionManager* collisionManager_, BaseState* startState)
@@ -204,8 +205,11 @@ void Player::update(float deltaTime)
 
 	//Animated sprite update
 	player.update(deltaTime, sprite, 1, facingRight);
-	rectangle.setPosition(sprite.getPosition().x - 20, sprite.getPosition().y - 40);
-	rectangle.setFillColor(sf::Color::Blue);
+	//hitbox.setPosition(sprite.getPosition().x, sprite.getPosition().y);
+	BaseObject::update(deltaTime);
+	hitbox.setFillColor(sf::Color::Blue);
+	//Global::GetInstance().testingRect.setPosition(sprite.getPosition().x-(sprite.getGlobalBounds().width/2), sprite.getPosition().y-(sprite.getGlobalBounds().height/2));
+	//Global::GetInstance().testingRect.setSize(sf::Vector2f(sprite.getGlobalBounds().width, sprite.getGlobalBounds().height));
 }
 
 void Player::takeDamage()
@@ -271,16 +275,19 @@ void Player::attack()
 void Player::move(float x, float y)
 {
 	sprite.move(x, y);
+	hitbox.setPosition(sprite.getPosition());
 }
 
 void Player::move(sf::Vector2f& distance)
 {
 	sprite.move(distance);
+	hitbox.setPosition(sprite.getPosition());
 }
 
 void Player::draw(sf::RenderWindow& window)
 {
 	//ui->draw(window);
+
 	BaseObject::draw(window);
 	window.draw(hShot.sprite);
 	playerSword.draw(window);
@@ -289,7 +296,7 @@ void Player::draw(sf::RenderWindow& window)
 			ammo[x].draw(window);
 	
 	window.draw(crosshair);
-	//window.draw(rectangle);
+	//window.draw(hitbox);
 	
 	/* //TESTING CIRCLE
 	sf::CircleShape circle = sf::CircleShape(5.0);
@@ -602,10 +609,10 @@ void Player::verticalAcceleration(float& deltaTime)
 
 void Player::moveOutOfTile(Tile* t)
 {
-	float left = (sprite.getPosition().x + sprite.getGlobalBounds().width/2) - t->left, 
-		right = (t->left + t->width) - (sprite.getPosition().x - sprite.getGlobalBounds().width/2), 
-		up = (sprite.getPosition().y + sprite.getGlobalBounds().height/2.f + 0.1f) - t->top, 
-		down = (t->top + t->height) - (sprite.getPosition().y - sprite.getGlobalBounds().height/2); 
+	float left = (hitbox.getPosition().x + hitbox.getGlobalBounds().width/2) - t->left, 
+		right = (t->left + t->width) - (hitbox.getPosition().x - hitbox.getGlobalBounds().width/2), 
+		up = (hitbox.getPosition().y + hitbox.getGlobalBounds().height/2.f + 0.1f) - t->top, 
+		down = (t->top + t->height) - (hitbox.getPosition().y - hitbox.getGlobalBounds().height/2); 
 
 	float mini = min(up, down);
 	mini = min(right, mini); 

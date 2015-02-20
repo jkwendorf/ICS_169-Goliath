@@ -43,42 +43,42 @@ void LevelSelectState::update(float deltaTime)
 {
 	if(inputCoolDown <= 0)
 	{
-		if((sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Joystick::getAxisPosition(0, sf::Joystick::Y) < -25) && !isPressedUp)
+		if((sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Joystick::getAxisPosition(0, sf::Joystick::Y) < -75) && !isPressedUp)
 		{
 			bM->scrollUp();
 			isPressedUp = true;
 		}
-		else if((!sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && sf::Joystick::getAxisPosition(0, sf::Joystick::Y) > -25) && isPressedUp)
+		else if((!sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && sf::Joystick::getAxisPosition(0, sf::Joystick::Y) > -75) && isPressedUp)
 			isPressedUp = false;
 	
-		if((sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || sf::Joystick::getAxisPosition(0, sf::Joystick::Y) > 25) &&!isPressedDown)
+		if((sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || sf::Joystick::getAxisPosition(0, sf::Joystick::Y) > 75) &&!isPressedDown)
 		{
 			bM->scrollDown();
 			isPressedDown = true;
 		}
-		else if((!sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && sf::Joystick::getAxisPosition(0, sf::Joystick::Y) < 25) && isPressedDown)
+		else if((!sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && sf::Joystick::getAxisPosition(0, sf::Joystick::Y) < 75) && isPressedDown)
 			isPressedDown = false;
 
-		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && !isLeftPressed)
+		if((sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Joystick::getAxisPosition(0, sf::Joystick::X) < -75) && !isLeftPressed)
 		{
 			bM->scrollLeft();
 			isLeftPressed = true;
 		}
-		else if(!sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && isLeftPressed)
+		else if(!sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && sf::Joystick::getAxisPosition(0, sf::Joystick::X) > -75 && isLeftPressed)
 			isLeftPressed = false;
 	
-		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right)&&!isRightPressed)
+		if((sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Joystick::getAxisPosition(0, sf::Joystick::X) > 75) && !isRightPressed)
 		{
 			bM->scrollRight();
 			isRightPressed = true;
 		}
-		else if(!sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && isRightPressed)
+		else if(!sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && sf::Joystick::getAxisPosition(0, sf::Joystick::X) < 75 && isRightPressed)
 			isRightPressed = false;
 
 		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Return) || sf::Joystick::isButtonPressed(0, 0))
 			bM->pressSelectedButton();
 
-		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || sf::Joystick::isButtonPressed(0, 7))
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || sf::Joystick::isButtonPressed(0, 1))
 		{
 			StateManager::getInstance().changeToState(MAIN_MENU, false);
 		}

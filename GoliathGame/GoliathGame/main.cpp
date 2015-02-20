@@ -16,6 +16,7 @@ int main()
 	window.setVerticalSyncEnabled(true);
 	StateManager::getInstance().addState(MAIN_MENU, new MainMenuState(), true);
 	StateManager::getInstance().addState(LEVEL_SELECT, new LevelSelectState());
+	StateManager::getInstance().addState(CONTROLS, new ControlsState());
 	//StateManager::getInstance().addState(GAME, new GameState());
 	//StateManager::getInstance().addState(END_GAME, new EndGameState());
 

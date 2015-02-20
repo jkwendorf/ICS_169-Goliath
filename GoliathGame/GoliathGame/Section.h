@@ -15,7 +15,7 @@ class Section
 private:
 	int sectionNum, numOfTiles;
 	Tile** grid1;
-	
+	Global global;
 	sf::Vector2i gDim;
 	sf::Vector2f startPos, offset;
 	std::string pathToText;
@@ -25,6 +25,7 @@ private:
 	void Tokenize(const std::string& str,
                       std::vector<std::string>& tokens,
                       const std::string& delimiters = " ");
+	bool checkToRender(int tileNum);
 public:
 	Section(int sectionNumber, std::string& s, sf::Vector2f& offset, std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList);
 	~Section();
