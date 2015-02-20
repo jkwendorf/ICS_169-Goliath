@@ -11,8 +11,8 @@
     <Room number="4" size="1" nonMoving="bandit canyon level"></Room>
     <Room number="5" size="1" nonMoving="bandit canyon level"></Room>
     <Room number="6" size="1" nonMoving="bandit canyon level"></Room>
-    <Room number="7" size="1" nonMoving="GoliathFootTest">
-      <MovingLayer image="GoliathGroundBackground" velScaleX="0.0" velScaleY="2.0" />
+    <Room number="7" size="1" nonMoving="GoliathFoot">
+      <MovingLayer image="GoliathGroundBackground" velScaleX="0.0" velScaleY="0.75" />
     </Room>
   </Level>
   <Level number="2" tilesheet="BanditTile" size="4">

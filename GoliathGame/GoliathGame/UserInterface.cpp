@@ -12,7 +12,7 @@ UserInterface::UserInterface(float h, float s)
 	TextureManager::GetInstance().retrieveTexture("Heart2");
 	TextureManager::GetInstance().retrieveTexture("Heart3");
 	healthIcon.setTexture(*TextureManager::GetInstance().retrieveTexture("Heart4"));
-	healthIcon.setScale(0.1, 0.1);
+	healthIcon.setScale(0.13, 0.13);
 }
 
 UserInterface::~UserInterface()
@@ -117,7 +117,7 @@ void UserInterface::updateDifferent(float h, float s, sf::Vector2f offset)
 		healthIcon.setTexture(*TextureManager::GetInstance().retrieveTexture("Heart1"));
 	}
 
-	healthIcon.setPosition(Global::GetInstance().topLeft.x + 20, Global::GetInstance().topLeft.y + 20);
+	healthIcon.setPosition(Global::GetInstance().topLeft.x + 20 + offset.x, Global::GetInstance().topLeft.y + 20 + offset.y);
 
 	/*healthBar1.setFillColor(sf::Color(255, 0, 0, 125));
 	healthBar1.setPosition(Global::GetInstance().topLeft.x + 20 + offset.x, Global::GetInstance().topLeft.y + 20 + offset.y);
