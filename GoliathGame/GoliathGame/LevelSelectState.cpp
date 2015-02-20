@@ -39,7 +39,7 @@ void LevelSelectState::DeleteState()
 		delete bM;
 }
 
-void LevelSelectState::update(float deltaTime)
+void LevelSelectState::update(float deltaTime, sf::RenderWindow& window)
 {
 	if(inputCoolDown <= 0)
 	{

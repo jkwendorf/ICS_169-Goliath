@@ -243,9 +243,9 @@ void Level::update(float deltaTime)
 			}
 		}*/
 
-fixedTime += deltaTime;
-if(fixedTime >= 50.0f)
-{
+	fixedTime += deltaTime;
+	if(fixedTime >= 50.0f)
+	{
 		fixedTime -= 50.0f;
 
 		for(Projectile& po : p.ammo)
@@ -380,7 +380,7 @@ if(fixedTime >= 50.0f)
 			i++;
 			std::vector<Tile*> proTile;
 			a->update(deltaTime);
-			//std::cout << "ARROW " << i << " position:" << a->sprite.getPosition().x << " " << a->sprite.getPosition().y << std::endl;	
+
 			if(a->moving)
 			{
 				currentRoom->GetCollidableTiles(*a, sf::Vector2f(a->sprite.getTexture()->getSize().x/10,
@@ -438,11 +438,6 @@ if(fixedTime >= 50.0f)
 
 void Level::draw(sf::RenderWindow& window)
 {
-	//window.draw(r);
-	//window.draw(background);
-
-	//window.draw(Global::GetInstance().testingRect);
-
 	currentRoom->draw(window);
 	p.draw(window);
 	//UNCOMMENT FOR TESTING

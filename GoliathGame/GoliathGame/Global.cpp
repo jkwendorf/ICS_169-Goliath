@@ -6,8 +6,7 @@ Global::Global()
 	test = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("GainItem")));
 
 	testingRect.setPosition(-100, -100);
-	testingRect.setOutlineColor(sf::Color::Red);
-	testingRect.setOutlineThickness(5);
+	testingRect.setFillColor(sf::Color::Red);
 	testingRect.setOrigin(testingRect.getLocalBounds().left, testingRect.getLocalBounds().top);
 }
 

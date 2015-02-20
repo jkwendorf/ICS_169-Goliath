@@ -33,7 +33,7 @@ void MainMenuState::DeleteState()
 		delete bM;
 }
 
-void MainMenuState::update(float deltaTime)
+void MainMenuState::update(float deltaTime, sf::RenderWindow& window)
 {
 	if(inputCoolDown <= 0)
 	{

@@ -109,6 +109,7 @@
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="JumpCommand.cpp" />
     <ClCompile Include="JumpingState.cpp" />
+    <ClCompile Include="Layer.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="LevelSelectState.cpp" />
     <ClCompile Include="LookCommand.cpp" />
@@ -171,6 +172,7 @@
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="JumpCommand.h" />
     <ClInclude Include="JumpingState.h" />
+    <ClInclude Include="Layer.h" />
     <ClInclude Include="LayerStruct.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="LevelSelectState.h" />
