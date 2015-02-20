@@ -8,6 +8,10 @@ struct Layer
 	sf::Sprite image;
 	sf::Vector2f scale;
 	int layerNum;
+	float degrees;
+	float timeToRotate;
+	float currentDegrees;
+	bool rotateForward;
 };
 
 class Background

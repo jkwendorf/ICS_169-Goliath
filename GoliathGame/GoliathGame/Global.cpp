@@ -56,11 +56,15 @@ void Global::ParseXML() {
 			RoomStruct roomStruct;
 			roomStruct.roomSize = room.attribute("size").as_int();
 			roomStruct.nonMovinglayer = room.attribute("nonMoving").as_string();
+			roomStruct.posOffset = sf::Vector2f(room.attribute("offsetX").as_float(), room.attribute("offsetY").as_float());
 			for (pugi::xml_node layer = room.child("MovingLayer"); layer; layer = layer.next_sibling("MovingLayer"))
 			{
 				LayerStruct l;
 				l.imageName = layer.attribute("image").as_string();
 				l.scale = sf::Vector2f(layer.attribute("velScaleX").as_float(), layer.attribute("velScaleY").as_float());
+				l.posOffset = sf::Vector2f(layer.attribute("offsetX").as_float(), layer.attribute("offsetY").as_float());
+				l.degrees = layer.attribute("rotationDegree").as_float();
+				l.timeToRotate = layer.attribute("timeToRotate").as_float();
 				roomStruct.movingLayers.push_back(l);
 			}
 			roomSizes[str2] = roomStruct;
