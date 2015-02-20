@@ -102,7 +102,6 @@ bool CollisionManager::tileBelowCharacter(BaseObject* p)
 
 	for(Tile* b : tileList)
 	{
-		//if(b->intersects(p->sprite.getGlobalBounds()) && b->top >= p->sprite.getPosition().y)
 		if(b->top >= p->hitbox.getPosition().y + p->hitbox.getGlobalBounds().height/2 && 
 			b->top - (p->hitbox.getPosition().y + p->hitbox.getGlobalBounds().height/2) < GAME_TILE_DIM)
 		{
@@ -164,12 +163,12 @@ void CollisionManager::checkPlayerSwordToEnemies(Sword s, Enemy* enemy)
 void CollisionManager::checkEnemyBulletToPlayer(Projectile p, Player* player)
 {
 	if(p.hitbox.getGlobalBounds().intersects(player->hitbox.getGlobalBounds()) && p.moving)
-		{
-			std::cout << p.rectangle.getPosition().x << " " << p.rectangle.getPosition().y << std::endl;
-			std::cout << player->hitbox.getPosition().x << " " << player->hitbox.getPosition().x << std::endl;
-			player->health -= p.damage;
-			p.moving = false;
-		}
+	{
+		std::cout << p.rectangle.getPosition().x << " " << p.rectangle.getPosition().y << std::endl;
+		std::cout << player->hitbox.getPosition().x << " " << player->hitbox.getPosition().x << std::endl;
+		player->health -= p.damage;
+		p.moving = false;
+	}
 }
 
 void CollisionManager::checkEnemySwordToPlayer(Sword s, Player* player)
@@ -195,8 +194,7 @@ bool CollisionManager::isGrappleListEmpty()
 
 bool CollisionManager::checkIfEnemyInRange(Projectile p, Player* player)
 {
-	if(sqrt(pow(p.rectangle.getPosition().x - player->hitbox.getPosition().x, 2) + 
-		pow(p.rectangle.getPosition().y - player->hitbox.getPosition().y, 2)) < 50 && p.moving)
+	if(p.hitbox.getGlobalBounds().intersects(player->hitbox.getGlobalBounds()) && p.moving)
 	{
 		std::cout << p.rectangle.getPosition().x << " " << p.rectangle.getPosition().y << std::endl;
 		std::cout << player->hitbox.getPosition().x << " " << player->hitbox.getPosition().x << std::endl;
