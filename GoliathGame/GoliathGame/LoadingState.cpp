@@ -25,7 +25,7 @@ void LoadingState::DeleteState()
 	delete f;
 }
 
-void LoadingState::update(float deltaTime)
+void LoadingState::update(float deltaTime, sf::RenderWindow& window)
 {
 	StateManager::getInstance().addState(GAME, new GameState(levelNumber, roomNumber), false);
 	StateManager::getInstance().changeToState(GAME, true);

@@ -72,9 +72,9 @@ void StateManager::changeToState(StateEnum state, bool deleteCurrentState)
 	}
 }
 
-void StateManager::update(float deltaTime)
+void StateManager::update(float deltaTime, sf::RenderWindow& window)
 {
-	currentState->update(deltaTime);
+	currentState->update(deltaTime, window);
 }
 
 void StateManager::draw(sf::RenderWindow& window)
