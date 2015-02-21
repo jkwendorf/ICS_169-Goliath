@@ -27,7 +27,7 @@ void EndGameState::DeleteState()
 		delete bM;
 }
 
-void EndGameState::update(float deltaTime)
+void EndGameState::update(float deltaTime, sf::RenderWindow& window)
 {
 	if((sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Joystick::getAxisPosition(0, sf::Joystick::Y) < -25) && !isUpPressed)
 	{

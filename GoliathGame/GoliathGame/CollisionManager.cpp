@@ -29,7 +29,7 @@ bool CollisionManager::playerCollisionDetection(BaseObject* p)
 	{
 		//std::cout << "(" << b.left << "," << b.top << ")";
 		
-		if(b->intersects(p->sprite.getGlobalBounds()))
+		if(b->intersects(p->hitbox.getGlobalBounds()))
 		{
 			return true;
 		}
@@ -78,7 +78,7 @@ void CollisionManager::checkTreasure(BaseObject* p)
 Tile* CollisionManager::getCollidedTile(BaseObject p)
 {
 	for(Tile* b : tileList)
-		if(b->intersects(p.sprite.getGlobalBounds()))
+		if(b->intersects(p.hitbox.getGlobalBounds()))
 		{
 			return b;
 		}
@@ -97,14 +97,13 @@ void CollisionManager::setGrapplableTiles(std::vector<Tile*> tiles)
 
 bool CollisionManager::tileBelowCharacter(BaseObject* p)
 {
-	float left = p->sprite.getPosition().x - p->sprite.getGlobalBounds().width/2,
-		right = p->sprite.getPosition().x + p->sprite.getGlobalBounds().width/2;
+	float left = p->hitbox.getPosition().x - p->hitbox.getGlobalBounds().width/2,
+		right = p->hitbox.getPosition().x + p->hitbox.getGlobalBounds().width/2;
 
 	for(Tile* b : tileList)
 	{
-		//if(b->intersects(p->sprite.getGlobalBounds()) && b->top >= p->sprite.getPosition().y)
-		if(b->top >= p->sprite.getPosition().y + p->sprite.getGlobalBounds().height/2 && 
-			b->top - (p->sprite.getPosition().y + p->sprite.getGlobalBounds().height/2) < GAME_TILE_DIM)
+		if(b->top >= p->hitbox.getPosition().y + p->hitbox.getGlobalBounds().height/2 && 
+			b->top - (p->hitbox.getPosition().y + p->hitbox.getGlobalBounds().height/2) < GAME_TILE_DIM)
 		{
 			if((b->left <= left && b->left + b->width >= left) ||
 				(b->left <= right && b->left + b->width >= right))
@@ -116,10 +115,10 @@ bool CollisionManager::tileBelowCharacter(BaseObject* p)
 
 bool CollisionManager::wallBlockingCharacter(BaseObject* p)
 {
-	float top = ceil(p->sprite.getPosition().y - p->sprite.getGlobalBounds().height/2);
+	float top = ceil(p->hitbox.getPosition().y - p->hitbox.getGlobalBounds().height/2);
 	for(Tile* b: tileList)
 	{
-		if(b->intersects(p->sprite.getGlobalBounds()))
+		if(b->intersects(p->hitbox.getGlobalBounds()))
 		{
 			if(b->top + b->height > top)
  				return true;
@@ -147,8 +146,7 @@ Tile* CollisionManager::getHookedTile(HookShot hs)
 void CollisionManager::checkPlayerBulletToEnemies(Projectile p, Enemy* enemy)
 {
 	//for(int x = 0; x < 3; x++)
-	if(sqrt(pow(p.sprite.getPosition().x - enemy->sprite.getPosition().x, 2) + 
-		pow(p.sprite.getPosition().y - enemy->sprite.getPosition().y, 2)) < 50 && p.moving)
+	if(p.hitbox.getGlobalBounds().intersects(enemy->hitbox.getGlobalBounds())&& p.moving)
 	{
 		enemy->health -= p.damage;
 		p.moving = false;
@@ -164,14 +162,13 @@ void CollisionManager::checkPlayerSwordToEnemies(Sword s, Enemy* enemy)
 
 void CollisionManager::checkEnemyBulletToPlayer(Projectile p, Player* player)
 {
-	if(sqrt(pow(p.rectangle.getPosition().x - player->hitbox.getPosition().x, 2) + 
-		pow(p.rectangle.getPosition().y - player->hitbox.getPosition().y, 2)) < 50 && p.moving)
-		{
-			std::cout << p.rectangle.getPosition().x << " " << p.rectangle.getPosition().y << std::endl;
-			std::cout << player->hitbox.getPosition().x << " " << player->hitbox.getPosition().x << std::endl;
-			player->health -= p.damage;
-			p.moving = false;
-		}
+	if(p.hitbox.getGlobalBounds().intersects(player->hitbox.getGlobalBounds()) && p.moving)
+	{
+		std::cout << p.rectangle.getPosition().x << " " << p.rectangle.getPosition().y << std::endl;
+		std::cout << player->hitbox.getPosition().x << " " << player->hitbox.getPosition().x << std::endl;
+		player->health -= p.damage;
+		p.moving = false;
+	}
 }
 
 void CollisionManager::checkEnemySwordToPlayer(Sword s, Player* player)
@@ -197,8 +194,7 @@ bool CollisionManager::isGrappleListEmpty()
 
 bool CollisionManager::checkIfEnemyInRange(Projectile p, Player* player)
 {
-	if(sqrt(pow(p.rectangle.getPosition().x - player->hitbox.getPosition().x, 2) + 
-		pow(p.rectangle.getPosition().y - player->hitbox.getPosition().y, 2)) < 50 && p.moving)
+	if(p.hitbox.getGlobalBounds().intersects(player->hitbox.getGlobalBounds()) && p.moving)
 	{
 		std::cout << p.rectangle.getPosition().x << " " << p.rectangle.getPosition().y << std::endl;
 		std::cout << player->hitbox.getPosition().x << " " << player->hitbox.getPosition().x << std::endl;

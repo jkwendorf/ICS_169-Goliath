@@ -7,8 +7,8 @@
 Player::Player() 
 	: BaseObject(0), grappleInProgress(false), facingRight(true),running(false), isVaulting(false), 
 	isHanging(false), shouldHang(false), health(Global::GetInstance().basePlayerStats[0]), 
-	stamina(Global::GetInstance().basePlayerStats[1]),	weaponCooldown(Global::GetInstance().basePlayerStats[4]), bottomPoint(0),
-	deathTimer(0.0f), currentState(nullptr), collidingLeft(false), collidingRight(false)
+	stamina(Global::GetInstance().basePlayerStats[1]), weaponCooldown(Global::GetInstance().basePlayerStats[4]), bottomPoint(0),
+	deathTimer(0.0f), currentState(nullptr), collidingLeft(false), collidingRight(false), gotHit(false), recoverTime(0.0f), drawPlease(true)
 {
 	vel = sf::Vector2f(0.0,0.0);
 
@@ -48,7 +48,7 @@ Player::Player()
 	ui = new UserInterface(health, stamina);
 	SetUpEffects();
 
-	hitbox = sf::RectangleShape(sf::Vector2f(GAME_TILE_DIM-10, PLAYER_DIM_Y-10));
+	hitbox = sf::RectangleShape(sf::Vector2f(PLAYER_DIM_X - PLAYER_DIM_X/2, PLAYER_DIM_Y-10));
 	hitbox.setOrigin(hitbox.getLocalBounds().width/2, hitbox.getLocalBounds().height/2);
 }
 
@@ -93,6 +93,21 @@ void Player::update(float deltaTime)
 	if(deathTimer > 0)
 	{
 		deathTimer -= deltaTime;
+	}
+
+	if(gotHit)
+	{
+		recoverTime += deltaTime;
+		if(recoverTime < 0.5f)
+		{
+			drawPlease = !drawPlease;
+		}
+		else
+		{
+			recoverTime = 0.0f;
+			gotHit = false;
+			drawPlease = true;
+		}
 	}
 
 	currentState->update(this, deltaTime);
@@ -205,8 +220,11 @@ void Player::update(float deltaTime)
 
 	//Animated sprite update
 	player.update(deltaTime, sprite, 1, facingRight);
-	hitbox.setPosition(sprite.getPosition().x, sprite.getPosition().y);
+	//hitbox.setPosition(sprite.getPosition().x, sprite.getPosition().y);
+	BaseObject::update(deltaTime);
 	hitbox.setFillColor(sf::Color::Blue);
+	//Global::GetInstance().testingRect.setPosition(sprite.getPosition().x-(sprite.getGlobalBounds().width/2), sprite.getPosition().y-(sprite.getGlobalBounds().height/2));
+	//Global::GetInstance().testingRect.setSize(sf::Vector2f(sprite.getGlobalBounds().width, sprite.getGlobalBounds().height));
 }
 
 void Player::takeDamage()
@@ -272,11 +290,13 @@ void Player::attack()
 void Player::move(float x, float y)
 {
 	sprite.move(x, y);
+	hitbox.setPosition(sprite.getPosition());
 }
 
 void Player::move(sf::Vector2f& distance)
 {
 	sprite.move(distance);
+	hitbox.setPosition(sprite.getPosition());
 }
 
 void Player::draw(sf::RenderWindow& window)
@@ -290,7 +310,6 @@ void Player::draw(sf::RenderWindow& window)
 			ammo[x].draw(window);
 	
 	window.draw(crosshair);
-	window.draw(hitbox);
 	
 	/* //TESTING CIRCLE
 	sf::CircleShape circle = sf::CircleShape(5.0);
@@ -602,11 +621,11 @@ void Player::verticalAcceleration(float& deltaTime)
 }*/
 
 void Player::moveOutOfTile(Tile* t)
-{
-	float left = (sprite.getPosition().x + sprite.getGlobalBounds().width/2) - t->left, 
-		right = (t->left + t->width) - (sprite.getPosition().x - sprite.getGlobalBounds().width/2), 
-		up = (sprite.getPosition().y + sprite.getGlobalBounds().height/2.f + 0.1f) - t->top, 
-		down = (t->top + t->height) - (sprite.getPosition().y - sprite.getGlobalBounds().height/2); 
+{ 
+	float left = (hitbox.getPosition().x + hitbox.getGlobalBounds().width/2) - t->left, 
+		right = (t->left + t->width) - (hitbox.getPosition().x - hitbox.getGlobalBounds().width/2), 
+		up = (hitbox.getPosition().y + hitbox.getGlobalBounds().height/2.f + 0.1f) - t->top, 
+		down = (t->top + t->height) - (hitbox.getPosition().y - hitbox.getGlobalBounds().height/2); 
 
 	float mini = min(up, down);
 	mini = min(right, mini); 
@@ -658,7 +677,10 @@ void Player::moveOutOfTile(Tile* t)
 	}
 }
 
-
+void Player::playHurtSound()
+{
+	soundEffects[DAMAGEDSOUND].play();
+}
 
 void Player::drawUI(sf::RenderWindow& window)
 {
@@ -700,6 +722,8 @@ void Player::SetUpEffects()
 	soundEffects[SHOOTSOUND] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("playerShoot")));
 	soundEffects[TAKEDMGSOUND] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("playerTakeDMG")));
 	soundEffects[HOOKSOUND] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("playerHook")));
+	soundEffects[DAMAGEDSOUND] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("playerHurt")));
+	soundEffects[DEATHSOUND] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("playerDied")));
 }
 
 void Player::instantVaultAboveGrappleTile()
@@ -754,5 +778,6 @@ bool Player::checkDead()
 void Player::resetHealth()
 {
 	health = 100;
+	soundEffects[DEATHSOUND].play();
 	ui->resetUI();
 }
