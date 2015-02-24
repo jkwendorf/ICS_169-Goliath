@@ -27,7 +27,7 @@ void GameState::DeleteState()
 	}
 }
 
-void GameState::update(float deltaTime)
+void GameState::update(float deltaTime, sf::RenderWindow& window)
 {
 	currentScreen->update(deltaTime);
 	if(currentScreen->CheckChangeScreen())

@@ -9,4 +9,5 @@ struct RoomStruct
 	int roomSize;
 	std::string nonMovinglayer;
 	std::vector<LayerStruct> movingLayers;
+	sf::Vector2f posOffset;
 };

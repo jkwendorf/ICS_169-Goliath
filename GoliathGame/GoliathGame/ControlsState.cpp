@@ -18,7 +18,7 @@ void ControlsState::DeleteState()
 
 }
 
-void ControlsState::update(float deltaTime)
+void ControlsState::update(float deltaTime, sf::RenderWindow& window)
 {
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || sf::Joystick::isButtonPressed(0, 1))
 	{

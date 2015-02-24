@@ -11,7 +11,7 @@ Level::Level(int levelNumber, int roomNumber)
 	:changeScreen(false), levelNum(levelNumber), p(), collisionManager(new CollisionManager()), inputManager(),
 	maxRooms(Global::GetInstance().levelSizes.at("Level " + std::to_string(levelNum))), loading(1.0),
 	enemyAI(collisionManager), arrowCool(2.0f), screenShakeDuration(.65f), screenShakeCooldown(10.0f), currentScreenShakeCooldown(0.0f),
-	arrowsCanFire(true), fixedTime(0.0f)
+	arrowsCanFire(true), fixedTime(0.0f), levelStart(true)
 {
 	p.init(collisionManager, new JumpingState());
 	currentRoom = new Room(levelNumber, roomNumber, enemyList, arrowTileList, destructTileList);
@@ -119,6 +119,15 @@ void Level::update(float deltaTime)
 	if((p.sprite.getPosition().y + PLAYER_DIM_Y/2) >= currentRoom->getroomHeight())
 	{
 		p.resetPosition(currentRoom->getStartPos() + sf::Vector2f(50, -10));
+		if(!levelStart)
+		{
+			p.resetHealth();
+		}
+		if(levelStart)
+		{
+			levelStart = false;
+		}
+
 	}
 
 	std::vector<Tile*> nearTiles, nearTiles2, enemyTiles;
@@ -236,9 +245,9 @@ void Level::update(float deltaTime)
 			}
 		}*/
 
-fixedTime += deltaTime;
-if(fixedTime >= 50.0f)
-{
+	fixedTime += deltaTime;
+	if(fixedTime >= 50.0f)
+	{
 		fixedTime -= 50.0f;
 
 		for(Projectile& po : p.ammo)
@@ -373,7 +382,7 @@ if(fixedTime >= 50.0f)
 			i++;
 			std::vector<Tile*> proTile;
 			a->update(deltaTime);
-			//std::cout << "ARROW " << i << " position:" << a->sprite.getPosition().x << " " << a->sprite.getPosition().y << std::endl;	
+
 			if(a->moving)
 			{
 				currentRoom->GetCollidableTiles(*a, sf::Vector2f(a->sprite.getTexture()->getSize().x/10,
@@ -393,6 +402,11 @@ if(fixedTime >= 50.0f)
 				if(collisionManager->checkIfEnemyInRange(*a, &p))
 				{
 					p.health -= a->damage;
+					p.gotHit = true;
+					if(p.health > 0)
+					{
+						p.playHurtSound();
+					}
 					a->moving = false;
 					a->setLocation(a->startLocation);
 					std::cout << "ARROW " << i << " hit player" << std::endl;
@@ -426,11 +440,6 @@ if(fixedTime >= 50.0f)
 
 void Level::draw(sf::RenderWindow& window)
 {
-	//window.draw(r);
-	//window.draw(background);
-
-	//window.draw(Global::GetInstance().testingRect);
-
 	currentRoom->draw(window);
 	p.draw(window);
 	//UNCOMMENT FOR TESTING

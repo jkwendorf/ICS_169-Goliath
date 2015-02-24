@@ -53,7 +53,9 @@ enum SoundEnum
 	JUMPSOUND = 1,
 	SHOOTSOUND = 2,
 	TAKEDMGSOUND = 3,
-	HOOKSOUND = 4
+	HOOKSOUND = 4,
+	DAMAGEDSOUND = 5,
+	DEATHSOUND = 6
 };
 
 class BaseState;
@@ -124,9 +126,13 @@ public:
 	sf::Sprite crosshair;
 	Tile closestGrappleTile;
 	Animation player;
+	bool gotHit;
+	float recoverTime;
+	bool drawPlease;
+	void playHurtSound();
 	//sf::RectangleShape hitbox;
 private:	
-	sf::Sound soundEffects[5];
+	sf::Sound soundEffects[7];
 	float deathTimer;
 
 	UserInterface* ui;

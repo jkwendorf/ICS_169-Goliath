@@ -38,6 +38,7 @@ private:
 	std::vector<Projectile*> arrows;
 
 	bool arrowsCanFire;
+	bool levelStart;
 
 	void viewCheck();
 	void playerCheck();

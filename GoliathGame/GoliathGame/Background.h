@@ -2,13 +2,7 @@
 
 #include "Global.h"
 #include "RoomStruct.h"
-
-struct Layer
-{
-	sf::Sprite image;
-	sf::Vector2f scale;
-	int layerNum;
-};
+#include "Layer.h"
 
 class Background
 {
