@@ -60,6 +60,6 @@ public:
 	bool CheckChangeScreen();
 	//checking if particle works
 	Particle particle;
-	ParticleEmitter particleEmitter;
+	ParticleEmitter particleEmitter, coneEmitter;
 	float fixedTime;
 };

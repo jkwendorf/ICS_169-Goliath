@@ -17,7 +17,7 @@ Projectile::Projectile(sf::Vector2f startPos, sf::Vector2f vel) :
 	startTime = 0.0;
 	//sprite.setOrigin(sprite.getGlobalBounds().width/2, sprite.getGlobalBounds().height/2);
 	sprite.setTextureRect(sf::IntRect(0, 0, 64, 64));
-	rectangle = sf::RectangleShape(sf::Vector2f(36,36));
+	hitbox = sf::RectangleShape(sf::Vector2f(36,36));
 }
 
 Projectile::~Projectile()
@@ -53,7 +53,7 @@ void Projectile::draw(sf::RenderWindow& window)
 {
 	window.draw(sprite);
 	
-	//rectangle.setFillColor(sf::Color::Red);
+	//hitbox.setFillColor(sf::Color::Red);
 	//window.draw(rectangle);
 }
 

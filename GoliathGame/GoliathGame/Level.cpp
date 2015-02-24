@@ -30,7 +30,8 @@ Level::Level(int levelNumber, int roomNumber)
 	setArrowTileArrows();
 	//realEnemyList.push_back(new Enemy("Test",200,200, 10));
 	particle = Particle("rock", sf::Vector2f(50, 100), sf::Vector2f(0, 1), 5, 250);
-	particleEmitter = ParticleEmitter("rock", sf::Vector2f(0, -400), sf::Vector2f(0, 1), 10, 350, 30);
+	particleEmitter = ParticleEmitter("rock", sf::Vector2f(0, -400), sf::Vector2f(0, 1), 10, 350, 30, "debris");
+	coneEmitter = ParticleEmitter("rock", sf::Vector2f(100, 1200), sf::Vector2f(.5, .5), 1, 50, 30, "cone");
 }
 
 Level::~Level(void)
@@ -87,6 +88,7 @@ void Level::changeRoom()
 void Level::update(float deltaTime)
 {
 	particleEmitter.update(deltaTime);
+	coneEmitter.update(deltaTime);
 	particle.update(deltaTime);
 	currentScreenShakeCooldown += deltaTime;
 
@@ -454,6 +456,7 @@ void Level::draw(sf::RenderWindow& window)
 	}
 	particle.draw(window);
 	particleEmitter.draw(window);
+	coneEmitter.draw(window);
 	window.setView(view);
 	p.drawUI(window);
 }

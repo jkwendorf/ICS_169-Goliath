@@ -14,9 +14,9 @@ CollisionManager::~CollisionManager()
 
 bool CollisionManager::hookCollisionDetection(HookShot hs)
 {
+	
 	for(Tile* b : grapplableTileList)
 	{
-		//b->sprite.setColor(sf::Color::Red);
 		if(b->intersects(hs.sprite.getGlobalBounds()) && ((b->getFlags() & TILE::GRAPPLEABLEMASK) != 0))
 			return true;
 	}
@@ -164,8 +164,7 @@ void CollisionManager::checkPlayerSwordToEnemies(Sword s, Enemy* enemy)
 
 void CollisionManager::checkEnemyBulletToPlayer(Projectile p, Player* player)
 {
-	if(sqrt(pow(p.rectangle.getPosition().x - player->hitbox.getPosition().x, 2) + 
-		pow(p.rectangle.getPosition().y - player->hitbox.getPosition().y, 2)) < 50 && p.moving)
+	if(p.hitbox.getGlobalBounds().intersects(player->hitbox.getGlobalBounds()) && p.moving)
 		{
 			std::cout << p.rectangle.getPosition().x << " " << p.rectangle.getPosition().y << std::endl;
 			std::cout << player->hitbox.getPosition().x << " " << player->hitbox.getPosition().x << std::endl;
