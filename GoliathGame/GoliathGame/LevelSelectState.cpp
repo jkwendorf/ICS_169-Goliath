@@ -80,6 +80,7 @@ void LevelSelectState::update(float deltaTime, sf::RenderWindow& window)
 
 		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || sf::Joystick::isButtonPressed(0, 1))
 		{
+			bM->resetSelectedButton();
 			StateManager::getInstance().changeToState(MAIN_MENU, false);
 		}
 	}

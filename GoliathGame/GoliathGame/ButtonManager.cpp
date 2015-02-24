@@ -91,7 +91,9 @@ void ButtonManager::scrollRight()
 
 void ButtonManager::pressSelectedButton()
 {
-	buttonList.at(current)->pressButton();
+	int choice = current;
+	resetSelectedButton();
+	buttonList.at(choice)->pressButton();
 }
 
 void ButtonManager::draw(sf::RenderWindow& window)
@@ -157,4 +159,11 @@ void ButtonManager::setButtonDimension(sf::Vector2f dim)
 sf::Vector2f ButtonManager::getButtonDimension()
 {
 	return buttonDim;
+}
+
+void ButtonManager::resetSelectedButton()
+{
+	buttonList.at(current)->setSelected(false);
+	current = 0;
+	buttonList.at(current)->setSelected(true);
 }
