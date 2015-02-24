@@ -84,6 +84,8 @@ void Level::changeRoom()
 	Global::GetInstance().topLeft.y = 0;
 	view.reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y, SCREEN_WIDTH, SCREEN_HEIGHT));
 	p.isFalling = true;
+	p.vel.x = 0;
+	p.vel.y = 0;
 
 	//p.playerUpdate(&view, sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()), 0.5f);
 }
@@ -143,7 +145,7 @@ void Level::update(float deltaTime)
 	int nearTile = currentRoom->NearInteractableTiles(p);
 	if( nearTile != -999)
 	{
-		if(nearTile == 18 || nearTile == 19)
+		if((nearTile == 18 || nearTile == 19) && hitPointTileList.empty())
 			changeRoom();
 		else if (nearTile == 20)
 		{
