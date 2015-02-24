@@ -47,11 +47,12 @@ void Projectile::update(float deltaTime)
 		}
 	}
 	rectangle.setPosition(sprite.getPosition().x + 18, sprite.getPosition().y + 18);
+	BaseObject::update(deltaTime);
 }
 
 void Projectile::draw(sf::RenderWindow& window)
 {
-	window.draw(sprite);
+	BaseObject::draw(window);
 	
 	//hitbox.setFillColor(sf::Color::Red);
 	//window.draw(rectangle);
