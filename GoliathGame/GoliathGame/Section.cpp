@@ -310,12 +310,12 @@ void Section::LoadTileMap(std::vector<std::shared_ptr<Enemy>> &enemyList, std::v
 				grid1[(y*gDim.y) + x] = new Tile(sf::Vector2f(x * GAME_TILE_DIM + offset.x, y * GAME_TILE_DIM + offset.y), 
 					tileType, 0x02);
 				break;
-			/*case 17:
+			case 17:
 				//Treasure
 				delete grid1[(y*gDim.y) + x];
 				grid1[(y*gDim.y) + x] = new Tile(sf::Vector2f(x * GAME_TILE_DIM + offset.x, y * GAME_TILE_DIM + offset.y), 
 					tileType, 0x09);
-				break;*/
+				break;
 			case 18:
 			case 19:
 				//Interactable
@@ -368,7 +368,7 @@ void Section::LoadTileMap(std::vector<std::shared_ptr<Enemy>> &enemyList, std::v
 					tileType, 0x31);
 				destructTileList.push_back(grid1[(y*gDim.y)+x]);
 				break;
-			case 17: //26:
+			case 26:
 				// Hitpoint Tile
 				delete grid1[(y*gDim.y) + x];
 				grid1[(y*gDim.y) + x] = new Tile(sf::Vector2f(x * GAME_TILE_DIM + offset.x, y * GAME_TILE_DIM + offset.y),
