@@ -302,13 +302,17 @@ void Player::move(sf::Vector2f& distance)
 void Player::draw(sf::RenderWindow& window)
 {
 	//ui->draw(window);
-	BaseObject::draw(window);
-	if(!collisionManager->isGrappleListEmpty())
-		window.draw(hShot.sprite);
-	playerSword.draw(window);
-	for(int x = 0; x < 3; x++)
-		if(ammo[x].moving)
-			ammo[x].draw(window);
+	
+	if(drawPlease)
+	{
+		BaseObject::draw(window);
+		if(!collisionManager->isGrappleListEmpty())
+			window.draw(hShot.sprite);
+		playerSword.draw(window);
+		for(int x = 0; x < 3; x++)
+			if(ammo[x].moving)
+				ammo[x].draw(window);
+	}
 	
 	window.draw(crosshair);
 	
