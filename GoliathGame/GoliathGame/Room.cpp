@@ -1,12 +1,12 @@
 
 #include "Room.h"
 
-Room::Room(int levelNumber, int roomNumber, std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList)
+Room::Room(int levelNumber, int roomNumber, std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList, std::list<Tile*> &hitPointTileList)
 	:roomNum(roomNumber), numSect(Global::GetInstance().roomSizes.at("Level" + std::to_string(levelNumber) + "Room" + std::to_string(roomNumber)).roomSize),
 	roomWidth(0), roomHeight(0), loadedTitles(false), bg(levelNumber, roomNumber)
 {
 	
-	LoadRoom(levelNumber, enemyList, arrowTileList, destructTileList);
+	LoadRoom(levelNumber, enemyList, arrowTileList, destructTileList, hitPointTileList);
 	//Music
 	if (!roomMusic.openFromFile("media/sound/Testlevel1SoTC.wav"))
 	{
@@ -26,7 +26,7 @@ Room::~Room()
 	roomMusic.stop();
 }
 	
-void Room::LoadRoom(int levelNumber, std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList)
+void Room::LoadRoom(int levelNumber, std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList, std::list<Tile*> &hitPointTileList)
 {
 	sectList = new Section*[numSect];
 	int totalWidth = 0;
@@ -35,13 +35,13 @@ void Room::LoadRoom(int levelNumber, std::vector<std::shared_ptr<Enemy>> &enemyL
 		std::string temp = "level" + std::to_string(levelNumber) + "room" + std::to_string(roomNum) + "section" + std::to_string(i+1);
 		if(i==0)
 		{
-			sectList[i] = new Section(i, temp, sf::Vector2f(0,0), enemyList, arrowTileList, destructTileList);
+			sectList[i] = new Section(i, temp, sf::Vector2f(0,0), enemyList, arrowTileList, destructTileList, hitPointTileList);
 			if(sectList[i]->getStartPos().x != -999)
 				startPos = sectList[i]->getStartPos();
 		}
 		else
 		{
-			sectList[i] = new Section(i, temp, sf::Vector2f(roomWidth, 0), enemyList, arrowTileList, destructTileList);
+			sectList[i] = new Section(i, temp, sf::Vector2f(roomWidth, 0), enemyList, arrowTileList, destructTileList, hitPointTileList);
 			if(sectList[i]->getStartPos().x != -999)
 				startPos = sectList[i]->getStartPos();
 		}
@@ -153,7 +153,8 @@ void Room::GetNearTiles(sf::FloatRect& rect, std::vector<Tile*>& nearTiles, bool
 
 void Room::update(float deltaTime)
 {
-	bg.update(deltaTime);
+	std::cout << "View room: " << mViewPosX << std::endl;
+	bg.update(deltaTime, mViewPosX);
 }
 
 void Room::draw(sf::RenderWindow& w)
@@ -344,4 +345,9 @@ int Room::getroomHeight()
 sf::Vector2f Room::getStartPos()
 {
 	return startPos;
+}
+
+void Room::setViewPosition(float viewPosX)
+{
+	mViewPosX = viewPosX;
 }

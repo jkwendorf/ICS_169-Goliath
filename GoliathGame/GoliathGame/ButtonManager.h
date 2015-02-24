@@ -15,6 +15,7 @@ public:
 	void scrollLeft();
 	void scrollRight();
 	void pressSelectedButton();
+	void resetSelectedButton();
 
 	void draw(sf::RenderWindow& window);
 

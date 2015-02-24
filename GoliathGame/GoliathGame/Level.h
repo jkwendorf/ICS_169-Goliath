@@ -25,6 +25,7 @@ private:
 	std::vector<std::shared_ptr<Enemy>> enemyList;
 	std::vector<Tile*> arrowTileList;
 	std::list<Tile*> destructTileList;
+	std::list<Tile*> hitPointTileList;
 	Player p;
 	Room* currentRoom;
 	sf::View view;
@@ -48,6 +49,7 @@ private:
 	void CleanUp();
 	void setArrowTileArrows();
 	void checkDestructableTiles();
+	void checkHitPointTilesForDmg(float deltaTime);
 
 	sf::Vector2f viewChangeOffset;
 	float screenShakeDuration;
@@ -66,4 +68,5 @@ public:
 	Particle particle;
 	ParticleEmitter particleEmitter, coneEmitter;
 	float fixedTime;
+	
 };
