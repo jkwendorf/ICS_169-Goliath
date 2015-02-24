@@ -11,7 +11,7 @@ Level::Level(int levelNumber, int roomNumber)
 	:changeScreen(false), levelNum(levelNumber), p(), collisionManager(new CollisionManager()), inputManager(),
 	maxRooms(Global::GetInstance().levelSizes.at("Level " + std::to_string(levelNum))), loading(1.0),
 	enemyAI(collisionManager), arrowCool(2.0f), screenShakeDuration(.65f), screenShakeCooldown(10.0f), currentScreenShakeCooldown(0.0f),
-	arrowsCanFire(true), fixedTime(0.0f), levelStart(true)
+	arrowsCanFire(true), fixedTime(0.0f), levelStart(true), screenShake(false), shakeOffset(1)
 {
 	p.init(collisionManager, new JumpingState());
 	currentRoom = new Room(levelNumber, roomNumber, enemyList, arrowTileList, destructTileList, hitPointTileList);
@@ -30,7 +30,9 @@ Level::Level(int levelNumber, int roomNumber)
 	setArrowTileArrows();
 	//realEnemyList.push_back(new Enemy("Test",200,200, 10));
 	particle = Particle("rock", sf::Vector2f(50, 100), sf::Vector2f(0, 1), 5, 250);
-	particleEmitter = ParticleEmitter("rock", sf::Vector2f(0, -400), sf::Vector2f(0, 1), 10, 350, 30);
+	particleEmitter = ParticleEmitter("rock", sf::Vector2f(0, -400), sf::Vector2f(0, 1), 10, 350, 30, "debris");
+	coneEmitter = ParticleEmitter("rock", sf::Vector2f(100, 1200), sf::Vector2f(.5, .5), 1, 50, 30, "cone");
+	//shakeScreen(5.0, 100);
 }
 
 Level::~Level(void)
@@ -89,32 +91,38 @@ void Level::changeRoom()
 void Level::update(float deltaTime)
 {
 	particleEmitter.update(deltaTime);
+	//coneEmitter.update(deltaTime);
 	particle.update(deltaTime);
 	currentScreenShakeCooldown += deltaTime;
 
 	currentRoom->update(deltaTime);
+
 	//SCREENSHAKE CODE
-	if(currentScreenShakeCooldown <= screenShakeDuration)
+	if(screenShake)
 	{
-		//std::cout << "ScreenShake should occur" << std::endl;
-		//currentRoom->bg.setScale(0, 0.0f, 1.0f);
-		viewChangeOffset.x = rand() % 50 - 25;
-		viewChangeOffset.y = rand() % 50 - 25;
-		view.reset(sf::FloatRect(Global::GetInstance().topLeft.x + viewChangeOffset.x, Global::GetInstance().topLeft.y + viewChangeOffset.y, SCREEN_WIDTH, SCREEN_HEIGHT));
-		//view.move(viewChangeOffset);
-		p.updateUI(viewChangeOffset);
+		if(currentScreenShakeCooldown <= screenShakeDuration)
+		{
+			//std::cout << "ScreenShake should occur" << std::endl;
+			//currentRoom->bg.setScale(0, 0.0f, 1.0f);
+			viewChangeOffset.x = rand() % shakeOffset;
+			viewChangeOffset.y = rand() % shakeOffset;
+			view.reset(sf::FloatRect(Global::GetInstance().topLeft.x + viewChangeOffset.x, Global::GetInstance().topLeft.y + viewChangeOffset.y, SCREEN_WIDTH, SCREEN_HEIGHT));
+			//view.move(viewChangeOffset);
+			p.updateUI(viewChangeOffset);
+		}
+		else if(currentScreenShakeCooldown > screenShakeDuration)
+		{
+			//std::cout << "Should be normal view" << std::endl;
+			//currentRoom->bg.setScale(0, 0.0f, -1.0f);
+			screenShake = false;
+		}
 	}
-	else if(currentScreenShakeCooldown > screenShakeDuration && currentScreenShakeCooldown <= screenShakeCooldown)
+	else
 	{
-		//std::cout << "Should be normal view" << std::endl;
 		view.reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y, SCREEN_WIDTH, SCREEN_HEIGHT));
 		p.updateUI();
-		//currentRoom->bg.setScale(0, 0.0f, -1.0f);
 	}
-	else if(currentScreenShakeCooldown >= screenShakeCooldown)
-	{
-		currentScreenShakeCooldown = 0;
-	}
+	
 
 	if((p.sprite.getPosition().y + PLAYER_DIM_Y/2) >= currentRoom->getroomHeight())
 	{
@@ -466,6 +474,7 @@ void Level::draw(sf::RenderWindow& window)
 	}
 	particle.draw(window);
 	particleEmitter.draw(window);
+	//coneEmitter.draw(window);
 	window.setView(view);
 	p.drawUI(window);
 }
@@ -557,4 +566,12 @@ void Level::checkHitPointTilesForDmg(float deltaTime)
 			}
 		}
 	}
+}
+
+void Level::shakeScreen(float duration, int shakeOff)
+{
+	screenShake = true;
+	screenShakeDuration = duration;
+	currentScreenShakeCooldown = 0;
+	shakeOffset = shakeOff;
 }

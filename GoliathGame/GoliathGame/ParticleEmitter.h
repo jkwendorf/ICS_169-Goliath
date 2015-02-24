@@ -5,7 +5,7 @@ class ParticleEmitter
 {
 public:
 	ParticleEmitter();
-	ParticleEmitter(std::string textureName, sf::Vector2f position, sf::Vector2f dir, float particleLife, float speed, int particleAmount);
+	ParticleEmitter(std::string textureName, sf::Vector2f position, sf::Vector2f dir, float particleLife, float speed, int particleAmount, std::string particleEmitterTye);
 	~ParticleEmitter();
 	void update(float deltaTime);
 	void draw(sf::RenderWindow &window);
