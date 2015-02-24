@@ -17,7 +17,7 @@ public:
 	Background(int levelNum, int roomNum);
 	~Background();
 	void setScale(int layerNum, float xScale, float yScale=1);
-	void update(float deltaTime);
+	void update(float deltaTime, float viewX);
 	void draw(sf::RenderWindow& window);
 
 	void reset();

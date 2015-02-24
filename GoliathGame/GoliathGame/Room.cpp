@@ -153,7 +153,8 @@ void Room::GetNearTiles(sf::FloatRect& rect, std::vector<Tile*>& nearTiles, bool
 
 void Room::update(float deltaTime)
 {
-	bg.update(deltaTime);
+	std::cout << "View room: " << mViewPosX << std::endl;
+	bg.update(deltaTime, mViewPosX);
 }
 
 void Room::draw(sf::RenderWindow& w)
@@ -344,4 +345,9 @@ int Room::getroomHeight()
 sf::Vector2f Room::getStartPos()
 {
 	return startPos;
+}
+
+void Room::setViewPosition(float viewPosX)
+{
+	mViewPosX = viewPosX;
 }

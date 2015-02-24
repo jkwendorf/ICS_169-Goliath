@@ -68,4 +68,5 @@ public:
 	Particle particle;
 	ParticleEmitter particleEmitter, coneEmitter;
 	float fixedTime;
+	
 };

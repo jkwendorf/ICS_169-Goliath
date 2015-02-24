@@ -446,6 +446,8 @@ void Level::update(float deltaTime)
 			//projectile
 				//check each "moving" projectile against enemies on the screen
 		//check enemy weapon collisions
+		std::cout << "View level: " << view.getCenter().x - view.getSize().x/2 << std::endl;
+		currentRoom->setViewPosition(view.getCenter().x - view.getSize().x/2);
 	}
 }
 

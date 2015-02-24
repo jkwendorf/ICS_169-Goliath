@@ -38,7 +38,7 @@ private:
 		std::vector<Tile*>& nearTiles);
 
 	void GetNearTiles(sf::FloatRect& player, std::vector<Tile*>& nearTiles, bool checkBoxOnly = false, bool grapple = false);
-
+	float mViewPosX;
 public:
 	Background bg;
 	//Player player;
@@ -56,5 +56,6 @@ public:
 	int getRoomNumber();
 	int getroomWidth();
 	int getroomHeight();
+	void setViewPosition(float viewPosX);
 	sf::Vector2f getStartPos();
 };
