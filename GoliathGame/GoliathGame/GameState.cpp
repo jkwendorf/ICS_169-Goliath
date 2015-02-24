@@ -38,7 +38,7 @@ void GameState::update(float deltaTime, sf::RenderWindow& window)
 
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || sf::Joystick::isButtonPressed(0, 7))
 	{
-		StateManager::getInstance().addState(PAUSE_GAME, new PauseGameState(), true);
+		StateManager::getInstance().addState(PAUSE_GAME, new PauseGameState(window), true);
 	}
 }
 

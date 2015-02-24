@@ -9,6 +9,7 @@ class PauseGameState : public State
 {
 public:
 	PauseGameState(void);
+	PauseGameState(sf::RenderWindow& window);
 	virtual ~PauseGameState(void);
 
 	void DeleteState();

@@ -14,7 +14,7 @@ Level::Level(int levelNumber, int roomNumber)
 	arrowsCanFire(true), fixedTime(0.0f), levelStart(true)
 {
 	p.init(collisionManager, new JumpingState());
-	currentRoom = new Room(levelNumber, roomNumber, enemyList, arrowTileList, destructTileList);
+	currentRoom = new Room(levelNumber, roomNumber, enemyList, arrowTileList, destructTileList, hitPointTileList);
 	//background.setTexture(*TextureManager::GetInstance().retrieveTexture("bandit canyon level"));
 	//sf::Color color = background.getColor();
 	//background.setColor(sf::Color(color.r, color.g, color.b, 200));
@@ -44,6 +44,7 @@ void Level::DeleteLevel()
 	arrowTileList.clear();
 	arrows.clear();
 	destructTileList.clear();
+	hitPointTileList.clear();
 	delete currentRoom;
 	delete collisionManager;
 	//particleEmitter.~ParticleEmitter();
@@ -60,7 +61,8 @@ void Level::changeRoom()
 		arrowTileList.clear();
 		arrows.clear();
 		destructTileList.clear();
-		currentRoom = new Room(levelNum, ++roomNum, enemyList, arrowTileList, destructTileList);
+		hitPointTileList.clear();
+		currentRoom = new Room(levelNum, ++roomNum, enemyList, arrowTileList, destructTileList, hitPointTileList);
 		setArrowTileArrows();
 		//Move player to the start pos in new room
 		p.resetPosition(currentRoom->getStartPos());
@@ -360,6 +362,7 @@ void Level::update(float deltaTime)
 
 		int i = 0;
 		//std::cout << "Player position:" << p.sprite.getPosition().x << " " << p.sprite.getPosition().y << std::endl;
+		checkHitPointTilesForDmg(deltaTime);
 		checkDestructableTiles();
 
 		//CODE TO DISABLE ARROW SHOOTER
@@ -524,5 +527,34 @@ void Level::checkDestructableTiles()
 			continue;
 		}
 		it++;
+	}
+
+	for (auto iter = hitPointTileList.begin(); iter != hitPointTileList.end();)
+	{
+		if((*iter)->isHealthZero())
+		{
+			auto iterToErase = iter;
+			iter++;
+			delete (*iterToErase);
+			*iterToErase = new Tile();
+			hitPointTileList.erase(iterToErase);
+			continue;
+		}
+
+		iter++;
+	}
+}
+
+void Level::checkHitPointTilesForDmg(float deltaTime)
+{
+	for (auto it = hitPointTileList.begin(); it != hitPointTileList.end(); it++)
+	{
+		if((*it)->isWaitOver(deltaTime))
+		{
+			if(collisionManager->playerSwordCollideWithTile(p.playerSword, *it) && p.playerSword.attacking)
+			{
+				(*it)->takeDamage();
+			}
+		}
 	}
 }
