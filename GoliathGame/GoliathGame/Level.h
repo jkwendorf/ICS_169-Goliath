@@ -39,6 +39,8 @@ private:
 
 	bool arrowsCanFire;
 	bool levelStart;
+	bool screenShake;
+	int shakeOffset;
 
 	void viewCheck();
 	void playerCheck();
@@ -57,6 +59,7 @@ public:
 	virtual ~Level(void);
 	void update(float deltaTime);
 	void draw(sf::RenderWindow& window);
+	void shakeScreen(float duration, int shakeOffset);
 	void DeleteLevel();
 	bool CheckChangeScreen();
 	//checking if particle works
