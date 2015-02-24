@@ -626,7 +626,7 @@ void Player::moveOutOfTile(Tile* t)
 	float left = (hitbox.getPosition().x + hitbox.getGlobalBounds().width/2) - t->left, 
 		right = (t->left + t->width) - (hitbox.getPosition().x - hitbox.getGlobalBounds().width/2), 
 		up = (hitbox.getPosition().y + hitbox.getGlobalBounds().height/2.f + 0.1f) - t->top, 
-		down = (t->top + t->height) - (hitbox.getPosition().y - hitbox.getGlobalBounds().height/2); 
+		down = (t->top + t->height) - (hitbox.getPosition().y - hitbox.getGlobalBounds().height/2);
 
 	float mini = min(up, down);
 	mini = min(right, mini); 
