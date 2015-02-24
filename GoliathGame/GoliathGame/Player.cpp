@@ -132,9 +132,9 @@ void Player::update(float deltaTime)
 	if(!hShot.grappleInProgress)
 	{
 		if(facingRight)
-			hShot.update(sf::Vector2f(sprite.getPosition().x + 60, sprite.getPosition().y - 15));
+			hShot.update(sf::Vector2f(sprite.getPosition().x, sprite.getPosition().y - 15));
 		else
-			hShot.update(sf::Vector2f(sprite.getPosition().x - 60, sprite.getPosition().y - 15));
+			hShot.update(sf::Vector2f(sprite.getPosition().x, sprite.getPosition().y - 15));
 	}
 	else
 	{
@@ -302,12 +302,17 @@ void Player::move(sf::Vector2f& distance)
 void Player::draw(sf::RenderWindow& window)
 {
 	//ui->draw(window);
-	BaseObject::draw(window);
-	window.draw(hShot.sprite);
-	playerSword.draw(window);
-	for(int x = 0; x < 3; x++)
-		if(ammo[x].moving)
-			ammo[x].draw(window);
+	
+	if(drawPlease)
+	{
+		BaseObject::draw(window);
+		if(!collisionManager->isGrappleListEmpty())
+			window.draw(hShot.sprite);
+		playerSword.draw(window);
+		for(int x = 0; x < 3; x++)
+			if(ammo[x].moving)
+				ammo[x].draw(window);
+	}
 	
 	window.draw(crosshair);
 	
@@ -625,7 +630,7 @@ void Player::moveOutOfTile(Tile* t)
 	float left = (hitbox.getPosition().x + hitbox.getGlobalBounds().width/2) - t->left, 
 		right = (t->left + t->width) - (hitbox.getPosition().x - hitbox.getGlobalBounds().width/2), 
 		up = (hitbox.getPosition().y + hitbox.getGlobalBounds().height/2.f + 0.1f) - t->top, 
-		down = (t->top + t->height) - (hitbox.getPosition().y - hitbox.getGlobalBounds().height/2); 
+		down = (t->top + t->height) - (hitbox.getPosition().y - hitbox.getGlobalBounds().height/2);
 
 	float mini = min(up, down);
 	mini = min(right, mini); 

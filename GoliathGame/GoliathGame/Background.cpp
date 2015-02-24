@@ -32,35 +32,36 @@ void Background::setScale(int layerNum, float xScale, float yScale)
 	movingLayers[layerNum].scale.y = yScale;
 }
 	
-void Background::update(float deltaTime)
+void Background::update(float deltaTime, float viewX)
 {
 	for (int i = 0; i < movingLayers.size(); i++)
 	{
+		movingLayers[i].setViewX(viewX);
 		movingLayers[i].update(deltaTime, vel);
-		if (movingLayers[i].image[i].getPosition().y + movingLayers[i].image[i].getGlobalBounds().height 
-			< nonMovingLayer.getPosition().y + nonMovingLayer.getGlobalBounds().height)
-		{
-			//reset();
-			vel.y *= -1;
-			//movingLayers[i].currentDegrees += deltaTime * movingLayers[i].degrees/movingLayers[i].timeToRotate;
-			//movingLayers[i].image.rotate(deltaTime * movingLayers[i].degrees/movingLayers[i].timeToRotate);
-			//if (movingLayers[i].currentDegrees > movingLayers[i].degrees) {
-			//	movingLayers[i].rotateForward = false;
-			//	vel.y *= -1;
-			//}
-		
-		}
-		else if (movingLayers[i].image[i].getPosition().y > nonMovingLayer.getPosition().y) 
-		{
-			vel.y *= -1;
-			
-			//movingLayers[i].currentDegrees -= deltaTime * movingLayers[i].degrees/movingLayers[i].timeToRotate;
-			//movingLayers[i].image.rotate(deltaTime * movingLayers[i].degrees/movingLayers[i].timeToRotate);
-			//if (movingLayers[i].currentDegrees > movingLayers[i].degrees) {
-			//	movingLayers[i].rotateForward = false;
-			//	vel.y *= -1;
-			//}
-		}
+		//if (movingLayers[i].image[i].getPosition().y + movingLayers[i].image[i].getGlobalBounds().height 
+		//	< nonMovingLayer.getPosition().y + nonMovingLayer.getGlobalBounds().height)
+		//{
+		//	//reset();
+		//	vel.y *= -1;
+		//	//movingLayers[i].currentDegrees += deltaTime * movingLayers[i].degrees/movingLayers[i].timeToRotate;
+		//	//movingLayers[i].image.rotate(deltaTime * movingLayers[i].degrees/movingLayers[i].timeToRotate);
+		//	//if (movingLayers[i].currentDegrees > movingLayers[i].degrees) {
+		//	//	movingLayers[i].rotateForward = false;
+		//	//	vel.y *= -1;
+		//	//}
+		//
+		//}
+		//else if (movingLayers[i].image[i].getPosition().y > nonMovingLayer.getPosition().y) 
+		//{
+		//	vel.y *= -1;
+		//	
+		//	//movingLayers[i].currentDegrees -= deltaTime * movingLayers[i].degrees/movingLayers[i].timeToRotate;
+		//	//movingLayers[i].image.rotate(deltaTime * movingLayers[i].degrees/movingLayers[i].timeToRotate);
+		//	//if (movingLayers[i].currentDegrees > movingLayers[i].degrees) {
+		//	//	movingLayers[i].rotateForward = false;
+		//	//	vel.y *= -1;
+		//	//}
+		//}
 	}
 }
 	

@@ -1,10 +1,10 @@
 #include "Section.h"
 // include more tiles
 
-Section::Section(int sectionNumber, std::string& s, sf::Vector2f& offset, std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList)
+Section::Section(int sectionNumber, std::string& s, sf::Vector2f& offset, std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList, std::list<Tile*> &hitPointTileList)
 	:sectionNum(sectionNumber), pathToText(s), offset(offset), startPos(-999.0, -999.0)
 {
-	LoadTileMap(enemyList, arrowTileList, destructTileList);
+	LoadTileMap(enemyList, arrowTileList, destructTileList, hitPointTileList);
 }
 
 Section::~Section()
@@ -219,7 +219,7 @@ void Section::print()
 //Loading is the text file from the given file path
 //Parses the first line of the file to get information about the rest of the file.
 //Continues through the file until it hits the end of the file and creates tiles based off information parsed in
-void Section::LoadTileMap(std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList)
+void Section::LoadTileMap(std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList, std::list<Tile*> &hitPointTileList)
 {
 	std::cout << "Loading section: " << sectionNum << std::endl; 
 	std::ifstream ifs;
@@ -367,6 +367,13 @@ void Section::LoadTileMap(std::vector<std::shared_ptr<Enemy>> &enemyList, std::v
 				grid1[(y*gDim.y) + x] = new Tile(sf::Vector2f(x * GAME_TILE_DIM + offset.x, y * GAME_TILE_DIM + offset.y), 
 					tileType, 0x31);
 				destructTileList.push_back(grid1[(y*gDim.y)+x]);
+				break;
+			case 26:
+				// Hitpoint Tile
+				delete grid1[(y*gDim.y) + x];
+				grid1[(y*gDim.y) + x] = new Tile(sf::Vector2f(x * GAME_TILE_DIM + offset.x, y * GAME_TILE_DIM + offset.y),
+					tileType, 0x31);
+				hitPointTileList.push_back(grid1[(y*gDim.y)+x]);
 				break;
 			default:
 				delete grid1[(y*gDim.y) + x];
