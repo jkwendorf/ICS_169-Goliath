@@ -50,7 +50,7 @@ void Layer::update(float deltaTime, sf::Vector2f& vel)
 		//	if (movingLayers[i].currentDegrees < 0)
 		//		movingLayers[i].rotateForward = true;
 		//}	
-	}
+	} 
 }
 	
 void Layer::draw(sf::RenderWindow& window)
