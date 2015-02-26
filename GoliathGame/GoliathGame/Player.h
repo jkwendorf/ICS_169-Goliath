@@ -87,7 +87,7 @@ public:
 	void playerMove(float& deltaTime);
 	void horizontalAcceleration(MovementDirection dir, float& deltaTime);
 	void verticalAcceleration(float& deltaTime);
-	void moveOutOfTile(Tile* t);
+	void moveOutOfTile(Tile* t, int totalReadjust);
 	void instantVaultAboveGrappleTile();
 	void interpolateVaultAboveGrappleTile();
 

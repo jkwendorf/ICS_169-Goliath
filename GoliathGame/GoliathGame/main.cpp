@@ -78,6 +78,7 @@ int main()
 
 	StateManager::getInstance().DeleteAllStates();
 	
+	Global::GetInstance().ControllerVibrate();
 	Global::GetInstance().SavePlayer();
 	Global::GetInstance().CleanUp();
 
