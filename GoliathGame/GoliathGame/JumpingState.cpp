@@ -32,6 +32,8 @@ void JumpingState::update(Player* player, float deltaTime)
 	
 	if(player->collisionManager->playerCollisionDetection(player))
 	{
+		int currentCount = 0;
+
 		while(player->collisionManager->playerCollisionDetection(player))
 		{
 			if((player->collisionManager->getCollidedTile(*player) != nullptr) && 
@@ -39,7 +41,8 @@ void JumpingState::update(Player* player, float deltaTime)
 			{
 				player->takeDamage();
 			}
-			player->moveOutOfTile(player->collisionManager->getCollidedTile(*player));
+			player->moveOutOfTile(player->collisionManager->getCollidedTile(*player), currentCount);
+			currentCount++;
 		}
 	}
 	else

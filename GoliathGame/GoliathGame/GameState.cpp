@@ -38,8 +38,14 @@ void GameState::update(float deltaTime, sf::RenderWindow& window)
 
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || sf::Joystick::isButtonPressed(0, 7))
 	{
+		Global::GetInstance().ControllerVibrate();
 		StateManager::getInstance().addState(PAUSE_GAME, new PauseGameState(window), true);
 	}
+
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::I))
+		Global::GetInstance().ControllerVibrate(0, 50);
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::O))
+		Global::GetInstance().ControllerVibrate();
 }
 
 void GameState::draw(sf::RenderWindow& window)
