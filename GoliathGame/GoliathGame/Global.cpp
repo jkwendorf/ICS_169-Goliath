@@ -1,4 +1,5 @@
 #include "Global.h"
+#include <Xinput.h>
 
 Global::Global()
 	:inventory(new PlayerInventory())
@@ -279,5 +280,31 @@ void Global::SetUpTileSheet(sf::Texture* texture)
 		//std::cout << "Pos x: " <<  temp.left << ". Pos Y: " << temp.top << std::endl;
 		currentTileSheet[i]->setTextureRect(temp);
 		currentTileSheet[i]->setScale(ratio, ratio);
+	}
+}
+
+void Global::ControllerVibrate(int leftPercent, int rightPercent)
+{
+	if(leftPercent > 100)
+		leftPercent = 100;
+	else if(leftPercent < 0)
+		leftPercent = 0;
+
+	if(rightPercent > 100)
+		rightPercent = 100;
+	else if(rightPercent < 0)
+		rightPercent = 0;
+
+	if(sf::Joystick::isConnected(0))
+	{
+		XINPUT_VIBRATION VibrationState;
+		ZeroMemory(&VibrationState, sizeof(XINPUT_VIBRATION));
+		int iLeftMotor = leftPercent * 655.35f;
+		int iRightMotor = rightPercent * 655.35f;
+
+		VibrationState.wLeftMotorSpeed = iLeftMotor;
+		VibrationState.wRightMotorSpeed = iRightMotor;
+
+		XInputSetState(0, &VibrationState);
 	}
 }

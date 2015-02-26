@@ -1,5 +1,6 @@
 #include "Level.h"
 #include "GrapplingState.h"
+#include "StateManager.h"
 
 Level::Level(void)
 	:changeScreen(false), enemyAI(collisionManager)
@@ -146,7 +147,11 @@ void Level::update(float deltaTime)
 	if( nearTile != -999)
 	{
 		if((nearTile == 18 || nearTile == 19) && hitPointTileList.empty())
+		{
 			changeRoom();
+			deltaTime = 0.f;
+			StateManager::getInstance().setTimeReset(true);
+		}
 		else if (nearTile == 20)
 		{
 			p.takeDamage();
@@ -446,7 +451,7 @@ void Level::update(float deltaTime)
 			//projectile
 				//check each "moving" projectile against enemies on the screen
 		//check enemy weapon collisions
-		std::cout << "View level: " << view.getCenter().x - view.getSize().x/2 << std::endl;
+//std::cout << "View level: " << view.getCenter().x - view.getSize().x/2 << std::endl;
 		currentRoom->setViewPosition(view.getCenter().x - view.getSize().x/2);
 	}
 }

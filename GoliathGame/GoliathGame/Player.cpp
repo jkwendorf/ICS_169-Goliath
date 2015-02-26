@@ -101,12 +101,19 @@ void Player::update(float deltaTime)
 		if(recoverTime < 0.5f)
 		{
 			drawPlease = !drawPlease;
+
+			if(recoverTime > 0.3f)
+				Global::GetInstance().ControllerVibrate();
+			else
+				Global::GetInstance().ControllerVibrate(75, 80);
+
 		}
 		else
 		{
 			recoverTime = 0.0f;
 			gotHit = false;
 			drawPlease = true;
+			Global::GetInstance().ControllerVibrate();
 		}
 	}
 
@@ -625,7 +632,7 @@ void Player::verticalAcceleration(float& deltaTime)
 	}
 }*/
 
-void Player::moveOutOfTile(Tile* t)
+void Player::moveOutOfTile(Tile* t, int totalReadjust)
 { 
 	float left = (hitbox.getPosition().x + hitbox.getGlobalBounds().width/2) - t->left, 
 		right = (t->left + t->width) - (hitbox.getPosition().x - hitbox.getGlobalBounds().width/2), 
@@ -633,8 +640,32 @@ void Player::moveOutOfTile(Tile* t)
 		down = (t->top + t->height) - (hitbox.getPosition().y - hitbox.getGlobalBounds().height/2);
 
 	float mini = min(up, down);
-	mini = min(right, mini); 
+	mini = min(right, mini);
 	mini = min(left, mini);
+
+	if(totalReadjust >= 3)
+	{
+		if(mini == left)
+		{
+			mini = min(up, down);
+			mini = min(right, mini);
+		}
+		else if(mini == right)
+		{
+			mini = min(up, down);
+			mini = min(left, mini);
+		}
+		else if(mini == up)
+		{
+			mini = min(right, down);
+			mini = min(left, mini);
+		}
+		else
+		{
+			mini = min(right, up);
+			mini = min(left, mini);
+		}
+	}
 
 	if(mini == left)
 	{
