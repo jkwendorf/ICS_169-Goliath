@@ -19,8 +19,8 @@ Player::Player()
 	grappleSpeed = Global::GetInstance().playerAttributes[4];
 	gravity = Global::GetInstance().playerAttributes[5];
 	fallSpeed = Global::GetInstance().playerAttributes[6];
-	player = Animation(4, 4, 90, 120, .10); 
-	sprite.setTexture(*TextureManager::GetInstance().retrieveTexture("David_Run2"));
+	player = Animation(8, 1, 90, 120, .10); 
+	sprite.setTexture(*TextureManager::GetInstance().retrieveTexture("David_Walk"));
 	crosshair.setTexture(*TextureManager::GetInstance().retrieveTexture("crosshair"));
 	crosshair.setPosition(-1000,-1000);
 	//crosshair.setScale(1.2,1.2);
@@ -226,7 +226,8 @@ void Player::update(float deltaTime)
 
 
 	//Animated sprite update
-	player.update(deltaTime, sprite, 1, facingRight);
+	player.update(deltaTime, sprite, 0, facingRight);
+	//player.update(deltaTime, sprite, 1, facingRight);
 	//hitbox.setPosition(sprite.getPosition().x, sprite.getPosition().y);
 	BaseObject::update(deltaTime);
 	hitbox.setFillColor(sf::Color::Blue);

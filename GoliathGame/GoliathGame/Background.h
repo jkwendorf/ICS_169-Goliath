@@ -11,6 +11,8 @@ private:
 	std::vector<Layer> movingLayers;
 	sf::Vector2f vel;
 	sf::Clock clock;
+	bool hitGround;
+	float timerForStep;
 
 	Background();
 public:
@@ -20,6 +22,8 @@ public:
 	void update(float deltaTime, float viewX);
 	void draw(sf::RenderWindow& window);
 
+	void setHitFloor(bool b);
+	bool hitFloor();
 	void reset();
 
 };

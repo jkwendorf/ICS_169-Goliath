@@ -31,7 +31,7 @@ Level::Level(int levelNumber, int roomNumber)
 	setArrowTileArrows();
 	//realEnemyList.push_back(new Enemy("Test",200,200, 10));
 	particle = Particle("rock", sf::Vector2f(50, 100), sf::Vector2f(0, 1), 5, 250);
-	particleEmitter = ParticleEmitter("rock", sf::Vector2f(0, -400), sf::Vector2f(0, 1), 10, 350, 30, "debris");
+	particleEmitter = ParticleEmitter("rock", sf::Vector2f(0, -400), sf::Vector2f(0, 1), 10, 350, 10, "debris");
 	coneEmitter = ParticleEmitter("rock", sf::Vector2f(100, 1200), sf::Vector2f(.5, .5), 1, 50, 30, "cone");
 	//shakeScreen(5.0, 100);
 }
@@ -99,6 +99,11 @@ void Level::update(float deltaTime)
 	currentScreenShakeCooldown += deltaTime;
 
 	currentRoom->update(deltaTime);
+	if (currentRoom->bg.hitFloor()) {
+		shakeScreen(1.0f, 20);
+		currentRoom->bg.setHitFloor(false);
+		particleEmitter.resetAllParticles();
+	}
 
 	//SCREENSHAKE CODE
 	if(screenShake)
@@ -112,12 +117,14 @@ void Level::update(float deltaTime)
 			view.reset(sf::FloatRect(Global::GetInstance().topLeft.x + viewChangeOffset.x, Global::GetInstance().topLeft.y + viewChangeOffset.y, SCREEN_WIDTH, SCREEN_HEIGHT));
 			//view.move(viewChangeOffset);
 			p.updateUI(viewChangeOffset);
+			Global::GetInstance().ControllerVibrate(75, 75);
 		}
 		else if(currentScreenShakeCooldown > screenShakeDuration)
 		{
 			//std::cout << "Should be normal view" << std::endl;
 			//currentRoom->bg.setScale(0, 0.0f, -1.0f);
 			screenShake = false;
+			Global::GetInstance().ControllerVibrate();
 		}
 	}
 	else

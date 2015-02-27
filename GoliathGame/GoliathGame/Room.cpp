@@ -153,7 +153,6 @@ void Room::GetNearTiles(sf::FloatRect& rect, std::vector<Tile*>& nearTiles, bool
 
 void Room::update(float deltaTime)
 {
-	std::cout << "View room: " << mViewPosX << std::endl;
 	bg.update(deltaTime, mViewPosX);
 }
 
