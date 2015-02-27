@@ -28,6 +28,9 @@ BaseObject::BaseObject(int testing, int objectNum, const sf::Vector2i& pos, cons
 	sprite.setPosition(pos.x + sectionOffSet.x, pos.y + sectionOffSet.y);
 	sprite.setScale(scale, scale);
 
+	hitbox.setPosition(pos.x + sectionOffSet.x, pos.y + sectionOffSet.y);
+	hitbox.setSize(sf::Vector2f(sprite.getGlobalBounds().width, sprite.getGlobalBounds().height));
+	hitbox.setFillColor(sf::Color::Blue);
 }
 
 BaseObject::~BaseObject()
@@ -37,12 +40,13 @@ BaseObject::~BaseObject()
 
 void BaseObject::update(float deltaTime)
 {
-
+	hitbox.setPosition(sprite.getPosition());
 }
 
 void BaseObject::draw(sf::RenderWindow& window)
 {
 	window.draw(sprite);
+	//window.draw(hitbox);
 }
 
 void BaseObject::print()

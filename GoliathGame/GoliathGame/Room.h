@@ -20,7 +20,7 @@ private:
 	sf::Music roomMusic;
 
 	Room();
-	void LoadRoom(int levelNumber, std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList);
+	void LoadRoom(int levelNumber, std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList, std::list<Tile*> &hitPointTileList);
 	bool CheckSectionOnScreen(int sectionNum);
 	std::vector<Tile*> checkBotRight(int i, sf::FloatRect& rect);
 	std::vector<sf::Vector2f> inSameGrid(const sf::Vector2f& p1, const sf::Vector2f& p2);
@@ -38,11 +38,11 @@ private:
 		std::vector<Tile*>& nearTiles);
 
 	void GetNearTiles(sf::FloatRect& player, std::vector<Tile*>& nearTiles, bool checkBoxOnly = false, bool grapple = false);
-
+	float mViewPosX;
 public:
 	Background bg;
 	//Player player;
-	Room(int levelNumber, int roomNumber, std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList);
+	Room(int levelNumber, int roomNumber, std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList, std::list<Tile*> &hitPointTileList);
 	~Room();
 	
 	void GetCollidableTiles(BaseObject& obj, sf::Vector2f& dim, std::vector<Tile*>& nearTiles, bool player=false);
@@ -56,5 +56,6 @@ public:
 	int getRoomNumber();
 	int getroomWidth();
 	int getroomHeight();
+	void setViewPosition(float viewPosX);
 	sf::Vector2f getStartPos();
 };

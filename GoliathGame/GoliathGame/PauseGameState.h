@@ -9,10 +9,11 @@ class PauseGameState : public State
 {
 public:
 	PauseGameState(void);
+	PauseGameState(sf::RenderWindow& window);
 	virtual ~PauseGameState(void);
 
 	void DeleteState();
-	void update(float deltaTime);
+	void update(float deltaTime, sf::RenderWindow& window);
 	void draw(sf::RenderWindow& window);
 	void handleEvent(sf::Event event);
 	void loadContent();
@@ -24,6 +25,9 @@ private:
 	ButtonManager* bM;
 	PopOut* pO;
 	sf::Font* f;
-	bool isPressedUp, isPressedDown, saved;
+	sf::Text pauseText;
+	sf::Texture backgroundTexture;
+	sf::Sprite backgroundSprite;
+	bool isPressedUp, isPressedDown, saved, backgroundUpdated;
 };
 

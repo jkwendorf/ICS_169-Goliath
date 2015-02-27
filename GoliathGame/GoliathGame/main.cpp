@@ -58,7 +58,7 @@ int main()
 
 		if(infocus)
 		{
-			StateManager::getInstance().getCurrentState()->update(deltaTime);
+			StateManager::getInstance().getCurrentState()->update(deltaTime, window);
 		}
 
 		window.clear(sf::Color::Black);
@@ -78,6 +78,7 @@ int main()
 
 	StateManager::getInstance().DeleteAllStates();
 	
+	Global::GetInstance().ControllerVibrate();
 	Global::GetInstance().SavePlayer();
 	Global::GetInstance().CleanUp();
 

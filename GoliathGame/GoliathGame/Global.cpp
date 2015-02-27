@@ -1,4 +1,5 @@
 #include "Global.h"
+#include <Xinput.h>
 
 Global::Global()
 	:inventory(new PlayerInventory())
@@ -6,8 +7,7 @@ Global::Global()
 	test = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("GainItem")));
 
 	testingRect.setPosition(-100, -100);
-	testingRect.setOutlineColor(sf::Color::Red);
-	testingRect.setOutlineThickness(5);
+	testingRect.setFillColor(sf::Color::Red);
 	testingRect.setOrigin(testingRect.getLocalBounds().left, testingRect.getLocalBounds().top);
 }
 
@@ -57,11 +57,15 @@ void Global::ParseXML() {
 			RoomStruct roomStruct;
 			roomStruct.roomSize = room.attribute("size").as_int();
 			roomStruct.nonMovinglayer = room.attribute("nonMoving").as_string();
+			roomStruct.posOffset = sf::Vector2f(room.attribute("offsetX").as_float(), room.attribute("offsetY").as_float());
 			for (pugi::xml_node layer = room.child("MovingLayer"); layer; layer = layer.next_sibling("MovingLayer"))
 			{
 				LayerStruct l;
 				l.imageName = layer.attribute("image").as_string();
 				l.scale = sf::Vector2f(layer.attribute("velScaleX").as_float(), layer.attribute("velScaleY").as_float());
+				l.posOffset = sf::Vector2f(layer.attribute("offsetX").as_float(), layer.attribute("offsetY").as_float());
+				l.degrees = layer.attribute("rotationDegree").as_float();
+				l.timeToRotate = layer.attribute("timeToRotate").as_float();
 				roomStruct.movingLayers.push_back(l);
 			}
 			roomSizes[str2] = roomStruct;
@@ -260,7 +264,7 @@ void Global::calculateOffset()
 {
 	//grab height and width and calculate that offset
 	xOffset = SCREEN_WIDTH / 2;
-	yOffset = SCREEN_HEIGHT / 2;
+	yOffset = (SCREEN_HEIGHT / 2) + GAME_TILE_DIM;
 
 }
 
@@ -276,5 +280,31 @@ void Global::SetUpTileSheet(sf::Texture* texture)
 		//std::cout << "Pos x: " <<  temp.left << ". Pos Y: " << temp.top << std::endl;
 		currentTileSheet[i]->setTextureRect(temp);
 		currentTileSheet[i]->setScale(ratio, ratio);
+	}
+}
+
+void Global::ControllerVibrate(int leftPercent, int rightPercent)
+{
+	if(leftPercent > 100)
+		leftPercent = 100;
+	else if(leftPercent < 0)
+		leftPercent = 0;
+
+	if(rightPercent > 100)
+		rightPercent = 100;
+	else if(rightPercent < 0)
+		rightPercent = 0;
+
+	if(sf::Joystick::isConnected(0))
+	{
+		XINPUT_VIBRATION VibrationState;
+		ZeroMemory(&VibrationState, sizeof(XINPUT_VIBRATION));
+		int iLeftMotor = leftPercent * 655.35f;
+		int iRightMotor = rightPercent * 655.35f;
+
+		VibrationState.wLeftMotorSpeed = iLeftMotor;
+		VibrationState.wRightMotorSpeed = iRightMotor;
+
+		XInputSetState(0, &VibrationState);
 	}
 }

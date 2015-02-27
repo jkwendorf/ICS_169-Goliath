@@ -32,7 +32,7 @@ public:
 	void addState(StateEnum state, State* s, bool makeCurrent);
 	void deleteState(StateEnum state);
 	void changeToState(StateEnum state, bool deleteCurrentState);
-	void update(float deltaTime);
+	void update(float deltaTime, sf::RenderWindow& window);
 	void draw(sf::RenderWindow& window);
 	void handleEvent(sf::Event event);
 	State* getCurrentState();

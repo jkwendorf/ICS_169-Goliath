@@ -2,13 +2,7 @@
 
 #include "Global.h"
 #include "RoomStruct.h"
-
-struct Layer
-{
-	sf::Sprite image;
-	sf::Vector2f scale;
-	int layerNum;
-};
+#include "Layer.h"
 
 class Background
 {
@@ -17,15 +11,19 @@ private:
 	std::vector<Layer> movingLayers;
 	sf::Vector2f vel;
 	sf::Clock clock;
+	bool hitGround;
+	float timerForStep;
 
 	Background();
 public:
 	Background(int levelNum, int roomNum);
 	~Background();
 	void setScale(int layerNum, float xScale, float yScale=1);
-	void update(float deltaTime);
+	void update(float deltaTime, float viewX);
 	void draw(sf::RenderWindow& window);
 
+	void setHitFloor(bool b);
+	bool hitFloor();
 	void reset();
 
 };

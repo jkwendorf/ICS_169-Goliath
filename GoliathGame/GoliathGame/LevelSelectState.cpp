@@ -39,7 +39,7 @@ void LevelSelectState::DeleteState()
 		delete bM;
 }
 
-void LevelSelectState::update(float deltaTime)
+void LevelSelectState::update(float deltaTime, sf::RenderWindow& window)
 {
 	if(inputCoolDown <= 0)
 	{
@@ -80,6 +80,7 @@ void LevelSelectState::update(float deltaTime)
 
 		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || sf::Joystick::isButtonPressed(0, 1))
 		{
+			bM->resetSelectedButton();
 			StateManager::getInstance().changeToState(MAIN_MENU, false);
 		}
 	}

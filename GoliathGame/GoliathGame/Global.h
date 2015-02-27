@@ -39,6 +39,7 @@ public :
 	void ParseLevelSizes(std::map<std::string, int>& mapToUpdate, std::string& fileName);
 	void ParseLevelTileSheets();
 	bool checkPoint(const sf::Vector2f& p, const sf::FloatRect& r);
+	void ControllerVibrate(int leftPercent = 0, int rightPercent = 0);
 
 	sf::Vector2f topLeft;
 	int fps;

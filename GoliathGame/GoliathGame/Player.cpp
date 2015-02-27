@@ -7,8 +7,9 @@
 Player::Player() 
 	: BaseObject(0), grappleInProgress(false), facingRight(true),running(false), isVaulting(false), 
 	isHanging(false), shouldHang(false), health(Global::GetInstance().basePlayerStats[0]), 
-	stamina(Global::GetInstance().basePlayerStats[1]),	weaponCooldown(Global::GetInstance().basePlayerStats[4]), bottomPoint(0),
-	deathTimer(0.0f), currentState(nullptr), collidingLeft(false), collidingRight(false)
+	stamina(Global::GetInstance().basePlayerStats[1]), weaponCooldown(Global::GetInstance().basePlayerStats[4]), bottomPoint(0),
+	deathTimer(0.0f), currentState(nullptr), collidingLeft(false), collidingRight(false), gotHit(false), recoverTime(0.0f), drawPlease(true),
+	targetScale(-0.02)
 {
 	vel = sf::Vector2f(0.0,0.0);
 
@@ -19,10 +20,11 @@ Player::Player()
 	grappleSpeed = Global::GetInstance().playerAttributes[4];
 	gravity = Global::GetInstance().playerAttributes[5];
 	fallSpeed = Global::GetInstance().playerAttributes[6];
-	player = Animation(4, 4, 90, 120, .10); 
-	sprite.setTexture(*TextureManager::GetInstance().retrieveTexture("David_Run2"));
+	player = Animation(8, 1, 90, 120, .10); 
+	sprite.setTexture(*TextureManager::GetInstance().retrieveTexture("David_Walk"));
 	crosshair.setTexture(*TextureManager::GetInstance().retrieveTexture("crosshair"));
 	crosshair.setPosition(-1000,-1000);
+	crosshair.setOrigin(crosshair.getGlobalBounds().width/2, crosshair.getGlobalBounds().height/2);
 	//crosshair.setScale(1.2,1.2);
 	//sprite.setPosition(64, 560);
 	//sprite.setPosition(500, 64);
@@ -48,7 +50,7 @@ Player::Player()
 	ui = new UserInterface(health, stamina);
 	SetUpEffects();
 
-	hitbox = sf::RectangleShape(sf::Vector2f(GAME_TILE_DIM-10, PLAYER_DIM_Y-10));
+	hitbox = sf::RectangleShape(sf::Vector2f(PLAYER_DIM_X - PLAYER_DIM_X/2, PLAYER_DIM_Y-10));
 	hitbox.setOrigin(hitbox.getLocalBounds().width/2, hitbox.getLocalBounds().height/2);
 }
 
@@ -95,6 +97,28 @@ void Player::update(float deltaTime)
 		deathTimer -= deltaTime;
 	}
 
+	if(gotHit)
+	{
+		recoverTime += deltaTime;
+		if(recoverTime < 0.5f)
+		{
+			drawPlease = !drawPlease;
+
+			if(recoverTime > 0.3f)
+				Global::GetInstance().ControllerVibrate();
+			else
+				Global::GetInstance().ControllerVibrate(75, 80);
+
+		}
+		else
+		{
+			recoverTime = 0.0f;
+			gotHit = false;
+			drawPlease = true;
+			Global::GetInstance().ControllerVibrate();
+		}
+	}
+
 	currentState->update(this, deltaTime);
 	//std::cout << sprite.getPosition().x << ", " << sprite.getPosition().y << std::endl;
 	/*
@@ -117,9 +141,9 @@ void Player::update(float deltaTime)
 	if(!hShot.grappleInProgress)
 	{
 		if(facingRight)
-			hShot.update(sf::Vector2f(sprite.getPosition().x + 60, sprite.getPosition().y - 15));
+			hShot.update(sf::Vector2f(sprite.getPosition().x, sprite.getPosition().y - 15));
 		else
-			hShot.update(sf::Vector2f(sprite.getPosition().x - 60, sprite.getPosition().y - 15));
+			hShot.update(sf::Vector2f(sprite.getPosition().x, sprite.getPosition().y - 15));
 	}
 	else
 	{
@@ -194,19 +218,27 @@ void Player::update(float deltaTime)
 	if(!collisionManager->isGrappleListEmpty())
 	{
 		closestGrappleTile = collisionManager->getNearestGrappleTile(*this);
-		crosshair.setPosition(closestGrappleTile.left - 17, closestGrappleTile.top - 17);
-		crosshair.setColor(sf::Color(crosshair.getColor().r, crosshair.getColor().g,crosshair.getColor().b, crosshair.getColor().a - 10));
-		if(crosshair.getColor().a < 0)
-			crosshair.setColor(sf::Color(crosshair.getColor().r, crosshair.getColor().g,crosshair.getColor().b, 255));
+		crosshair.setPosition(closestGrappleTile.left + closestGrappleTile.width/2, closestGrappleTile.top + closestGrappleTile.height/2);
+		//crosshair.setColor(sf::Color(crosshair.getColor().r, crosshair.getColor().g,crosshair.getColor().b, crosshair.getColor().a));
+		crosshair.setScale(crosshair.getScale().x + targetScale, crosshair.getScale().y + targetScale);
+		if(crosshair.getScale().x < 0.8 || crosshair.getScale().x > 1.5)
+		{
+			//crosshair.setScale(0.0,0.0);
+			targetScale *= -1;
+		}
 	}
 	else
 		crosshair.setPosition(-1000,-1000);
 
 
 	//Animated sprite update
-	player.update(deltaTime, sprite, 1, facingRight);
-	hitbox.setPosition(sprite.getPosition().x, sprite.getPosition().y);
+	player.update(deltaTime, sprite, 0, facingRight);
+	//player.update(deltaTime, sprite, 1, facingRight);
+	//hitbox.setPosition(sprite.getPosition().x, sprite.getPosition().y);
+	BaseObject::update(deltaTime);
 	hitbox.setFillColor(sf::Color::Blue);
+	//Global::GetInstance().testingRect.setPosition(sprite.getPosition().x-(sprite.getGlobalBounds().width/2), sprite.getPosition().y-(sprite.getGlobalBounds().height/2));
+	//Global::GetInstance().testingRect.setSize(sf::Vector2f(sprite.getGlobalBounds().width, sprite.getGlobalBounds().height));
 }
 
 void Player::takeDamage()
@@ -272,25 +304,31 @@ void Player::attack()
 void Player::move(float x, float y)
 {
 	sprite.move(x, y);
+	hitbox.setPosition(sprite.getPosition());
 }
 
 void Player::move(sf::Vector2f& distance)
 {
 	sprite.move(distance);
+	hitbox.setPosition(sprite.getPosition());
 }
 
 void Player::draw(sf::RenderWindow& window)
 {
 	//ui->draw(window);
-	BaseObject::draw(window);
-	window.draw(hShot.sprite);
-	playerSword.draw(window);
-	for(int x = 0; x < 3; x++)
-		if(ammo[x].moving)
-			ammo[x].draw(window);
+	
+	if(drawPlease)
+	{
+		BaseObject::draw(window);
+		if(!collisionManager->isGrappleListEmpty())
+			window.draw(hShot.sprite);
+		playerSword.draw(window);
+		for(int x = 0; x < 3; x++)
+			if(ammo[x].moving)
+				ammo[x].draw(window);
+	}
 	
 	window.draw(crosshair);
-	window.draw(hitbox);
 	
 	/* //TESTING CIRCLE
 	sf::CircleShape circle = sf::CircleShape(5.0);
@@ -601,16 +639,40 @@ void Player::verticalAcceleration(float& deltaTime)
 	}
 }*/
 
-void Player::moveOutOfTile(Tile* t)
-{
-	float left = (sprite.getPosition().x + sprite.getGlobalBounds().width/2) - t->left, 
-		right = (t->left + t->width) - (sprite.getPosition().x - sprite.getGlobalBounds().width/2), 
-		up = (sprite.getPosition().y + sprite.getGlobalBounds().height/2.f + 0.1f) - t->top, 
-		down = (t->top + t->height) - (sprite.getPosition().y - sprite.getGlobalBounds().height/2); 
+void Player::moveOutOfTile(Tile* t, int totalReadjust)
+{ 
+	float left = (hitbox.getPosition().x + hitbox.getGlobalBounds().width/2) - t->left, 
+		right = (t->left + t->width) - (hitbox.getPosition().x - hitbox.getGlobalBounds().width/2), 
+		up = (hitbox.getPosition().y + hitbox.getGlobalBounds().height/2.f + 0.1f) - t->top, 
+		down = (t->top + t->height) - (hitbox.getPosition().y - hitbox.getGlobalBounds().height/2);
 
 	float mini = min(up, down);
-	mini = min(right, mini); 
+	mini = min(right, mini);
 	mini = min(left, mini);
+
+	if(totalReadjust >= 3)
+	{
+		if(mini == left)
+		{
+			mini = min(up, down);
+			mini = min(right, mini);
+		}
+		else if(mini == right)
+		{
+			mini = min(up, down);
+			mini = min(left, mini);
+		}
+		else if(mini == up)
+		{
+			mini = min(right, down);
+			mini = min(left, mini);
+		}
+		else
+		{
+			mini = min(right, up);
+			mini = min(left, mini);
+		}
+	}
 
 	if(mini == left)
 	{
@@ -658,7 +720,10 @@ void Player::moveOutOfTile(Tile* t)
 	}
 }
 
-
+void Player::playHurtSound()
+{
+	soundEffects[DAMAGEDSOUND].play();
+}
 
 void Player::drawUI(sf::RenderWindow& window)
 {
@@ -700,6 +765,8 @@ void Player::SetUpEffects()
 	soundEffects[SHOOTSOUND] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("playerShoot")));
 	soundEffects[TAKEDMGSOUND] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("playerTakeDMG")));
 	soundEffects[HOOKSOUND] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("playerHook")));
+	soundEffects[DAMAGEDSOUND] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("playerHurt")));
+	soundEffects[DEATHSOUND] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("playerDied")));
 }
 
 void Player::instantVaultAboveGrappleTile()
@@ -754,5 +821,6 @@ bool Player::checkDead()
 void Player::resetHealth()
 {
 	health = 100;
+	soundEffects[DEATHSOUND].play();
 	ui->resetUI();
 }

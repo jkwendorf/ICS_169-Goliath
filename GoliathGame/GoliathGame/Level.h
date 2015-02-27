@@ -25,6 +25,7 @@ private:
 	std::vector<std::shared_ptr<Enemy>> enemyList;
 	std::vector<Tile*> arrowTileList;
 	std::list<Tile*> destructTileList;
+	std::list<Tile*> hitPointTileList;
 	Player p;
 	Room* currentRoom;
 	sf::View view;
@@ -38,6 +39,9 @@ private:
 	std::vector<Projectile*> arrows;
 
 	bool arrowsCanFire;
+	bool levelStart;
+	bool screenShake;
+	int shakeOffset;
 
 	void viewCheck();
 	void playerCheck();
@@ -45,6 +49,7 @@ private:
 	void CleanUp();
 	void setArrowTileArrows();
 	void checkDestructableTiles();
+	void checkHitPointTilesForDmg(float deltaTime);
 
 	sf::Vector2f viewChangeOffset;
 	float screenShakeDuration;
@@ -56,10 +61,12 @@ public:
 	virtual ~Level(void);
 	void update(float deltaTime);
 	void draw(sf::RenderWindow& window);
+	void shakeScreen(float duration, int shakeOffset);
 	void DeleteLevel();
 	bool CheckChangeScreen();
 	//checking if particle works
 	Particle particle;
-	ParticleEmitter particleEmitter;
+	ParticleEmitter particleEmitter, coneEmitter;
 	float fixedTime;
+	
 };

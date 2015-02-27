@@ -1,12 +1,12 @@
 
 #include "Room.h"
 
-Room::Room(int levelNumber, int roomNumber, std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList)
+Room::Room(int levelNumber, int roomNumber, std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList, std::list<Tile*> &hitPointTileList)
 	:roomNum(roomNumber), numSect(Global::GetInstance().roomSizes.at("Level" + std::to_string(levelNumber) + "Room" + std::to_string(roomNumber)).roomSize),
 	roomWidth(0), roomHeight(0), loadedTitles(false), bg(levelNumber, roomNumber)
 {
 	
-	LoadRoom(levelNumber, enemyList, arrowTileList, destructTileList);
+	LoadRoom(levelNumber, enemyList, arrowTileList, destructTileList, hitPointTileList);
 	//Music
 	if (!roomMusic.openFromFile("media/sound/Testlevel1SoTC.wav"))
 	{
@@ -26,7 +26,7 @@ Room::~Room()
 	roomMusic.stop();
 }
 	
-void Room::LoadRoom(int levelNumber, std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList)
+void Room::LoadRoom(int levelNumber, std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList, std::list<Tile*> &hitPointTileList)
 {
 	sectList = new Section*[numSect];
 	int totalWidth = 0;
@@ -35,13 +35,13 @@ void Room::LoadRoom(int levelNumber, std::vector<std::shared_ptr<Enemy>> &enemyL
 		std::string temp = "level" + std::to_string(levelNumber) + "room" + std::to_string(roomNum) + "section" + std::to_string(i+1);
 		if(i==0)
 		{
-			sectList[i] = new Section(i, temp, sf::Vector2f(0,0), enemyList, arrowTileList, destructTileList);
+			sectList[i] = new Section(i, temp, sf::Vector2f(0,0), enemyList, arrowTileList, destructTileList, hitPointTileList);
 			if(sectList[i]->getStartPos().x != -999)
 				startPos = sectList[i]->getStartPos();
 		}
 		else
 		{
-			sectList[i] = new Section(i, temp, sf::Vector2f(roomWidth, 0), enemyList, arrowTileList, destructTileList);
+			sectList[i] = new Section(i, temp, sf::Vector2f(roomWidth, 0), enemyList, arrowTileList, destructTileList, hitPointTileList);
 			if(sectList[i]->getStartPos().x != -999)
 				startPos = sectList[i]->getStartPos();
 		}
@@ -66,13 +66,8 @@ void Room::GetCollidableTiles(BaseObject& obj, sf::Vector2f& dim, std::vector<Ti
 	//sf::FloatRect rect(sf::Vector2f(obj.sprite.getPosition().x - dim.x/2, obj.sprite.getPosition().y - dim.y/2), sf::Vector2f(dim.x, dim.y));
 	//std::cout << obj.sprite.getGlobalBounds().left << ", " << obj.sprite.getGlobalBounds().top << ", " << obj.sprite.getGlobalBounds().width << ", ";
 	//std::cout <<  obj.sprite.getGlobalBounds().height << std::endl;
-	if(player)
-	{
-		//std::cout << obj.hitbox.getGlobalBounds().left << ", " << obj.hitbox.getGlobalBounds().top << ", " << obj.hitbox.getGlobalBounds().width << ", ";
-		//std::cout <<  obj.hitbox.getGlobalBounds().height << std::endl;
-		GetNearTiles(obj.hitbox.getGlobalBounds(), nearTiles);
-	}
-	GetNearTiles(obj.sprite.getGlobalBounds(), nearTiles);
+
+	GetNearTiles(obj.hitbox.getGlobalBounds(), nearTiles);
 	return;
 }
 
@@ -80,7 +75,7 @@ int Room::NearInteractableTiles(BaseObject& obj)
 {
 	std::vector<Tile*> nearTiles;
 	//sf::IntRect rect(sf::Vector2f(obj.sprite.getPosition().x - PLAYER_DIM_X/2, obj.sprite.getPosition().y - PLAYER_DIM_Y/2), sf::Vector2f(PLAYER_DIM_X, PLAYER_DIM_Y));
-	GetNearTiles(obj.sprite.getGlobalBounds(), nearTiles, true);
+	GetNearTiles(obj.hitbox.getGlobalBounds(), nearTiles, true);
 	if(nearTiles.size() > 0)
 		return nearTiles[0]->getTileNum();
 	return -999; 
@@ -158,7 +153,7 @@ void Room::GetNearTiles(sf::FloatRect& rect, std::vector<Tile*>& nearTiles, bool
 
 void Room::update(float deltaTime)
 {
-	bg.update(deltaTime);
+	bg.update(deltaTime, mViewPosX);
 }
 
 void Room::draw(sf::RenderWindow& w)
@@ -349,4 +344,9 @@ int Room::getroomHeight()
 sf::Vector2f Room::getStartPos()
 {
 	return startPos;
+}
+
+void Room::setViewPosition(float viewPosX)
+{
+	mViewPosX = viewPosX;
 }
