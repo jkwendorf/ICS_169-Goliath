@@ -124,6 +124,7 @@ public:
 	CollisionManager* collisionManager;
 	std::deque<Command*> inputQueue;
 	sf::Sprite crosshair;
+	float targetScale;
 	Tile closestGrappleTile;
 	Animation player;
 	bool gotHit;

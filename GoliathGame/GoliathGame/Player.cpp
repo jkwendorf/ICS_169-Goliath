@@ -8,7 +8,8 @@ Player::Player()
 	: BaseObject(0), grappleInProgress(false), facingRight(true),running(false), isVaulting(false), 
 	isHanging(false), shouldHang(false), health(Global::GetInstance().basePlayerStats[0]), 
 	stamina(Global::GetInstance().basePlayerStats[1]), weaponCooldown(Global::GetInstance().basePlayerStats[4]), bottomPoint(0),
-	deathTimer(0.0f), currentState(nullptr), collidingLeft(false), collidingRight(false), gotHit(false), recoverTime(0.0f), drawPlease(true)
+	deathTimer(0.0f), currentState(nullptr), collidingLeft(false), collidingRight(false), gotHit(false), recoverTime(0.0f), drawPlease(true),
+	targetScale(-0.02)
 {
 	vel = sf::Vector2f(0.0,0.0);
 
@@ -23,6 +24,7 @@ Player::Player()
 	sprite.setTexture(*TextureManager::GetInstance().retrieveTexture("David_Run2"));
 	crosshair.setTexture(*TextureManager::GetInstance().retrieveTexture("crosshair"));
 	crosshair.setPosition(-1000,-1000);
+	crosshair.setOrigin(crosshair.getGlobalBounds().width/2, crosshair.getGlobalBounds().height/2);
 	//crosshair.setScale(1.2,1.2);
 	//sprite.setPosition(64, 560);
 	//sprite.setPosition(500, 64);
@@ -216,10 +218,14 @@ void Player::update(float deltaTime)
 	if(!collisionManager->isGrappleListEmpty())
 	{
 		closestGrappleTile = collisionManager->getNearestGrappleTile(*this);
-		crosshair.setPosition(closestGrappleTile.left - 17, closestGrappleTile.top - 17);
-		crosshair.setColor(sf::Color(crosshair.getColor().r, crosshair.getColor().g,crosshair.getColor().b, crosshair.getColor().a - 10));
-		if(crosshair.getColor().a < 0)
-			crosshair.setColor(sf::Color(crosshair.getColor().r, crosshair.getColor().g,crosshair.getColor().b, 255));
+		crosshair.setPosition(closestGrappleTile.left + closestGrappleTile.width/2, closestGrappleTile.top + closestGrappleTile.height/2);
+		//crosshair.setColor(sf::Color(crosshair.getColor().r, crosshair.getColor().g,crosshair.getColor().b, crosshair.getColor().a));
+		crosshair.setScale(crosshair.getScale().x + targetScale, crosshair.getScale().y + targetScale);
+		if(crosshair.getScale().x < 0.8 || crosshair.getScale().x > 1.5)
+		{
+			//crosshair.setScale(0.0,0.0);
+			targetScale *= -1;
+		}
 	}
 	else
 		crosshair.setPosition(-1000,-1000);
