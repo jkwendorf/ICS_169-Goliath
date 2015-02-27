@@ -327,7 +327,7 @@ void Section::LoadTileMap(std::vector<std::shared_ptr<Enemy>> &enemyList, std::v
 				//Hazard tile
 				delete grid1[(y*gDim.y) + x];
 				grid1[(y*gDim.y) + x] = new Tile(sf::Vector2f(x * GAME_TILE_DIM + offset.x, y * GAME_TILE_DIM + offset.y), 
-					tileType, 0x21);
+					tileType, 0x24);
 				break;
 			case 21:
 				// Arrow Tile Left
