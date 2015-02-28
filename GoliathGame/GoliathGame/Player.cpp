@@ -92,6 +92,7 @@ void Player::handleInput()
 
 void Player::update(float deltaTime)
 {
+	hShot.updateChain(sprite.getPosition());
 	if(deathTimer > 0)
 	{
 		deathTimer -= deltaTime;
@@ -327,7 +328,9 @@ void Player::draw(sf::RenderWindow& window)
 			if(ammo[x].moving)
 				ammo[x].draw(window);
 	}
-	
+	if(hShot.grappleInProgress || hShot.hookedOnSomething)
+		for(int x = 0; x < 10; x++)
+			window.draw(hShot.hookshotChain[x]);
 	window.draw(crosshair);
 	
 	/* //TESTING CIRCLE
