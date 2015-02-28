@@ -34,6 +34,7 @@ private:
 	BaseGameScreen* currentScreen;
 	BaseGameScreen* nextScreen;
 	SCREENENUM screen;
+	bool firstLoop;
 
 };
 

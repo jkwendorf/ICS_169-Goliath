@@ -9,7 +9,7 @@ Player::Player()
 	isHanging(false), shouldHang(false), health(Global::GetInstance().basePlayerStats[0]), 
 	stamina(Global::GetInstance().basePlayerStats[1]), weaponCooldown(Global::GetInstance().basePlayerStats[4]), bottomPoint(0),
 	deathTimer(0.0f), currentState(nullptr), collidingLeft(false), collidingRight(false), gotHit(false), recoverTime(0.0f), drawPlease(true),
-	targetScale(-0.02)
+	targetScale(-0.02), doHitVibrate(false), vibrateTime(0.0f)
 {
 	vel = sf::Vector2f(0.0,0.0);
 
@@ -52,6 +52,7 @@ Player::Player()
 
 	hitbox = sf::RectangleShape(sf::Vector2f(PLAYER_DIM_X - PLAYER_DIM_X/2, PLAYER_DIM_Y-10));
 	hitbox.setOrigin(hitbox.getLocalBounds().width/2, hitbox.getLocalBounds().height/2);
+	//hitbox.setFillColor(sf::Color::Blue);
 }
 
 void Player::init(CollisionManager* collisionManager_, BaseState* startState)
@@ -92,6 +93,7 @@ void Player::handleInput()
 
 void Player::update(float deltaTime)
 {
+	hShot.updateChain(sprite.getPosition());
 	if(deathTimer > 0)
 	{
 		deathTimer -= deltaTime;
@@ -105,10 +107,8 @@ void Player::update(float deltaTime)
 			drawPlease = !drawPlease;
 			ui->flashHealth();
 
-			if(recoverTime > 0.3f)
-				Global::GetInstance().ControllerVibrate();
-			else
-				Global::GetInstance().ControllerVibrate(75, 80);
+			if(recoverTime <= 0.3f)
+				doHitVibrate = true;
 
 		}
 		else
@@ -121,8 +121,21 @@ void Player::update(float deltaTime)
 		}
 	}
 
+	if(doHitVibrate)
+	{
+		vibrateTime += deltaTime;
+		if(vibrateTime > 0.3f)
+		{
+			Global::GetInstance().ControllerVibrate();
+			doHitVibrate = false;
+			vibrateTime = 0.0f;
+		}
+		else
+			Global::GetInstance().ControllerVibrate(75, 80);
+	}
+
 	currentState->update(this, deltaTime);
-	//std::cout << sprite.getPosition().x << ", " << sprite.getPosition().y << std::endl;
+	//std::cout << sprite.getPopksition().x << ", " << sprite.getPosition().y << std::endl;
 	/*
 	while(!inputQueue.empty())
 	//if(inputQueue.empty())
@@ -247,6 +260,7 @@ void Player::update(float deltaTime)
 
 void Player::takeDamage()
 {
+
 	//Player health decrease
 	if(deathTimer <= 0)
 	{
@@ -331,9 +345,11 @@ void Player::draw(sf::RenderWindow& window)
 			if(ammo[x].moving)
 				ammo[x].draw(window);
 	}
-	
+	if(hShot.grappleInProgress || hShot.hookedOnSomething)
+		for(int x = 0; x < 10; x++)
+			window.draw(hShot.hookshotChain[x]);
 	window.draw(crosshair);
-	
+	window.draw(hitbox);
 	/* //TESTING CIRCLE
 	sf::CircleShape circle = sf::CircleShape(5.0);
 	circle.setPosition(sprite.getPosition());
@@ -369,6 +385,7 @@ void Player::grapple()
 
 void Player::resetPosition(sf::Vector2f& newPos)
 {
+	std::cout << "Reset player Position" << std::endl;
 	sprite.setPosition(newPos);
 	vel.x = 0;
 }

@@ -3,6 +3,7 @@
 #include "JumpingState.h"
 
 InputManager::InputManager()
+	:grappleReset(true)
 {
 	movement[0] = false;
 	movement[1] = false;
@@ -103,8 +104,11 @@ void InputManager::update(Player& s, Camera camera, float deltaTime)
 		}
 	}
 	*/
-	utility[2] = (sf::Mouse::isButtonPressed(sf::Mouse::Right) || sf::Joystick::isButtonPressed(0, 1)) && !utility[2] ? true : false;
-	utility[3] = (sf::Mouse::isButtonPressed(sf::Mouse::Left) || sf::Joystick::isButtonPressed(0, 2)) && !utility[3] ? true : false;
+	//std::cout << "Z axis: " << sf::Joystick::getAxisPosition(0, sf::Joystick::Z) << std::endl;
+	utility[2] = grappleReset && (sf::Mouse::isButtonPressed(sf::Mouse::Left) || (sf::Joystick::getAxisPosition(0, sf::Joystick::Z) < -0.1)) && !utility[2] ? true : false;
+
+	grappleReset = (sf::Joystick::getAxisPosition(0, sf::Joystick::Z) > -10 && sf::Joystick::getAxisPosition(0, sf::Joystick::Z) < 10);
+	//utility[3] = (sf::Mouse::isButtonPressed(sf::Mouse::Left) || sf::Joystick::isButtonPressed(0, 2)) && !utility[3] ? true : false;
 	utility[4] = (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || sf::Joystick::isButtonPressed(0, 3)) && !utility[4] ? true : false;
 	utility[5] = (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Joystick::getAxisPosition(0, sf::Joystick::Y) < -50) && !utility[6] ? true : false;
 	utility[6] = (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Joystick::getAxisPosition(0, sf::Joystick::Y) > 50) && !utility[5] ? true : false;

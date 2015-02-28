@@ -17,7 +17,9 @@ Projectile::Projectile(sf::Vector2f startPos, sf::Vector2f vel) :
 	startTime = 0.0;
 	//sprite.setOrigin(sprite.getGlobalBounds().width/2, sprite.getGlobalBounds().height/2);
 	sprite.setTextureRect(sf::IntRect(0, 0, 64, 64));
+	sprite.setPosition(startLocation.x, startLocation.y);
 	hitbox = sf::RectangleShape(sf::Vector2f(36,36));
+	hitbox.setPosition(startLocation);
 }
 
 Projectile::~Projectile()
@@ -39,6 +41,7 @@ void Projectile::update(float deltaTime)
 				bulletAnimation.update(deltaTime, sprite, 0, true);
 			//sprite.move(velocity.x * 100 * deltaTime, velocity.y * 100 * deltaTime);
 			sprite.move(velocity.x * 750 * deltaTime, velocity.y * 750 * deltaTime);
+			drawPlease = true;
 		}
 		else
 		{

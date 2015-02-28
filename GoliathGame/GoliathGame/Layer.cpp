@@ -11,7 +11,7 @@ Layer::Layer(RoomStruct& roomStrct, int layerNum)
 	image[0].scale(2.0f, 2.0f);
 	image[1] = sf::Sprite(*TextureManager::GetInstance().retrieveTexture(roomStrct.movingLayers[layerNum].imageName));
 	//l.image.setPosition(0.0f, 0.0f);
-	std::cout << image[0].getGlobalBounds().left << std::endl;
+	//std::cout << image[0].getGlobalBounds().left << std::endl;
 	image[1].setPosition(image[0].getGlobalBounds().left + image[0].getGlobalBounds().width, 
 		image[0].getGlobalBounds().top);
 	//image[1].setOrigin(image[0].getGlobalBounds().left/2, image[0].getGlobalBounds().top/2);

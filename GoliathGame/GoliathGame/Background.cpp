@@ -42,7 +42,7 @@ void Background::update(float deltaTime, float viewX)
 			//Move up
 			if (movingLayers[movingLayers.size() - 1].image[1].getPosition().y > nonMovingLayer.getGlobalBounds().height)
 			{
-				std::cout << "Move Up" << std::endl;
+				//std::cout << "Move Up" << std::endl;
 				//reset();
 				vel.y = -100;
 
@@ -58,7 +58,7 @@ void Background::update(float deltaTime, float viewX)
 			else if (movingLayers[movingLayers.size() - 1].image[1].getPosition().y + movingLayers[movingLayers.size() - 1].image[1].getGlobalBounds().height <
 				nonMovingLayer.getPosition().y + nonMovingLayer.getGlobalBounds().height && vel.y != 99) 
 			{
-				std::cout << "Move Down" << std::endl;
+				//std::cout << "Move Down" << std::endl;
 				//vel.y = 100;
 				vel.x = 0;
 				vel.y = 0;

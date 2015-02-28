@@ -1,7 +1,9 @@
 #include "HookShot.h"
+#include "Utility.h"
 
 HookShot::HookShot() : 
-	hookedOnSomething(false), grappleInProgress(false), fireRight(false), isDisabled(false), grappleLength(400), hitNonGrappleTile(true)
+	hookedOnSomething(false), grappleInProgress(false), fireRight(false), isDisabled(false), grappleLength(400), 
+	hitNonGrappleTile(true), hookshotSpeed(10)
 {
 	sprite.setTexture(*TextureManager::GetInstance().retrieveTexture("Grapple"));
 	sprite.setScale(0.025,0.025);
@@ -9,6 +11,11 @@ HookShot::HookShot() :
 	currentCooldown = 0.0;
 	weaponCooldown = 1.0;
 	grappleBox = grappleLength/sqrt(2);
+	for(int x = 0; x < 10; x++)
+	{
+		hookshotChain[x].setTexture(*TextureManager::GetInstance().retrieveTexture("rock"));
+		hookshotChain[x].setOrigin(hookshotChain[x].getLocalBounds().width/2, hookshotChain[x].getLocalBounds().height/2);
+	}
 }
 
 HookShot::~HookShot()
@@ -28,7 +35,8 @@ void HookShot::update(float deltaTime)
 
 	if(!hookedOnSomething)
 	{
-		sprite.move((grappleLocation.x - sprite.getPosition().x)*25*deltaTime, (grappleLocation.y - sprite.getPosition().y)*25*deltaTime);	
+		sprite.move((grappleLocation.x - sprite.getPosition().x)*hookshotSpeed*deltaTime, 
+			(grappleLocation.y - sprite.getPosition().y)*hookshotSpeed*deltaTime);	
 	}
 	else
 		currentCooldown = 0.0;
@@ -59,4 +67,15 @@ void HookShot::attack()
 void HookShot::grappleToLocation(sf::Vector2f location)
 {
 	grappleLocation = location;
+}
+
+void HookShot::updateChain(sf::Vector2f playerPos)
+{
+	sf::Vector2f normalDirectionTowardHookshot = sprite.getPosition() - playerPos;
+	normalize(normalDirectionTowardHookshot);
+	sf::Vector2f directionTowardHookshot = sprite.getPosition() - playerPos;
+	//if(grappleInProgress || hookedOnSomething)
+		for(int x = 0; x < 10; x++)
+			hookshotChain[x].setPosition(playerPos
+			+ sf::Vector2f(directionTowardHookshot.x * x / 10, directionTowardHookshot.y * x /10));
 }
