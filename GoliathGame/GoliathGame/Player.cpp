@@ -52,6 +52,7 @@ Player::Player()
 
 	hitbox = sf::RectangleShape(sf::Vector2f(PLAYER_DIM_X - PLAYER_DIM_X/2, PLAYER_DIM_Y-10));
 	hitbox.setOrigin(hitbox.getLocalBounds().width/2, hitbox.getLocalBounds().height/2);
+	hitbox.setFillColor(sf::Color::Blue);
 }
 
 void Player::init(CollisionManager* collisionManager_, BaseState* startState)
@@ -243,6 +244,7 @@ void Player::update(float deltaTime)
 
 void Player::takeDamage()
 {
+
 	//Player health decrease
 	if(deathTimer <= 0)
 	{
@@ -329,7 +331,7 @@ void Player::draw(sf::RenderWindow& window)
 	}
 	
 	window.draw(crosshair);
-	
+	window.draw(hitbox);
 	/* //TESTING CIRCLE
 	sf::CircleShape circle = sf::CircleShape(5.0);
 	circle.setPosition(sprite.getPosition());
@@ -365,6 +367,7 @@ void Player::grapple()
 
 void Player::resetPosition(sf::Vector2f& newPos)
 {
+	std::cout << "Reset player Position" << std::endl;
 	sprite.setPosition(newPos);
 	vel.x = 0;
 }
