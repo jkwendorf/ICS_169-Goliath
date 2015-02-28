@@ -424,17 +424,21 @@ void Level::update(float deltaTime)
 
 				if(collisionManager->checkIfEnemyInRange(*a, &p))
 				{
-					p.health -= a->damage;
-					p.gotHit = true;
-					if(p.health > 0)
+					if(!p.gotHit)
 					{
-						p.playHurtSound();
+						p.health -= a->damage;
+						if(p.health > 0)
+						{
+							p.playHurtSound();
+						}
+						p.gotHit = true;
+
+						a->moving = false;
+						a->setLocation(a->startLocation);
+						a->drawPlease = false;
+						a->startTime = 0.0f;
 					}
-					a->moving = false;
-					a->setLocation(a->startLocation);
-					a->drawPlease = false;
-					a->startTime = 0.0f;
-					std::cout << "ARROW " << i << " hit player" << std::endl;
+
 				}
 			}
 			else if(arrowCool > 2.0f && arrowsCanFire)

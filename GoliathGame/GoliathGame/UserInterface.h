@@ -12,6 +12,8 @@ public:
 	void draw(sf::RenderWindow& window);
 	void update(float h, float s);
 	void updateDifferent(float h, float s, sf::Vector2f offset);
+	void flashHealth();
+	void endFlash();
 
 private:
 	/*sf::RectangleShape healthBar1;
@@ -22,6 +24,8 @@ private:
 	sf::RectangleShape staminaBar;*/
 
 	sf::Sprite healthIcon;
+
+	bool drawPlease;
 
 	bool showHealth1;
 	bool showHealth2;
