@@ -168,7 +168,7 @@ void Level::update(float deltaTime)
 	if(!changeScreen)
 	{
 
-		currentRoom->GetCollidableTiles(p, sf::Vector2f(PLAYER_DIM_X, PLAYER_DIM_Y), nearTiles, true);
+		currentRoom->GetCollidableTiles(p, nearTiles, true);
 
 		collisionManager->setNearByTiles(nearTiles);
 		collisionManager->setGrapplableTiles(nearTiles2);
@@ -278,8 +278,7 @@ void Level::update(float deltaTime)
 			if(po.moving)
 			{
 				std::cout << "Projectile position: " << po.sprite.getPosition().x << " " << po.sprite.getPosition().y << std::endl;	
-				currentRoom->GetCollidableTiles(po, sf::Vector2f(po.sprite.getTexture()->getSize().x/10,
-					po.sprite.getTexture()->getSize().y/10), proTile);
+				currentRoom->GetCollidableTiles(po, proTile);
 				for(auto& t : proTile)
 				{
 					std::cout << t->getTileNum() << std::endl;
@@ -305,7 +304,7 @@ void Level::update(float deltaTime)
 			if(e->health > 0)
 			{
 				std::vector<Tile*> proTile;
-				currentRoom->GetCollidableTiles(*e, sf::Vector2f(PLAYER_DIM_X, PLAYER_DIM_Y), enemyTiles);
+				currentRoom->GetCollidableTiles(*e, enemyTiles);
 
 				if(enemyTiles.size() > 0)
 				{
@@ -330,8 +329,7 @@ void Level::update(float deltaTime)
 				{
 					if(po.moving)
 					{
-						currentRoom->GetCollidableTiles(po, sf::Vector2f(po.sprite.getTexture()->getSize().x/10,
-							po.sprite.getTexture()->getSize().y/10), proTile);
+						currentRoom->GetCollidableTiles(po, proTile);
 
 						if(proTile.size() > 0)
 						{
@@ -352,8 +350,7 @@ void Level::update(float deltaTime)
 
 				if(ray.moving)
 				{
-					currentRoom->GetCollidableTiles(ray, sf::Vector2f(ray.sprite.getTexture()->getSize().x/10,
-							ray.sprite.getTexture()->getSize().y/10), proTile);
+					currentRoom->GetCollidableTiles(ray, proTile);
 
 						if(proTile.size() > 0)
 						{
@@ -408,8 +405,7 @@ void Level::update(float deltaTime)
 
 			if(a->moving)
 			{
-				currentRoom->GetCollidableTiles(*a, sf::Vector2f(a->sprite.getTexture()->getSize().x/10,
-					a->sprite.getTexture()->getSize().y/10), proTile);
+				currentRoom->GetCollidableTiles(*a, proTile);
 
 				if(proTile.size() > 0)
 				{
