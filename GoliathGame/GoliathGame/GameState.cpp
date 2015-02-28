@@ -31,6 +31,7 @@ void GameState::update(float deltaTime, sf::RenderWindow& window)
 {
 	if(!firstLoop)
 	{
+		Global::GetInstance().ControllerVibrate();
 		currentScreen->update(deltaTime);
 		if(currentScreen->CheckChangeScreen())
 		{
