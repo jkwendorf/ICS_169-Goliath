@@ -419,7 +419,7 @@ void Level::update(float deltaTime)
 				if(collisionManager->playerCollisionDetection(a))
 				{
 					a->moving = false;
-					a->setLocation(a->startLocation);
+					a->startTime = 0.0f;
 				}
 
 				if(collisionManager->checkIfEnemyInRange(*a, &p))
@@ -432,12 +432,15 @@ void Level::update(float deltaTime)
 					}
 					a->moving = false;
 					a->setLocation(a->startLocation);
+					a->drawPlease = false;
+					a->startTime = 0.0f;
 					std::cout << "ARROW " << i << " hit player" << std::endl;
 				}
 			}
 			else if(arrowCool > 2.0f && arrowsCanFire)
 			{
 				a->setLocation(a->startLocation);
+				a->drawPlease = true;
 				a->moving = true;
 			}
 		}
@@ -483,10 +486,7 @@ void Level::draw(sf::RenderWindow& window)
 	
 	for (auto& a : arrows)
 	{
-		if(a->moving)
-		{
-			a->draw(window);
-		}
+		a->draw(window);
 	}
 	particle.draw(window);
 	particleEmitter.draw(window);

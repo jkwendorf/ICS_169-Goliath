@@ -20,6 +20,7 @@ public:
 	void setVelocity(sf::Vector2f vel);
 
 	bool moving;
+	bool drawPlease;
 	//for now it has damage
 	float damage;
 	sf::Texture projectileTexture;

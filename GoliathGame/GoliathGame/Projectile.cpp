@@ -6,7 +6,7 @@ Projectile::Projectile()
 }
 
 Projectile::Projectile(sf::Vector2f startPos, sf::Vector2f vel) :
-	startLocation(startPos), velocity(vel), moving(false)
+	startLocation(startPos), velocity(vel), moving(false), drawPlease(true)
 {
 	bulletAnimation = Animation(10, 1, 64, 64, .10);
 	//source = sf::Vector2i(0,0);
@@ -52,7 +52,8 @@ void Projectile::update(float deltaTime)
 
 void Projectile::draw(sf::RenderWindow& window)
 {
-	BaseObject::draw(window);
+	if(drawPlease)
+		BaseObject::draw(window);
 	
 	//hitbox.setFillColor(sf::Color::Red);
 	//window.draw(rectangle);
