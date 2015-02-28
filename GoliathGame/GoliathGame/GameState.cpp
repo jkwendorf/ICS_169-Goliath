@@ -32,6 +32,7 @@ void GameState::update(float deltaTime, sf::RenderWindow& window)
 	currentScreen->update(deltaTime);
 	if(currentScreen->CheckChangeScreen())
 	{
+		Global::GetInstance().ControllerVibrate();
 		StateManager::getInstance().changeToState(MAIN_MENU, true);
 		StateManager::getInstance().deleteState(GAME);
 	}
@@ -41,11 +42,6 @@ void GameState::update(float deltaTime, sf::RenderWindow& window)
 		Global::GetInstance().ControllerVibrate();
 		StateManager::getInstance().addState(PAUSE_GAME, new PauseGameState(window), true);
 	}
-
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::I))
-		Global::GetInstance().ControllerVibrate(0, 50);
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::O))
-		Global::GetInstance().ControllerVibrate();
 }
 
 void GameState::draw(sf::RenderWindow& window)

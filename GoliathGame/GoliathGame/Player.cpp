@@ -9,7 +9,7 @@ Player::Player()
 	isHanging(false), shouldHang(false), health(Global::GetInstance().basePlayerStats[0]), 
 	stamina(Global::GetInstance().basePlayerStats[1]), weaponCooldown(Global::GetInstance().basePlayerStats[4]), bottomPoint(0),
 	deathTimer(0.0f), currentState(nullptr), collidingLeft(false), collidingRight(false), gotHit(false), recoverTime(0.0f), drawPlease(true),
-	targetScale(-0.02)
+	targetScale(-0.02), doHitVibrate(false), vibrateTime(0.0f)
 {
 	vel = sf::Vector2f(0.0,0.0);
 
@@ -105,10 +105,8 @@ void Player::update(float deltaTime)
 			drawPlease = !drawPlease;
 			ui->flashHealth();
 
-			if(recoverTime > 0.3f)
-				Global::GetInstance().ControllerVibrate();
-			else
-				Global::GetInstance().ControllerVibrate(75, 80);
+			if(recoverTime <= 0.3f)
+				doHitVibrate = true;
 
 		}
 		else
@@ -121,8 +119,21 @@ void Player::update(float deltaTime)
 		}
 	}
 
+	if(doHitVibrate)
+	{
+		vibrateTime += deltaTime;
+		if(vibrateTime > 0.3f)
+		{
+			Global::GetInstance().ControllerVibrate();
+			doHitVibrate = false;
+			vibrateTime = 0.0f;
+		}
+		else
+			Global::GetInstance().ControllerVibrate(75, 80);
+	}
+
 	currentState->update(this, deltaTime);
-	//std::cout << sprite.getPosition().x << ", " << sprite.getPosition().y << std::endl;
+	//std::cout << sprite.getPopksition().x << ", " << sprite.getPosition().y << std::endl;
 	/*
 	while(!inputQueue.empty())
 	//if(inputQueue.empty())
