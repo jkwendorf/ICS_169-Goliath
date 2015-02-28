@@ -219,6 +219,9 @@
     <ClCompile Include="Layer.cpp">
       <Filter>Source Files\Level Stuff</Filter>
     </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="State.h">
@@ -433,6 +436,9 @@
     </ClInclude>
     <ClInclude Include="Layer.h">
       <Filter>Header Files\Level Stuff</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

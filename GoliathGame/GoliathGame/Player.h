@@ -50,12 +50,13 @@ enum WeaponEnum
 enum SoundEnum
 {
 	ATTACKSOUND = 0,
-	JUMPSOUND = 1,
-	SHOOTSOUND = 2,
-	TAKEDMGSOUND = 3,
-	HOOKSOUND = 4,
-	DAMAGEDSOUND = 5,
-	DEATHSOUND = 6
+	JUMPSOUND1 = 1,
+	JUMPSOUND2 = 2,
+	HOOKSOUND = 3,
+	DAMAGEDSOUND1 = 4,
+	DAMAGEDSOUND2 = 5,
+	DEATHSOUND = 6,
+	SHOOTSOUND = 7
 };
 
 class BaseState;
@@ -82,7 +83,7 @@ public:
 	void grapple();
 	void resetPosition(sf::Vector2f& newPos);
 	void draw(sf::RenderWindow& window);
-	void playerUpdate(sf::View* view, sf::Vector2i roomSize, float deltaTime);
+	void playerUpdate(sf::Vector2i roomSize, float deltaTime);
 	
 	void playerMove(float& deltaTime);
 	void horizontalAcceleration(MovementDirection dir, float& deltaTime);
@@ -111,7 +112,7 @@ public:
 
 	bool grappleInProgress, facingRight, running, shouldHang, isHanging, isVaulting, collidingLeft, collidingRight;
 	Projectile ammo[3];
-	void viewCheck(sf::View* view, int width, int height);
+	void viewCheck(int width, int height);
 	Sword playerSword;
 	bool atTopEdge, atBottomEdge, atTheBottom;
 
@@ -133,10 +134,11 @@ public:
 	void playHurtSound();
 	//sf::RectangleShape hitbox;
 private:	
-	sf::Sound soundEffects[7];
+	sf::Sound soundEffects[8];
 	float deathTimer;
 
 	UserInterface* ui;
 	void SetUpAugments();
 	void SetUpEffects();
+	int randomHurtSound();
 };

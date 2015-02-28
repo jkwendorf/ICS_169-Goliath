@@ -91,14 +91,14 @@ void Background::update(float deltaTime, float viewX)
 		movingLayers[i].setViewX(viewX);
 		movingLayers[i].update(deltaTime, vel);
 
-		std::cout << "Layer: " << i << " Pos: " << movingLayers[i].image[i].getPosition().y << std::endl;
+		//std::cout << "Layer: " << i << " Pos: " << movingLayers[i].image[i].getPosition().y << std::endl;
 
 		// Move up
 		/*if (movingLayers[i].image[i].getPosition().y + movingLayers[i].image[i].getGlobalBounds().height 
 			< nonMovingLayer.getPosition().y + nonMovingLayer.getGlobalBounds().height)*/
 	}
 
-	std::cout << "Hi Tyler" << std::endl;
+	//std::cout << "Hi Tyler" << std::endl;
 }
 	
 void Background::draw(sf::RenderWindow& window)

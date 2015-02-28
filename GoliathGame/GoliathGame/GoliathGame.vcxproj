@@ -93,6 +93,7 @@
     <ClCompile Include="Boss.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="ButtonManager.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ClimbCommand.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="ControlsState.cpp" />
@@ -153,6 +154,7 @@
     <ClInclude Include="Boss.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="ButtonManager.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="ClimbCommand.h" />
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="Command.h" />

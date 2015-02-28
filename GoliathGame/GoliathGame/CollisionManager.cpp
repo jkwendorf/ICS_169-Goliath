@@ -164,8 +164,6 @@ void CollisionManager::checkEnemyBulletToPlayer(Projectile p, Player* player)
 {
 	if(p.hitbox.getGlobalBounds().intersects(player->hitbox.getGlobalBounds()) && p.moving)
 	{
-		std::cout << p.rectangle.getPosition().x << " " << p.rectangle.getPosition().y << std::endl;
-		std::cout << player->hitbox.getPosition().x << " " << player->hitbox.getPosition().x << std::endl;
 		player->health -= p.damage;
 		p.moving = false;
 	}
@@ -196,9 +194,9 @@ bool CollisionManager::checkIfEnemyInRange(Projectile p, Player* player)
 {
 	if(p.hitbox.getGlobalBounds().intersects(player->hitbox.getGlobalBounds()) && p.moving)
 	{
-		std::cout << p.rectangle.getPosition().x << " " << p.rectangle.getPosition().y << std::endl;
+		/*std::cout << p.rectangle.getPosition().x << " " << p.rectangle.getPosition().y << std::endl;
 		std::cout << player->hitbox.getPosition().x << " " << player->hitbox.getPosition().x << std::endl;
-		std::cout << "Player was hit by arrow" << std::endl;
+		std::cout << "Player was hit by arrow" << std::endl;*/
 		return true;
 	}
 	else return false;
