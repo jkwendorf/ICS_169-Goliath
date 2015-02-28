@@ -261,6 +261,12 @@ void InputManager::viewMove(sf::View* v, Player& s, float deltaTime)
 				viewChangedY = Global::GetInstance().yOffset * -4;
 			}
 			Global::GetInstance().topLeft.y -= viewDifference;
+
+			if(viewChangedY < GAME_TILE_DIM * -5)
+			{
+				viewChangedY = GAME_TILE_DIM * -5;
+			}
+
 			if(s.atBottomEdge)
 			{
 				v->reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y + viewChangedY, SCREEN_WIDTH, SCREEN_HEIGHT));
@@ -276,6 +282,11 @@ void InputManager::viewMove(sf::View* v, Player& s, float deltaTime)
 				viewChangedY = Global::GetInstance().yOffset * 4;
 			}
 			Global::GetInstance().topLeft.y += viewDifference;
+
+			if(viewChangedY > GAME_TILE_DIM * 5)
+			{
+				viewChangedY = GAME_TILE_DIM * 5;
+			}
 			if(s.atTopEdge || !s.atTheBottom)
 			{
 				v->reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y + viewChangedY, SCREEN_WIDTH, SCREEN_HEIGHT));

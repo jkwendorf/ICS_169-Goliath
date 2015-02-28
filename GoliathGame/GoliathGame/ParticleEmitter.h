@@ -9,6 +9,7 @@ public:
 	~ParticleEmitter();
 	void update(float deltaTime);
 	void draw(sf::RenderWindow &window);
+	void resetAllParticles();
 	std::vector<Particle> particleList;
 	//Particle* particles[20];
 	void disable();
