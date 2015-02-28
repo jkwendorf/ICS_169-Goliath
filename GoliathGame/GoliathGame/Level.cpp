@@ -513,29 +513,38 @@ void Level::setArrowTileArrows()
 {
 	for(auto& a : arrowTileList)
 	{
+		//std::cout << "Shooter: " << a->left << ", " << a->top << std::endl;
 		if(a->getDirection().x == 1.0)
 		{
 			Projectile* pro = new Projectile(sf::Vector2f(a->left + (GAME_TILE_DIM), a->top), a->getDirection());
+			pro->drawPlease = false;
 			pro->damage = 25;
 			arrows.push_back(pro);
+			//std::cout << pro->hitbox.getGlobalBounds().left << ", " << pro->hitbox.getGlobalBounds().top << std::endl;
 		}
 		else if(a->getDirection().x == -1.0)
 		{
 			Projectile* pro = new Projectile(sf::Vector2f(a->left - (GAME_TILE_DIM), a->top), a->getDirection());
+			pro->drawPlease = false;
 			pro->damage = 25;
 			arrows.push_back(pro);
+			//std::cout << pro->hitbox.getGlobalBounds().left << ", " << pro->hitbox.getGlobalBounds().top << std::endl;
 		}
 		else if(a->getDirection().y == 1.0)
 		{
 			Projectile* pro = new Projectile(sf::Vector2f(a->left, a->top + (GAME_TILE_DIM)), a->getDirection());
+			pro->drawPlease = false;
 			pro->damage = 25;
 			arrows.push_back(pro); 
+			//std::cout << pro->hitbox.getGlobalBounds().left << ", " << pro->hitbox.getGlobalBounds().top << std::endl;
 		}
 		else if(a->getDirection().y == -1.0)
 		{
 			Projectile* pro = new Projectile(sf::Vector2f(a->left, a->top - (GAME_TILE_DIM)), a->getDirection());
+			pro->drawPlease = false;
 			pro->damage = 25;
 			arrows.push_back(pro);
+			//std::cout << pro->hitbox.getGlobalBounds().left << ", " << pro->hitbox.getGlobalBounds().top << std::endl;
 		}
 
 	}
