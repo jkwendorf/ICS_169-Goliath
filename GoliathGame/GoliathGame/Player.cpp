@@ -52,7 +52,7 @@ Player::Player()
 
 	hitbox = sf::RectangleShape(sf::Vector2f(PLAYER_DIM_X - PLAYER_DIM_X/2, PLAYER_DIM_Y-10));
 	hitbox.setOrigin(hitbox.getLocalBounds().width/2, hitbox.getLocalBounds().height/2);
-	hitbox.setFillColor(sf::Color::Blue);
+	//hitbox.setFillColor(sf::Color::Blue);
 }
 
 void Player::init(CollisionManager* collisionManager_, BaseState* startState)
@@ -93,6 +93,7 @@ void Player::handleInput()
 
 void Player::update(float deltaTime)
 {
+	hShot.updateChain(sprite.getPosition());
 	if(deathTimer > 0)
 	{
 		deathTimer -= deltaTime;
@@ -331,7 +332,9 @@ void Player::draw(sf::RenderWindow& window)
 			if(ammo[x].moving)
 				ammo[x].draw(window);
 	}
-	
+	if(hShot.grappleInProgress || hShot.hookedOnSomething)
+		for(int x = 0; x < 10; x++)
+			window.draw(hShot.hookshotChain[x]);
 	window.draw(crosshair);
 	window.draw(hitbox);
 	/* //TESTING CIRCLE
