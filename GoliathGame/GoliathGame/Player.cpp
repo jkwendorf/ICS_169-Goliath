@@ -100,9 +100,10 @@ void Player::update(float deltaTime)
 	if(gotHit)
 	{
 		recoverTime += deltaTime;
-		if(recoverTime < 0.5f)
+		if(recoverTime < 2.0f)
 		{
 			drawPlease = !drawPlease;
+			ui->flashHealth();
 
 			if(recoverTime > 0.3f)
 				Global::GetInstance().ControllerVibrate();
@@ -115,6 +116,7 @@ void Player::update(float deltaTime)
 			recoverTime = 0.0f;
 			gotHit = false;
 			drawPlease = true;
+			ui->endFlash();
 			Global::GetInstance().ControllerVibrate();
 		}
 	}
@@ -822,5 +824,9 @@ void Player::resetHealth()
 {
 	health = 100;
 	soundEffects[DEATHSOUND].play();
+	recoverTime = 0.0f;
+	gotHit = false;
+	drawPlease = true;
+	ui->endFlash();
 	ui->resetUI();
 }
