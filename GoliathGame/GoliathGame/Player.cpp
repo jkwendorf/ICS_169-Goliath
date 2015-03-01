@@ -347,7 +347,7 @@ void Player::draw(sf::RenderWindow& window)
 		for(int x = 0; x < 10; x++)
 			window.draw(hShot.hookshotChain[x]);
 	window.draw(crosshair);
-	window.draw(hitbox);
+	//window.draw(hitbox);
 	/* //TESTING CIRCLE
 	sf::CircleShape circle = sf::CircleShape(5.0);
 	circle.setPosition(sprite.getPosition());

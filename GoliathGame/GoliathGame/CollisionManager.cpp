@@ -47,14 +47,18 @@ Tile CollisionManager::getNearestGrappleTile(BaseObject p)
 
 	*/
 	Tile closestTile;
+
 	if((grapplableTileList.front()->getFlags() & TILE::GRAPPLEABLEMASK) != 0)
 		closestTile = *grapplableTileList.front();
+	float closest = sqrt(pow(((closestTile.top + closestTile.height/2) - p.sprite.getPosition().y),2) + pow(((closestTile.left + closestTile.width/2) - p.sprite.getPosition().x),2));
 	for(Tile* b: grapplableTileList)
-		if(sqrt(pow(((b->top + b->height/2) - p.sprite.getPosition().y),2) + pow(((b->left + b->width/2)  - p.sprite.getPosition().x),2)) < 
-			sqrt(pow(((closestTile.top + closestTile.height/2) - p.sprite.getPosition().y),2) + pow(((closestTile.left + closestTile.width/2) - p.sprite.getPosition().x),2)) )
+		if(sqrt(pow(((b->top + b->height/2) - p.sprite.getPosition().y),2) + pow(((b->left + b->width/2)  - p.sprite.getPosition().x),2)) < closest )
 		{
 			if(((b->getFlags() & TILE::GRAPPLEABLEMASK) != 0))
+			{
 				closestTile = *b;
+				closest = sqrt(pow(((closestTile.top + closestTile.height/2) - p.sprite.getPosition().y),2) + pow(((closestTile.left + closestTile.width/2) - p.sprite.getPosition().x),2));
+			}
 		}
 
 	return closestTile;
