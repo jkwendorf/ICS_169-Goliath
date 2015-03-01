@@ -7,6 +7,7 @@
 #include "PauseGameState.h"
 #include "LevelSelectState.h"
 #include "ControlsState.h"
+#include "LoadingState.h"
 
 enum StateEnum
 {

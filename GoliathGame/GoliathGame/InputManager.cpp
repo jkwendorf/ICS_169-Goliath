@@ -3,6 +3,7 @@
 #include "JumpingState.h"
 
 InputManager::InputManager()
+	:grappleReset(true)
 {
 	movement[0] = false;
 	movement[1] = false;
@@ -41,7 +42,7 @@ InputManager::~InputManager()
 
 }
 
-void InputManager::update(Player& s, sf::View* v, float deltaTime)
+void InputManager::update(Player& s, Camera* camera, float deltaTime)
 {
 	// JW: Players should conserve momentum when jumping.  They shouldn't be able to change directions in midair
 
@@ -52,12 +53,12 @@ void InputManager::update(Player& s, sf::View* v, float deltaTime)
 	//change this when you want more complex movement
 	//movement[0] = sf::Keyboard::isKeyPressed(sf::Keyboard::A) || (sf::Joystick::getAxisPosition(0, sf::Joystick::X) < -25);
 	//movement[1] = sf::Keyboard::isKeyPressed(sf::Keyboard::D) || (sf::Joystick::getAxisPosition(0, sf::Joystick::X) > 25);
-
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::A) || (sf::Joystick::getAxisPosition(0, sf::Joystick::X) < -25))
 	{
 		MoveCommand* move = new MoveCommand();
 		move->init(&s, LEFT, deltaTime, MOVELEFT);
-		s.inputQueue.push_back(move);
+		if(!s.hShot.grappleInProgress)
+			s.inputQueue.push_back(move);
 		//sch.moveCommand->init(&s, MovementDirection::LEFT, deltaTime, MOVELEFT);
 		//s.inputQueue.push_back(sch.moveCommand);
 	}
@@ -65,10 +66,12 @@ void InputManager::update(Player& s, sf::View* v, float deltaTime)
 	{
 		MoveCommand* move = new MoveCommand();
 		move->init(&s, RIGHT, deltaTime, MOVERIGHT);
-		s.inputQueue.push_back(move);
+		if(!s.hShot.grappleInProgress)
+			s.inputQueue.push_back(move);
 		//sch.moveCommand->init(&s, MovementDirection::RIGHT, deltaTime, MOVERIGHT);
 		//s.inputQueue.push_back(sch.moveCommand);
 	}
+	
 	else if(s.vel.x != 0)
 	{
 		MoveCommand* move = new MoveCommand();
@@ -103,14 +106,17 @@ void InputManager::update(Player& s, sf::View* v, float deltaTime)
 		}
 	}
 	*/
-	utility[2] = (sf::Mouse::isButtonPressed(sf::Mouse::Right) || sf::Joystick::isButtonPressed(0, 1)) && !utility[2] ? true : false;
-	utility[3] = (sf::Mouse::isButtonPressed(sf::Mouse::Left) || sf::Joystick::isButtonPressed(0, 2)) && !utility[3] ? true : false;
+	//std::cout << "Z axis: " << sf::Joystick::getAxisPosition(0, sf::Joystick::Z) << std::endl;
+	utility[2] = grappleReset && (sf::Mouse::isButtonPressed(sf::Mouse::Left) || (sf::Joystick::getAxisPosition(0, sf::Joystick::Z) < -0.1)) && !utility[2] ? true : false;
+
+	grappleReset = (sf::Joystick::getAxisPosition(0, sf::Joystick::Z) > -10 && sf::Joystick::getAxisPosition(0, sf::Joystick::Z) < 10);
+	//utility[3] = (sf::Mouse::isButtonPressed(sf::Mouse::Left) || sf::Joystick::isButtonPressed(0, 2)) && !utility[3] ? true : false;
 	utility[4] = (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || sf::Joystick::isButtonPressed(0, 3)) && !utility[4] ? true : false;
 	utility[5] = (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Joystick::getAxisPosition(0, sf::Joystick::Y) < -50) && !utility[6] ? true : false;
 	utility[6] = (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Joystick::getAxisPosition(0, sf::Joystick::Y) > 50) && !utility[5] ? true : false;
 
 	playerMove(s, deltaTime);
-	viewMove(v, s, deltaTime);
+	viewMove(camera, s, deltaTime);
 
 	currentInputCooldown += deltaTime;
 	currentWeaponSwitchCooldown += deltaTime;
@@ -246,7 +252,7 @@ void InputManager::playerMove(Player& player, float deltaTime)
 	//player.vel.x = 0.0;
 }
 
-void InputManager::viewMove(sf::View* v, Player& s, float deltaTime)
+void InputManager::viewMove(Camera* camera, Player& s, float deltaTime)
 {
 	
 	viewDifference = 100.0f*deltaTime;	
@@ -254,57 +260,22 @@ void InputManager::viewMove(sf::View* v, Player& s, float deltaTime)
 	{
 		if(utility[5])
 		{
-			viewChangedY -= viewDifference;
-			if(viewChangedY < Global::GetInstance().yOffset * (-4) && viewChangedY < 0)
-			{
-				viewDifference = 0;
-				viewChangedY = Global::GetInstance().yOffset * -4;
-			}
-			Global::GetInstance().topLeft.y -= viewDifference;
-
-			if(viewChangedY < GAME_TILE_DIM * -5)
-			{
-				viewChangedY = GAME_TILE_DIM * -5;
-			}
-
-			if(s.atBottomEdge)
-			{
-				v->reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y + viewChangedY, SCREEN_WIDTH, SCREEN_HEIGHT));
-				s.updateUI(sf::Vector2f(0, viewChangedY));
-			}
+			s.updateUI(camera->viewMove(true, deltaTime));
 		}
 		else if(utility[6])
 		{
-			viewChangedY += viewDifference;
-			if(viewChangedY > Global::GetInstance().yOffset * 4 && viewChangedY > 0)
-			{
-				viewDifference = 0;
-				viewChangedY = Global::GetInstance().yOffset * 4;
-			}
-			Global::GetInstance().topLeft.y += viewDifference;
-
-			if(viewChangedY > GAME_TILE_DIM * 5)
-			{
-				viewChangedY = GAME_TILE_DIM * 5;
-			}
-			if(s.atTopEdge || !s.atTheBottom)
-			{
-				v->reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y + viewChangedY, SCREEN_WIDTH, SCREEN_HEIGHT));
-				s.updateUI(sf::Vector2f(0, viewChangedY));
-			}
+			s.updateUI(camera->viewMove(false, deltaTime));
 		}
 		else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::N))
 		{
 			viewChangedY = rand() % 50;
 			viewChangedX = rand() % 50;
-			v->reset(sf::FloatRect(Global::GetInstance().topLeft.x + viewChangedX, Global::GetInstance().topLeft.y + viewChangedY, SCREEN_WIDTH, SCREEN_HEIGHT));
+			camera->shakeScreen(viewChangedX, viewChangedY);
 			s.updateUI(sf::Vector2f(viewChangedX, viewChangedY));
 		}
 		else
 		{
-			Global::GetInstance().topLeft.y -= viewChangedY;
-			viewChangedY = 0;
-			viewChangedX = 0;
+			camera->endMovement();
 		}
 
 		//std::cout << viewChanged << std::endl;
@@ -315,5 +286,4 @@ void InputManager::viewMove(sf::View* v, Player& s, float deltaTime)
 		Global::GetInstance().topLeft.y -= viewChangedY;
 		viewChangedY = 0;
 	}
-	
 }

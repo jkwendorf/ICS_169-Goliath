@@ -2,7 +2,7 @@
 #include "StateManager.h"
 
 LoadingState::LoadingState(int level, int room) :
-	levelNumber(level), roomNumber(room)
+	levelNumber(level), roomNumber(room), loadTime(0.0f)
 {
 	f = new sf::Font();
 
@@ -16,6 +16,19 @@ LoadingState::LoadingState(int level, int room) :
 	shouldQuit = false;
 }
 
+LoadingState::LoadingState() : loadTime(0.0f), levelNumber(NULL), roomNumber(NULL)
+{
+	f = new sf::Font();
+
+	if(f->loadFromFile("media/fonts/arial.ttf"))
+	{
+		t.setString("LOADING...");
+		t.setFont(*f);
+		t.setCharacterSize(50);
+		t.setPosition(520, 320);
+	}
+	shouldQuit = false;
+}
 LoadingState::~LoadingState()
 {
 }
@@ -27,8 +40,15 @@ void LoadingState::DeleteState()
 
 void LoadingState::update(float deltaTime, sf::RenderWindow& window)
 {
-	StateManager::getInstance().addState(GAME, new GameState(levelNumber, roomNumber), false);
-	StateManager::getInstance().changeToState(GAME, true);
+	loadTime += deltaTime;
+	if(loadTime > 1.0f)
+	{
+		if(levelNumber != NULL && roomNumber != NULL)
+		{
+			StateManager::getInstance().addState(GAME, new GameState(levelNumber, roomNumber), false);
+		}
+		StateManager::getInstance().changeToState(GAME, true);
+	}
 }
 
 void LoadingState::draw(sf::RenderWindow& window)

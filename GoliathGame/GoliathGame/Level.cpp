@@ -1,6 +1,8 @@
 #include "Level.h"
 #include "GrapplingState.h"
 #include "StateManager.h"
+#include "LoadingState.h"
+#include "AudioManager.h"
 
 Level::Level(void)
 	:changeScreen(false), enemyAI(collisionManager)
@@ -10,12 +12,13 @@ Level::Level(void)
 
 Level::Level(int levelNumber, int roomNumber)
 	:changeScreen(false), levelNum(levelNumber), p(), collisionManager(new CollisionManager()), inputManager(),
-	maxRooms(Global::GetInstance().levelSizes.at("Level " + std::to_string(levelNum))), loading(1.0),
+	levelInfo(Global::GetInstance().levelInfo.at("Level " + std::to_string(levelNum))), loading(1.0),
 	enemyAI(collisionManager), arrowCool(2.0f), screenShakeDuration(.65f), screenShakeCooldown(10.0f), currentScreenShakeCooldown(0.0f),
-	arrowsCanFire(true), fixedTime(0.0f), levelStart(true), screenShake(false), shakeOffset(1)
+	arrowsCanFire(true), fixedTime(0.0f), levelStart(true), screenShake(false), shakeOffset(1), introTimer(5.0f)
 {
-	p.init(collisionManager, new JumpingState());
+	
 	currentRoom = new Room(levelNumber, roomNumber, enemyList, arrowTileList, destructTileList, hitPointTileList);
+	p.init(collisionManager, new JumpingState(), currentRoom->numTreasures);
 	//background.setTexture(*TextureManager::GetInstance().retrieveTexture("bandit canyon level"));
 	//sf::Color color = background.getColor();
 	//background.setColor(sf::Color(color.r, color.g, color.b, 200));
@@ -25,15 +28,25 @@ Level::Level(int levelNumber, int roomNumber)
 	loadingSprite.setPosition(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y);
 	Global::GetInstance().topLeft.x = 0;
 	Global::GetInstance().topLeft.y = 0;
-	view.reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y, SCREEN_WIDTH, SCREEN_HEIGHT));
-	view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
+	camera.setRoomSize(sf::Vector2f(currentRoom->getroomWidth(), currentRoom->getroomHeight()));
+	camera.viewReset();
 	p.resetPosition(currentRoom->getStartPos());
 	setArrowTileArrows();
 	//realEnemyList.push_back(new Enemy("Test",200,200, 10));
 	particle = Particle("rock", sf::Vector2f(50, 100), sf::Vector2f(0, 1), 5, 250);
 	particleEmitter = ParticleEmitter("rock", sf::Vector2f(0, -400), sf::Vector2f(0, 1), 10, 350, 10, "debris");
 	coneEmitter = ParticleEmitter("rock", sf::Vector2f(100, 1200), sf::Vector2f(.5, .5), 1, 50, 30, "cone");
+	loadSounds();
 	//shakeScreen(5.0, 100);
+
+	introDescription = sf::Text(levelInfo.description, Global::GetInstance().font);
+	introDescription.setOrigin(introDescription.getGlobalBounds().width/2, introDescription.getGlobalBounds().height/2);
+	if (levelInfo.imageName != "")
+	{
+		description = sf::Sprite(*TextureManager::GetInstance().retrieveTexture(levelInfo.imageName));
+		description.setOrigin(description.getGlobalBounds().width/2, description.getGlobalBounds().height/2);
+		description.setPosition(Global::GetInstance().topLeft.x + SCREEN_WIDTH/2, Global::GetInstance().topLeft.y + SCREEN_HEIGHT/2);
+	}
 }
 
 Level::~Level(void)
@@ -57,7 +70,7 @@ void Level::changeRoom()
 {
 	loading = 1.0;
 	int roomNum = currentRoom->getRoomNumber();
-	if (roomNum < maxRooms)
+	if (roomNum < levelInfo.levelSize)
 	{
 		delete currentRoom;
 		enemyList.clear();
@@ -66,10 +79,11 @@ void Level::changeRoom()
 		destructTileList.clear();
 		hitPointTileList.clear();
 		currentRoom = new Room(levelNum, ++roomNum, enemyList, arrowTileList, destructTileList, hitPointTileList);
+
 		setArrowTileArrows();
 		//Move player to the start pos in new room
 		p.resetPosition(currentRoom->getStartPos());
-		p.init(collisionManager, new JumpingState());
+		p.init(collisionManager, new JumpingState(), currentRoom->numTreasures);
 	}
 	else
 	{
@@ -83,26 +97,31 @@ void Level::changeRoom()
 	}
 	Global::GetInstance().topLeft.x = 0;
 	Global::GetInstance().topLeft.y = 0;
-	view.reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y, SCREEN_WIDTH, SCREEN_HEIGHT));
+	camera.setRoomSize(sf::Vector2f(currentRoom->getroomWidth(), currentRoom->getroomHeight()));
+	camera.viewReset();
 	p.isFalling = true;
 	p.vel.x = 0;
 	p.vel.y = 0;
+	StateManager::getInstance().addState(TRANSITION, new LoadingState(), true);
 
 	//p.playerUpdate(&view, sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()), 0.5f);
 }
 
 void Level::update(float deltaTime)
 {
+	
 	particleEmitter.update(deltaTime);
 	//coneEmitter.update(deltaTime);
 	particle.update(deltaTime);
 	currentScreenShakeCooldown += deltaTime;
-
+	camera.viewChange(p.sprite.getPosition());
 	currentRoom->update(deltaTime);
 	if (currentRoom->bg.hitFloor()) {
+		goliathSound[STOMP1].play();
 		shakeScreen(1.0f, 20);
 		currentRoom->bg.setHitFloor(false);
 		particleEmitter.resetAllParticles();
+		
 	}
 
 	//SCREENSHAKE CODE
@@ -114,7 +133,8 @@ void Level::update(float deltaTime)
 			//currentRoom->bg.setScale(0, 0.0f, 1.0f);
 			viewChangeOffset.x = rand() % shakeOffset;
 			viewChangeOffset.y = rand() % shakeOffset;
-			view.reset(sf::FloatRect(Global::GetInstance().topLeft.x + viewChangeOffset.x, Global::GetInstance().topLeft.y + viewChangeOffset.y, SCREEN_WIDTH, SCREEN_HEIGHT));
+			camera.shakeScreen(viewChangeOffset.x, viewChangeOffset.y);
+			
 			//view.move(viewChangeOffset);
 			p.updateUI(viewChangeOffset);
 			Global::GetInstance().ControllerVibrate(75, 75);
@@ -129,7 +149,7 @@ void Level::update(float deltaTime)
 	}
 	else
 	{
-		view.reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y, SCREEN_WIDTH, SCREEN_HEIGHT));
+		camera.viewReset();
 		p.updateUI();
 	}
 	
@@ -137,14 +157,16 @@ void Level::update(float deltaTime)
 	if((p.sprite.getPosition().y + PLAYER_DIM_Y/2) >= currentRoom->getroomHeight())
 	{
 		p.resetPosition(currentRoom->getStartPos() + sf::Vector2f(50, -10));
-		if(!levelStart)
+		/*if(!levelStart)
 		{
 			p.resetHealth();
 		}
 		if(levelStart)
 		{
 			levelStart = false;
-		}
+			p.resetHealth();
+		}*/
+		p.resetHealth();
 
 	}
 
@@ -163,16 +185,19 @@ void Level::update(float deltaTime)
 		{
 			p.takeDamage();
 		}
-			
+		
 	}
 	if(!changeScreen)
 	{
 
-		currentRoom->GetCollidableTiles(p, sf::Vector2f(PLAYER_DIM_X, PLAYER_DIM_Y), nearTiles, true);
+		currentRoom->GetCollidableTiles(p, nearTiles, true);
 
 		collisionManager->setNearByTiles(nearTiles);
-		collisionManager->setGrapplableTiles(nearTiles2);
-	
+		if(!p.hShot.grappleInProgress)
+			collisionManager->setGrapplableTiles(nearTiles2);
+
+		collisionManager->checkTreasure(p);
+		
 		if(p.hShot.grappleInProgress)
 		{
 			p.hShot.hitNonGrappleTile = collisionManager->hShotHitNonGrappleTile(p.hShot);
@@ -195,6 +220,13 @@ void Level::update(float deltaTime)
 					p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left - hookedTile->width/2, hookedTile->top - hookedTile->height/2 - 28));
 				else if(hookedTile->getTileNum() == 7)
 					p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width/2 + GAME_TILE_DIM - 5, hookedTile->top - hookedTile->height/2 - 28));
+				else if(hookedTile->getTileNum() == 26)
+				{
+					// Hookshot goliath hitpoint
+					p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width/2, hookedTile->top + hookedTile->height));
+					p.destroyGoliathHitpoint = true;
+					p.goliathHitpoint = hookedTile;
+				}
 				else
 					//p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width/2, hookedTile->top + 5));
 					p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width/2, hookedTile->top + hookedTile->height));
@@ -211,9 +243,10 @@ void Level::update(float deltaTime)
 
 		//p.isFalling = !collisionManager->playerCollisionDetection(p);
 		//p.update(deltaTime);
-		p.playerUpdate(&view, sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()), deltaTime);
+		p.playerUpdate(sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()), deltaTime);
 
-		inputManager.update(p, &view, deltaTime);
+
+		inputManager.update(p, &camera, deltaTime);
 		p.handleInput();
 		//Check to see if the player has died
 		if(p.checkDead())
@@ -278,8 +311,7 @@ void Level::update(float deltaTime)
 			if(po.moving)
 			{
 				std::cout << "Projectile position: " << po.sprite.getPosition().x << " " << po.sprite.getPosition().y << std::endl;	
-				currentRoom->GetCollidableTiles(po, sf::Vector2f(po.sprite.getTexture()->getSize().x/10,
-					po.sprite.getTexture()->getSize().y/10), proTile);
+				currentRoom->GetCollidableTiles(po, proTile);
 				for(auto& t : proTile)
 				{
 					std::cout << t->getTileNum() << std::endl;
@@ -305,7 +337,7 @@ void Level::update(float deltaTime)
 			if(e->health > 0)
 			{
 				std::vector<Tile*> proTile;
-				currentRoom->GetCollidableTiles(*e, sf::Vector2f(PLAYER_DIM_X, PLAYER_DIM_Y), enemyTiles);
+				currentRoom->GetCollidableTiles(*e, enemyTiles);
 
 				if(enemyTiles.size() > 0)
 				{
@@ -330,8 +362,7 @@ void Level::update(float deltaTime)
 				{
 					if(po.moving)
 					{
-						currentRoom->GetCollidableTiles(po, sf::Vector2f(po.sprite.getTexture()->getSize().x/10,
-							po.sprite.getTexture()->getSize().y/10), proTile);
+						currentRoom->GetCollidableTiles(po, proTile);
 
 						if(proTile.size() > 0)
 						{
@@ -352,8 +383,7 @@ void Level::update(float deltaTime)
 
 				if(ray.moving)
 				{
-					currentRoom->GetCollidableTiles(ray, sf::Vector2f(ray.sprite.getTexture()->getSize().x/10,
-							ray.sprite.getTexture()->getSize().y/10), proTile);
+					currentRoom->GetCollidableTiles(ray, proTile);
 
 						if(proTile.size() > 0)
 						{
@@ -408,8 +438,7 @@ void Level::update(float deltaTime)
 
 			if(a->moving)
 			{
-				currentRoom->GetCollidableTiles(*a, sf::Vector2f(a->sprite.getTexture()->getSize().x/10,
-					a->sprite.getTexture()->getSize().y/10), proTile);
+				currentRoom->GetCollidableTiles(*a, proTile);
 
 				if(proTile.size() > 0)
 				{
@@ -419,25 +448,32 @@ void Level::update(float deltaTime)
 				if(collisionManager->playerCollisionDetection(a))
 				{
 					a->moving = false;
-					a->setLocation(a->startLocation);
+					a->startTime = 0.0f;
 				}
 
 				if(collisionManager->checkIfEnemyInRange(*a, &p))
 				{
-					p.health -= a->damage;
-					p.gotHit = true;
-					if(p.health > 0)
+					if(!p.gotHit)
 					{
-						p.playHurtSound();
+						p.health -= a->damage;
+						if(p.health > 0)
+						{
+							p.playHurtSound();
+						}
+						p.gotHit = true;
+
+						a->moving = false;
+						a->setLocation(a->startLocation);
+						a->drawPlease = false;
+						a->startTime = 0.0f;
 					}
-					a->moving = false;
-					a->setLocation(a->startLocation);
-					std::cout << "ARROW " << i << " hit player" << std::endl;
+
 				}
 			}
 			else if(arrowCool > 2.0f && arrowsCanFire)
 			{
 				a->setLocation(a->startLocation);
+				a->drawPlease = true;
 				a->moving = true;
 			}
 		}
@@ -458,8 +494,20 @@ void Level::update(float deltaTime)
 			//projectile
 				//check each "moving" projectile against enemies on the screen
 		//check enemy weapon collisions
-//std::cout << "View level: " << view.getCenter().x - view.getSize().x/2 << std::endl;
+		//std::cout << "View level: " << view.getCenter().x - view.getSize().x/2 << std::endl;
 		currentRoom->setViewPosition(view.getCenter().x - view.getSize().x/2);
+	}
+
+	if(introTimer > 0 && currentRoom->getRoomNumber() == 1)
+	{
+		introTimer -= deltaTime;
+		//introDescription.setScale(introDescription.getScale().x - 0.05, introDescription.getScale().y - 0.05);
+		introDescription.setPosition(Global::GetInstance().topLeft.x + SCREEN_WIDTH/2, Global::GetInstance().topLeft.y + SCREEN_HEIGHT/2);
+		if (levelInfo.imageName != "")
+		{
+			description.setPosition(Global::GetInstance().topLeft.x + SCREEN_WIDTH/2, Global::GetInstance().topLeft.y + SCREEN_HEIGHT/2);
+			description.setColor(sf::Color(description.getColor().r, description.getColor().g, description.getColor().b, description.getColor().a - 0.01));
+		}
 	}
 }
 
@@ -483,16 +531,21 @@ void Level::draw(sf::RenderWindow& window)
 	
 	for (auto& a : arrows)
 	{
-		if(a->moving)
-		{
-			a->draw(window);
-		}
+		a->draw(window);
 	}
 	particle.draw(window);
 	particleEmitter.draw(window);
 	//coneEmitter.draw(window);
-	window.setView(view);
+	window.setView(camera.getView());
 	p.drawUI(window);
+	if( introTimer > 0 && currentRoom->getRoomNumber() == 1)
+	{
+		window.draw(introDescription);
+		if (levelInfo.imageName != "")
+		{
+			window.draw(description);
+		}
+	}
 }
 
 bool Level::CheckChangeScreen()
@@ -509,29 +562,38 @@ void Level::setArrowTileArrows()
 {
 	for(auto& a : arrowTileList)
 	{
+		//std::cout << "Shooter: " << a->left << ", " << a->top << std::endl;
 		if(a->getDirection().x == 1.0)
 		{
 			Projectile* pro = new Projectile(sf::Vector2f(a->left + (GAME_TILE_DIM), a->top), a->getDirection());
+			pro->drawPlease = false;
 			pro->damage = 25;
 			arrows.push_back(pro);
+			//std::cout << pro->hitbox.getGlobalBounds().left << ", " << pro->hitbox.getGlobalBounds().top << std::endl;
 		}
 		else if(a->getDirection().x == -1.0)
 		{
 			Projectile* pro = new Projectile(sf::Vector2f(a->left - (GAME_TILE_DIM), a->top), a->getDirection());
+			pro->drawPlease = false;
 			pro->damage = 25;
 			arrows.push_back(pro);
+			//std::cout << pro->hitbox.getGlobalBounds().left << ", " << pro->hitbox.getGlobalBounds().top << std::endl;
 		}
 		else if(a->getDirection().y == 1.0)
 		{
 			Projectile* pro = new Projectile(sf::Vector2f(a->left, a->top + (GAME_TILE_DIM)), a->getDirection());
+			pro->drawPlease = false;
 			pro->damage = 25;
 			arrows.push_back(pro); 
+			//std::cout << pro->hitbox.getGlobalBounds().left << ", " << pro->hitbox.getGlobalBounds().top << std::endl;
 		}
 		else if(a->getDirection().y == -1.0)
 		{
 			Projectile* pro = new Projectile(sf::Vector2f(a->left, a->top - (GAME_TILE_DIM)), a->getDirection());
+			pro->drawPlease = false;
 			pro->damage = 25;
 			arrows.push_back(pro);
+			//std::cout << pro->hitbox.getGlobalBounds().left << ", " << pro->hitbox.getGlobalBounds().top << std::endl;
 		}
 
 	}
@@ -590,4 +652,17 @@ void Level::shakeScreen(float duration, int shakeOff)
 	screenShakeDuration = duration;
 	currentScreenShakeCooldown = 0;
 	shakeOffset = shakeOff;
+}
+
+void Level::loadSounds()
+{
+	goliathSound[STOMP1] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("GoliathStomp1")));
+	goliathSound[STOMP2] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("GoliathStomp2")));
+	goliathSound[STOMP3] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("GoliathStomp3")));
+}
+
+void Level::playStompSound()
+{
+	int sound = rand() % 3;
+	goliathSound[sound].play();
 }
