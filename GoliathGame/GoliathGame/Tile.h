@@ -28,7 +28,7 @@ private:
 	float waitTime; // Can either be used for the arrow shooters or the hitpoint tiles
 
 public:
-	Tile() : tileNum(-999), flags(0x00), health(5) {};
+	Tile();
 	Tile(sf::Vector2f& pos_, int tileNum_, uint8 flags_);
 	~Tile();
 	int getTileNum();

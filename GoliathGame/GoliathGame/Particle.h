@@ -13,6 +13,7 @@ public:
 
 	void update(float deltaTime);
 	void draw(sf::RenderWindow &window);
+	void resetPosition();
 	
 	float lifespan, currentLife;
 	sf::Sprite particle;

@@ -2,7 +2,7 @@
 #include "Global.h"
 
 UserInterface::UserInterface(float h, float s)
-	:showHealth1(false), showHealth2(false), showHealth3(false), showHealth4(false)
+	:showHealth1(false), showHealth2(false), showHealth3(false), showHealth4(false), drawPlease(true)
 	/*:healthBar1(sf::Vector2f(100, 50)), healthBar2(sf::Vector2f(100, 50)), 
 	healthBar3(sf::Vector2f(100, 50)), healthBar4(sf::Vector2f(100, 50)),
 	showHealth1(true), showHealth2(true), showHealth3(true), showHealth4(true),
@@ -32,7 +32,20 @@ void UserInterface::resetUI()
 
 void UserInterface::draw(sf::RenderWindow& window)
 {
-	window.draw(healthIcon);
+	if(drawPlease)
+	{
+		window.draw(healthIcon);
+	}
+}
+
+void UserInterface::flashHealth()
+{
+	drawPlease = !drawPlease;
+}
+
+void UserInterface::endFlash()
+{
+	drawPlease = true;
 }
 
 void UserInterface::update(float h, float s)
