@@ -7,6 +7,7 @@ class LoadingState : public State
 {
 public:
 	LoadingState(int level, int room);
+	LoadingState();
 	virtual ~LoadingState(void);
 
 	void DeleteState();
@@ -23,4 +24,5 @@ private:
 	bool isPressedUp, isPressedDown, isRightPressed, isLeftPressed;
 	float inputCoolDown;
 	int levelNumber, roomNumber;
+	float loadTime;
 };
