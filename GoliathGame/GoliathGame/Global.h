@@ -9,6 +9,7 @@
 #include "AudioManager.h"
 #include "PlayerInventory.h"
 #include "RoomStruct.h"
+#include "LevelStruct.h"
 
 // JW: In the future, we might want to make Global a static class so we can alter values
 
@@ -22,7 +23,7 @@ public :
 		return instance;
 	}
 
-	std::map<std::string, int> levelSizes;
+	std::map<std::string, LevelStruct> levelInfo;
 	std::map<std::string, RoomStruct> roomSizes;
 	std::map<std::string, std::string> roomTileSheets;
 
@@ -55,7 +56,7 @@ public :
 	void SetUpTileSheet(sf::Texture* texture);
 
 	sf::Sound test;
-
+	sf::Font font;
 	
 	sf::RectangleShape testingRect;
 };

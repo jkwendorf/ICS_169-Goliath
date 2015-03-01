@@ -10,9 +10,9 @@ Level::Level(void)
 
 Level::Level(int levelNumber, int roomNumber)
 	:changeScreen(false), levelNum(levelNumber), p(), collisionManager(new CollisionManager()), inputManager(),
-	maxRooms(Global::GetInstance().levelSizes.at("Level " + std::to_string(levelNum))), loading(1.0),
+	levelInfo(Global::GetInstance().levelInfo.at("Level " + std::to_string(levelNum))), loading(1.0),
 	enemyAI(collisionManager), arrowCool(2.0f), screenShakeDuration(.65f), screenShakeCooldown(10.0f), currentScreenShakeCooldown(0.0f),
-	arrowsCanFire(true), fixedTime(0.0f), levelStart(true), screenShake(false), shakeOffset(1)
+	arrowsCanFire(true), fixedTime(0.0f), levelStart(true), screenShake(false), shakeOffset(1), introTimer(5.0f)
 {
 	p.init(collisionManager, new JumpingState());
 	currentRoom = new Room(levelNumber, roomNumber, enemyList, arrowTileList, destructTileList, hitPointTileList);
@@ -34,6 +34,15 @@ Level::Level(int levelNumber, int roomNumber)
 	particleEmitter = ParticleEmitter("rock", sf::Vector2f(0, -400), sf::Vector2f(0, 1), 10, 350, 10, "debris");
 	coneEmitter = ParticleEmitter("rock", sf::Vector2f(100, 1200), sf::Vector2f(.5, .5), 1, 50, 30, "cone");
 	//shakeScreen(5.0, 100);
+
+	introDescription = sf::Text(levelInfo.description, Global::GetInstance().font);
+	introDescription.setOrigin(introDescription.getGlobalBounds().width/2, introDescription.getGlobalBounds().height/2);
+	if (levelInfo.imageName != "")
+	{
+		description = sf::Sprite(*TextureManager::GetInstance().retrieveTexture(levelInfo.imageName));
+		description.setOrigin(description.getGlobalBounds().width/2, description.getGlobalBounds().height/2);
+		description.setPosition(Global::GetInstance().topLeft.x + SCREEN_WIDTH/2, Global::GetInstance().topLeft.y + SCREEN_HEIGHT/2);
+	}
 }
 
 Level::~Level(void)
@@ -57,7 +66,7 @@ void Level::changeRoom()
 {
 	loading = 1.0;
 	int roomNum = currentRoom->getRoomNumber();
-	if (roomNum < maxRooms)
+	if (roomNum < levelInfo.levelSize)
 	{
 		delete currentRoom;
 		enemyList.clear();
@@ -94,6 +103,7 @@ void Level::changeRoom()
 
 void Level::update(float deltaTime)
 {
+	
 	particleEmitter.update(deltaTime);
 	//coneEmitter.update(deltaTime);
 	particle.update(deltaTime);
@@ -104,6 +114,7 @@ void Level::update(float deltaTime)
 		shakeScreen(1.0f, 20);
 		currentRoom->bg.setHitFloor(false);
 		particleEmitter.resetAllParticles();
+		
 	}
 
 	//SCREENSHAKE CODE
@@ -463,8 +474,20 @@ void Level::update(float deltaTime)
 			//projectile
 				//check each "moving" projectile against enemies on the screen
 		//check enemy weapon collisions
-//std::cout << "View level: " << view.getCenter().x - view.getSize().x/2 << std::endl;
+		//std::cout << "View level: " << view.getCenter().x - view.getSize().x/2 << std::endl;
 		currentRoom->setViewPosition(view.getCenter().x - view.getSize().x/2);
+	}
+
+	if(introTimer > 0 && currentRoom->getRoomNumber() == 1)
+	{
+		introTimer -= deltaTime;
+		//introDescription.setScale(introDescription.getScale().x - 0.05, introDescription.getScale().y - 0.05);
+		introDescription.setPosition(Global::GetInstance().topLeft.x + SCREEN_WIDTH/2, Global::GetInstance().topLeft.y + SCREEN_HEIGHT/2);
+		if (levelInfo.imageName != "")
+		{
+			description.setPosition(Global::GetInstance().topLeft.x + SCREEN_WIDTH/2, Global::GetInstance().topLeft.y + SCREEN_HEIGHT/2);
+			description.setColor(sf::Color(description.getColor().r, description.getColor().g, description.getColor().b, description.getColor().a - 0.01));
+		}
 	}
 }
 
@@ -495,6 +518,14 @@ void Level::draw(sf::RenderWindow& window)
 	//coneEmitter.draw(window);
 	window.setView(camera.getView());
 	p.drawUI(window);
+	if( introTimer > 0 && currentRoom->getRoomNumber() == 1)
+	{
+		window.draw(introDescription);
+		if (levelInfo.imageName != "")
+		{
+			window.draw(description);
+		}
+	}
 }
 
 bool Level::CheckChangeScreen()
