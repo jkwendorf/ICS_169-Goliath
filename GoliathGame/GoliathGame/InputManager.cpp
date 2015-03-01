@@ -268,7 +268,6 @@ void InputManager::viewMove(Camera* camera, Player& s, float deltaTime)
 		{
 			viewChangedY = rand() % 50;
 			viewChangedX = rand() % 50;
-			//v->reset(sf::FloatRect(Global::GetInstance().topLeft.x + viewChangedX, Global::GetInstance().topLeft.y + viewChangedY, SCREEN_WIDTH, SCREEN_HEIGHT));
 			camera->shakeScreen(viewChangedX, viewChangedY);
 			s.updateUI(sf::Vector2f(viewChangedX, viewChangedY));
 		}
@@ -286,5 +285,4 @@ void InputManager::viewMove(Camera* camera, Player& s, float deltaTime)
 		Global::GetInstance().topLeft.y -= viewChangedY;
 		viewChangedY = 0;
 	}
-	
 }

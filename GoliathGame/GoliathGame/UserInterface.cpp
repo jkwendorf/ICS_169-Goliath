@@ -37,9 +37,9 @@ void UserInterface::draw(sf::RenderWindow& window)
 	if(drawPlease)
 	{
 		window.draw(healthIcon);
-		if (totalTreasure > 0)
-			window.draw(treasure);
 	}
+	if (totalTreasure > 0)
+		window.draw(treasure);
 }
 
 void UserInterface::flashHealth()
