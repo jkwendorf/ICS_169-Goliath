@@ -1,6 +1,7 @@
 #include "Level.h"
 #include "GrapplingState.h"
 #include "StateManager.h"
+#include "LoadingState.h"
 
 Level::Level(void)
 	:changeScreen(false), enemyAI(collisionManager)
@@ -66,6 +67,7 @@ void Level::changeRoom()
 		destructTileList.clear();
 		hitPointTileList.clear();
 		currentRoom = new Room(levelNum, ++roomNum, enemyList, arrowTileList, destructTileList, hitPointTileList);
+
 		setArrowTileArrows();
 		//Move player to the start pos in new room
 		p.resetPosition(currentRoom->getStartPos());
@@ -88,6 +90,7 @@ void Level::changeRoom()
 	p.isFalling = true;
 	p.vel.x = 0;
 	p.vel.y = 0;
+	StateManager::getInstance().addState(TRANSITION, new LoadingState(), true);
 
 	//p.playerUpdate(&view, sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()), 0.5f);
 }
