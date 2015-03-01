@@ -9,7 +9,7 @@ HookShot::HookShot() :
 	sprite.setScale(0.025,0.025);
 	sprite.setOrigin(sprite.getLocalBounds().width/2, sprite.getLocalBounds().height/2);
 	currentCooldown = 0.0;
-	weaponCooldown = 1.0;
+	weaponCooldown = 2.0;
 	grappleBox = grappleLength/sqrt(2);
 	for(int x = 0; x < 10; x++)
 	{

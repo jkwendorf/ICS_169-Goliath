@@ -41,7 +41,7 @@ void LoadingState::DeleteState()
 void LoadingState::update(float deltaTime, sf::RenderWindow& window)
 {
 	loadTime += deltaTime;
-	if(loadTime > 1.5f)
+	if(loadTime > 1.0f)
 	{
 		if(levelNumber != NULL && roomNumber != NULL)
 		{
