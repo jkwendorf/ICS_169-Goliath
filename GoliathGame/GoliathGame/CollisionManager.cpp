@@ -73,6 +73,10 @@ void CollisionManager::checkTreasure(Player& p)
 			{
  				notify(p, Util::Events::PICK_UP_ITEM);
 				p.ui->addTreasure();
+				if(p.health < 100.0f)
+				{
+					p.health += 25.0f;
+				}
 				b->changeOpened();
 				return;
 			}

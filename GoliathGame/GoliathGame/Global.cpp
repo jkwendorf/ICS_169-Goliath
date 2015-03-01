@@ -2,7 +2,7 @@
 #include <Xinput.h>
 
 Global::Global()
-	:inventory(new PlayerInventory())
+	:inventory(new PlayerInventory()), played(false)
 {
 	test = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("GainItem")));
 
@@ -14,6 +14,9 @@ Global::Global()
 	{
 		std::cout << "Font did not load!" << std::endl;
 	}
+
+	bgMusic = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("Nocturne")));
+	bgMusic.setLoop(true);
 }
 
 Global::~Global()

@@ -49,18 +49,15 @@
     <Filter Include="Source Files\Player\Player States">
       <UniqueIdentifier>{f734605d-858e-4e14-a243-02bbc0cea473}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\States">
+      <UniqueIdentifier>{1999c60a-f230-42ba-8301-76ef3a628359}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\States">
+      <UniqueIdentifier>{5ac14055-4028-4f0d-9582-2180fb84dff3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GameState.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MainMenuState.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="EndGameState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Button.cpp">
@@ -98,9 +95,6 @@
     </ClCompile>
     <ClCompile Include="Boss.cpp">
       <Filter>Source Files\Level Stuff</Filter>
-    </ClCompile>
-    <ClCompile Include="PauseGameState.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Animation.cpp">
       <Filter>Source Files</Filter>
@@ -186,9 +180,6 @@
     <ClCompile Include="LookingState.cpp">
       <Filter>Source Files\Player\Player States</Filter>
     </ClCompile>
-    <ClCompile Include="LevelSelectState.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="PopOut.cpp">
       <Filter>Source Files\Util</Filter>
     </ClCompile>
@@ -201,16 +192,10 @@
     <ClCompile Include="Background.cpp">
       <Filter>Source Files\Level Stuff</Filter>
     </ClCompile>
-    <ClCompile Include="ControlsState.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Particle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ParticleEmitter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="LoadingState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Projectile.cpp">
@@ -222,20 +207,29 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="EndGameState.cpp">
+      <Filter>Source Files\States</Filter>
+    </ClCompile>
+    <ClCompile Include="ControlsState.cpp">
+      <Filter>Source Files\States</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelSelectState.cpp">
+      <Filter>Source Files\States</Filter>
+    </ClCompile>
+    <ClCompile Include="GameState.cpp">
+      <Filter>Source Files\States</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadingState.cpp">
+      <Filter>Source Files\States</Filter>
+    </ClCompile>
+    <ClCompile Include="MainMenuState.cpp">
+      <Filter>Source Files\States</Filter>
+    </ClCompile>
+    <ClCompile Include="PauseGameState.cpp">
+      <Filter>Source Files\States</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="State.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GameState.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MainMenuState.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="EndGameState.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Button.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -274,9 +268,6 @@
     </ClInclude>
     <ClInclude Include="Room.h">
       <Filter>Header Files\Level Stuff</Filter>
-    </ClInclude>
-    <ClInclude Include="PauseGameState.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Animation.h">
       <Filter>Header Files</Filter>
@@ -401,9 +392,6 @@
     <ClInclude Include="LookingState.h">
       <Filter>Header Files\Player\Player States</Filter>
     </ClInclude>
-    <ClInclude Include="LevelSelectState.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="PopOut.h">
       <Filter>Header Files\Util</Filter>
     </ClInclude>
@@ -416,13 +404,7 @@
     <ClInclude Include="Background.h">
       <Filter>Header Files\Level Stuff</Filter>
     </ClInclude>
-    <ClInclude Include="ControlsState.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="LayerStruct.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="LoadingState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Particle.h">
@@ -442,6 +424,30 @@
     </ClInclude>
     <ClInclude Include="LevelStruct.h">
       <Filter>Header Files\Level Stuff</Filter>
+    </ClInclude>
+    <ClInclude Include="EndGameState.h">
+      <Filter>Header Files\States</Filter>
+    </ClInclude>
+    <ClInclude Include="ControlsState.h">
+      <Filter>Header Files\States</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelSelectState.h">
+      <Filter>Header Files\States</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadingState.h">
+      <Filter>Header Files\States</Filter>
+    </ClInclude>
+    <ClInclude Include="MainMenuState.h">
+      <Filter>Header Files\States</Filter>
+    </ClInclude>
+    <ClInclude Include="State.h">
+      <Filter>Header Files\States</Filter>
+    </ClInclude>
+    <ClInclude Include="GameState.h">
+      <Filter>Header Files\States</Filter>
+    </ClInclude>
+    <ClInclude Include="PauseGameState.h">
+      <Filter>Header Files\States</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
