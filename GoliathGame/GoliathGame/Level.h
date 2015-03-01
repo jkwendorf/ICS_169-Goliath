@@ -18,6 +18,13 @@
 #include "Camera.h"
 #include "LevelStruct.h"
 
+enum GoliathSoundEnum
+{
+	STOMP1 = 0,
+	STOMP2 = 1,
+	STOMP3 = 2,
+};
+
 class Level : public BaseGameScreen
 {
 private:
@@ -43,6 +50,7 @@ private:
 	EnemyAI enemyAI;
 	std::vector<Projectile*> arrows;
 	Camera camera;
+	sf::Sound goliathSound[3];
 
 	bool arrowsCanFire;
 	bool levelStart;
@@ -56,6 +64,8 @@ private:
 	void setArrowTileArrows();
 	void checkDestructableTiles();
 	void checkHitPointTilesForDmg(float deltaTime);
+	void loadSounds();
+	void playStompSound();
 
 	sf::Vector2f viewChangeOffset;
 	float screenShakeDuration;

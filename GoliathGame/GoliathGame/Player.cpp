@@ -9,7 +9,7 @@ Player::Player()
 	isHanging(false), shouldHang(false), health(Global::GetInstance().basePlayerStats[0]), 
 	stamina(Global::GetInstance().basePlayerStats[1]), weaponCooldown(Global::GetInstance().basePlayerStats[4]), bottomPoint(0),
 	deathTimer(0.0f), currentState(nullptr), collidingLeft(false), collidingRight(false), gotHit(false), recoverTime(0.0f), drawPlease(true),
-	targetScale(-0.02), doHitVibrate(false), vibrateTime(0.0f)
+	targetScale(-0.02), doHitVibrate(false), vibrateTime(0.0f), destroyGoliathHitpoint(false), goliathHitpoint(nullptr)
 {
 	vel = sf::Vector2f(0.0,0.0);
 

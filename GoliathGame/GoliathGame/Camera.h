@@ -14,6 +14,7 @@ public:
 	void viewMove(bool up, float deltaTime);
 	sf::View getView();
 	void setBottomPoint(float bot);
+	void shakeScreen(float x, float y);
 
 private:
 	sf::Vector2f roomSize;
