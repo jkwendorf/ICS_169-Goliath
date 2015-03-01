@@ -15,7 +15,7 @@
 //Player sprite dim never used...
 #define PLAYER_SPRITE_DIM 1000
 
-#define TileSheetRows 5
+#define TileSheetRows 6
 #define TileSheetCols 5
 
 //ND: Offset initially set with define. Will figure out method function for proper calculation

@@ -372,7 +372,7 @@ void Section::LoadTileMap(std::vector<std::shared_ptr<Enemy>> &enemyList, std::v
 				// Hitpoint Tile
 				delete grid1[(y*gDim.y) + x];
 				grid1[(y*gDim.y) + x] = new Tile(sf::Vector2f(x * GAME_TILE_DIM + offset.x, y * GAME_TILE_DIM + offset.y),
-					tileType, 0x31);
+					tileType, 0x02);
 				hitPointTileList.push_back(grid1[(y*gDim.y)+x]);
 				break;
 			default:
