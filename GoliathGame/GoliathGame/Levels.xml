@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Game>
-  <Level number="1" tilesheet="BanditTile" size="7">
+  <Level number="1" tilesheet="BanditTile" size="7" descriptionImage="x" levelDescription="Level 1">
     <Room number="1" size="1" nonMoving="bandit canyon level" offsetX="0" offsetY="0">
       <!--<MovingLayer image="TestingBackground2" velScaleX="2.0" velScaleY="0.0"/>
       <MovingLayer image="TestingBackground3" velScaleX="1.0" velScaleY="0.0"/>
@@ -16,12 +16,12 @@
     <Room number="6" size="1" nonMoving="bandit canyon level"></Room>
     <Room number="7" size="1" nonMoving="GoliathFoot" offsetX="320" offsetY="0">
       <!--<MovingLayer image="bandit canyon level" timeToRotate="1" rotationDegree="0" velScaleX="0.25" velScaleY="0.25" offsetX="0" offsetY="1500" />-->
-      <MovingLayer image="Goliath Foreground" timeToRotate="1" rotationDegree="0" velScaleX="0.75" velScaleY="0.0" offsetX="0.0" offsetY="500"/>
-      <MovingLayer image="Goliath Midground Rocks" timeToRotate="1" rotationDegree="0" velScaleX="0.75" velScaleY="0.0" offsetX="0" offsetY="500"/>
-      <MovingLayer image="Goliath Background Mountains" timeToRotate="1" rotationDegree="0" velScaleX="0.75" velScaleY="0" offsetX="0" offsetY="500"/>
+      <MovingLayer image="Goliath Foreground" timeToRotate="1" rotationDegree="0" velScaleX="0.75" velScaleY="3" offsetX="0.0" offsetY="500"/>
+      <MovingLayer image="Goliath Midground Rocks" timeToRotate="1" rotationDegree="0" velScaleX="0.75" velScaleY="3" offsetX="0" offsetY="500"/>
+      <MovingLayer image="Goliath Background Mountains" timeToRotate="1" rotationDegree="0" velScaleX="0.75" velScaleY="3" offsetX="0" offsetY="500"/>
     </Room>
   </Level>
-  <Level number="2" tilesheet="BanditTile" size="4">
+  <Level number="2" tilesheet="BanditTile" size="4" descriptionImage="" levelDescription="Level 2">
     <Room number="1" size="1" nonMoving="banditCity"></Room>
     <Room number="2" size="1" nonMoving="banditCity"></Room>
     <Room number="3" size="1" nonMoving="banditCity"></Room>

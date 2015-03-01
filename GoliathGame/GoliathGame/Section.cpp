@@ -2,7 +2,7 @@
 // include more tiles
 
 Section::Section(int sectionNumber, std::string& s, sf::Vector2f& offset, std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList, std::list<Tile*> &hitPointTileList)
-	:sectionNum(sectionNumber), pathToText(s), offset(offset), startPos(-999.0, -999.0)
+	:sectionNum(sectionNumber), pathToText(s), offset(offset), startPos(-999.0, -999.0), numTreasures(0)
 {
 	LoadTileMap(enemyList, arrowTileList, destructTileList, hitPointTileList);
 }
@@ -315,6 +315,7 @@ void Section::LoadTileMap(std::vector<std::shared_ptr<Enemy>> &enemyList, std::v
 				delete grid1[(y*gDim.y) + x];
 				grid1[(y*gDim.y) + x] = new Tile(sf::Vector2f(x * GAME_TILE_DIM + offset.x, y * GAME_TILE_DIM + offset.y), 
 					tileType, 0x09);
+				numTreasures++;
 				break;
 			case 18:
 			case 19:
@@ -327,7 +328,7 @@ void Section::LoadTileMap(std::vector<std::shared_ptr<Enemy>> &enemyList, std::v
 				//Hazard tile
 				delete grid1[(y*gDim.y) + x];
 				grid1[(y*gDim.y) + x] = new Tile(sf::Vector2f(x * GAME_TILE_DIM + offset.x, y * GAME_TILE_DIM + offset.y), 
-					tileType, 0x21);
+					tileType, 0x24);
 				break;
 			case 21:
 				// Arrow Tile Left
@@ -372,7 +373,7 @@ void Section::LoadTileMap(std::vector<std::shared_ptr<Enemy>> &enemyList, std::v
 				// Hitpoint Tile
 				delete grid1[(y*gDim.y) + x];
 				grid1[(y*gDim.y) + x] = new Tile(sf::Vector2f(x * GAME_TILE_DIM + offset.x, y * GAME_TILE_DIM + offset.y),
-					tileType, 0x31);
+					tileType, 0x02);
 				hitPointTileList.push_back(grid1[(y*gDim.y)+x]);
 				break;
 			default:

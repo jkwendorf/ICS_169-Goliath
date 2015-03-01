@@ -11,7 +11,7 @@ Layer::Layer(RoomStruct& roomStrct, int layerNum)
 	image[0].scale(2.0f, 2.0f);
 	image[1] = sf::Sprite(*TextureManager::GetInstance().retrieveTexture(roomStrct.movingLayers[layerNum].imageName));
 	//l.image.setPosition(0.0f, 0.0f);
-	std::cout << image[0].getGlobalBounds().left << std::endl;
+	//std::cout << image[0].getGlobalBounds().left << std::endl;
 	image[1].setPosition(image[0].getGlobalBounds().left + image[0].getGlobalBounds().width, 
 		image[0].getGlobalBounds().top);
 	//image[1].setOrigin(image[0].getGlobalBounds().left/2, image[0].getGlobalBounds().top/2);
@@ -30,12 +30,13 @@ void Layer::update(float deltaTime, sf::Vector2f& vel)
 	{
 		if (!rotateForward)
 			image[i].move(sf::Vector2f(vel.x * scale.x * deltaTime, vel.y * scale.y * deltaTime));
-		std::cout << "Pos: " << image[i].getGlobalBounds().left << ", " << image[i].getGlobalBounds().left + image[i].getGlobalBounds().width << std::endl;
+		//std::cout << "Pos: " << image[i].getGlobalBounds().left << ", " << image[i].getGlobalBounds().left + image[i].getGlobalBounds().width <<
+		//	", " << vel.y << std::endl;
 		if(image[i].getGlobalBounds().left + image[i].getGlobalBounds().width < mViewX)
 		{
 			std::cout << "things should be getting reset" << std::endl;
 			int j = (i == 0 ? 1 : 0);
-			image[i].setPosition(image[j].getGlobalBounds().left + image[j].getGlobalBounds().width, posOffset.y);
+			image[i].setPosition(image[j].getGlobalBounds().left + image[j].getGlobalBounds().width, image[j].getGlobalBounds().top);
 		}
 		//std::cout << "Pos" << i << ": " << image[i].getGlobalBounds().left << ", " << image[i].getGlobalBounds().top << std::endl;
 		//if (movingLayers[i].rotateForward) {

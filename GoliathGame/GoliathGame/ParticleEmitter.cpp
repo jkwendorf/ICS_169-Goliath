@@ -55,3 +55,14 @@ void ParticleEmitter::draw(sf::RenderWindow &window)
 
 	
 }
+
+void ParticleEmitter::resetAllParticles()
+{
+	for(auto iter = particleList.begin(); iter != particleList.end(); iter++)
+		{
+			(iter)->resetPosition();
+			std::cout << "Particle position reset" << std::endl;
+		}
+
+	std::cout << "HI TYLER" << std::endl;
+}

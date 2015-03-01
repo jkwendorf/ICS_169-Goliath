@@ -50,6 +50,7 @@ int main()
 			if (event.type == sf::Event::LostFocus)
 			{
 				infocus = false;
+				Global::GetInstance().ControllerVibrate();
 			}
 
 			//infocus = event.type == sf::Event::GainedFocus ? true: false;
@@ -78,6 +79,7 @@ int main()
 
 	StateManager::getInstance().DeleteAllStates();
 	
+	Global::GetInstance().ControllerVibrate();
 	Global::GetInstance().SavePlayer();
 	Global::GetInstance().CleanUp();
 

@@ -50,12 +50,13 @@ enum WeaponEnum
 enum SoundEnum
 {
 	ATTACKSOUND = 0,
-	JUMPSOUND = 1,
-	SHOOTSOUND = 2,
-	TAKEDMGSOUND = 3,
-	HOOKSOUND = 4,
-	DAMAGEDSOUND = 5,
-	DEATHSOUND = 6
+	JUMPSOUND1 = 1,
+	JUMPSOUND2 = 2,
+	HOOKSOUND = 3,
+	DAMAGEDSOUND1 = 4,
+	DAMAGEDSOUND2 = 5,
+	DEATHSOUND = 6,
+	SHOOTSOUND = 7
 };
 
 class BaseState;
@@ -69,7 +70,7 @@ public:
 	// METHODS AND FUNCTIONS
 	Player();
 	~Player();
-	void init(CollisionManager* collisionManager_, BaseState* startState);
+	void init(CollisionManager* collisionManager_, BaseState* startState, int treasureNum);
 
 	void handleInput();
 	void update(float deltaTime);
@@ -82,12 +83,12 @@ public:
 	void grapple();
 	void resetPosition(sf::Vector2f& newPos);
 	void draw(sf::RenderWindow& window);
-	void playerUpdate(sf::View* view, sf::Vector2i roomSize, float deltaTime);
+	void playerUpdate(sf::Vector2i roomSize, float deltaTime);
 	
 	void playerMove(float& deltaTime);
 	void horizontalAcceleration(MovementDirection dir, float& deltaTime);
 	void verticalAcceleration(float& deltaTime);
-	void moveOutOfTile(Tile* t);
+	void moveOutOfTile(Tile* t, int totalReadjust);
 	void instantVaultAboveGrappleTile();
 	void interpolateVaultAboveGrappleTile();
 
@@ -107,11 +108,12 @@ public:
 	int weapon;
 	int bottomPoint;
 	HookShot hShot;
+	UserInterface* ui;
 	sf::Vector2f grappleDir, vaultPos;
 
-	bool grappleInProgress, facingRight, running, shouldHang, isHanging, isVaulting, collidingLeft, collidingRight;
+	bool grappleInProgress, facingRight, running, shouldHang, isHanging, isVaulting, collidingLeft, collidingRight, doHitVibrate;
 	Projectile ammo[3];
-	void viewCheck(sf::View* view, int width, int height);
+	void viewCheck(int width, int height);
 	Sword playerSword;
 	bool atTopEdge, atBottomEdge, atTheBottom;
 
@@ -124,18 +126,21 @@ public:
 	CollisionManager* collisionManager;
 	std::deque<Command*> inputQueue;
 	sf::Sprite crosshair;
+	float targetScale;
 	Tile closestGrappleTile;
 	Animation player;
-	bool gotHit;
-	float recoverTime;
+	bool gotHit, destroyGoliathHitpoint;
+	Tile* goliathHitpoint;
+	float recoverTime, vibrateTime;
 	bool drawPlease;
 	void playHurtSound();
 	//sf::RectangleShape hitbox;
 private:	
-	sf::Sound soundEffects[7];
+	sf::Sound soundEffects[8];
 	float deathTimer;
 
-	UserInterface* ui;
+	
 	void SetUpAugments();
 	void SetUpEffects();
+	int randomHurtSound();
 };

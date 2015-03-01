@@ -3,7 +3,7 @@
 
 Room::Room(int levelNumber, int roomNumber, std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList, std::list<Tile*> &hitPointTileList)
 	:roomNum(roomNumber), numSect(Global::GetInstance().roomSizes.at("Level" + std::to_string(levelNumber) + "Room" + std::to_string(roomNumber)).roomSize),
-	roomWidth(0), roomHeight(0), loadedTitles(false), bg(levelNumber, roomNumber)
+	roomWidth(0), roomHeight(0), loadedTitles(false), bg(levelNumber, roomNumber), numTreasures(0)
 {
 	
 	LoadRoom(levelNumber, enemyList, arrowTileList, destructTileList, hitPointTileList);
@@ -49,6 +49,7 @@ void Room::LoadRoom(int levelNumber, std::vector<std::shared_ptr<Enemy>> &enemyL
 
 		if(roomHeight < sectList[i]->getHeight())
 			roomHeight = sectList[i]->getHeight();
+		numTreasures += sectList[i]->numTreasures;
 	}
 	
 	//std::cout << Global::GetInstance().roomTileSheets. << std::endl;
@@ -61,7 +62,7 @@ bool Room::CheckSectionOnScreen(int sectionNum)
 	return sectList[sectionNum]->inWindow();
 }
 
-void Room::GetCollidableTiles(BaseObject& obj, sf::Vector2f& dim, std::vector<Tile*>& nearTiles, bool player)
+void Room::GetCollidableTiles(BaseObject& obj, std::vector<Tile*>& nearTiles, bool player)
 {
 	//sf::FloatRect rect(sf::Vector2f(obj.sprite.getPosition().x - dim.x/2, obj.sprite.getPosition().y - dim.y/2), sf::Vector2f(dim.x, dim.y));
 	//std::cout << obj.sprite.getGlobalBounds().left << ", " << obj.sprite.getGlobalBounds().top << ", " << obj.sprite.getGlobalBounds().width << ", ";
@@ -153,7 +154,6 @@ void Room::GetNearTiles(sf::FloatRect& rect, std::vector<Tile*>& nearTiles, bool
 
 void Room::update(float deltaTime)
 {
-	std::cout << "View room: " << mViewPosX << std::endl;
 	bg.update(deltaTime, mViewPosX);
 }
 
@@ -224,6 +224,14 @@ void Room::checkUpperLeftSameGrid(int currentGrid, sf::FloatRect& rect, const sf
 			//Set the top left y position = 0	
 			sectList[currentGrid]->checkGrapple(sf::Vector2f(topLeft.x < 0 ? 0 : topLeft.x, topLeft.y < 0 ? 0 : topLeft.y), 
 				botRight - sectList[currentGrid]->getOffset(), nearTiles);
+			return;
+		}
+		else
+		{
+			if(!checkBoxOnly)
+			{ 
+				sectList[currentGrid]->surroundingRects(sf::Vector2f(topLeft.x < 0 ? 0 : topLeft.x, topLeft.y < 0 ? 0 : topLeft.y) - sectList[currentGrid]->getOffset(), botRight - sectList[currentGrid]->getOffset(), nearTiles);
+			}
 			return;
 		}
 	

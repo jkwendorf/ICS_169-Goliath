@@ -8,7 +8,8 @@ Player::Player()
 	: BaseObject(0), grappleInProgress(false), facingRight(true),running(false), isVaulting(false), 
 	isHanging(false), shouldHang(false), health(Global::GetInstance().basePlayerStats[0]), 
 	stamina(Global::GetInstance().basePlayerStats[1]), weaponCooldown(Global::GetInstance().basePlayerStats[4]), bottomPoint(0),
-	deathTimer(0.0f), currentState(nullptr), collidingLeft(false), collidingRight(false), gotHit(false), recoverTime(0.0f), drawPlease(true)
+	deathTimer(0.0f), currentState(nullptr), collidingLeft(false), collidingRight(false), gotHit(false), recoverTime(0.0f), drawPlease(true),
+	targetScale(-0.02), doHitVibrate(false), vibrateTime(0.0f), destroyGoliathHitpoint(false), goliathHitpoint(nullptr)
 {
 	vel = sf::Vector2f(0.0,0.0);
 
@@ -19,10 +20,11 @@ Player::Player()
 	grappleSpeed = Global::GetInstance().playerAttributes[4];
 	gravity = Global::GetInstance().playerAttributes[5];
 	fallSpeed = Global::GetInstance().playerAttributes[6];
-	player = Animation(4, 4, 90, 120, .10); 
-	sprite.setTexture(*TextureManager::GetInstance().retrieveTexture("David_Run2"));
+	player = Animation(8, 1, 90, 120, .10); 
+	sprite.setTexture(*TextureManager::GetInstance().retrieveTexture("David_Walk"));
 	crosshair.setTexture(*TextureManager::GetInstance().retrieveTexture("crosshair"));
 	crosshair.setPosition(-1000,-1000);
+	crosshair.setOrigin(crosshair.getGlobalBounds().width/2, crosshair.getGlobalBounds().height/2);
 	//crosshair.setScale(1.2,1.2);
 	//sprite.setPosition(64, 560);
 	//sprite.setPosition(500, 64);
@@ -45,19 +47,19 @@ Player::Player()
 
 	SetUpAugments();
 
-	ui = new UserInterface(health, stamina);
-	SetUpEffects();
-
 	hitbox = sf::RectangleShape(sf::Vector2f(PLAYER_DIM_X - PLAYER_DIM_X/2, PLAYER_DIM_Y-10));
 	hitbox.setOrigin(hitbox.getLocalBounds().width/2, hitbox.getLocalBounds().height/2);
+	//hitbox.setFillColor(sf::Color::Blue);
 }
 
-void Player::init(CollisionManager* collisionManager_, BaseState* startState)
+void Player::init(CollisionManager* collisionManager_, BaseState* startState, int treasureNum)
 {
 	if(currentState != nullptr)
 		delete currentState;
 	collisionManager = collisionManager_;
 	currentState = startState;
+	ui = new UserInterface(health, stamina, treasureNum);
+	SetUpEffects();
 }
 
 Player::~Player() 
@@ -90,6 +92,7 @@ void Player::handleInput()
 
 void Player::update(float deltaTime)
 {
+	hShot.updateChain(sprite.getPosition());
 	if(deathTimer > 0)
 	{
 		deathTimer -= deltaTime;
@@ -98,20 +101,40 @@ void Player::update(float deltaTime)
 	if(gotHit)
 	{
 		recoverTime += deltaTime;
-		if(recoverTime < 0.5f)
+		if(recoverTime < 1.0f)
 		{
 			drawPlease = !drawPlease;
+			ui->flashHealth();
+
+			if(recoverTime <= 0.3f)
+				doHitVibrate = true;
+
 		}
 		else
 		{
 			recoverTime = 0.0f;
 			gotHit = false;
 			drawPlease = true;
+			ui->endFlash();
+			Global::GetInstance().ControllerVibrate();
 		}
 	}
 
+	if(doHitVibrate)
+	{
+		vibrateTime += deltaTime;
+		if(vibrateTime > 0.3f)
+		{
+			Global::GetInstance().ControllerVibrate();
+			doHitVibrate = false;
+			vibrateTime = 0.0f;
+		}
+		else
+			Global::GetInstance().ControllerVibrate(75, 80);
+	}
+
 	currentState->update(this, deltaTime);
-	//std::cout << sprite.getPosition().x << ", " << sprite.getPosition().y << std::endl;
+	//std::cout << sprite.getPopksition().x << ", " << sprite.getPosition().y << std::endl;
 	/*
 	while(!inputQueue.empty())
 	//if(inputQueue.empty())
@@ -209,26 +232,34 @@ void Player::update(float deltaTime)
 	if(!collisionManager->isGrappleListEmpty())
 	{
 		closestGrappleTile = collisionManager->getNearestGrappleTile(*this);
-		crosshair.setPosition(closestGrappleTile.left - 17, closestGrappleTile.top - 17);
-		crosshair.setColor(sf::Color(crosshair.getColor().r, crosshair.getColor().g,crosshair.getColor().b, crosshair.getColor().a - 10));
-		if(crosshair.getColor().a < 0)
-			crosshair.setColor(sf::Color(crosshair.getColor().r, crosshair.getColor().g,crosshair.getColor().b, 255));
+		crosshair.setPosition(closestGrappleTile.left + closestGrappleTile.width/2, closestGrappleTile.top + closestGrappleTile.height/2);
+		//crosshair.setColor(sf::Color(crosshair.getColor().r, crosshair.getColor().g,crosshair.getColor().b, crosshair.getColor().a));
+		crosshair.setScale(crosshair.getScale().x + targetScale, crosshair.getScale().y + targetScale);
+		if(crosshair.getScale().x < 0.8 || crosshair.getScale().x > 1.5)
+		{
+			//crosshair.setScale(0.0,0.0);
+			targetScale *= -1;
+		}
 	}
 	else
 		crosshair.setPosition(-1000,-1000);
 
 
 	//Animated sprite update
-	player.update(deltaTime, sprite, 1, facingRight);
+	player.update(deltaTime, sprite, 0, facingRight);
+	//player.update(deltaTime, sprite, 1, facingRight);
 	//hitbox.setPosition(sprite.getPosition().x, sprite.getPosition().y);
 	BaseObject::update(deltaTime);
 	hitbox.setFillColor(sf::Color::Blue);
 	//Global::GetInstance().testingRect.setPosition(sprite.getPosition().x-(sprite.getGlobalBounds().width/2), sprite.getPosition().y-(sprite.getGlobalBounds().height/2));
 	//Global::GetInstance().testingRect.setSize(sf::Vector2f(sprite.getGlobalBounds().width, sprite.getGlobalBounds().height));
+
+
 }
 
 void Player::takeDamage()
 {
+
 	//Player health decrease
 	if(deathTimer <= 0)
 	{
@@ -313,9 +344,11 @@ void Player::draw(sf::RenderWindow& window)
 			if(ammo[x].moving)
 				ammo[x].draw(window);
 	}
-	
+	if(hShot.grappleInProgress || hShot.hookedOnSomething)
+		for(int x = 0; x < 10; x++)
+			window.draw(hShot.hookshotChain[x]);
 	window.draw(crosshair);
-	
+	//window.draw(hitbox);
 	/* //TESTING CIRCLE
 	sf::CircleShape circle = sf::CircleShape(5.0);
 	circle.setPosition(sprite.getPosition());
@@ -351,6 +384,7 @@ void Player::grapple()
 
 void Player::resetPosition(sf::Vector2f& newPos)
 {
+	std::cout << "Reset player Position" << std::endl;
 	sprite.setPosition(newPos);
 	vel.x = 0;
 }
@@ -359,90 +393,22 @@ void Player::jump()
 {
 	if(!isHanging && !isFalling)
 	{
-		soundEffects[JUMPSOUND].play();
+		int sound = rand() % 2 + 1;
+		std::cout << "Sound Playing: " << sound << std::endl;
+		soundEffects[sound].play();
  		vel.y = jumpSpeed;
 		isFalling = true;
 	}
 }
 
-void Player::playerUpdate(sf::View* view, sf::Vector2i roomSize, float deltaTime)
+void Player::playerUpdate(sf::Vector2i roomSize, float deltaTime)
 {
-	viewCheck(view, roomSize.x, roomSize.y);
+	viewCheck(roomSize.x, roomSize.y);
 	update(deltaTime);
 }
 
-void Player::viewCheck(sf::View* view, int width, int height)
-{
-	/*if(facingRight)
-	{
-		if(sprite.getPosition().x > SCREEN_WIDTH - Global::GetInstance().xOffset + Global::GetInstance().topLeft.x)
-		{
-			Global::GetInstance().topLeft.x = sprite.getPosition().x - SCREEN_WIDTH + Global::GetInstance().xOffset;
-		}
-	}
-	else
-	{
-		if(sprite.getPosition().x < Global::GetInstance().topLeft.x + Global::GetInstance().xOffset)
-		{
-			Global::GetInstance().topLeft.x = sprite.getPosition().x - Global::GetInstance().xOffset;
-		}
-	}*/
-
-	Global::GetInstance().topLeft.x = sprite.getPosition().x - Global::GetInstance().xOffset;
-
-	if(Global::GetInstance().topLeft.x < 0)
-	{
-		Global::GetInstance().topLeft.x = 0;
-	}
-
-	if(width - Global::GetInstance().xOffset < sprite.getPosition().x)
-	{
-		Global::GetInstance().topLeft.x = width - SCREEN_WIDTH;
-		if(width % SCREEN_WIDTH > 0)
-		{
-			Global::GetInstance().topLeft.x = (width / SCREEN_WIDTH) * SCREEN_WIDTH
-				- SCREEN_WIDTH + (width % SCREEN_WIDTH);
-		}
-	}
-
-	//If falling, bottom edge is player position
-	//If not, bottom edge is player's bottom most point
-	//Highest bottom point is TBD
-
-	if(isFalling)
-	{
-		bottomPoint = sprite.getPosition().y - (PLAYER_DIM_Y / 2);
-		//std::cout << bottomPoint << std::endl;
-	}
-
-	if(sprite.getPosition().y - (PLAYER_DIM_Y / 2) < Global::GetInstance().yOffset)
-	{
-		Global::GetInstance().topLeft.y = sprite.getPosition().y - (PLAYER_DIM_Y / 2) - Global::GetInstance().yOffset;
-		atTopEdge = true;
-		atBottomEdge = false;
-	}
-	else if(sprite.getPosition().y - (PLAYER_DIM_Y / 2) > SCREEN_HEIGHT - Global::GetInstance().yOffset)
-	{
-		Global::GetInstance().topLeft.y = sprite.getPosition().y - (PLAYER_DIM_Y / 2) + Global::GetInstance().yOffset - SCREEN_HEIGHT;
-		atTopEdge = false;
-		atBottomEdge = true;
-	}
-	else
-	{
-		atTopEdge = false;
-		atBottomEdge = false;
-	}
-
-	if(Global::GetInstance().topLeft.y > height - SCREEN_HEIGHT)
-	{
-		Global::GetInstance().topLeft.y = height - SCREEN_HEIGHT;
-		atTheBottom = true;
-	}
-	else
-	{
-		atTheBottom = false;
-	}
-		
+void Player::viewCheck(int width, int height)
+{		
 	if(Global::GetInstance().topLeft.x == 0)
 	{
 		if((sprite.getPosition().x - (PLAYER_DIM_X / 2)) < 0)
@@ -465,8 +431,22 @@ void Player::viewCheck(sf::View* view, int width, int height)
 		}
 	}
 
-	//view->reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y, SCREEN_WIDTH, SCREEN_HEIGHT));
+	if(isFalling)
+	{
+		bottomPoint = sprite.getPosition().y - (PLAYER_DIM_Y / 2);
+		
+	}
 
+
+	if(Global::GetInstance().topLeft.y > height - SCREEN_HEIGHT)
+	{
+		Global::GetInstance().topLeft.y = height - SCREEN_HEIGHT;
+		atTheBottom = true;
+	}
+	else
+	{
+		atTheBottom = false;
+	}
 }
 
 void Player::updateUI()
@@ -625,7 +605,7 @@ void Player::verticalAcceleration(float& deltaTime)
 	}
 }*/
 
-void Player::moveOutOfTile(Tile* t)
+void Player::moveOutOfTile(Tile* t, int totalReadjust)
 { 
 	float left = (hitbox.getPosition().x + hitbox.getGlobalBounds().width/2) - t->left, 
 		right = (t->left + t->width) - (hitbox.getPosition().x - hitbox.getGlobalBounds().width/2), 
@@ -633,8 +613,32 @@ void Player::moveOutOfTile(Tile* t)
 		down = (t->top + t->height) - (hitbox.getPosition().y - hitbox.getGlobalBounds().height/2);
 
 	float mini = min(up, down);
-	mini = min(right, mini); 
+	mini = min(right, mini);
 	mini = min(left, mini);
+
+	if(totalReadjust >= 3)
+	{
+		if(mini == left)
+		{
+			mini = min(up, down);
+			mini = min(right, mini);
+		}
+		else if(mini == right)
+		{
+			mini = min(up, down);
+			mini = min(left, mini);
+		}
+		else if(mini == up)
+		{
+			mini = min(right, down);
+			mini = min(left, mini);
+		}
+		else
+		{
+			mini = min(right, up);
+			mini = min(left, mini);
+		}
+	}
 
 	if(mini == left)
 	{
@@ -684,7 +688,8 @@ void Player::moveOutOfTile(Tile* t)
 
 void Player::playHurtSound()
 {
-	soundEffects[DAMAGEDSOUND].play();
+	int sound = rand() % 2 + 4;
+	soundEffects[sound].play();
 }
 
 void Player::drawUI(sf::RenderWindow& window)
@@ -722,14 +727,16 @@ void Player::SetUpAugments()
 
 void Player::SetUpEffects()
 {
-	soundEffects[ATTACKSOUND] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("playerAttack")));
-	soundEffects[JUMPSOUND] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("playerJump")));
-	soundEffects[SHOOTSOUND] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("playerShoot")));
-	soundEffects[TAKEDMGSOUND] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("playerTakeDMG")));
+	soundEffects[ATTACKSOUND] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("DavidAttack1")));
+	soundEffects[JUMPSOUND1] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("DavidJump1")));
+	soundEffects[JUMPSOUND2] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("DavidJump2")));
 	soundEffects[HOOKSOUND] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("playerHook")));
-	soundEffects[DAMAGEDSOUND] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("playerHurt")));
-	soundEffects[DEATHSOUND] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("playerDied")));
+	soundEffects[DAMAGEDSOUND1] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("DavidDamage1")));
+	soundEffects[DAMAGEDSOUND2] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("DavidDamage2")));
+	soundEffects[DEATHSOUND] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("DavidDeath1")));
+	soundEffects[SHOOTSOUND] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("playerShoot")));
 }
+
 
 void Player::instantVaultAboveGrappleTile()
 {
@@ -784,5 +791,8 @@ void Player::resetHealth()
 {
 	health = 100;
 	soundEffects[DEATHSOUND].play();
+	recoverTime = 0.0f;
+	drawPlease = true;
+	ui->endFlash();
 	ui->resetUI();
 }

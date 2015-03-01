@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "CollisionManager.h"
 #include "StaticCommandHolder.h"
+#include "Camera.h"
 
 
 class InputManager
@@ -34,15 +35,15 @@ public:
 	//controller[2] = keyboard only
 	bool controller[3];
 
-	void update(Player& s, sf::View* v, float deltaTime);
+	void update(Player& s, Camera* camera, float deltaTime);
 	void playerMove(Player& s, float deltaTime);
-	void viewMove(sf::View* v, Player& s, float deltaTime);
+	void viewMove(Camera* camera, Player& s, float deltaTime);
 
 	float inputCooldown, currentInputCooldown;
 	float weaponSwitchCooldown, currentWeaponSwitchCooldown;
 	float viewDifference, viewChangedY, viewChangedX;
 	float grappleCooldown, currentGrappleCooldown;
-	
+	bool grappleReset;
 private:
 	StaticCommandHolder sch;
 };

@@ -1,4 +1,5 @@
 #include "Global.h"
+#include <Xinput.h>
 
 Global::Global()
 	:inventory(new PlayerInventory())
@@ -8,6 +9,11 @@ Global::Global()
 	testingRect.setPosition(-100, -100);
 	testingRect.setFillColor(sf::Color::Red);
 	testingRect.setOrigin(testingRect.getLocalBounds().left, testingRect.getLocalBounds().top);
+
+	if(font.loadFromFile("media/fonts/arial.ttf"))
+	{
+		std::cout << "Font did not load!" << std::endl;
+	}
 }
 
 Global::~Global()
@@ -44,9 +50,13 @@ void Global::ParseXML() {
 		std::string str = "Level " + levelNumber;
 		std::string tilesheetName = level.attribute("tilesheet").as_string();
 		//str += levelNumber;
-		
-		int levelSize = level.attribute("size").as_int();
-		levelSizes[str] = levelSize;
+
+		LevelStruct l;
+		l.description = level.attribute("levelDescription").as_string();
+		l.imageName = level.attribute("descriptionImage").as_string();
+		l.levelSize = level.attribute("size").as_int();
+		levelInfo[str] = l;
+
 		//std::cout << str << std::endl;
 		for (pugi::xml_node room = level.child("Room"); room; room = room.next_sibling("Room")) {
 			std::cout << "Room Number: " << room.attribute("number").value() << std::endl;
@@ -263,7 +273,7 @@ void Global::calculateOffset()
 {
 	//grab height and width and calculate that offset
 	xOffset = SCREEN_WIDTH / 2;
-	yOffset = SCREEN_HEIGHT / 2;
+	yOffset = (SCREEN_HEIGHT / 2) + GAME_TILE_DIM;
 
 }
 
@@ -279,5 +289,31 @@ void Global::SetUpTileSheet(sf::Texture* texture)
 		//std::cout << "Pos x: " <<  temp.left << ". Pos Y: " << temp.top << std::endl;
 		currentTileSheet[i]->setTextureRect(temp);
 		currentTileSheet[i]->setScale(ratio, ratio);
+	}
+}
+
+void Global::ControllerVibrate(int leftPercent, int rightPercent)
+{
+	if(leftPercent > 100)
+		leftPercent = 100;
+	else if(leftPercent < 0)
+		leftPercent = 0;
+
+	if(rightPercent > 100)
+		rightPercent = 100;
+	else if(rightPercent < 0)
+		rightPercent = 0;
+
+	if(sf::Joystick::isConnected(0))
+	{
+		XINPUT_VIBRATION VibrationState;
+		ZeroMemory(&VibrationState, sizeof(XINPUT_VIBRATION));
+		int iLeftMotor = leftPercent * 655.35f;
+		int iRightMotor = rightPercent * 655.35f;
+
+		VibrationState.wLeftMotorSpeed = iLeftMotor;
+		VibrationState.wRightMotorSpeed = iRightMotor;
+
+		XInputSetState(0, &VibrationState);
 	}
 }

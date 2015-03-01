@@ -3,7 +3,7 @@
 #include "StateManager.h"
 
 GameState::GameState(int levelNum, int roomNumber)
-	:currentScreen(new Level(levelNum, roomNumber)), nextScreen(NULL), screen(LEVEL)
+	:currentScreen(new Level(levelNum, roomNumber)), nextScreen(NULL), screen(LEVEL), firstLoop(true)
 {
 	shouldQuit = false;
 }
@@ -29,17 +29,29 @@ void GameState::DeleteState()
 
 void GameState::update(float deltaTime, sf::RenderWindow& window)
 {
-	currentScreen->update(deltaTime);
-	if(currentScreen->CheckChangeScreen())
+	if(!firstLoop)
 	{
-		StateManager::getInstance().changeToState(MAIN_MENU, true);
-		StateManager::getInstance().deleteState(GAME);
-	}
+		Global::GetInstance().ControllerVibrate();
+		currentScreen->update(deltaTime);
+		if(currentScreen->CheckChangeScreen())
+		{
+			StateManager::getInstance().changeToState(MAIN_MENU, true);
+			StateManager::getInstance().deleteState(GAME);
+		}
 
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || sf::Joystick::isButtonPressed(0, 7))
-	{
-		StateManager::getInstance().addState(PAUSE_GAME, new PauseGameState(window), true);
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || sf::Joystick::isButtonPressed(0, 7))
+		{
+			Global::GetInstance().ControllerVibrate();
+			StateManager::getInstance().addState(PAUSE_GAME, new PauseGameState(window), true);
+		}
+
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::I))
+			Global::GetInstance().ControllerVibrate(0, 50);
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::O))
+			Global::GetInstance().ControllerVibrate();
 	}
+	else
+		firstLoop = false;
 }
 
 void GameState::draw(sf::RenderWindow& window)

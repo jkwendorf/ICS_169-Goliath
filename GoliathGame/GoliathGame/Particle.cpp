@@ -27,7 +27,7 @@ void Particle::update(float deltaTime)
 	if(currentLife >= lifespan)
 	{
 		currentLife = 0;
-		particle.setPosition(position);
+		//particle.setPosition(position);
 		//particle.setRotation(0.0);
 	}
 	particle.move(direction.x * speed * deltaTime, direction.y * speed * deltaTime);
@@ -39,4 +39,10 @@ void Particle::update(float deltaTime)
 void Particle::draw(sf::RenderWindow &window)
 {
 	//window.draw(particle);
+}
+
+void Particle::resetPosition()
+{
+	position.y += rand() % 400 - 200;
+	particle.setPosition(position);
 }

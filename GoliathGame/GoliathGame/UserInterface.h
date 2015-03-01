@@ -5,13 +5,17 @@
 class UserInterface
 {
 public:
-	UserInterface(float h, float s);
+	UserInterface(float h, float s, int numTreasure);
 	~UserInterface();
 
 	void resetUI();
 	void draw(sf::RenderWindow& window);
 	void update(float h, float s);
 	void updateDifferent(float h, float s, sf::Vector2f offset);
+	void flashHealth();
+	void endFlash();
+	void setTreasureNumber(int numTreasure);
+	void addTreasure();
 
 private:
 	/*sf::RectangleShape healthBar1;
@@ -20,8 +24,11 @@ private:
 	sf::RectangleShape healthBar4;
 
 	sf::RectangleShape staminaBar;*/
-
+	int collectedTreasure, totalTreasure;
+	sf::Text treasure;
 	sf::Sprite healthIcon;
+
+	bool drawPlease;
 
 	bool showHealth1;
 	bool showHealth2;
