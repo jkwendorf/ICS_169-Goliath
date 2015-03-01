@@ -128,7 +128,8 @@ public:
 	float targetScale;
 	Tile closestGrappleTile;
 	Animation player;
-	bool gotHit;
+	bool gotHit, destroyGoliathHitpoint;
+	Tile* goliathHitpoint;
 	float recoverTime, vibrateTime;
 	bool drawPlease;
 	void playHurtSound();
