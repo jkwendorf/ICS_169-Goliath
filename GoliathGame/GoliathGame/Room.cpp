@@ -3,7 +3,7 @@
 
 Room::Room(int levelNumber, int roomNumber, std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList, std::list<Tile*> &hitPointTileList)
 	:roomNum(roomNumber), numSect(Global::GetInstance().roomSizes.at("Level" + std::to_string(levelNumber) + "Room" + std::to_string(roomNumber)).roomSize),
-	roomWidth(0), roomHeight(0), loadedTitles(false), bg(levelNumber, roomNumber)
+	roomWidth(0), roomHeight(0), loadedTitles(false), bg(levelNumber, roomNumber), numTreasures(0)
 {
 	
 	LoadRoom(levelNumber, enemyList, arrowTileList, destructTileList, hitPointTileList);
@@ -49,6 +49,7 @@ void Room::LoadRoom(int levelNumber, std::vector<std::shared_ptr<Enemy>> &enemyL
 
 		if(roomHeight < sectList[i]->getHeight())
 			roomHeight = sectList[i]->getHeight();
+		numTreasures += sectList[i]->numTreasures;
 	}
 	
 	//std::cout << Global::GetInstance().roomTileSheets. << std::endl;
@@ -84,22 +85,29 @@ int Room::NearInteractableTiles(BaseObject& obj)
 void Room::GetGrapplableTiles(Player& player, std::vector<Tile*>& nearTiles)
 {
 	//*Global::GetInstance().debugLog << "Player Pos: " << player.sprite.getPosition().x << ", " << player.sprite.getPosition().y << "---";
+	//If player is not past the edge of the screen, then grapple onto that shit.
 	if(player.sprite.getPosition().y - PLAYER_DIM_Y/2 - player.hShot.grappleBox >= 0)
 	{
 		if (!player.facingRight)
 		{
-			sf::FloatRect rect(sf::Vector2f(player.sprite.getPosition().x /*- PLAYER_DIM_X/2 */ - player.hShot.grappleBox, 
+			sf::FloatRect rect(sf::Vector2f(player.sprite.getPosition().x /*- PLAYER_DIM_X/2 */ - player.hShot.grappleBox - 96, 
 				player.sprite.getPosition().y /*- PLAYER_DIM_Y/2 */ - player.hShot.grappleBox),
 				sf::Vector2f(player.hShot.grappleBox, player.hShot.grappleBox));
 			GetNearTiles(rect, nearTiles, true, true);
+			Global::GetInstance().testingRect.setPosition(rect.left, rect.top);
+			sf::Vector2f vect(rect.width, rect.height);
+			Global::GetInstance().testingRect.setSize(vect);
 			return;
 		}
 		else
 		{
-			sf::FloatRect rect(sf::Vector2f(player.sprite.getPosition().x,
+			sf::FloatRect rect(sf::Vector2f(player.sprite.getPosition().x + 96,
 				player.sprite.getPosition().y /*- PLAYER_DIM_Y/2 */ - player.hShot.grappleBox),
 				sf::Vector2f(player.hShot.grappleBox, player.hShot.grappleBox));
 			GetNearTiles(rect, nearTiles, true, true);
+			Global::GetInstance().testingRect.setPosition(rect.left, rect.top);
+			sf::Vector2f vect(rect.width, rect.height);
+			Global::GetInstance().testingRect.setSize(vect);
 			return;
 		}
 	}
@@ -108,16 +116,22 @@ void Room::GetGrapplableTiles(Player& player, std::vector<Tile*>& nearTiles)
 		//These two cases do not work need to fix the Grant Walker
 		if (!player.facingRight)
 		{
-			sf::FloatRect rect(sf::Vector2f(player.sprite.getPosition().x /*- PLAYER_DIM_X/2 */ - player.hShot.grappleBox, 0),
+			sf::FloatRect rect(sf::Vector2f(player.sprite.getPosition().x /*- PLAYER_DIM_X/2 */ - player.hShot.grappleBox - 96, 0),
 				sf::Vector2f(player.hShot.grappleBox, player.sprite.getPosition().y));
 			GetNearTiles(rect, nearTiles, true, true);
+			Global::GetInstance().testingRect.setPosition(rect.left, rect.top);
+			sf::Vector2f vect(rect.width, rect.height);
+			Global::GetInstance().testingRect.setSize(vect);
 			return;
 		}
 		else
 		{
-			sf::FloatRect rect(sf::Vector2f(player.sprite.getPosition().x + PLAYER_DIM_X/2, 0),
+			sf::FloatRect rect(sf::Vector2f(player.sprite.getPosition().x + PLAYER_DIM_X/2 + 96, 0),
 				sf::Vector2f(player.hShot.grappleBox, player.sprite.getPosition().y));
 			GetNearTiles(rect, nearTiles, true, true);
+			Global::GetInstance().testingRect.setPosition(rect.left, rect.top);
+			sf::Vector2f vect(rect.width, rect.height);
+			Global::GetInstance().testingRect.setSize(vect);
 			return;
 		}
 		
@@ -163,7 +177,7 @@ void Room::draw(sf::RenderWindow& w)
 	{
 		sectList[i]->draw(w);
 	}
-
+	w.draw(Global::GetInstance().testingRect);
 }
 
 void Room::checkUpperLeftSameGrid(int currentGrid, sf::FloatRect& rect, const sf::Vector2f& topLeft, 

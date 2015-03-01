@@ -16,7 +16,7 @@ public:
 	CollisionManager();
 	~CollisionManager();
 	bool playerCollisionDetection(BaseObject* p);
-	void checkTreasure(BaseObject* p);
+	void checkTreasure(Player& p);
 	
 	void setNearByTiles(std::vector<Tile*> tiles);
 	void setGrapplableTiles(std::vector<Tile*> tiles);

@@ -63,15 +63,16 @@ Tile CollisionManager::getNearestGrappleTile(BaseObject p)
 
 	return closestTile;
 }
-void CollisionManager::checkTreasure(BaseObject* p)
+void CollisionManager::checkTreasure(Player& p)
 {
 	for(Tile* b : tileList)
 	{
-		if(b->intersects(p->sprite.getGlobalBounds()))
+		if(b->intersects(p.sprite.getGlobalBounds()))
 		{
 			if(((b->getFlags() & TILE::OPENEDMASK) == 0) && ((b->getFlags() & TILE::TREASUREMASK) != 0))
 			{
- 				notify(*p, Util::Events::PICK_UP_ITEM);
+ 				notify(p, Util::Events::PICK_UP_ITEM);
+				p.ui->addTreasure();
 				b->changeOpened();
 				return;
 			}
