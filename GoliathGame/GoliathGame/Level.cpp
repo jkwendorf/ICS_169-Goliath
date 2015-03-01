@@ -193,7 +193,8 @@ void Level::update(float deltaTime)
 		currentRoom->GetCollidableTiles(p, nearTiles, true);
 
 		collisionManager->setNearByTiles(nearTiles);
-		collisionManager->setGrapplableTiles(nearTiles2);
+		if(!p.hShot.grappleInProgress)
+			collisionManager->setGrapplableTiles(nearTiles2);
 
 		collisionManager->checkTreasure(p);
 		

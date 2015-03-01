@@ -53,12 +53,12 @@ void InputManager::update(Player& s, Camera* camera, float deltaTime)
 	//change this when you want more complex movement
 	//movement[0] = sf::Keyboard::isKeyPressed(sf::Keyboard::A) || (sf::Joystick::getAxisPosition(0, sf::Joystick::X) < -25);
 	//movement[1] = sf::Keyboard::isKeyPressed(sf::Keyboard::D) || (sf::Joystick::getAxisPosition(0, sf::Joystick::X) > 25);
-
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::A) || (sf::Joystick::getAxisPosition(0, sf::Joystick::X) < -25))
 	{
 		MoveCommand* move = new MoveCommand();
 		move->init(&s, LEFT, deltaTime, MOVELEFT);
-		s.inputQueue.push_back(move);
+		if(!s.hShot.grappleInProgress)
+			s.inputQueue.push_back(move);
 		//sch.moveCommand->init(&s, MovementDirection::LEFT, deltaTime, MOVELEFT);
 		//s.inputQueue.push_back(sch.moveCommand);
 	}
@@ -66,10 +66,12 @@ void InputManager::update(Player& s, Camera* camera, float deltaTime)
 	{
 		MoveCommand* move = new MoveCommand();
 		move->init(&s, RIGHT, deltaTime, MOVERIGHT);
-		s.inputQueue.push_back(move);
+		if(!s.hShot.grappleInProgress)
+			s.inputQueue.push_back(move);
 		//sch.moveCommand->init(&s, MovementDirection::RIGHT, deltaTime, MOVERIGHT);
 		//s.inputQueue.push_back(sch.moveCommand);
 	}
+	
 	else if(s.vel.x != 0)
 	{
 		MoveCommand* move = new MoveCommand();

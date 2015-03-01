@@ -20,7 +20,7 @@ Player::Player()
 	grappleSpeed = Global::GetInstance().playerAttributes[4];
 	gravity = Global::GetInstance().playerAttributes[5];
 	fallSpeed = Global::GetInstance().playerAttributes[6];
-	player = Animation(8, 1, 90, 120, .10); 
+	player = Animation(8, 1, 90, 120, .15); 
 	sprite.setTexture(*TextureManager::GetInstance().retrieveTexture("David_Walk"));
 	crosshair.setTexture(*TextureManager::GetInstance().retrieveTexture("crosshair"));
 	crosshair.setPosition(-1000,-1000);
