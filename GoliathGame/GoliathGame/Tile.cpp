@@ -31,6 +31,8 @@ uint8 Tile::getFlags()
 void Tile::changeOpened()
 {
 	flags += 0x10;
+	tileNum = -1;
+	flags = 0x00;
 }
 
 sf::Vector2f Tile::getDirection()

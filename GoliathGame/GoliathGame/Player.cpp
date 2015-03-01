@@ -47,20 +47,19 @@ Player::Player()
 
 	SetUpAugments();
 
-	ui = new UserInterface(health, stamina);
-	SetUpEffects();
-
 	hitbox = sf::RectangleShape(sf::Vector2f(PLAYER_DIM_X - PLAYER_DIM_X/2, PLAYER_DIM_Y-10));
 	hitbox.setOrigin(hitbox.getLocalBounds().width/2, hitbox.getLocalBounds().height/2);
 	//hitbox.setFillColor(sf::Color::Blue);
 }
 
-void Player::init(CollisionManager* collisionManager_, BaseState* startState)
+void Player::init(CollisionManager* collisionManager_, BaseState* startState, int treasureNum)
 {
 	if(currentState != nullptr)
 		delete currentState;
 	collisionManager = collisionManager_;
 	currentState = startState;
+	ui = new UserInterface(health, stamina, treasureNum);
+	SetUpEffects();
 }
 
 Player::~Player() 

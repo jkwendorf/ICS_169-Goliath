@@ -16,8 +16,9 @@ Level::Level(int levelNumber, int roomNumber)
 	enemyAI(collisionManager), arrowCool(2.0f), screenShakeDuration(.65f), screenShakeCooldown(10.0f), currentScreenShakeCooldown(0.0f),
 	arrowsCanFire(true), fixedTime(0.0f), levelStart(true), screenShake(false), shakeOffset(1), introTimer(5.0f)
 {
-	p.init(collisionManager, new JumpingState());
+	
 	currentRoom = new Room(levelNumber, roomNumber, enemyList, arrowTileList, destructTileList, hitPointTileList);
+	p.init(collisionManager, new JumpingState(), currentRoom->numTreasures);
 	//background.setTexture(*TextureManager::GetInstance().retrieveTexture("bandit canyon level"));
 	//sf::Color color = background.getColor();
 	//background.setColor(sf::Color(color.r, color.g, color.b, 200));
@@ -82,7 +83,7 @@ void Level::changeRoom()
 		setArrowTileArrows();
 		//Move player to the start pos in new room
 		p.resetPosition(currentRoom->getStartPos());
-		p.init(collisionManager, new JumpingState());
+		p.init(collisionManager, new JumpingState(), currentRoom->numTreasures);
 	}
 	else
 	{
@@ -184,7 +185,7 @@ void Level::update(float deltaTime)
 		{
 			p.takeDamage();
 		}
-			
+		
 	}
 	if(!changeScreen)
 	{
@@ -193,7 +194,9 @@ void Level::update(float deltaTime)
 
 		collisionManager->setNearByTiles(nearTiles);
 		collisionManager->setGrapplableTiles(nearTiles2);
-	
+
+		collisionManager->checkTreasure(p);
+		
 		if(p.hShot.grappleInProgress)
 		{
 			p.hShot.hitNonGrappleTile = collisionManager->hShotHitNonGrappleTile(p.hShot);
