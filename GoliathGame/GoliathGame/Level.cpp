@@ -231,7 +231,7 @@ void Level::update(float deltaTime)
 		p.playerUpdate(sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()), deltaTime);
 
 
-		inputManager.update(p, camera, deltaTime);
+		inputManager.update(p, &camera, deltaTime);
 		p.handleInput();
 		//Check to see if the player has died
 		if(p.checkDead())

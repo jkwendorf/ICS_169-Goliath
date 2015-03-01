@@ -11,10 +11,11 @@ public:
 	void setRoomSize(sf::Vector2f dim);
 	void viewChange(sf::Vector2f playerPos);
 	void viewReset();
-	void viewMove(bool up, float deltaTime);
+	sf::Vector2f viewMove(bool up, float deltaTime);
 	sf::View getView();
 	void setBottomPoint(float bot);
 	void shakeScreen(float x, float y);
+	void endMovement();
 
 private:
 	sf::Vector2f roomSize;

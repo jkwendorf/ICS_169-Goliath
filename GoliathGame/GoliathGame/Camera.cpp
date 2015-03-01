@@ -42,22 +42,17 @@ void Camera::viewChange(sf::Vector2f playerPos)
 	if(Global::GetInstance().topLeft.y > roomSize.y - SCREEN_HEIGHT)
 	{
 		Global::GetInstance().topLeft.y = roomSize.y - SCREEN_HEIGHT;
-
 	}
+
 	view.reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y, SCREEN_WIDTH, SCREEN_HEIGHT));
 }
 
-void Camera::viewMove(bool up, float deltaTime)
+sf::Vector2f Camera::viewMove(bool up, float deltaTime)
 {
 	viewDifference = 100.0f * deltaTime;
 	if(up)
 	{
 		viewChangedY -= viewDifference;
-		if(viewChangedY < Global::GetInstance().yOffset * (-4) && viewChangedY < 0)
-		{
-			viewDifference = 0;
-			viewChangedY = Global::GetInstance().yOffset * -4;
-		}
 
 		if(viewChangedY < GAME_TILE_DIM * -5)
 		{
@@ -67,26 +62,27 @@ void Camera::viewMove(bool up, float deltaTime)
 	else
 	{
 		viewChangedY += viewDifference;
-		if(viewChangedY > Global::GetInstance().yOffset * 4 && viewChangedY > 0)
-		{
-			viewDifference = 0;
-			viewChangedY = Global::GetInstance().yOffset * 4;
-		}
 
 		if(viewChangedY > GAME_TILE_DIM * 5)
 		{
 			viewChangedY = GAME_TILE_DIM * 5;
 		}
 
-		if((roomSize.y - Global::GetInstance().topLeft.y - viewChangedY) + SCREEN_HEIGHT > roomSize.y - SCREEN_HEIGHT)
+		if(Global::GetInstance().topLeft.y + viewChangedY > roomSize.y - SCREEN_HEIGHT)
 		{
-			viewChangedY = roomSize.y - SCREEN_HEIGHT - Global::GetInstance().topLeft.y;
+			viewChangedY -= viewDifference;
 		}
 	}
 
-
-
 	view.reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y + viewChangedY, SCREEN_WIDTH, SCREEN_HEIGHT));
+	return sf::Vector2f(viewChangedX, viewChangedY);
+}
+
+void Camera::endMovement()
+{
+	viewDifference = 0;
+	viewChangedY = 0;
+	viewChangedX = 0;
 }
 
 void Camera::shakeScreen(float x, float y)
