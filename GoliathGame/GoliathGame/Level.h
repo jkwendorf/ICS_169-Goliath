@@ -15,6 +15,7 @@
 #include "Tile.h"
 #include "Particle.h"
 #include "ParticleEmitter.h"
+#include "Camera.h"
 
 class Level : public BaseGameScreen
 {
@@ -37,6 +38,7 @@ private:
 	InputManager inputManager;
 	EnemyAI enemyAI;
 	std::vector<Projectile*> arrows;
+	Camera camera;
 
 	bool arrowsCanFire;
 	bool levelStart;

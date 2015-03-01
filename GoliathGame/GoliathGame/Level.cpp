@@ -25,8 +25,8 @@ Level::Level(int levelNumber, int roomNumber)
 	loadingSprite.setPosition(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y);
 	Global::GetInstance().topLeft.x = 0;
 	Global::GetInstance().topLeft.y = 0;
-	view.reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y, SCREEN_WIDTH, SCREEN_HEIGHT));
-	view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
+	camera.setRoomSize(sf::Vector2f(currentRoom->getroomWidth(), currentRoom->getroomHeight()));
+	camera.viewReset();
 	p.resetPosition(currentRoom->getStartPos());
 	setArrowTileArrows();
 	//realEnemyList.push_back(new Enemy("Test",200,200, 10));
@@ -83,7 +83,8 @@ void Level::changeRoom()
 	}
 	Global::GetInstance().topLeft.x = 0;
 	Global::GetInstance().topLeft.y = 0;
-	view.reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y, SCREEN_WIDTH, SCREEN_HEIGHT));
+	camera.setRoomSize(sf::Vector2f(currentRoom->getroomWidth(), currentRoom->getroomHeight()));
+	camera.viewReset();
 	p.isFalling = true;
 	p.vel.x = 0;
 	p.vel.y = 0;
@@ -129,7 +130,7 @@ void Level::update(float deltaTime)
 	}
 	else
 	{
-		view.reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y, SCREEN_WIDTH, SCREEN_HEIGHT));
+		camera.viewReset();
 		p.updateUI();
 	}
 	
@@ -211,9 +212,10 @@ void Level::update(float deltaTime)
 
 		//p.isFalling = !collisionManager->playerCollisionDetection(p);
 		//p.update(deltaTime);
-		p.playerUpdate(&view, sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()), deltaTime);
+		p.playerUpdate(sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()), deltaTime);
+		camera.viewChange(p.sprite.getPosition());
 
-		inputManager.update(p, &view, deltaTime);
+		inputManager.update(p, camera, deltaTime);
 		p.handleInput();
 		//Check to see if the player has died
 		if(p.checkDead())
@@ -491,7 +493,7 @@ void Level::draw(sf::RenderWindow& window)
 	particle.draw(window);
 	particleEmitter.draw(window);
 	//coneEmitter.draw(window);
-	window.setView(view);
+	window.setView(camera.getView());
 	p.drawUI(window);
 }
 

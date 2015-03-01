@@ -42,7 +42,7 @@ InputManager::~InputManager()
 
 }
 
-void InputManager::update(Player& s, sf::View* v, float deltaTime)
+void InputManager::update(Player& s, Camera camera, float deltaTime)
 {
 	// JW: Players should conserve momentum when jumping.  They shouldn't be able to change directions in midair
 
@@ -114,7 +114,7 @@ void InputManager::update(Player& s, sf::View* v, float deltaTime)
 	utility[6] = (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Joystick::getAxisPosition(0, sf::Joystick::Y) > 50) && !utility[5] ? true : false;
 
 	playerMove(s, deltaTime);
-	viewMove(v, s, deltaTime);
+	viewMove(camera, s, deltaTime);
 
 	currentInputCooldown += deltaTime;
 	currentWeaponSwitchCooldown += deltaTime;
@@ -250,7 +250,7 @@ void InputManager::playerMove(Player& player, float deltaTime)
 	//player.vel.x = 0.0;
 }
 
-void InputManager::viewMove(sf::View* v, Player& s, float deltaTime)
+void InputManager::viewMove(Camera camera, Player& s, float deltaTime)
 {
 	
 	viewDifference = 100.0f*deltaTime;	
@@ -258,57 +258,25 @@ void InputManager::viewMove(sf::View* v, Player& s, float deltaTime)
 	{
 		if(utility[5])
 		{
-			viewChangedY -= viewDifference;
-			if(viewChangedY < Global::GetInstance().yOffset * (-4) && viewChangedY < 0)
-			{
-				viewDifference = 0;
-				viewChangedY = Global::GetInstance().yOffset * -4;
-			}
-			Global::GetInstance().topLeft.y -= viewDifference;
-
-			if(viewChangedY < GAME_TILE_DIM * -5)
-			{
-				viewChangedY = GAME_TILE_DIM * -5;
-			}
-
-			if(s.atBottomEdge)
-			{
-				v->reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y + viewChangedY, SCREEN_WIDTH, SCREEN_HEIGHT));
-				s.updateUI(sf::Vector2f(0, viewChangedY));
-			}
+			camera.viewMove(true, deltaTime);
+			s.updateUI(sf::Vector2f(0, viewChangedY));
+			
 		}
 		else if(utility[6])
 		{
-			viewChangedY += viewDifference;
-			if(viewChangedY > Global::GetInstance().yOffset * 4 && viewChangedY > 0)
-			{
-				viewDifference = 0;
-				viewChangedY = Global::GetInstance().yOffset * 4;
-			}
-			Global::GetInstance().topLeft.y += viewDifference;
-
-			if(viewChangedY > GAME_TILE_DIM * 5)
-			{
-				viewChangedY = GAME_TILE_DIM * 5;
-			}
-			if(s.atTopEdge || !s.atTheBottom)
-			{
-				v->reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y + viewChangedY, SCREEN_WIDTH, SCREEN_HEIGHT));
-				s.updateUI(sf::Vector2f(0, viewChangedY));
-			}
+			camera.viewMove(false, deltaTime);
+			s.updateUI(sf::Vector2f(0, viewChangedY));
 		}
 		else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::N))
 		{
 			viewChangedY = rand() % 50;
 			viewChangedX = rand() % 50;
-			v->reset(sf::FloatRect(Global::GetInstance().topLeft.x + viewChangedX, Global::GetInstance().topLeft.y + viewChangedY, SCREEN_WIDTH, SCREEN_HEIGHT));
+			//v->reset(sf::FloatRect(Global::GetInstance().topLeft.x + viewChangedX, Global::GetInstance().topLeft.y + viewChangedY, SCREEN_WIDTH, SCREEN_HEIGHT));
 			s.updateUI(sf::Vector2f(viewChangedX, viewChangedY));
 		}
 		else
 		{
-			Global::GetInstance().topLeft.y -= viewChangedY;
-			viewChangedY = 0;
-			viewChangedX = 0;
+			camera.viewReset();
 		}
 
 		//std::cout << viewChanged << std::endl;

@@ -102,7 +102,7 @@ void Player::update(float deltaTime)
 	if(gotHit)
 	{
 		recoverTime += deltaTime;
-		if(recoverTime < 2.0f)
+		if(recoverTime < 1.0f)
 		{
 			drawPlease = !drawPlease;
 			ui->flashHealth();
@@ -254,6 +254,8 @@ void Player::update(float deltaTime)
 	hitbox.setFillColor(sf::Color::Blue);
 	//Global::GetInstance().testingRect.setPosition(sprite.getPosition().x-(sprite.getGlobalBounds().width/2), sprite.getPosition().y-(sprite.getGlobalBounds().height/2));
 	//Global::GetInstance().testingRect.setSize(sf::Vector2f(sprite.getGlobalBounds().width, sprite.getGlobalBounds().height));
+
+
 }
 
 void Player::takeDamage()
@@ -392,90 +394,22 @@ void Player::jump()
 {
 	if(!isHanging && !isFalling)
 	{
-		soundEffects[JUMPSOUND].play();
+		int sound = rand() % 2 + 1;
+		std::cout << "Sound Playing: " << sound << std::endl;
+		soundEffects[sound].play();
  		vel.y = jumpSpeed;
 		isFalling = true;
 	}
 }
 
-void Player::playerUpdate(sf::View* view, sf::Vector2i roomSize, float deltaTime)
+void Player::playerUpdate(sf::Vector2i roomSize, float deltaTime)
 {
-	viewCheck(view, roomSize.x, roomSize.y);
+	viewCheck(roomSize.x, roomSize.y);
 	update(deltaTime);
 }
 
-void Player::viewCheck(sf::View* view, int width, int height)
-{
-	/*if(facingRight)
-	{
-		if(sprite.getPosition().x > SCREEN_WIDTH - Global::GetInstance().xOffset + Global::GetInstance().topLeft.x)
-		{
-			Global::GetInstance().topLeft.x = sprite.getPosition().x - SCREEN_WIDTH + Global::GetInstance().xOffset;
-		}
-	}
-	else
-	{
-		if(sprite.getPosition().x < Global::GetInstance().topLeft.x + Global::GetInstance().xOffset)
-		{
-			Global::GetInstance().topLeft.x = sprite.getPosition().x - Global::GetInstance().xOffset;
-		}
-	}*/
-
-	Global::GetInstance().topLeft.x = sprite.getPosition().x - Global::GetInstance().xOffset;
-
-	if(Global::GetInstance().topLeft.x < 0)
-	{
-		Global::GetInstance().topLeft.x = 0;
-	}
-
-	if(width - Global::GetInstance().xOffset < sprite.getPosition().x)
-	{
-		Global::GetInstance().topLeft.x = width - SCREEN_WIDTH;
-		if(width % SCREEN_WIDTH > 0)
-		{
-			Global::GetInstance().topLeft.x = (width / SCREEN_WIDTH) * SCREEN_WIDTH
-				- SCREEN_WIDTH + (width % SCREEN_WIDTH);
-		}
-	}
-
-	//If falling, bottom edge is player position
-	//If not, bottom edge is player's bottom most point
-	//Highest bottom point is TBD
-
-	if(isFalling)
-	{
-		bottomPoint = sprite.getPosition().y - (PLAYER_DIM_Y / 2);
-		//std::cout << bottomPoint << std::endl;
-	}
-
-	if(sprite.getPosition().y - (PLAYER_DIM_Y / 2) < Global::GetInstance().yOffset)
-	{
-		Global::GetInstance().topLeft.y = sprite.getPosition().y - (PLAYER_DIM_Y / 2) - Global::GetInstance().yOffset;
-		atTopEdge = true;
-		atBottomEdge = false;
-	}
-	else if(sprite.getPosition().y - (PLAYER_DIM_Y / 2) > SCREEN_HEIGHT - Global::GetInstance().yOffset)
-	{
-		Global::GetInstance().topLeft.y = sprite.getPosition().y - (PLAYER_DIM_Y / 2) + Global::GetInstance().yOffset - SCREEN_HEIGHT;
-		atTopEdge = false;
-		atBottomEdge = true;
-	}
-	else
-	{
-		atTopEdge = false;
-		atBottomEdge = false;
-	}
-
-	if(Global::GetInstance().topLeft.y > height - SCREEN_HEIGHT)
-	{
-		Global::GetInstance().topLeft.y = height - SCREEN_HEIGHT;
-		atTheBottom = true;
-	}
-	else
-	{
-		atTheBottom = false;
-	}
-		
+void Player::viewCheck(int width, int height)
+{		
 	if(Global::GetInstance().topLeft.x == 0)
 	{
 		if((sprite.getPosition().x - (PLAYER_DIM_X / 2)) < 0)
@@ -498,8 +432,22 @@ void Player::viewCheck(sf::View* view, int width, int height)
 		}
 	}
 
-	//view->reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y, SCREEN_WIDTH, SCREEN_HEIGHT));
+	if(isFalling)
+	{
+		bottomPoint = sprite.getPosition().y - (PLAYER_DIM_Y / 2);
+		
+	}
 
+
+	if(Global::GetInstance().topLeft.y > height - SCREEN_HEIGHT)
+	{
+		Global::GetInstance().topLeft.y = height - SCREEN_HEIGHT;
+		atTheBottom = true;
+	}
+	else
+	{
+		atTheBottom = false;
+	}
 }
 
 void Player::updateUI()
@@ -741,7 +689,8 @@ void Player::moveOutOfTile(Tile* t, int totalReadjust)
 
 void Player::playHurtSound()
 {
-	soundEffects[DAMAGEDSOUND].play();
+	int sound = rand() % 2 + 4;
+	soundEffects[sound].play();
 }
 
 void Player::drawUI(sf::RenderWindow& window)
@@ -779,14 +728,16 @@ void Player::SetUpAugments()
 
 void Player::SetUpEffects()
 {
-	soundEffects[ATTACKSOUND] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("playerAttack")));
-	soundEffects[JUMPSOUND] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("playerJump")));
-	soundEffects[SHOOTSOUND] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("playerShoot")));
-	soundEffects[TAKEDMGSOUND] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("playerTakeDMG")));
+	soundEffects[ATTACKSOUND] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("DavidAttack1")));
+	soundEffects[JUMPSOUND1] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("DavidJump1")));
+	soundEffects[JUMPSOUND2] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("DavidJump2")));
 	soundEffects[HOOKSOUND] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("playerHook")));
-	soundEffects[DAMAGEDSOUND] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("playerHurt")));
-	soundEffects[DEATHSOUND] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("playerDied")));
+	soundEffects[DAMAGEDSOUND1] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("DavidDamage1")));
+	soundEffects[DAMAGEDSOUND2] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("DavidDamage2")));
+	soundEffects[DEATHSOUND] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("DavidDeath1")));
+	soundEffects[SHOOTSOUND] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("playerShoot")));
 }
+
 
 void Player::instantVaultAboveGrappleTile()
 {
@@ -842,7 +793,6 @@ void Player::resetHealth()
 	health = 100;
 	soundEffects[DEATHSOUND].play();
 	recoverTime = 0.0f;
-	gotHit = false;
 	drawPlease = true;
 	ui->endFlash();
 	ui->resetUI();
