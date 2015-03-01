@@ -273,7 +273,6 @@ void InputManager::viewMove(Camera* camera, Player& s, float deltaTime)
 		}
 		else
 		{
-			camera->viewReset();
 			camera->endMovement();
 		}
 
