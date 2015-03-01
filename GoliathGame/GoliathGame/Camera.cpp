@@ -89,6 +89,11 @@ void Camera::viewMove(bool up, float deltaTime)
 	view.reset(sf::FloatRect(Global::GetInstance().topLeft.x, Global::GetInstance().topLeft.y + viewChangedY, SCREEN_WIDTH, SCREEN_HEIGHT));
 }
 
+void Camera::shakeScreen(float x, float y)
+{
+	view.reset(sf::FloatRect(Global::GetInstance().topLeft.x + x, Global::GetInstance().topLeft.y + y, SCREEN_WIDTH, SCREEN_HEIGHT));
+}
+
 void Camera::setBottomPoint(float bot)
 {
 	bottomPoint = bot;

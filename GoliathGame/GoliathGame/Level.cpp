@@ -2,6 +2,7 @@
 #include "GrapplingState.h"
 #include "StateManager.h"
 #include "LoadingState.h"
+#include "AudioManager.h"
 
 Level::Level(void)
 	:changeScreen(false), enemyAI(collisionManager)
@@ -34,6 +35,7 @@ Level::Level(int levelNumber, int roomNumber)
 	particle = Particle("rock", sf::Vector2f(50, 100), sf::Vector2f(0, 1), 5, 250);
 	particleEmitter = ParticleEmitter("rock", sf::Vector2f(0, -400), sf::Vector2f(0, 1), 10, 350, 10, "debris");
 	coneEmitter = ParticleEmitter("rock", sf::Vector2f(100, 1200), sf::Vector2f(.5, .5), 1, 50, 30, "cone");
+	loadSounds();
 	//shakeScreen(5.0, 100);
 }
 
@@ -101,9 +103,10 @@ void Level::update(float deltaTime)
 	//coneEmitter.update(deltaTime);
 	particle.update(deltaTime);
 	currentScreenShakeCooldown += deltaTime;
-
+	camera.viewChange(p.sprite.getPosition());
 	currentRoom->update(deltaTime);
 	if (currentRoom->bg.hitFloor()) {
+		goliathSound[STOMP1].play();
 		shakeScreen(1.0f, 20);
 		currentRoom->bg.setHitFloor(false);
 		particleEmitter.resetAllParticles();
@@ -118,7 +121,8 @@ void Level::update(float deltaTime)
 			//currentRoom->bg.setScale(0, 0.0f, 1.0f);
 			viewChangeOffset.x = rand() % shakeOffset;
 			viewChangeOffset.y = rand() % shakeOffset;
-			view.reset(sf::FloatRect(Global::GetInstance().topLeft.x + viewChangeOffset.x, Global::GetInstance().topLeft.y + viewChangeOffset.y, SCREEN_WIDTH, SCREEN_HEIGHT));
+			camera.shakeScreen(viewChangeOffset.x, viewChangeOffset.y);
+			
 			//view.move(viewChangeOffset);
 			p.updateUI(viewChangeOffset);
 			Global::GetInstance().ControllerVibrate(75, 75);
@@ -223,7 +227,7 @@ void Level::update(float deltaTime)
 		//p.isFalling = !collisionManager->playerCollisionDetection(p);
 		//p.update(deltaTime);
 		p.playerUpdate(sf::Vector2i(currentRoom->getroomWidth(), currentRoom->getroomHeight()), deltaTime);
-		camera.viewChange(p.sprite.getPosition());
+
 
 		inputManager.update(p, camera, deltaTime);
 		p.handleInput();
@@ -611,4 +615,17 @@ void Level::shakeScreen(float duration, int shakeOff)
 	screenShakeDuration = duration;
 	currentScreenShakeCooldown = 0;
 	shakeOffset = shakeOff;
+}
+
+void Level::loadSounds()
+{
+	goliathSound[STOMP1] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("GoliathStomp1")));
+	goliathSound[STOMP2] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("GoliathStomp2")));
+	goliathSound[STOMP3] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("GoliathStomp3")));
+}
+
+void Level::playStompSound()
+{
+	int sound = rand() % 3;
+	goliathSound[sound].play();
 }
