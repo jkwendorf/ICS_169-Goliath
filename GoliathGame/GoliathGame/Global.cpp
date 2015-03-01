@@ -9,6 +9,11 @@ Global::Global()
 	testingRect.setPosition(-100, -100);
 	testingRect.setFillColor(sf::Color::Red);
 	testingRect.setOrigin(testingRect.getLocalBounds().left, testingRect.getLocalBounds().top);
+
+	if(font.loadFromFile("media/fonts/arial.ttf"))
+	{
+		std::cout << "Font did not load!" << std::endl;
+	}
 }
 
 Global::~Global()
@@ -45,9 +50,13 @@ void Global::ParseXML() {
 		std::string str = "Level " + levelNumber;
 		std::string tilesheetName = level.attribute("tilesheet").as_string();
 		//str += levelNumber;
-		
-		int levelSize = level.attribute("size").as_int();
-		levelSizes[str] = levelSize;
+
+		LevelStruct l;
+		l.description = level.attribute("levelDescription").as_string();
+		l.imageName = level.attribute("descriptionImage").as_string();
+		l.levelSize = level.attribute("size").as_int();
+		levelInfo[str] = l;
+
 		//std::cout << str << std::endl;
 		for (pugi::xml_node room = level.child("Room"); room; room = room.next_sibling("Room")) {
 			std::cout << "Room Number: " << room.attribute("number").value() << std::endl;

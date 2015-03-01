@@ -3,7 +3,7 @@
 
 Room::Room(int levelNumber, int roomNumber, std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList, std::list<Tile*> &hitPointTileList)
 	:roomNum(roomNumber), numSect(Global::GetInstance().roomSizes.at("Level" + std::to_string(levelNumber) + "Room" + std::to_string(roomNumber)).roomSize),
-	roomWidth(0), roomHeight(0), loadedTitles(false), bg(levelNumber, roomNumber)
+	roomWidth(0), roomHeight(0), loadedTitles(false), bg(levelNumber, roomNumber), numTreasures(0)
 {
 	
 	LoadRoom(levelNumber, enemyList, arrowTileList, destructTileList, hitPointTileList);
@@ -49,6 +49,7 @@ void Room::LoadRoom(int levelNumber, std::vector<std::shared_ptr<Enemy>> &enemyL
 
 		if(roomHeight < sectList[i]->getHeight())
 			roomHeight = sectList[i]->getHeight();
+		numTreasures += sectList[i]->numTreasures;
 	}
 	
 	//std::cout << Global::GetInstance().roomTileSheets. << std::endl;

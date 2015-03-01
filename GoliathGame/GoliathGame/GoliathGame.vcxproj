@@ -178,6 +178,7 @@
     <ClInclude Include="LayerStruct.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="LevelSelectState.h" />
+    <ClInclude Include="LevelStruct.h" />
     <ClInclude Include="LoadingState.h" />
     <ClInclude Include="LookCommand.h" />
     <ClInclude Include="LookingState.h" />

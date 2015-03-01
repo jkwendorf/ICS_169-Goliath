@@ -41,6 +41,7 @@ private:
 	float mViewPosX;
 public:
 	Background bg;
+	int numTreasures;
 	//Player player;
 	Room(int levelNumber, int roomNumber, std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList, std::list<Tile*> &hitPointTileList);
 	~Room();

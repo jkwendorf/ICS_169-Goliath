@@ -70,7 +70,7 @@ public:
 	// METHODS AND FUNCTIONS
 	Player();
 	~Player();
-	void init(CollisionManager* collisionManager_, BaseState* startState);
+	void init(CollisionManager* collisionManager_, BaseState* startState, int treasureNum);
 
 	void handleInput();
 	void update(float deltaTime);
@@ -108,6 +108,7 @@ public:
 	int weapon;
 	int bottomPoint;
 	HookShot hShot;
+	UserInterface* ui;
 	sf::Vector2f grappleDir, vaultPos;
 
 	bool grappleInProgress, facingRight, running, shouldHang, isHanging, isVaulting, collidingLeft, collidingRight, doHitVibrate;
@@ -138,7 +139,7 @@ private:
 	sf::Sound soundEffects[8];
 	float deathTimer;
 
-	UserInterface* ui;
+	
 	void SetUpAugments();
 	void SetUpEffects();
 	int randomHurtSound();

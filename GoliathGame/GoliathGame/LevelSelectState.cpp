@@ -13,9 +13,9 @@ LevelSelectState::LevelSelectState(void)
 		
 		// JW: We may want to have this be automated, so whenever the designers add a level to the Levels.xml, we'll create a new button
 
-		for (int level = 1; level <= Global::GetInstance().levelSizes.size(); level++)
+		for (int level = 1; level <= Global::GetInstance().levelInfo.size(); level++)
 		{
-			int numRooms = Global::GetInstance().levelSizes.at("Level " + std::to_string(level));
+			int numRooms = Global::GetInstance().levelInfo.at("Level " + std::to_string(level)).levelSize;
 			for (int room = 1; room <= numRooms; room++)
 			{
 				bM->createButton("Level " + std::to_string(level) + "-" + std::to_string(room), [=] {StateManager::getInstance().addState(TRANSITION, new LoadingState(level, room), true);});

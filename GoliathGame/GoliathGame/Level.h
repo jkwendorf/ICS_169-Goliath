@@ -16,6 +16,7 @@
 #include "Particle.h"
 #include "ParticleEmitter.h"
 #include "Camera.h"
+#include "LevelStruct.h"
 
 enum GoliathSoundEnum
 {
@@ -28,8 +29,9 @@ class Level : public BaseGameScreen
 {
 private:
 	bool changeScreen;
-	float loading;
-	int levelNum, maxRooms;
+	float loading, introTimer;
+	int levelNum;
+	LevelStruct levelInfo;
 	std::vector<std::shared_ptr<Enemy>> enemyList;
 	std::vector<Tile*> arrowTileList;
 	std::list<Tile*> destructTileList;
@@ -39,6 +41,8 @@ private:
 	sf::View view;
 	//sf::RenderWindow win;
 	sf::Sprite loadingSprite;
+	sf::Sprite description;
+	sf::Text introDescription;
 	float arrowCool;
 
 	CollisionManager* collisionManager;
