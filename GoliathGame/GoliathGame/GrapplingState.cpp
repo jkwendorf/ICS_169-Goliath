@@ -64,6 +64,12 @@ void GrapplingState::update(Player* player, float deltaTime)
 		//std::cout << "Created new state" << std::endl;
 		//if(player->newState == NULL)
 			//player->newState = new JumpingState();
+
+		if(player->destroyGoliathHitpoint)
+		{
+			player->goliathHitpoint->takeDamage();
+		}
+
 		delete player->currentState;
 		player->currentState = new JumpingState();
 	}

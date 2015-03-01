@@ -47,27 +47,32 @@ Tile CollisionManager::getNearestGrappleTile(BaseObject p)
 
 	*/
 	Tile closestTile;
+
 	if((grapplableTileList.front()->getFlags() & TILE::GRAPPLEABLEMASK) != 0)
 		closestTile = *grapplableTileList.front();
+	float closest = sqrt(pow(((closestTile.top + closestTile.height/2) - p.sprite.getPosition().y),2) + pow(((closestTile.left + closestTile.width/2) - p.sprite.getPosition().x),2));
 	for(Tile* b: grapplableTileList)
-		if(sqrt(pow(((b->top + b->height/2) - p.sprite.getPosition().y),2) + pow(((b->left + b->width/2)  - p.sprite.getPosition().x),2)) < 
-			sqrt(pow(((closestTile.top + closestTile.height/2) - p.sprite.getPosition().y),2) + pow(((closestTile.left + closestTile.width/2) - p.sprite.getPosition().x),2)) )
+		if(sqrt(pow(((b->top + b->height/2) - p.sprite.getPosition().y),2) + pow(((b->left + b->width/2)  - p.sprite.getPosition().x),2)) < closest )
 		{
 			if(((b->getFlags() & TILE::GRAPPLEABLEMASK) != 0))
+			{
 				closestTile = *b;
+				closest = sqrt(pow(((closestTile.top + closestTile.height/2) - p.sprite.getPosition().y),2) + pow(((closestTile.left + closestTile.width/2) - p.sprite.getPosition().x),2));
+			}
 		}
 
 	return closestTile;
 }
-void CollisionManager::checkTreasure(BaseObject* p)
+void CollisionManager::checkTreasure(Player& p)
 {
 	for(Tile* b : tileList)
 	{
-		if(b->intersects(p->sprite.getGlobalBounds()))
+		if(b->intersects(p.sprite.getGlobalBounds()))
 		{
 			if(((b->getFlags() & TILE::OPENEDMASK) == 0) && ((b->getFlags() & TILE::TREASUREMASK) != 0))
 			{
- 				notify(*p, Util::Events::PICK_UP_ITEM);
+ 				notify(p, Util::Events::PICK_UP_ITEM);
+				p.ui->addTreasure();
 				b->changeOpened();
 				return;
 			}
@@ -164,8 +169,6 @@ void CollisionManager::checkEnemyBulletToPlayer(Projectile p, Player* player)
 {
 	if(p.hitbox.getGlobalBounds().intersects(player->hitbox.getGlobalBounds()) && p.moving)
 	{
-		std::cout << p.rectangle.getPosition().x << " " << p.rectangle.getPosition().y << std::endl;
-		std::cout << player->hitbox.getPosition().x << " " << player->hitbox.getPosition().x << std::endl;
 		player->health -= p.damage;
 		p.moving = false;
 	}
@@ -196,9 +199,9 @@ bool CollisionManager::checkIfEnemyInRange(Projectile p, Player* player)
 {
 	if(p.hitbox.getGlobalBounds().intersects(player->hitbox.getGlobalBounds()) && p.moving)
 	{
-		std::cout << p.rectangle.getPosition().x << " " << p.rectangle.getPosition().y << std::endl;
+		/*std::cout << p.rectangle.getPosition().x << " " << p.rectangle.getPosition().y << std::endl;
 		std::cout << player->hitbox.getPosition().x << " " << player->hitbox.getPosition().x << std::endl;
-		std::cout << "Player was hit by arrow" << std::endl;
+		std::cout << "Player was hit by arrow" << std::endl;*/
 		return true;
 	}
 	else return false;

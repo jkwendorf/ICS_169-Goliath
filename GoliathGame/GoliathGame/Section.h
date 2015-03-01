@@ -27,6 +27,7 @@ private:
                       const std::string& delimiters = " ");
 	bool checkToRender(int tileNum);
 public:
+	int numTreasures;
 	Section(int sectionNumber, std::string& s, sf::Vector2f& offset, std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList, std::list<Tile*> &hitPointTileList);
 	~Section();
 	sf::Vector2f getOffset();

@@ -1,8 +1,9 @@
 #include "UserInterface.h"
 #include "Global.h"
 
-UserInterface::UserInterface(float h, float s)
-	:showHealth1(false), showHealth2(false), showHealth3(false), showHealth4(false), drawPlease(true)
+UserInterface::UserInterface(float h, float s, int numTreasure)
+	:showHealth1(false), showHealth2(false), showHealth3(false), showHealth4(false), drawPlease(true), totalTreasure(numTreasure),
+	collectedTreasure(0)
 	/*:healthBar1(sf::Vector2f(100, 50)), healthBar2(sf::Vector2f(100, 50)), 
 	healthBar3(sf::Vector2f(100, 50)), healthBar4(sf::Vector2f(100, 50)),
 	showHealth1(true), showHealth2(true), showHealth3(true), showHealth4(true),
@@ -13,6 +14,7 @@ UserInterface::UserInterface(float h, float s)
 	TextureManager::GetInstance().retrieveTexture("Heart3");
 	healthIcon.setTexture(*TextureManager::GetInstance().retrieveTexture("Heart4"));
 	healthIcon.setScale(0.13, 0.13);
+	treasure = sf::Text(std::to_string(collectedTreasure) + " / " + std::to_string(totalTreasure), Global::GetInstance().font);
 }
 
 UserInterface::~UserInterface()
@@ -36,6 +38,8 @@ void UserInterface::draw(sf::RenderWindow& window)
 	{
 		window.draw(healthIcon);
 	}
+	if (totalTreasure > 0)
+		window.draw(treasure);
 }
 
 void UserInterface::flashHealth()
@@ -50,6 +54,7 @@ void UserInterface::endFlash()
 
 void UserInterface::update(float h, float s)
 {
+	treasure.setString(std::to_string(collectedTreasure) + " / " + std::to_string(totalTreasure));
 	if(h > 75.f && !showHealth4)
 	{
 		showHealth4 = true;
@@ -81,6 +86,8 @@ void UserInterface::update(float h, float s)
 	}
 
 	healthIcon.setPosition(Global::GetInstance().topLeft.x + 20, Global::GetInstance().topLeft.y + 20);
+	if (totalTreasure > 0)
+		treasure.setPosition(Global::GetInstance().topLeft.x + healthIcon.getGlobalBounds().width + 20, Global::GetInstance().topLeft.y + 20);
 
 	/*healthBar1.setFillColor(sf::Color(255, 0, 0, 125));
 	healthBar1.setPosition(Global::GetInstance().topLeft.x + 20, Global::GetInstance().topLeft.y + 20);
@@ -100,6 +107,7 @@ void UserInterface::update(float h, float s)
 
 void UserInterface::updateDifferent(float h, float s, sf::Vector2f offset)
 {
+	treasure.setString(std::to_string(collectedTreasure) + " / " + std::to_string(totalTreasure));
 	if(h > 75.f && !showHealth4)
 	{
 		showHealth4 = true;
@@ -131,6 +139,8 @@ void UserInterface::updateDifferent(float h, float s, sf::Vector2f offset)
 	}
 
 	healthIcon.setPosition(Global::GetInstance().topLeft.x + 20 + offset.x, Global::GetInstance().topLeft.y + 20 + offset.y);
+	if (totalTreasure > 0)
+		treasure.setPosition(Global::GetInstance().topLeft.x + healthIcon.getGlobalBounds().width + 20 + offset.x, Global::GetInstance().topLeft.y + 20 + offset.y);
 
 	/*healthBar1.setFillColor(sf::Color(255, 0, 0, 125));
 	healthBar1.setPosition(Global::GetInstance().topLeft.x + 20 + offset.x, Global::GetInstance().topLeft.y + 20 + offset.y);
@@ -146,4 +156,9 @@ void UserInterface::updateDifferent(float h, float s, sf::Vector2f offset)
 
 	staminaBar.setSize(sf::Vector2f((s * 6), 50));
 	staminaBar.setPosition(Global::GetInstance().topLeft.x + 20 + offset.x, Global::GetInstance().topLeft.y + 90 + offset.y);*/
+}
+	
+void UserInterface::addTreasure()
+{
+	collectedTreasure++;
 }
