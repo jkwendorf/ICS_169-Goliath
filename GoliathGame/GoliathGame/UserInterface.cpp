@@ -15,6 +15,7 @@ UserInterface::UserInterface(float h, float s, int numTreasure)
 	healthIcon.setTexture(*TextureManager::GetInstance().retrieveTexture("Heart4"));
 	healthIcon.setScale(0.13, 0.13);
 	treasure = sf::Text(std::to_string(collectedTreasure) + " / " + std::to_string(totalTreasure), Global::GetInstance().font);
+	addSounds();
 }
 
 UserInterface::~UserInterface()
@@ -47,75 +48,34 @@ void UserInterface::flashHealth()
 	drawPlease = !drawPlease;
 }
 
+void UserInterface::addSounds()
+{
+	uiSounds[0] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("FoundAll1")));
+	uiSounds[1] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("FoundAll2")));
+	uiSounds[2] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("FoundAll3")));
+}
+
 void UserInterface::endFlash()
 {
 	drawPlease = true;
 }
 
-void UserInterface::update(float h, float s)
+void UserInterface::update(float h, float s, sf::Vector2f offset)
 {
 	treasure.setString(std::to_string(collectedTreasure) + " / " + std::to_string(totalTreasure));
 	if(h > 75.f && !showHealth4)
 	{
-		showHealth4 = true;
-		healthIcon.setTexture(*TextureManager::GetInstance().retrieveTexture("Heart4"));
-	}
-
-	if(h > 50.f && h <= 75.f && !showHealth3)
-	{
-		showHealth3 = true;
-		showHealth4 = false;
-		healthIcon.setTexture(*TextureManager::GetInstance().retrieveTexture("Heart3"));
-	}
-
-	if(h > 25.f && h <= 50.f && !showHealth2)
-	{
-		showHealth2 = false;
-		showHealth3 = true;
-		showHealth4 = false;
-		healthIcon.setTexture(*TextureManager::GetInstance().retrieveTexture("Heart2"));
-	}
-
-	if(h > 1.f && h <= 25.f && !showHealth1)
-	{
-		showHealth1 = true;
+		showHealth1 = false;
 		showHealth2 = false;
 		showHealth3 = false;
-		showHealth4 = false;
-		healthIcon.setTexture(*TextureManager::GetInstance().retrieveTexture("Heart1"));
-	}
-
-	healthIcon.setPosition(Global::GetInstance().topLeft.x + 20, Global::GetInstance().topLeft.y + 20);
-	if (totalTreasure > 0)
-		treasure.setPosition(Global::GetInstance().topLeft.x + healthIcon.getGlobalBounds().width + 20, Global::GetInstance().topLeft.y + 20);
-
-	/*healthBar1.setFillColor(sf::Color(255, 0, 0, 125));
-	healthBar1.setPosition(Global::GetInstance().topLeft.x + 20, Global::GetInstance().topLeft.y + 20);
-	
-	healthBar2.setFillColor(sf::Color(255, 0, 0, 125));
-	healthBar2.setPosition(Global::GetInstance().topLeft.x + 40 + 100, Global::GetInstance().topLeft.y + 20);
-	
-	healthBar3.setFillColor(sf::Color(255, 0, 0, 125));
-	healthBar3.setPosition(Global::GetInstance().topLeft.x + 60 + 200, Global::GetInstance().topLeft.y + 20);
-
-	healthBar4.setFillColor(sf::Color(255, 0, 0, 125));
-	healthBar4.setPosition(Global::GetInstance().topLeft.x + 80 + 300, Global::GetInstance().topLeft.y + 20);
-
-	staminaBar.setSize(sf::Vector2f((s * 6), 50));
-	staminaBar.setPosition(Global::GetInstance().topLeft.x + 20, Global::GetInstance().topLeft.y + 90);*/
-}
-
-void UserInterface::updateDifferent(float h, float s, sf::Vector2f offset)
-{
-	treasure.setString(std::to_string(collectedTreasure) + " / " + std::to_string(totalTreasure));
-	if(h > 75.f && !showHealth4)
-	{
 		showHealth4 = true;
 		healthIcon.setTexture(*TextureManager::GetInstance().retrieveTexture("Heart4"));
 	}
 
 	if(h > 50.f && h <= 75.f && !showHealth3)
 	{
+		showHealth1 = false;
+		showHealth2 = false;
 		showHealth3 = true;
 		showHealth4 = false;
 		healthIcon.setTexture(*TextureManager::GetInstance().retrieveTexture("Heart3"));
@@ -123,8 +83,9 @@ void UserInterface::updateDifferent(float h, float s, sf::Vector2f offset)
 
 	if(h > 25.f && h <= 50.f && !showHealth2)
 	{
-		showHealth2 = false;
-		showHealth3 = true;
+		showHealth1 = false;
+		showHealth2 = true;
+		showHealth3 = false;
 		showHealth4 = false;
 		healthIcon.setTexture(*TextureManager::GetInstance().retrieveTexture("Heart2"));
 	}
@@ -158,7 +119,18 @@ void UserInterface::updateDifferent(float h, float s, sf::Vector2f offset)
 	staminaBar.setPosition(Global::GetInstance().topLeft.x + 20 + offset.x, Global::GetInstance().topLeft.y + 90 + offset.y);*/
 }
 	
+void UserInterface::update(float h, float s)
+{
+	update(h, s, sf::Vector2f(0, 0));
+}
+
+
 void UserInterface::addTreasure()
 {
 	collectedTreasure++;
+	if(collectedTreasure == totalTreasure)
+	{
+		int x = rand() % 3;
+		uiSounds[x].play();
+	}
 }

@@ -456,7 +456,7 @@ void Player::updateUI()
 
 void Player::updateUI(sf::Vector2f offset)
 {
-	ui->updateDifferent(health, stamina, offset);
+	ui->update(health, stamina, offset);
 }
 
 void Player::horizontalAcceleration(MovementDirection dir, float& deltaTime)
