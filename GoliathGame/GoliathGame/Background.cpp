@@ -42,7 +42,7 @@ void Background::update(float deltaTime, float viewX)
 			//Move up
 			if (movingLayers[movingLayers.size() - 1].image[1].getPosition().y > nonMovingLayer.getGlobalBounds().height)
 			{
-				std::cout << "Move Up" << std::endl;
+				//std::cout << "Move Up" << std::endl;
 				//reset();
 				vel.y = -100;
 
@@ -58,7 +58,7 @@ void Background::update(float deltaTime, float viewX)
 			else if (movingLayers[movingLayers.size() - 1].image[1].getPosition().y + movingLayers[movingLayers.size() - 1].image[1].getGlobalBounds().height <
 				nonMovingLayer.getPosition().y + nonMovingLayer.getGlobalBounds().height && vel.y != 99) 
 			{
-				std::cout << "Move Down" << std::endl;
+				//std::cout << "Move Down" << std::endl;
 				//vel.y = 100;
 				vel.x = 0;
 				vel.y = 0;
@@ -91,14 +91,14 @@ void Background::update(float deltaTime, float viewX)
 		movingLayers[i].setViewX(viewX);
 		movingLayers[i].update(deltaTime, vel);
 
-		std::cout << "Layer: " << i << " Pos: " << movingLayers[i].image[i].getPosition().y << std::endl;
+		//std::cout << "Layer: " << i << " Pos: " << movingLayers[i].image[i].getPosition().y << std::endl;
 
 		// Move up
 		/*if (movingLayers[i].image[i].getPosition().y + movingLayers[i].image[i].getGlobalBounds().height 
 			< nonMovingLayer.getPosition().y + nonMovingLayer.getGlobalBounds().height)*/
 	}
 
-	std::cout << "Hi Tyler" << std::endl;
+	//std::cout << "Hi Tyler" << std::endl;
 }
 	
 void Background::draw(sf::RenderWindow& window)
