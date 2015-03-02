@@ -1,8 +1,11 @@
 #include "Section.h"
 // include more tiles
 
-Section::Section(int sectionNumber, std::string& s, sf::Vector2f& offset, std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList, std::list<Tile*> &hitPointTileList)
-	:sectionNum(sectionNumber), pathToText(s), offset(offset), startPos(-999.0, -999.0), numTreasures(0)
+Section::Section(int sectionNumber, std::string& s, sf::Vector2f& offset, std::vector<std::shared_ptr<Enemy>> &enemyList, 
+	std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList, 
+	std::list<Tile*> &hitPointTileList, bool foundAll)
+	:sectionNum(sectionNumber), pathToText(s), offset(offset), startPos(-999.0, -999.0), numTreasures(0),
+	mFoundAll(foundAll)
 {
 	LoadTileMap(enemyList, arrowTileList, destructTileList, hitPointTileList);
 }
@@ -312,10 +315,13 @@ void Section::LoadTileMap(std::vector<std::shared_ptr<Enemy>> &enemyList, std::v
 				break;
 			case 17:
 				//Treasure
-				delete grid1[(y*gDim.y) + x];
-				grid1[(y*gDim.y) + x] = new Tile(sf::Vector2f(x * GAME_TILE_DIM + offset.x, y * GAME_TILE_DIM + offset.y), 
-					tileType, 0x09);
-				numTreasures++;
+				if(!mFoundAll)
+				{
+					delete grid1[(y*gDim.y) + x];
+					grid1[(y*gDim.y) + x] = new Tile(sf::Vector2f(x * GAME_TILE_DIM + offset.x, y * GAME_TILE_DIM + offset.y), 
+						tileType, 0x09);
+					numTreasures++;
+				}
 				break;
 			case 18:
 			case 19:

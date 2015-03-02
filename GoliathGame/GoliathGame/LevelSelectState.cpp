@@ -18,7 +18,8 @@ LevelSelectState::LevelSelectState(void)
 			int numRooms = Global::GetInstance().levelInfo.at("Level " + std::to_string(level)).levelSize;
 			for (int room = 1; room <= numRooms; room++)
 			{
-				bM->createButton("Level " + std::to_string(level) + "-" + std::to_string(room), [=] {StateManager::getInstance().addState(TRANSITION, new LoadingState(level, room), true);});
+				if(Global::GetInstance().roomSizes["Level" + std::to_string(level) + "Room" + std::to_string(room)].open)
+					bM->createButton("Level " + std::to_string(level) + "-" + std::to_string(room), [=] {StateManager::getInstance().addState(TRANSITION, new LoadingState(level, room), true);});
 			}
 		}
 	}
@@ -104,7 +105,21 @@ void LevelSelectState::handleEvent(sf::Event event)
 
 void LevelSelectState::loadContent()
 {
+	if(bM)
+		delete bM;
+	bM = new ButtonManager(sf::Vector2f(SCREEN_WIDTH/4, SCREEN_HEIGHT/8), 4, 15, sf::Vector2f(200, 66), TextureManager::GetInstance().retrieveTexture("ButtonTest"), f); 
+		
+	// JW: We may want to have this be automated, so whenever the designers add a level to the Levels.xml, we'll create a new button
 
+	for (int level = 1; level <= Global::GetInstance().levelInfo.size(); level++)
+	{
+		int numRooms = Global::GetInstance().levelInfo.at("Level " + std::to_string(level)).levelSize;
+		for (int room = 1; room <= numRooms; room++)
+		{
+			if(Global::GetInstance().roomSizes["Level" + std::to_string(level) + "Room" + std::to_string(room)].open)
+				bM->createButton("Level " + std::to_string(level) + "-" + std::to_string(room), [=] {StateManager::getInstance().addState(TRANSITION, new LoadingState(level, room), true);});
+		}
+	}
 }
 
 void LevelSelectState::unloadContent()

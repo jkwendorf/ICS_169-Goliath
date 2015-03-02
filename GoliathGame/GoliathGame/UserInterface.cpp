@@ -162,3 +162,8 @@ void UserInterface::addTreasure()
 {
 	collectedTreasure++;
 }
+
+bool UserInterface::collectedAllTreasure()
+{
+	return collectedTreasure == totalTreasure;
+}

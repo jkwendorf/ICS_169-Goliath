@@ -431,9 +431,6 @@
     <ClInclude Include="ParticleEmitter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RoomStruct.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Layer.h">
       <Filter>Header Files\Level Stuff</Filter>
     </ClInclude>
@@ -441,6 +438,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LevelStruct.h">
+      <Filter>Header Files\Level Stuff</Filter>
+    </ClInclude>
+    <ClInclude Include="RoomStruct.h">
       <Filter>Header Files\Level Stuff</Filter>
     </ClInclude>
   </ItemGroup>

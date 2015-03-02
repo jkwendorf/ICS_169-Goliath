@@ -14,6 +14,7 @@ class Section
 {
 private:
 	int sectionNum, numOfTiles;
+	bool mFoundAll;
 	Tile** grid1;
 	Global global;
 	sf::Vector2i gDim;
@@ -28,7 +29,9 @@ private:
 	bool checkToRender(int tileNum);
 public:
 	int numTreasures;
-	Section(int sectionNumber, std::string& s, sf::Vector2f& offset, std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList, std::list<Tile*> &hitPointTileList);
+	Section(int sectionNumber, std::string& s, sf::Vector2f& offset, 
+		std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList, 
+		std::list<Tile*> &destructTileList, std::list<Tile*> &hitPointTileList, bool foundAll);
 	~Section();
 	sf::Vector2f getOffset();
 	sf::Vector2i getGridDim();

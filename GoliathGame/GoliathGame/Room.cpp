@@ -1,8 +1,10 @@
 
 #include "Room.h"
 
-Room::Room(int levelNumber, int roomNumber, std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList, std::list<Tile*> &hitPointTileList)
-	:roomNum(roomNumber), numSect(Global::GetInstance().roomSizes.at("Level" + std::to_string(levelNumber) + "Room" + std::to_string(roomNumber)).roomSize),
+Room::Room(int levelNumber, int roomNumber, std::vector<std::shared_ptr<Enemy>> &enemyList, 
+	std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList, 
+	std::list<Tile*> &hitPointTileList)
+	:roomNum(roomNumber), roomInfo(Global::GetInstance().roomSizes.at("Level" + std::to_string(levelNumber) + "Room" + std::to_string(roomNumber))),
 	roomWidth(0), roomHeight(0), loadedTitles(false), bg(levelNumber, roomNumber), numTreasures(0)
 {
 	
@@ -20,28 +22,30 @@ Room::Room(int levelNumber, int roomNumber, std::vector<std::shared_ptr<Enemy>> 
 Room::~Room()
 {
 	std::cout << "Deleting the room" << std::endl;
-	for (int i = 0; i < numSect; i++)
+	for (int i = 0; i < roomInfo.roomSize; i++)
 		delete sectList[i];
 	delete[] sectList;
 	roomMusic.stop();
 }
 	
-void Room::LoadRoom(int levelNumber, std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList, std::list<Tile*> &hitPointTileList)
+void Room::LoadRoom(int levelNumber, std::vector<std::shared_ptr<Enemy>> &enemyList, 
+	std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList, 
+	std::list<Tile*> &hitPointTileList)
 {
-	sectList = new Section*[numSect];
+	sectList = new Section*[roomInfo.roomSize];
 	int totalWidth = 0;
-	for (int i = 0; i < numSect; i++)
+	for (int i = 0; i < roomInfo.roomSize; i++)
 	{
 		std::string temp = "level" + std::to_string(levelNumber) + "room" + std::to_string(roomNum) + "section" + std::to_string(i+1);
 		if(i==0)
 		{
-			sectList[i] = new Section(i, temp, sf::Vector2f(0,0), enemyList, arrowTileList, destructTileList, hitPointTileList);
+			sectList[i] = new Section(i, temp, sf::Vector2f(0,0), enemyList, arrowTileList, destructTileList, hitPointTileList, roomInfo.foundAll);
 			if(sectList[i]->getStartPos().x != -999)
 				startPos = sectList[i]->getStartPos();
 		}
 		else
 		{
-			sectList[i] = new Section(i, temp, sf::Vector2f(roomWidth, 0), enemyList, arrowTileList, destructTileList, hitPointTileList);
+			sectList[i] = new Section(i, temp, sf::Vector2f(roomWidth, 0), enemyList, arrowTileList, destructTileList, hitPointTileList, roomInfo.foundAll);
 			if(sectList[i]->getStartPos().x != -999)
 				startPos = sectList[i]->getStartPos();
 		}
@@ -143,7 +147,7 @@ void Room::GetNearTiles(sf::FloatRect& rect, std::vector<Tile*>& nearTiles, bool
 	sf::Vector2f topLeft = sf::Vector2f(rect.left, rect.top);
 	sf::Vector2f botRight = sf::Vector2f(rect.left + rect.width, rect.top + rect.height);
 	
-	for (int i = 0; i < numSect; i++)
+	for (int i = 0; i < roomInfo.roomSize; i++)
 	{
 		if (sectList[i]->inWindow())
 		{
@@ -153,7 +157,7 @@ void Room::GetNearTiles(sf::FloatRect& rect, std::vector<Tile*>& nearTiles, bool
 				topLeft.x = (0 + PLAYER_DIM_X /2);
 				botRight.x = (0 + PLAYER_DIM_X /2);
 			}
-			if (i == numSect-1 && topLeft.x > sectList[i]->getOffset().x + sectList[i]->getWidth())
+			if (i == roomInfo.roomSize-1 && topLeft.x > sectList[i]->getOffset().x + sectList[i]->getWidth())
 			{
 				topLeft.x = sectList[i]->getOffset().x + sectList[i]->getWidth() - 1;
 				botRight.x = sectList[i]->getOffset().x + sectList[i]->getWidth() - 1;
@@ -173,7 +177,7 @@ void Room::update(float deltaTime)
 void Room::draw(sf::RenderWindow& w)
 {
 	bg.draw(w);
-	for(int i = 0; i < numSect; i++)
+	for(int i = 0; i < roomInfo.roomSize; i++)
 	{
 		sectList[i]->draw(w);
 	}
@@ -191,7 +195,7 @@ void Room::checkUpperLeftSameGrid(int currentGrid, sf::FloatRect& rect, const sf
 		if(g.checkPoint(botRight, sf::FloatRect(sectList[currentGrid]->getOffset(), sf::Vector2f(sectList[currentGrid]->getWidth(), sectList[currentGrid]->getHeight()))))
 		{
 			//Check to see if the grid is not the last one
-			if(currentGrid < numSect-1 && !checkBoxOnly)
+			if(currentGrid < roomInfo.roomSize-1 && !checkBoxOnly)
 			{
 				//Check to see if the lower right corner is in the last col
 				checkLowerRightLastCol(currentGrid, rect, topLeft, botRight, nearTiles);
@@ -256,7 +260,7 @@ void Room::checkLowerRightNextGrid(int currentGrid, sf::FloatRect& rect, const s
 														bool checkBoxOnly, bool grapple)
 {
 	//If check to see if it is not the last grid
-	if(currentGrid + 1 < numSect)
+	if(currentGrid + 1 < roomInfo.roomSize)
 	{
 		if(g.checkPoint(botRight, sf::FloatRect(sectList[currentGrid+1]->getOffset(), sf::Vector2f(sectList[currentGrid+1]->getWidth(), sectList[currentGrid+1]->getHeight()))))
 		{
