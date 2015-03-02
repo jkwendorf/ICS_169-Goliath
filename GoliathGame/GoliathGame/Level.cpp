@@ -84,6 +84,7 @@ void Level::changeRoom()
 		//Move player to the start pos in new room
 		p.resetPosition(currentRoom->getStartPos());
 		p.init(collisionManager, new JumpingState(), currentRoom->numTreasures);
+		p.resetHealth();
 	}
 	else
 	{
