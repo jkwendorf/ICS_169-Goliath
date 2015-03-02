@@ -25,5 +25,6 @@ private:
 	bool played;
 	bool isPressedUp, isPressedDown;
 	float inputCoolDown;
+	sf::Sprite bg;
 };
 
