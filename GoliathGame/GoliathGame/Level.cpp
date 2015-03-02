@@ -34,8 +34,8 @@ Level::Level(int levelNumber, int roomNumber)
 	setArrowTileArrows();
 	//realEnemyList.push_back(new Enemy("Test",200,200, 10));
 	particle = Particle("rock", sf::Vector2f(50, 100), sf::Vector2f(0, 1), 5, 250);
-	particleEmitter = ParticleEmitter("rock", sf::Vector2f(0, -400), sf::Vector2f(0, 1), 10, 350, 10, "debris");
-	coneEmitter = ParticleEmitter("rock", sf::Vector2f(100, 1200), sf::Vector2f(.5, .5), 1, 50, 30, "cone");
+	particleEmitter = ParticleEmitter("RockParticle2", sf::Vector2f(0, -400), sf::Vector2f(0, 1), 10, 350, 10, "debris");
+	coneEmitter = ParticleEmitter("RockParticle1", sf::Vector2f(100, 1200), sf::Vector2f(.5, .5), 1, 50, 30, "cone");
 	loadSounds();
 	//shakeScreen(5.0, 100);
 
