@@ -5,12 +5,19 @@
 Background::Background(int levelNum, int roomNum)
 	:nonMovingLayer(*TextureManager::GetInstance().retrieveTexture(
 	Global::GetInstance().roomSizes.at("Level"+ std::to_string(levelNum) + "Room" + std::to_string(roomNum)).nonMovinglayer)),
-	vel(-300.0f, 99.0f), hitGround(false), timerForStep(-1.0f), goliathStepWait(6.0f)
+	vel(-300.0f, 99.0f), hitGround(false), timerForStep(-1.0f), goliathStepWait(4.0f)
 {
 	RoomStruct temp = Global::GetInstance().roomSizes.at("Level"+ std::to_string(levelNum) + "Room" + std::to_string(roomNum));
 	for (int i = 0; i < temp.movingLayers.size(); i++)
 	{
-		movingLayers.push_back(Layer(temp, i));
+		if(temp.movingLayers.at(i).scale.x == 0 && temp.movingLayers.at(i).scale.y == 0)
+		{
+			nonMovingLayers.push_back(sf::Sprite(*TextureManager::GetInstance().retrieveTexture(temp.movingLayers[i].imageName)));
+			nonMovingLayers[nonMovingLayers.size() - 1].setPosition(temp.movingLayers.at(i).posOffset.x, temp.movingLayers.at(i).posOffset.y);
+			nonMovingLayers[nonMovingLayers.size() - 1].setScale(2.0f, 2.0f);
+		}
+		else
+			movingLayers.push_back(Layer(temp, i));
 	}
 	nonMovingLayer.setPosition(temp.posOffset.x, temp.posOffset.y);
 }
@@ -34,13 +41,12 @@ void Background::setScale(int layerNum, float xScale, float yScale)
 	
 void Background::update(float deltaTime, float viewX)
 {
-
 	if(!movingLayers.empty())
 	{
 		if(timerForStep == -1.0f)
 		{
-			//Move up
-			if (movingLayers[movingLayers.size() - 1].image[1].getPosition().y > nonMovingLayer.getGlobalBounds().height)
+			// Hit Top Check
+			if (movingLayers[movingLayers.size() - 1].image[1].getPosition().y > nonMovingLayer.getGlobalBounds().height/1.5)
 			{
 				//std::cout << "Move Up" << std::endl;
 				//reset();
@@ -54,7 +60,7 @@ void Background::update(float deltaTime, float viewX)
 				//}
 	
 			}
-			// Move down
+			// Hit Ground Check
 			else if (movingLayers[movingLayers.size() - 1].image[1].getPosition().y + movingLayers[movingLayers.size() - 1].image[1].getGlobalBounds().height <
 				nonMovingLayer.getPosition().y + nonMovingLayer.getGlobalBounds().height && vel.y != 99) 
 			{
@@ -103,10 +109,16 @@ void Background::update(float deltaTime, float viewX)
 	
 void Background::draw(sf::RenderWindow& window)
 {
+	for (int nonMove = nonMovingLayers.size() - 1; nonMove >= 0; nonMove--)
+	{
+		window.draw(nonMovingLayers.at(nonMove));
+	}
+
 	for (int i = movingLayers.size()-1; i >= 0; i--)
 	{
 		movingLayers[i].draw(window);
 	}
+
 	window.draw(nonMovingLayer);
 }
 
