@@ -48,6 +48,8 @@ public :
 	int xOffset;
 	int yOffset;
 	sf::Sprite* currentTileSheet[TileSheetRows * TileSheetCols];
+	sf::Sound bgMusic;
+	bool played;
 
 	Global();
 	~Global();
@@ -60,4 +62,8 @@ public :
 	sf::Font font;
 	
 	sf::RectangleShape testingRect;
+
+
+	//Cheats
+	bool unlockAllRooms;
 };

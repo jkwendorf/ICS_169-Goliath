@@ -40,8 +40,14 @@ void LoadingState::DeleteState()
 
 void LoadingState::update(float deltaTime, sf::RenderWindow& window)
 {
+	if(Global::GetInstance().played)
+	{
+		Global::GetInstance().bgMusic.stop();
+		Global::GetInstance().played = false;
+	}
+
 	loadTime += deltaTime;
-	if(loadTime > 1.5f)
+	if(loadTime > 1.0f)
 	{
 		if(levelNumber != NULL && roomNumber != NULL)
 		{

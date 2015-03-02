@@ -3,7 +3,7 @@
 #include "JumpingState.h"
 
 InputManager::InputManager()
-	:grappleReset(true)
+	:grappleReset(true), jumpButtonReleased(true)
 {
 	movement[0] = false;
 	movement[1] = false;
@@ -53,12 +53,12 @@ void InputManager::update(Player& s, Camera* camera, float deltaTime)
 	//change this when you want more complex movement
 	//movement[0] = sf::Keyboard::isKeyPressed(sf::Keyboard::A) || (sf::Joystick::getAxisPosition(0, sf::Joystick::X) < -25);
 	//movement[1] = sf::Keyboard::isKeyPressed(sf::Keyboard::D) || (sf::Joystick::getAxisPosition(0, sf::Joystick::X) > 25);
-
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::A) || (sf::Joystick::getAxisPosition(0, sf::Joystick::X) < -25))
 	{
 		MoveCommand* move = new MoveCommand();
 		move->init(&s, LEFT, deltaTime, MOVELEFT);
-		s.inputQueue.push_back(move);
+		if(!s.hShot.grappleInProgress)
+			s.inputQueue.push_back(move);
 		//sch.moveCommand->init(&s, MovementDirection::LEFT, deltaTime, MOVELEFT);
 		//s.inputQueue.push_back(sch.moveCommand);
 	}
@@ -66,10 +66,12 @@ void InputManager::update(Player& s, Camera* camera, float deltaTime)
 	{
 		MoveCommand* move = new MoveCommand();
 		move->init(&s, RIGHT, deltaTime, MOVERIGHT);
-		s.inputQueue.push_back(move);
+		if(!s.hShot.grappleInProgress)
+			s.inputQueue.push_back(move);
 		//sch.moveCommand->init(&s, MovementDirection::RIGHT, deltaTime, MOVERIGHT);
 		//s.inputQueue.push_back(sch.moveCommand);
 	}
+	
 	else if(s.vel.x != 0)
 	{
 		MoveCommand* move = new MoveCommand();
@@ -81,6 +83,7 @@ void InputManager::update(Player& s, Camera* camera, float deltaTime)
 	
 	s.running = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Joystick::getAxisPosition(0, sf::Joystick::Z) > 25;
 	utility[1] = (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || sf::Joystick::isButtonPressed(0, 0)) && !utility[1] ? true : false;
+	
 	if((sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || sf::Joystick::isButtonPressed(0, 0)) && !utility[1])
 	{
 		if(s.isHanging)
@@ -89,10 +92,16 @@ void InputManager::update(Player& s, Camera* camera, float deltaTime)
 		}
 		else
 		{
-			JumpCommand* jump = new JumpCommand(&s, JUMP);
-			s.inputQueue.push_back(jump);
+			if(jumpButtonReleased)
+			{
+				JumpCommand* jump = new JumpCommand(&s, JUMP);
+				s.inputQueue.push_back(jump);
+				jumpButtonReleased = false;
+			}
 		}
 	}
+	else if(!utility[1] && !jumpButtonReleased)
+		jumpButtonReleased = true;
 	/*
 	{
 		if(!s.isHanging && !s.isFalling)
@@ -273,7 +282,6 @@ void InputManager::viewMove(Camera* camera, Player& s, float deltaTime)
 		}
 		else
 		{
-			camera->viewReset();
 			camera->endMovement();
 		}
 

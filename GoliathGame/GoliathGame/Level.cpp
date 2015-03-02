@@ -34,8 +34,8 @@ Level::Level(int levelNumber, int roomNumber)
 	setArrowTileArrows();
 	//realEnemyList.push_back(new Enemy("Test",200,200, 10));
 	particle = Particle("rock", sf::Vector2f(50, 100), sf::Vector2f(0, 1), 5, 250);
-	particleEmitter = ParticleEmitter("rock", sf::Vector2f(0, -400), sf::Vector2f(0, 1), 10, 350, 10, "debris");
-	coneEmitter = ParticleEmitter("rock", sf::Vector2f(100, 1200), sf::Vector2f(.5, .5), 1, 50, 30, "cone");
+	particleEmitter = ParticleEmitter("RockParticle2", sf::Vector2f(0, -400), sf::Vector2f(0, 1), 10, 350, 10, "debris");
+	coneEmitter = ParticleEmitter("RockParticle1", sf::Vector2f(100, 1200), sf::Vector2f(.5, .5), 1, 50, 30, "cone");
 	loadSounds();
 	//shakeScreen(5.0, 100);
 
@@ -85,6 +85,7 @@ void Level::changeRoom()
 		//Move player to the start pos in new room
 		p.resetPosition(currentRoom->getStartPos());
 		p.init(collisionManager, new JumpingState(), currentRoom->numTreasures);
+		p.resetHealth();
 		Global::GetInstance().SaveProgress(levelNum, roomNum, true, p.ui->collectedAllTreasure());
 	}
 	else
@@ -198,7 +199,8 @@ void Level::update(float deltaTime)
 		currentRoom->GetCollidableTiles(p, nearTiles, true);
 
 		collisionManager->setNearByTiles(nearTiles);
-		collisionManager->setGrapplableTiles(nearTiles2);
+		if(!p.hShot.grappleInProgress)
+			collisionManager->setGrapplableTiles(nearTiles2);
 
 		collisionManager->checkTreasure(p);
 		

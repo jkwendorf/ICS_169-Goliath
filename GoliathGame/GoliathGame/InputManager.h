@@ -43,7 +43,7 @@ public:
 	float weaponSwitchCooldown, currentWeaponSwitchCooldown;
 	float viewDifference, viewChangedY, viewChangedX;
 	float grappleCooldown, currentGrappleCooldown;
-	bool grappleReset;
+	bool grappleReset, jumpButtonReleased;
 private:
 	StaticCommandHolder sch;
 };

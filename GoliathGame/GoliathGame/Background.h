@@ -9,10 +9,11 @@ class Background
 private:
 	sf::Sprite nonMovingLayer;
 	std::vector<Layer> movingLayers;
+	std::vector<sf::Sprite> nonMovingLayers;
 	sf::Vector2f vel;
 	sf::Clock clock;
 	bool hitGround;
-	float timerForStep;
+	float timerForStep, goliathStepWait, goliathMove, goliathStepTimer;
 
 	Background();
 public:

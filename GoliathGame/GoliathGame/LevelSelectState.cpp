@@ -9,7 +9,7 @@ LevelSelectState::LevelSelectState(void)
 	f = new sf::Font();
 	if(f->loadFromFile("media/fonts/arial.ttf"))
 	{
-		bM = new ButtonManager(sf::Vector2f(SCREEN_WIDTH/4, SCREEN_HEIGHT/8), 4, 15, sf::Vector2f(200, 66), TextureManager::GetInstance().retrieveTexture("ButtonTest"), f); 
+		bM = new ButtonManager(sf::Vector2f(SCREEN_WIDTH/4, SCREEN_HEIGHT/8 + 50), 4, 15, sf::Vector2f(200, 66), TextureManager::GetInstance().retrieveTexture("ButtonTest"), f); 
 		
 		// JW: We may want to have this be automated, so whenever the designers add a level to the Levels.xml, we'll create a new button
 
@@ -18,11 +18,13 @@ LevelSelectState::LevelSelectState(void)
 			int numRooms = Global::GetInstance().levelInfo.at("Level " + std::to_string(level)).levelSize;
 			for (int room = 1; room <= numRooms; room++)
 			{
-				if(Global::GetInstance().roomSizes["Level" + std::to_string(level) + "Room" + std::to_string(room)].open)
+				if(Global::GetInstance().roomSizes["Level" + std::to_string(level) + "Room" + std::to_string(room)].open || Global::GetInstance().unlockAllRooms)
 					bM->createButton("Level " + std::to_string(level) + "-" + std::to_string(room), [=] {StateManager::getInstance().addState(TRANSITION, new LoadingState(level, room), true);});
 			}
 		}
 	}
+
+	bg.setTexture(*TextureManager::GetInstance().retrieveTexture("LevelSelect"));
 
 	shouldQuit = false;
 }
@@ -96,7 +98,7 @@ void LevelSelectState::draw(sf::RenderWindow& window)
 	sf::View v = window.getView();
 	v.reset(sf::FloatRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
 	window.setView(v);
-
+	window.draw(bg);
 	bM->draw(window);
 }
 
@@ -116,7 +118,7 @@ void LevelSelectState::loadContent()
 		int numRooms = Global::GetInstance().levelInfo.at("Level " + std::to_string(level)).levelSize;
 		for (int room = 1; room <= numRooms; room++)
 		{
-			if(Global::GetInstance().roomSizes["Level" + std::to_string(level) + "Room" + std::to_string(room)].open)
+			if(Global::GetInstance().roomSizes["Level" + std::to_string(level) + "Room" + std::to_string(room)].open || Global::GetInstance().unlockAllRooms)
 				bM->createButton("Level " + std::to_string(level) + "-" + std::to_string(room), [=] {StateManager::getInstance().addState(TRANSITION, new LoadingState(level, room), true);});
 		}
 	}
