@@ -20,8 +20,21 @@ Player::Player()
 	grappleSpeed = Global::GetInstance().playerAttributes[4];
 	gravity = Global::GetInstance().playerAttributes[5];
 	fallSpeed = Global::GetInstance().playerAttributes[6];
-	player = Animation(8, 1, 90, 120, .15); 
-	sprite.setTexture(*TextureManager::GetInstance().retrieveTexture("David_Walk"));
+	player = Animation(16, 1, 90, 120, .15); 
+	
+	spriteDictionary = std::map<std::string, sf::Sprite>();
+	spriteDictionary["Idle"].setTexture(*TextureManager::GetInstance().retrieveTexture("David_Idle"));
+	spriteDictionary["Run"].setTexture(*TextureManager::GetInstance().retrieveTexture("davidrunright"));
+
+	for (std::map<std::string, sf::Sprite>::iterator it = spriteDictionary.begin(); it != spriteDictionary.end(); it++) {
+		it->second.setOrigin(45, 60);
+		it->second.setTextureRect(sf::IntRect(0,0,90,120));
+		it->second.setScale((GAME_TILE_DIM / 90.0f), 1);
+
+	}
+	//sprite.setTexture(*TextureManager::GetInstance().retrieveTexture("davidrunright"));
+	sprite = spriteDictionary["Idle"];
+
 	crosshair.setTexture(*TextureManager::GetInstance().retrieveTexture("crosshair"));
 	crosshair.setPosition(-1000,-1000);
 	crosshair.setOrigin(crosshair.getGlobalBounds().width/2, crosshair.getGlobalBounds().height/2);
@@ -403,6 +416,16 @@ void Player::jump()
 
 void Player::playerUpdate(sf::Vector2i roomSize, float deltaTime)
 {
+	if (vel.x != 0) {
+		sf::Vector2f pos = sprite.getPosition();
+		sprite = spriteDictionary["Run"];
+		sprite.setPosition(pos);
+	}
+	else if (vel.x == 0) {
+		sf::Vector2f pos = sprite.getPosition();
+		sprite = spriteDictionary["Idle"];
+		sprite.setPosition(pos);
+	}
 	viewCheck(roomSize.x, roomSize.y);
 	update(deltaTime);
 }
@@ -456,7 +479,7 @@ void Player::updateUI()
 
 void Player::updateUI(sf::Vector2f offset)
 {
-	ui->updateDifferent(health, stamina, offset);
+	ui->update(health, stamina, offset);
 }
 
 void Player::horizontalAcceleration(MovementDirection dir, float& deltaTime)

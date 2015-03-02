@@ -36,6 +36,7 @@ public :
 	void LoadEnemyAttributes();
 	void LoadPlayerAttribtues();
 	void SavePlayer();
+	void SaveProgress(int levelNum, int roomNum, bool open, bool foundAll);
 	void ParseXML();
 	void ParseLevelSizes(std::map<std::string, int>& mapToUpdate, std::string& fileName);
 	void ParseLevelTileSheets();
@@ -47,6 +48,8 @@ public :
 	int xOffset;
 	int yOffset;
 	sf::Sprite* currentTileSheet[TileSheetRows * TileSheetCols];
+	sf::Sound bgMusic;
+	bool played;
 
 	Global();
 	~Global();
@@ -59,4 +62,8 @@ public :
 	sf::Font font;
 	
 	sf::RectangleShape testingRect;
+
+
+	//Cheats
+	bool unlockAllRooms;
 };

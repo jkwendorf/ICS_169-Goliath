@@ -3,7 +3,7 @@
 #include "JumpingState.h"
 
 InputManager::InputManager()
-	:grappleReset(true)
+	:grappleReset(true), jumpButtonReleased(true)
 {
 	movement[0] = false;
 	movement[1] = false;
@@ -83,6 +83,7 @@ void InputManager::update(Player& s, Camera* camera, float deltaTime)
 	
 	s.running = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Joystick::getAxisPosition(0, sf::Joystick::Z) > 25;
 	utility[1] = (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || sf::Joystick::isButtonPressed(0, 0)) && !utility[1] ? true : false;
+	
 	if((sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || sf::Joystick::isButtonPressed(0, 0)) && !utility[1])
 	{
 		if(s.isHanging)
@@ -91,10 +92,16 @@ void InputManager::update(Player& s, Camera* camera, float deltaTime)
 		}
 		else
 		{
-			JumpCommand* jump = new JumpCommand(&s, JUMP);
-			s.inputQueue.push_back(jump);
+			if(jumpButtonReleased)
+			{
+				JumpCommand* jump = new JumpCommand(&s, JUMP);
+				s.inputQueue.push_back(jump);
+				jumpButtonReleased = false;
+			}
 		}
 	}
+	else if(!utility[1] && !jumpButtonReleased)
+		jumpButtonReleased = true;
 	/*
 	{
 		if(!s.isHanging && !s.isFalling)

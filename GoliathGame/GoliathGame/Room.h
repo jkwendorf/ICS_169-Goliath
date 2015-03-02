@@ -12,15 +12,18 @@ class Room
 {
 private:
 	Section** sectList;
-	int numSect, roomNum, roomWidth, roomHeight;
+	int roomNum, roomWidth, roomHeight;
 	bool loadedTitles;
+	RoomStruct roomInfo;
 	Global g;
 	
 	sf::Vector2f startPos;
 	sf::Music roomMusic;
 
 	Room();
-	void LoadRoom(int levelNumber, std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList, std::list<Tile*> &hitPointTileList);
+	void LoadRoom(int levelNumber, std::vector<std::shared_ptr<Enemy>> &enemyList, 
+		std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList, 
+		std::list<Tile*> &hitPointTileList);
 	bool CheckSectionOnScreen(int sectionNum);
 	std::vector<Tile*> checkBotRight(int i, sf::FloatRect& rect);
 	std::vector<sf::Vector2f> inSameGrid(const sf::Vector2f& p1, const sf::Vector2f& p2);
@@ -43,7 +46,9 @@ public:
 	Background bg;
 	int numTreasures;
 	//Player player;
-	Room(int levelNumber, int roomNumber, std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList, std::list<Tile*> &hitPointTileList);
+	Room(int levelNumber, int roomNumber, std::vector<std::shared_ptr<Enemy>> &enemyList, 
+		std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList, 
+		std::list<Tile*> &hitPointTileList);
 	~Room();
 	
 	void GetCollidableTiles(BaseObject& obj, std::vector<Tile*>& nearTiles, bool player=false);
