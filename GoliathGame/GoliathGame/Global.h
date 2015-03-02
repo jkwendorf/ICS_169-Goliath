@@ -47,6 +47,8 @@ public :
 	int xOffset;
 	int yOffset;
 	sf::Sprite* currentTileSheet[TileSheetRows * TileSheetCols];
+	sf::Sound bgMusic;
+	bool played;
 
 	Global();
 	~Global();

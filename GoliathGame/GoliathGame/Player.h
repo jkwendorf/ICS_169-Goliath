@@ -134,6 +134,7 @@ public:
 	float recoverTime, vibrateTime;
 	bool drawPlease;
 	void playHurtSound();
+	std::map<std::string,sf::Sprite> spriteDictionary;
 	//sf::RectangleShape hitbox;
 private:	
 	sf::Sound soundEffects[8];

@@ -21,6 +21,8 @@ public:
 private:
 	ButtonManager* bM;
 	sf::Font* f;
+	sf::Sound* bgMusic;
+	bool played;
 	bool isPressedUp, isPressedDown;
 	float inputCoolDown;
 };
