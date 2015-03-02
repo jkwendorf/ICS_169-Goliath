@@ -12,7 +12,7 @@ private:
 	sf::Vector2f vel;
 	sf::Clock clock;
 	bool hitGround;
-	float timerForStep;
+	float timerForStep, goliathStepWait;
 
 	Background();
 public:

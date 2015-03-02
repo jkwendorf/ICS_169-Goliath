@@ -5,7 +5,7 @@
 Background::Background(int levelNum, int roomNum)
 	:nonMovingLayer(*TextureManager::GetInstance().retrieveTexture(
 	Global::GetInstance().roomSizes.at("Level"+ std::to_string(levelNum) + "Room" + std::to_string(roomNum)).nonMovinglayer)),
-	vel(-300.0f, 99.0f), hitGround(false), timerForStep(-1.0f)
+	vel(-300.0f, 99.0f), hitGround(false), timerForStep(-1.0f), goliathStepWait(6.0f)
 {
 	RoomStruct temp = Global::GetInstance().roomSizes.at("Level"+ std::to_string(levelNum) + "Room" + std::to_string(roomNum));
 	for (int i = 0; i < temp.movingLayers.size(); i++)
@@ -74,11 +74,11 @@ void Background::update(float deltaTime, float viewX)
 				//}
 			}
 		}
-		else if(timerForStep != -1.0f && timerForStep < 2.0f)
+		else if(timerForStep != -1.0f && timerForStep < goliathStepWait)
 		{
 			timerForStep += deltaTime;
 
-			if(timerForStep >= 2.0f)
+			if(timerForStep >= goliathStepWait)
 			{
 				timerForStep = -1.0f;
 				vel.x = -300.f;
