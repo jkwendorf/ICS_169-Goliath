@@ -16,6 +16,7 @@ public:
 	void endFlash();
 	void setTreasureNumber(int numTreasure);
 	void addTreasure();
+	bool collectedAllTreasure();
 
 private:
 	/*sf::RectangleShape healthBar1;

@@ -87,6 +87,12 @@ void MainMenuState::update(float deltaTime, sf::RenderWindow& window)
 	{
 		inputCoolDown -= deltaTime;
 	}
+
+	//Cheats
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::U))
+	{
+		Global::GetInstance().unlockAllRooms = true;
+	}
 }
 
 void MainMenuState::draw(sf::RenderWindow& window)

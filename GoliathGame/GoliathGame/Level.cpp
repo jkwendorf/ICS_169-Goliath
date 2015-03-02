@@ -78,6 +78,7 @@ void Level::changeRoom()
 		arrows.clear();
 		destructTileList.clear();
 		hitPointTileList.clear();
+		Global::GetInstance().SaveProgress(levelNum, roomNum, 1, p.ui->collectedAllTreasure());
 		currentRoom = new Room(levelNum, ++roomNum, enemyList, arrowTileList, destructTileList, hitPointTileList);
 
 		setArrowTileArrows();
@@ -85,6 +86,7 @@ void Level::changeRoom()
 		p.resetPosition(currentRoom->getStartPos());
 		p.init(collisionManager, new JumpingState(), currentRoom->numTreasures);
 		p.resetHealth();
+		Global::GetInstance().SaveProgress(levelNum, roomNum, true, p.ui->collectedAllTreasure());
 	}
 	else
 	{
@@ -93,6 +95,9 @@ void Level::changeRoom()
 		arrowTileList.clear();
 		arrows.clear();
 		destructTileList.clear();
+		Global::GetInstance().SaveProgress(levelNum, roomNum, 1, p.ui->collectedAllTreasure());
+		if(levelNum < Global::GetInstance().levelInfo.size())
+			Global::GetInstance().SaveProgress(levelNum+1, 1, true, p.ui->collectedAllTreasure());
 		changeScreen = true;
 		
 	}

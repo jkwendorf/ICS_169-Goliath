@@ -134,3 +134,8 @@ void UserInterface::addTreasure()
 		uiSounds[x].play();
 	}
 }
+
+bool UserInterface::collectedAllTreasure()
+{
+	return collectedTreasure == totalTreasure;
+}
