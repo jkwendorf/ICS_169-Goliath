@@ -16,6 +16,8 @@ MainMenuState::MainMenuState(void)
 		bM->createButton("Controls", [] {StateManager::getInstance().changeToState(CONTROLS, false);});
 		bM->createButton("Quit", [&] {setToQuit();});
 	}
+	bg.setTexture(*TextureManager::GetInstance().retrieveTexture("MenuBG"));
+	
 	shouldQuit = false;
 }
 
@@ -27,7 +29,6 @@ MainMenuState::~MainMenuState(void)
 void MainMenuState::DeleteState()
 {
 	delete f;
-	delete bgMusic;
 
 	if(bM)
 		delete bM;
@@ -94,6 +95,7 @@ void MainMenuState::draw(sf::RenderWindow& window)
 	v.reset(sf::FloatRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
 	window.setView(v);
 
+	window.draw(bg);
 	bM->draw(window);
 }
 

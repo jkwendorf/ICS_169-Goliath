@@ -209,7 +209,7 @@ void Room::draw(sf::RenderWindow& w)
 	{
 		sectList[i]->draw(w);
 	}
-	w.draw(Global::GetInstance().testingRect);
+	//w.draw(Global::GetInstance().testingRect);
 }
 
 void Room::checkUpperLeftSameGrid(int currentGrid, sf::FloatRect& rect, const sf::Vector2f& topLeft, 
