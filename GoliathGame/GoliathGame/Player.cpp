@@ -25,6 +25,7 @@ Player::Player()
 	spriteDictionary = std::map<std::string, sf::Sprite>();
 	spriteDictionary["Idle"].setTexture(*TextureManager::GetInstance().retrieveTexture("David_Idle"));
 	spriteDictionary["Run"].setTexture(*TextureManager::GetInstance().retrieveTexture("davidrunright"));
+	spriteDictionary["Grapple"].setTexture(*TextureManager::GetInstance().retrieveTexture("David_Grapple"));
 
 	for (std::map<std::string, sf::Sprite>::iterator it = spriteDictionary.begin(); it != spriteDictionary.end(); it++) {
 		it->second.setOrigin(45, 60);
@@ -376,6 +377,9 @@ void Player::grapple()
 	{
 		if(!hShot.grappleInProgress && !isVaulting)
 		{
+			sf::Vector2f pos = sprite.getPosition();
+			sprite = spriteDictionary["Grapple"];
+			sprite.setPosition(pos);
 			soundEffects[HOOKSOUND].play();
 			hShot.grappleInProgress = true;
 			std::cout << closestGrappleTile.top << " " << closestGrappleTile.left << std::endl;
@@ -416,15 +420,18 @@ void Player::jump()
 
 void Player::playerUpdate(sf::Vector2i roomSize, float deltaTime)
 {
-	if (vel.x != 0) {
-		sf::Vector2f pos = sprite.getPosition();
-		sprite = spriteDictionary["Run"];
-		sprite.setPosition(pos);
-	}
-	else if (vel.x == 0) {
-		sf::Vector2f pos = sprite.getPosition();
-		sprite = spriteDictionary["Idle"];
-		sprite.setPosition(pos);
+	if (!hShot.grappleInProgress)
+	{
+		if (vel.x != 0) {
+			sf::Vector2f pos = sprite.getPosition();
+			sprite = spriteDictionary["Run"];
+			sprite.setPosition(pos);
+		}
+		else if (vel.x == 0) {
+			sf::Vector2f pos = sprite.getPosition();
+			sprite = spriteDictionary["Idle"];
+			sprite.setPosition(pos);
+		} 
 	}
 	viewCheck(roomSize.x, roomSize.y);
 	update(deltaTime);
