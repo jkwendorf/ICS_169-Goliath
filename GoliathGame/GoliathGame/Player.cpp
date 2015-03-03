@@ -812,8 +812,9 @@ bool Player::checkDead()
 
 void Player::resetHealth()
 {
+	if(checkDead())
+		soundEffects[DEATHSOUND].play();
 	health = 100;
-	soundEffects[DEATHSOUND].play();
 	recoverTime = 0.0f;
 	drawPlease = true;
 	ui->endFlash();
