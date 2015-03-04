@@ -172,8 +172,11 @@ void Player::update(float deltaTime)
 			hShot.update(sf::Vector2f(sprite.getPosition().x, sprite.getPosition().y - 15));
 		else
 			hShot.update(sf::Vector2f(sprite.getPosition().x, sprite.getPosition().y - 15));
+
+		if(fallSpeed != Global::GetInstance().playerAttributes[6])
+			fallSpeed = Global::GetInstance().playerAttributes[6];
 	}
-	else
+	/*else
 	{
 		//hShot.update(deltaTime);
 		if(sqrt(pow((std::abs(hShot.sprite.getPosition().x - sprite.getPosition().x)),2) + 
@@ -182,7 +185,7 @@ void Player::update(float deltaTime)
 			hShot.grappleInProgress = false;
 			hShot.hookedOnSomething = false;			
 		}
-	}
+	}*/
 
 	/*if(hShot.grappleInProgress && hShot.hookedOnSomething)
 	{
@@ -394,7 +397,7 @@ void Player::grapple()
 				hShot.grappleToLocation(sf::Vector2f(closestGrappleTile.left + closestGrappleTile.width/2 , closestGrappleTile.top + closestGrappleTile.height/2));
 			}
 			hShot.fireRight = facingRight;
-			
+			fallSpeed /= 10;
 		}
 	}
 }
@@ -822,6 +825,9 @@ void Player::resetHealth()
 	if(checkDead())
 		soundEffects[DEATHSOUND].play();
 	health = 100;
+	hShot.grappleInProgress = false;
+	hShot.hookedOnSomething = false;
+	fallSpeed = Global::GetInstance().playerAttributes[6];
 	recoverTime = 0.0f;
 	drawPlease = true;
 	ui->endFlash();
