@@ -42,7 +42,7 @@ InputManager::~InputManager()
 
 }
 
-void InputManager::update(Player& s, Camera camera, float deltaTime)
+void InputManager::update(Player& s, Camera* camera, float deltaTime)
 {
 	// JW: Players should conserve momentum when jumping.  They shouldn't be able to change directions in midair
 
@@ -250,7 +250,7 @@ void InputManager::playerMove(Player& player, float deltaTime)
 	//player.vel.x = 0.0;
 }
 
-void InputManager::viewMove(Camera& camera, Player& s, float deltaTime)
+void InputManager::viewMove(Camera* camera, Player& s, float deltaTime)
 {
 	
 	viewDifference = 100.0f*deltaTime;	
@@ -258,26 +258,23 @@ void InputManager::viewMove(Camera& camera, Player& s, float deltaTime)
 	{
 		if(utility[5])
 		{
-			camera.viewMove(true, deltaTime);
-			s.updateUI(sf::Vector2f(0, viewChangedY));
-			
+			s.updateUI(camera->viewMove(true, deltaTime));
 		}
 		else if(utility[6])
 		{
-			camera.viewMove(false, deltaTime);
-			s.updateUI(sf::Vector2f(0, viewChangedY));
+			s.updateUI(camera->viewMove(false, deltaTime));
 		}
 		else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::N))
 		{
 			viewChangedY = rand() % 50;
 			viewChangedX = rand() % 50;
-			//v->reset(sf::FloatRect(Global::GetInstance().topLeft.x + viewChangedX, Global::GetInstance().topLeft.y + viewChangedY, SCREEN_WIDTH, SCREEN_HEIGHT));
-			camera.shakeScreen(viewChangedX, viewChangedY);
+			camera->shakeScreen(viewChangedX, viewChangedY);
 			s.updateUI(sf::Vector2f(viewChangedX, viewChangedY));
 		}
 		else
 		{
-			camera.viewReset();
+			camera->viewReset();
+			camera->endMovement();
 		}
 
 		//std::cout << viewChanged << std::endl;
@@ -288,5 +285,4 @@ void InputManager::viewMove(Camera& camera, Player& s, float deltaTime)
 		Global::GetInstance().topLeft.y -= viewChangedY;
 		viewChangedY = 0;
 	}
-	
 }

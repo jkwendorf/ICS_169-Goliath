@@ -35,9 +35,9 @@ public:
 	//controller[2] = keyboard only
 	bool controller[3];
 
-	void update(Player& s, Camera camera, float deltaTime);
+	void update(Player& s, Camera* camera, float deltaTime);
 	void playerMove(Player& s, float deltaTime);
-	void viewMove(Camera& camera, Player& s, float deltaTime);
+	void viewMove(Camera* camera, Player& s, float deltaTime);
 
 	float inputCooldown, currentInputCooldown;
 	float weaponSwitchCooldown, currentWeaponSwitchCooldown;
