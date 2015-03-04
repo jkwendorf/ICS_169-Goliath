@@ -34,7 +34,7 @@
 			<MovingLayer image="Goliath Sky" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="500" />
 		</Room>
 	</Level>
-	<Level number="2" tilesheet="BanditTile" size="4" descriptionImage="goliathoverlay2" levelDescription="Level 2 - Scale the Goliath">
+	<Level number="2" tilesheet="BanditTile" size="1" descriptionImage="goliathoverlay2" levelDescription="Level 2 - Scale the Goliath">
 		<Room number="1" size="1" nonMoving="GoliathFoot" offsetX="320" offsetY="0" open="true" foundAll="false">
 			<MovingLayer image="Goliath Foreground" timeToRotate="1" rotationDegree="0" velScaleX="0.75" velScaleY="3" offsetX="0.0" offsetY="500" />
 			<MovingLayer image="Goliath Midground Rocks" timeToRotate="1" rotationDegree="0" velScaleX="0.75" velScaleY="3" offsetX="0" offsetY="500" />
