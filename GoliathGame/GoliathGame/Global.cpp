@@ -2,7 +2,7 @@
 #include <Xinput.h>
 
 Global::Global()
-	:inventory(new PlayerInventory())
+	:inventory(new PlayerInventory()), played(false), unlockAllRooms(false), useRB(false)
 {
 	test = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("GainItem")));
 
@@ -14,6 +14,9 @@ Global::Global()
 	{
 		std::cout << "Font did not load!" << std::endl;
 	}
+
+	bgMusic = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("Nocturne")));
+	bgMusic.setLoop(true);
 }
 
 Global::~Global()
@@ -67,6 +70,10 @@ void Global::ParseXML() {
 			roomStruct.roomSize = room.attribute("size").as_int();
 			roomStruct.nonMovinglayer = room.attribute("nonMoving").as_string();
 			roomStruct.posOffset = sf::Vector2f(room.attribute("offsetX").as_float(), room.attribute("offsetY").as_float());
+			//Set in XML if the room is available and if the player collected all the treasure
+			roomStruct.open = room.attribute("open").as_bool();
+			roomStruct.foundAll = room.attribute("foundAll").as_bool();
+
 			for (pugi::xml_node layer = room.child("MovingLayer"); layer; layer = layer.next_sibling("MovingLayer"))
 			{
 				LayerStruct l;
@@ -161,6 +168,72 @@ void Global::SavePlayer() {
 	}
 	//doc.save_file(std::cout);
 	doc.save_file("PlayerStats.xml");
+}
+
+void Global::SaveProgress(int levelNum, int roomNum, bool open, bool foundAll)
+{
+	std::cout << "Saving the progress" << std::endl;
+
+	std::string str = "Level"+ std::to_string(levelNum) + "Room" + std::to_string(roomNum);
+	roomSizes[str].foundAll = foundAll;
+	roomSizes[str].open = open;
+
+	pugi::xml_document doc;
+
+	pugi::xml_parse_result result = doc.load_file("Levels.xml");
+	std::cout << result << std::endl;
+	pugi::xml_node gameNode = doc.child("Game");
+	
+	int i = 0;
+	for (pugi::xml_node level = gameNode.child("Level"); level; level = level.next_sibling("Level"))
+	{
+		if(levelNum == level.attribute("number").as_int())
+		{
+			for (pugi::xml_node room = level.child("Room"); room; room = room.next_sibling("Room"))
+			{
+				if(room.attribute("number").as_int() == roomNum)
+				{
+					room.attribute("open").set_value(open);
+					room.attribute("foundAll").set_value(foundAll);
+					break;
+				}
+			}
+		}
+	}
+
+	//doc.save_file(std::cout);
+	doc.save_file("Levels.xml");
+	
+
+}
+
+void Global::ResetProgress()
+{
+	pugi::xml_document doc;
+
+	pugi::xml_parse_result result = doc.load_file("Levels.xml");
+	std::cout << result << std::endl;
+	pugi::xml_node gameNode = doc.child("Game");
+	
+	int i = 0;
+	for (pugi::xml_node level = gameNode.child("Level"); level; level = level.next_sibling("Level"))
+	{
+		for (pugi::xml_node room = level.child("Room"); room; room = room.next_sibling("Room"))
+		{
+			std::string str = "Level"+ std::to_string(level.attribute("number").as_int()) + "Room" + std::to_string(room.attribute("number").as_int());
+			if (str != "Level1Room1")
+			{
+				room.attribute("open").set_value(false);
+				room.attribute("foundAll").set_value(false);
+				roomSizes[str].foundAll = false;
+				roomSizes[str].open = false;
+			}
+
+		}
+	}
+
+	//doc.save_file(std::cout);
+	doc.save_file("Levels.xml");
 }
 
 void Global::LoadPlayerAttribtues() {

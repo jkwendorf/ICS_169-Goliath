@@ -43,7 +43,7 @@ void GrapplingState::update(Player* player, float deltaTime)
 		player->hShot.grappleInProgress = false;
 		player->isFalling = true;
 		player->grappleDir.y = 100;
-			
+		player->fallSpeed *= 10;
 		/*if(player->shouldHang)
 		{
 			player->shouldHang = false;

@@ -3,7 +3,7 @@
 #include "StateManager.h"
 
 MainMenuState::MainMenuState(void)
-	: isPressedUp(false), isPressedDown(false), inputCoolDown(0.25)
+	: isPressedUp(false), isPressedDown(false), inputCoolDown(0.25), played(false)
 	//:play(new Button(sf::Vector2f(SCREEN_WIDTH/2, SCREEN_HEIGHT/3), TextureManager::GetInstance().retrieveTexture("PlayButton"), m.changeToState(GAME)))
 {
 	f = new sf::Font();
@@ -16,7 +16,8 @@ MainMenuState::MainMenuState(void)
 		bM->createButton("Controls", [] {StateManager::getInstance().changeToState(CONTROLS, false);});
 		bM->createButton("Quit", [&] {setToQuit();});
 	}
-
+	bg.setTexture(*TextureManager::GetInstance().retrieveTexture("MenuBG"));
+	
 	shouldQuit = false;
 }
 
@@ -35,6 +36,13 @@ void MainMenuState::DeleteState()
 
 void MainMenuState::update(float deltaTime, sf::RenderWindow& window)
 {
+	if(!Global::GetInstance().played)
+	{
+		Global::GetInstance().bgMusic.play();
+		Global::GetInstance().played = true;
+	}
+
+
 	if(inputCoolDown <= 0)
 	{
 		/*if(sf::Keyboard::isKeyPressed(sf::Keyboard::P))
@@ -79,6 +87,20 @@ void MainMenuState::update(float deltaTime, sf::RenderWindow& window)
 	{
 		inputCoolDown -= deltaTime;
 	}
+
+	//Cheats
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::U))
+	{
+		Global::GetInstance().unlockAllRooms = true;
+	}
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::T))
+	{
+		Global::GetInstance().useRB = !Global::GetInstance().useRB;
+	}
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::R))
+	{
+		Global::GetInstance().ResetProgress();
+	}
 }
 
 void MainMenuState::draw(sf::RenderWindow& window)
@@ -87,6 +109,7 @@ void MainMenuState::draw(sf::RenderWindow& window)
 	v.reset(sf::FloatRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
 	window.setView(v);
 
+	window.draw(bg);
 	bM->draw(window);
 }
 
