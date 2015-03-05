@@ -93,6 +93,14 @@ void MainMenuState::update(float deltaTime, sf::RenderWindow& window)
 	{
 		Global::GetInstance().unlockAllRooms = true;
 	}
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::T))
+	{
+		Global::GetInstance().useRB = !Global::GetInstance().useRB;
+	}
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::R))
+	{
+		Global::GetInstance().ResetProgress();
+	}
 }
 
 void MainMenuState::draw(sf::RenderWindow& window)
