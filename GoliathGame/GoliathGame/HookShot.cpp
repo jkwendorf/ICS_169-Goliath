@@ -15,6 +15,7 @@ HookShot::HookShot() :
 	{
 		hookshotChain[x].setTexture(*TextureManager::GetInstance().retrieveTexture("rock"));
 		hookshotChain[x].setOrigin(hookshotChain[x].getLocalBounds().width/2, hookshotChain[x].getLocalBounds().height/2);
+		//hookshotChain[x].setPosition(hookshotChain[x].getPosition().x, hookshotChain[x].getPosition().y - 40);
 	}
 }
 
@@ -77,5 +78,5 @@ void HookShot::updateChain(sf::Vector2f playerPos)
 	//if(grappleInProgress || hookedOnSomething)
 		for(int x = 0; x < 10; x++)
 			hookshotChain[x].setPosition(playerPos
-			+ sf::Vector2f(directionTowardHookshot.x * x / 10, directionTowardHookshot.y * x /10));
+			+ sf::Vector2f(directionTowardHookshot.x * x / 10, directionTowardHookshot.y * x /10  - 25));
 }
