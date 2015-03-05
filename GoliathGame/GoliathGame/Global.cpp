@@ -2,7 +2,7 @@
 #include <Xinput.h>
 
 Global::Global()
-	:inventory(new PlayerInventory()), played(false), unlockAllRooms(false)
+	:inventory(new PlayerInventory()), played(false), unlockAllRooms(false), useRB(false)
 {
 	test = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("GainItem")));
 
@@ -205,6 +205,35 @@ void Global::SaveProgress(int levelNum, int roomNum, bool open, bool foundAll)
 	doc.save_file("Levels.xml");
 	
 
+}
+
+void Global::ResetProgress()
+{
+	pugi::xml_document doc;
+
+	pugi::xml_parse_result result = doc.load_file("Levels.xml");
+	std::cout << result << std::endl;
+	pugi::xml_node gameNode = doc.child("Game");
+	
+	int i = 0;
+	for (pugi::xml_node level = gameNode.child("Level"); level; level = level.next_sibling("Level"))
+	{
+		for (pugi::xml_node room = level.child("Room"); room; room = room.next_sibling("Room"))
+		{
+			std::string str = "Level"+ std::to_string(level.attribute("number").as_int()) + "Room" + std::to_string(room.attribute("number").as_int());
+			if (str != "Level1Room1")
+			{
+				room.attribute("open").set_value(false);
+				room.attribute("foundAll").set_value(false);
+				roomSizes[str].foundAll = false;
+				roomSizes[str].open = false;
+			}
+
+		}
+	}
+
+	//doc.save_file(std::cout);
+	doc.save_file("Levels.xml");
 }
 
 void Global::LoadPlayerAttribtues() {

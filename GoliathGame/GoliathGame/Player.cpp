@@ -25,6 +25,7 @@ Player::Player()
 	spriteDictionary = std::map<std::string, sf::Sprite>();
 	spriteDictionary["Idle"].setTexture(*TextureManager::GetInstance().retrieveTexture("David_Idle"));
 	spriteDictionary["Run"].setTexture(*TextureManager::GetInstance().retrieveTexture("davidrunright"));
+	spriteDictionary["Grapple"].setTexture(*TextureManager::GetInstance().retrieveTexture("David_Grapple"));
 
 	for (std::map<std::string, sf::Sprite>::iterator it = spriteDictionary.begin(); it != spriteDictionary.end(); it++) {
 		it->second.setOrigin(45, 60);
@@ -171,8 +172,11 @@ void Player::update(float deltaTime)
 			hShot.update(sf::Vector2f(sprite.getPosition().x, sprite.getPosition().y - 15));
 		else
 			hShot.update(sf::Vector2f(sprite.getPosition().x, sprite.getPosition().y - 15));
+
+		if(fallSpeed != Global::GetInstance().playerAttributes[6])
+			fallSpeed = Global::GetInstance().playerAttributes[6];
 	}
-	else
+	/*else
 	{
 		//hShot.update(deltaTime);
 		if(sqrt(pow((std::abs(hShot.sprite.getPosition().x - sprite.getPosition().x)),2) + 
@@ -181,7 +185,7 @@ void Player::update(float deltaTime)
 			hShot.grappleInProgress = false;
 			hShot.hookedOnSomething = false;			
 		}
-	}
+	}*/
 
 	/*if(hShot.grappleInProgress && hShot.hookedOnSomething)
 	{
@@ -376,6 +380,9 @@ void Player::grapple()
 	{
 		if(!hShot.grappleInProgress && !isVaulting)
 		{
+			sf::Vector2f pos = sprite.getPosition();
+			sprite = spriteDictionary["Grapple"];
+			sprite.setPosition(pos);
 			soundEffects[HOOKSOUND].play();
 			hShot.grappleInProgress = true;
 			std::cout << closestGrappleTile.top << " " << closestGrappleTile.left << std::endl;
@@ -390,7 +397,7 @@ void Player::grapple()
 				hShot.grappleToLocation(sf::Vector2f(closestGrappleTile.left + closestGrappleTile.width/2 , closestGrappleTile.top + closestGrappleTile.height/2));
 			}
 			hShot.fireRight = facingRight;
-			
+			fallSpeed /= 10;
 		}
 	}
 }
@@ -416,15 +423,18 @@ void Player::jump()
 
 void Player::playerUpdate(sf::Vector2i roomSize, float deltaTime)
 {
-	if (vel.x != 0) {
-		sf::Vector2f pos = sprite.getPosition();
-		sprite = spriteDictionary["Run"];
-		sprite.setPosition(pos);
-	}
-	else if (vel.x == 0) {
-		sf::Vector2f pos = sprite.getPosition();
-		sprite = spriteDictionary["Idle"];
-		sprite.setPosition(pos);
+	if (!hShot.grappleInProgress)
+	{
+		if (vel.x != 0) {
+			sf::Vector2f pos = sprite.getPosition();
+			sprite = spriteDictionary["Run"];
+			sprite.setPosition(pos);
+		}
+		else if (vel.x == 0) {
+			sf::Vector2f pos = sprite.getPosition();
+			sprite = spriteDictionary["Idle"];
+			sprite.setPosition(pos);
+		} 
 	}
 	viewCheck(roomSize.x, roomSize.y);
 	update(deltaTime);
@@ -812,8 +822,12 @@ bool Player::checkDead()
 
 void Player::resetHealth()
 {
+	if(checkDead())
+		soundEffects[DEATHSOUND].play();
 	health = 100;
-	soundEffects[DEATHSOUND].play();
+	hShot.grappleInProgress = false;
+	hShot.hookedOnSomething = false;
+	fallSpeed = Global::GetInstance().playerAttributes[6];
 	recoverTime = 0.0f;
 	drawPlease = true;
 	ui->endFlash();

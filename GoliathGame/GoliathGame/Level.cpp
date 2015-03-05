@@ -69,6 +69,7 @@ void Level::DeleteLevel()
 void Level::changeRoom()
 {
 	loading = 1.0;
+	Global::GetInstance().ControllerVibrate();
 	int roomNum = currentRoom->getRoomNumber();
 	if (roomNum < levelInfo.levelSize)
 	{

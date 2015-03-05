@@ -37,6 +37,7 @@ public :
 	void LoadPlayerAttribtues();
 	void SavePlayer();
 	void SaveProgress(int levelNum, int roomNum, bool open, bool foundAll);
+	void ResetProgress();
 	void ParseXML();
 	void ParseLevelSizes(std::map<std::string, int>& mapToUpdate, std::string& fileName);
 	void ParseLevelTileSheets();
@@ -66,4 +67,5 @@ public :
 
 	//Cheats
 	bool unlockAllRooms;
+	bool useRB;
 };
