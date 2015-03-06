@@ -80,8 +80,10 @@ void Global::ParseXML() {
 				l.imageName = layer.attribute("image").as_string();
 				l.scale = sf::Vector2f(layer.attribute("velScaleX").as_float(), layer.attribute("velScaleY").as_float());
 				l.posOffset = sf::Vector2f(layer.attribute("offsetX").as_float(), layer.attribute("offsetY").as_float());
+				l.sizeScale = sf::Vector2f(layer.attribute("scaleX").as_float(), layer.attribute("scaleY").as_float());
 				l.degrees = layer.attribute("rotationDegree").as_float();
 				l.timeToRotate = layer.attribute("timeToRotate").as_float();
+				l.drawInFront = layer.attribute("drawInFront").as_bool();
 				roomStruct.movingLayers.push_back(l);
 			}
 			roomSizes[str2] = roomStruct;

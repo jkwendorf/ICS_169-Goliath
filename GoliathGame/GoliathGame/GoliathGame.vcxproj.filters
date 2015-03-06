@@ -222,6 +222,9 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="NonMovingLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="State.h">
@@ -441,6 +444,9 @@
       <Filter>Header Files\Level Stuff</Filter>
     </ClInclude>
     <ClInclude Include="RoomStruct.h">
+      <Filter>Header Files\Level Stuff</Filter>
+    </ClInclude>
+    <ClInclude Include="NonMovingLayer.h">
       <Filter>Header Files\Level Stuff</Filter>
     </ClInclude>
   </ItemGroup>
