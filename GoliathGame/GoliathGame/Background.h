@@ -3,13 +3,16 @@
 #include "Global.h"
 #include "RoomStruct.h"
 #include "Layer.h"
+#include "NonMovingLayer.h"
 
 class Background
 {
 private:
 	sf::Sprite nonMovingLayer;
 	std::vector<Layer> movingLayers;
-	std::vector<sf::Sprite> nonMovingLayers;
+	//std::vector<sf::Sprite> nonMovingLayers;
+	//std::map<std::string, std::vector<sf::Sprite>> nonMovingLayers;
+	std::vector<NonMovingLayer> nonMovingLayers;
 	sf::Vector2f vel;
 	sf::Clock clock;
 	bool hitGround;

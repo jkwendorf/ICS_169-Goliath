@@ -116,6 +116,7 @@
     <ClCompile Include="LookCommand.cpp" />
     <ClCompile Include="LookingState.cpp" />
     <ClCompile Include="MoveCommand.cpp" />
+    <ClCompile Include="NonMovingLayer.cpp" />
     <ClCompile Include="OnGroundState.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="ParticleEmitter.cpp" />
@@ -183,6 +184,7 @@
     <ClInclude Include="LookCommand.h" />
     <ClInclude Include="LookingState.h" />
     <ClInclude Include="MoveCommand.h" />
+    <ClInclude Include="NonMovingLayer.h" />
     <ClInclude Include="Observer.h" />
     <ClInclude Include="OnGroundState.h" />
     <ClInclude Include="Particle.h" />
