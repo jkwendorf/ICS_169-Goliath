@@ -4,7 +4,8 @@
 PauseGameState::PauseGameState(void)
 	: isPressedUp(false), isPressedDown(false), saved(false), pO(new PopOut()), backgroundUpdated(false)
 {
-	backgroundTexture.create(SCREEN_WIDTH, SCREEN_HEIGHT);
+	if(!backgroundTexture.create(SCREEN_WIDTH + 1, SCREEN_HEIGHT+ 1))
+		backgroundUpdated = true;
 	backgroundSprite.setTexture(backgroundTexture);
 	backgroundSprite.setColor(sf::Color(64, 64, 64, 255));
 
@@ -34,8 +35,8 @@ PauseGameState::PauseGameState(void)
 PauseGameState::PauseGameState(sf::RenderWindow& window)
 	: isPressedUp(false), isPressedDown(false), saved(false), pO(new PopOut()), backgroundUpdated(false)
 {
-	backgroundTexture.create(SCREEN_WIDTH, SCREEN_HEIGHT);
-	backgroundTexture.update(window);
+	if(backgroundTexture.create(SCREEN_WIDTH + 1, SCREEN_HEIGHT + 1))
+		backgroundTexture.update(window);
 	backgroundUpdated = true;
 	backgroundSprite.setTexture(backgroundTexture);
 	backgroundSprite.setColor(sf::Color(64, 64, 64, 255));
