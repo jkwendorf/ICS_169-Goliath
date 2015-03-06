@@ -12,9 +12,13 @@ Background::Background(int levelNum, int roomNum)
 	{
 		if(temp.movingLayers.at(i).scale.x == 0 && temp.movingLayers.at(i).scale.y == 0)
 		{
-			nonMovingLayers.push_back(sf::Sprite(*TextureManager::GetInstance().retrieveTexture(temp.movingLayers[i].imageName)));
-			nonMovingLayers[nonMovingLayers.size() - 1].setPosition(temp.movingLayers.at(i).posOffset.x, temp.movingLayers.at(i).posOffset.y);
-			nonMovingLayers[nonMovingLayers.size() - 1].setScale(2.0f, 2.0f);
+			//sf::Sprite test = sf::Sprite(*TextureManager::GetInstance().retrieveTexture(temp.movingLayers[i].imageName));
+			//test.setPosition(temp.movingLayers.at(i).posOffset.x, temp.movingLayers.at(i).posOffset.y);
+			//test.setScale(temp.movingLayers.at(i).sizeScale.x, temp.movingLayers.at(i).sizeScale.y);
+			nonMovingLayers.push_back(NonMovingLayer(temp, i));
+			//nonMovingLayers.push_back(sf::Sprite(*TextureManager::GetInstance().retrieveTexture(temp.movingLayers[i].imageName)));
+			//nonMovingLayers[nonMovingLayers.size() - 1].setPosition(temp.movingLayers.at(i).posOffset.x, temp.movingLayers.at(i).posOffset.y);
+			//nonMovingLayers[nonMovingLayers.size() - 1].setScale(temp.movingLayers.at(i).sizeScale.x, temp.movingLayers.at(i).sizeScale.y);
 		}
 		else
 			movingLayers.push_back(Layer(temp, i));
@@ -39,7 +43,7 @@ void Background::setScale(int layerNum, float xScale, float yScale)
 	movingLayers[layerNum].scale.y = yScale;
 }
 	
-void Background::update(float deltaTime, float viewX)
+void Background::update(float deltaTime, float viewX)	
 {
 	if(!movingLayers.empty())
 	{
@@ -109,10 +113,18 @@ void Background::update(float deltaTime, float viewX)
 	
 void Background::draw(sf::RenderWindow& window)
 {
-	for (int nonMove = nonMovingLayers.size() - 1; nonMove >= 0; nonMove--)
+	//window.draw(nonMovingLayer);
+	//for (int nonMove = nonMovingLayers.size() - 1; nonMove >= 0; nonMove--)
+	//{
+	//	//window.draw(nonMovingLayers.at(nonMove));
+	//}
+	for (int nonMove = nonMovingLayers.size() - 1; nonMove >= 0; nonMove--) 
 	{
-		window.draw(nonMovingLayers.at(nonMove));
+		if (!nonMovingLayers.at(nonMove).inFront)
+			nonMovingLayers[nonMove].draw(window);
 	}
+
+	//window.draw(nonMovingLayer);
 
 	for (int i = movingLayers.size()-1; i >= 0; i--)
 	{
@@ -120,6 +132,12 @@ void Background::draw(sf::RenderWindow& window)
 	}
 
 	window.draw(nonMovingLayer);
+
+	for (int nonMove = nonMovingLayers.size() - 1; nonMove >= 0; nonMove--) 
+	{
+		if (nonMovingLayers.at(nonMove).inFront)
+			nonMovingLayers[nonMove].draw(window);
+	}
 }
 
 void Background::setHitFloor(bool b) {

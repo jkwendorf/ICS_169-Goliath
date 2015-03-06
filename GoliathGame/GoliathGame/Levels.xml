@@ -2,47 +2,49 @@
 <Game>
 	<Level number="1" tilesheet="BanditTile" size="6" descriptionImage="goliathoverlay1" levelDescription="Level 1 - Get to the Goliath">
 		<Room number="1" size="1" nonMoving="Goliath Midground City" offsetX="0" offsetY="500" open="true" foundAll="true">
-			<MovingLayer image="Goliath Sky" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="160" />
+			<MovingLayer image="Goliath Sky" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="160" scaleX="2" scaleY="2"/>
 		</Room>
-		<Room number="2" size="1" nonMoving="Goliath Midground City" offsetX="0" offsetY="500" open="true" foundAll="false">
-			<MovingLayer image="Goliath Birds" timeToRotate="1" rotationDegree="0" velScaleX="0.25" velScaleY="0" offsetX="0" offsetY="225" />
-			<MovingLayer image="Goliath Sky" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="-450" />
+		<Room number="2" size="1" nonMoving="Goliath Midground City" offsetX="0" offsetY="500" open="false" foundAll="false">
+			<MovingLayer image="Goliath Birds" timeToRotate="1" rotationDegree="0" velScaleX="0.25" velScaleY="0" offsetX="0" offsetY="225" scaleX="2" scaleY="2"/>
+			<MovingLayer image="Goliath Sky" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="-450" scaleX="2" scaleY="2"/>
 		</Room>
-		<Room number="3" size="1" nonMoving="Goliath Sky" offsetX="0" offsetY="-2000" open="true" foundAll="false">
-			<MovingLayer image="Goliath Background Mountains" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="-50" offsetY="150" />
-			<MovingLayer image="Goliath Sky" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="-380" />
+		<Room number="3" size="1" nonMoving="Goliath Sky" offsetX="0" offsetY="-2000" open="false" foundAll="false">
+			<MovingLayer image="Goliath Background Mountains" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="-50" offsetY="150" scaleX="2" scaleY="2"/>
+			<MovingLayer image="Goliath Sky" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="-380" scaleX="2" scaleY="2"/>
 		</Room>
-		<Room number="4" size="1" nonMoving="FileNotFound" offsetX="-480" open="true" foundAll="false">
-			<MovingLayer image="Goliath Midground Rocks" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="-450" />
-			<MovingLayer image="Goliath Clouds" timeToRotate="1" rotationDegree="0" velScaleX="0.15" velScaleY="0" offsetX="0" offsetY="-100" />
-			<MovingLayer image="Goliath Birds" timeToRotate="1" rotationDegree="0" velScaleX="0.25" velScaleY="0" offsetX="0" offsetY="300" />
-			<MovingLayer image="Goliath Sky" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="-450" />
+		<Room number="4" size="1" nonMoving="FileNotFound" offsetX="-480" open="false" foundAll="false">
+			<MovingLayer image="Goliath Midground Rocks" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="-450" scaleX="2" scaleY="2"/>
+			<MovingLayer image="Goliath Clouds" timeToRotate="1" rotationDegree="0" velScaleX="0.15" velScaleY="0" offsetX="0" offsetY="-100" scaleX="2" scaleY="2" />
+			<MovingLayer image="Goliath Birds" timeToRotate="1" rotationDegree="0" velScaleX="0.25" velScaleY="0" offsetX="0" offsetY="300" scaleX="2" scaleY="2"/>
+			<MovingLayer image="Goliath Sky" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="-450" scaleX="2" scaleY="2"/>
 		</Room>
-		<Room number="5" size="1" nonMoving="FileNotFound" offsetX="-480" open="true" foundAll="false">
-			<MovingLayer image="Goliath Foreground" timeToRotate="1" rotationDegree="0" velScaleX="00" velScaleY="0" offsetX="0" offsetY="-500" />
-			<MovingLayer image="Goliath Midground Rocks" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="-450" />
-			<MovingLayer image="Goliath Birds" timeToRotate="1" rotationDegree="0" velScaleX="0.25" velScaleY="0" offsetX="0" offsetY="0" />
-			<MovingLayer image="Goliath Sky" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="-450" />
+		<Room number="5" size="1" nonMoving="FileNotFound" offsetX="-480" open="false" foundAll="false">
+			<MovingLayer image="Goliath Foreground" timeToRotate="1" rotationDegree="0" velScaleX="00" velScaleY="0" offsetX="0" offsetY="-500" scaleX="2" scaleY="2"/>
+			<MovingLayer image="Goliath Midground Rocks" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="-450" scaleX="2" scaleY="2"/>
+			<MovingLayer image="Goliath Birds" timeToRotate="1" rotationDegree="0" velScaleX="0.25" velScaleY="0" offsetX="0" offsetY="0" scaleX="2" scaleY="2"/>
+			<MovingLayer image="Goliath Sky" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="-450" scaleX="2" scaleY="2"/>
 		</Room>
 		<Room number="6" size="1" nonMoving="FileNotFound" offsetX="-480" open="false" foundAll="false">
-			<MovingLayer image="Goliath Foreground" timeToRotate="1" rotationDegree="0" velScaleX="00" velScaleY="0" offsetX="0" offsetY="760" />
-			<MovingLayer image="Goliath Midground Rocks" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="760" />
-			<MovingLayer image="Goliath Clouds" timeToRotate="1" rotationDegree="0" velScaleX="0.15" velScaleY="0" offsetX="0" offsetY="175" />
-			<MovingLayer image="Goliath Birds" timeToRotate="1" rotationDegree="0" velScaleX="0.25" velScaleY="0" offsetX="0" offsetY="400" />
-			<MovingLayer image="Goliath Background Mountains" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="-50" offsetY="760" />
-			<MovingLayer image="Goliath Sky" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="-370" />
-			<MovingLayer image="Goliath Sky" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="500" />
+			<MovingLayer image="Goliath Foreground" timeToRotate="1" rotationDegree="0" velScaleX="00" velScaleY="0" offsetX="0" offsetY="760" scaleX="2" scaleY="2"/>
+			<MovingLayer image="Goliath Midground Rocks" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="760" scaleX="2" scaleY="2" />
+			<MovingLayer image="Goliath Clouds" timeToRotate="1" rotationDegree="0" velScaleX="0.15" velScaleY="0" offsetX="0" offsetY="175" scaleX="2" scaleY="2"/>
+			<MovingLayer image="Goliath Birds" timeToRotate="1" rotationDegree="0" velScaleX="0.25" velScaleY="0" offsetX="0" offsetY="400" scaleX="2" scaleY="2"/>
+			<MovingLayer image="Goliath Background Mountains" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="-50" offsetY="760" scaleX="2" scaleY="2"/>
+			<MovingLayer image="Goliath Sky" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="-370" scaleX="2" scaleY="2"/>
+			<MovingLayer image="Goliath Sky" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="500" scaleX="2" scaleY="2"/>
 		</Room>
 	</Level>
-	<Level number="2" tilesheet="BanditTile" size="4" descriptionImage="goliathoverlay2" levelDescription="Level 2 - Scale the Goliath">
-		<Room number="1" size="1" nonMoving="GoliathFoot" offsetX="320" offsetY="0" open="false" foundAll="false">
-			<MovingLayer image="Goliath Foreground" timeToRotate="1" rotationDegree="0" velScaleX="0.75" velScaleY="3" offsetX="0.0" offsetY="500" />
-			<MovingLayer image="Goliath Midground Rocks" timeToRotate="1" rotationDegree="0" velScaleX="0.75" velScaleY="3" offsetX="0" offsetY="500" />
-			<MovingLayer image="Goliath Clouds" timeToRotate="1" rotationDegree="0" velScaleX="1.25" velScaleY="3" offsetX="0" offsetY="500" />
-			<MovingLayer image="Goliath Background Mountains" timeToRotate="1" rotationDegree="0" velScaleX="0.75" velScaleY="3" offsetX="0" offsetY="500" />
-			<MovingLayer image="Goliath Sky" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="500" />
+	<Level number="2" tilesheet="BanditTile" size="2" descriptionImage="goliathoverlay2" levelDescription="Level 2 - Scale the Goliath">
+		<Room number="1" size="1" nonMoving="GoliathFoot" offsetX="320" offsetY="0" open="true" foundAll="false">
+			<MovingLayer image="Goliath Foreground" timeToRotate="1" rotationDegree="0" velScaleX="0.75" velScaleY="3" offsetX="0.0" offsetY="500" scaleX="2" scaleY="2"/>
+			<MovingLayer image="Goliath Midground Rocks" timeToRotate="1" rotationDegree="0" velScaleX="0.75" velScaleY="3" offsetX="0" offsetY="500" scaleX="2" scaleY="2"/>
+			<MovingLayer image="Goliath Clouds" timeToRotate="1" rotationDegree="0" velScaleX="1.25" velScaleY="3" offsetX="0" offsetY="500" scaleX="2" scaleY="2"/>
+			<MovingLayer image="Goliath Background Mountains" timeToRotate="1" rotationDegree="0" velScaleX="0.75" velScaleY="3" offsetX="0" offsetY="500" scaleX="2" scaleY="2"/>
+			<MovingLayer image="Goliath Sky" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="500" scaleX="2" scaleY="2"/>
 		</Room>
-		<Room number="2" size="1" nonMoving="banditCity" open="false" foundAll="false" />
+    <Room number="2" size="1" nonMoving="GoliathCalfKnee" offsetX="320" offsetY="0" open="true" foundAll="false">
+      <MovingLayer image="ThighAnimate" timeToRotate="1" rotationDegree="5" velScaleX="0" velScaleY="0" offsetX="280" offsetY="-200" scaleX="1" scaleY="1" drawInFront="true"/>
+    </Room>
 		<Room number="3" size="1" nonMoving="banditCity" open="false" foundAll="false" />
 		<Room number="4" size="1" nonMoving="banditCity" open="false" foundAll="false" />
 	</Level>
