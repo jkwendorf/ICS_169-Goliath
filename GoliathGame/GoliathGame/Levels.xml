@@ -4,21 +4,21 @@
 		<Room number="1" size="1" nonMoving="Goliath Midground City" offsetX="0" offsetY="500" open="true" foundAll="true">
 			<MovingLayer image="Goliath Sky" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="160" />
 		</Room>
-		<Room number="2" size="1" nonMoving="Goliath Midground City" offsetX="0" offsetY="500" open="false" foundAll="false">
+		<Room number="2" size="1" nonMoving="Goliath Midground City" offsetX="0" offsetY="500" open="true" foundAll="false">
 			<MovingLayer image="Goliath Birds" timeToRotate="1" rotationDegree="0" velScaleX="0.25" velScaleY="0" offsetX="0" offsetY="225" />
 			<MovingLayer image="Goliath Sky" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="-450" />
 		</Room>
-		<Room number="3" size="1" nonMoving="Goliath Sky" offsetX="0" offsetY="-2000" open="false" foundAll="false">
+		<Room number="3" size="1" nonMoving="Goliath Sky" offsetX="0" offsetY="-2000" open="true" foundAll="false">
 			<MovingLayer image="Goliath Background Mountains" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="-50" offsetY="150" />
 			<MovingLayer image="Goliath Sky" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="-380" />
 		</Room>
-		<Room number="4" size="1" nonMoving="FileNotFound" offsetX="-480" open="false" foundAll="false">
+		<Room number="4" size="1" nonMoving="FileNotFound" offsetX="-480" open="true" foundAll="false">
 			<MovingLayer image="Goliath Midground Rocks" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="-450" />
 			<MovingLayer image="Goliath Clouds" timeToRotate="1" rotationDegree="0" velScaleX="0.15" velScaleY="0" offsetX="0" offsetY="-100" />
 			<MovingLayer image="Goliath Birds" timeToRotate="1" rotationDegree="0" velScaleX="0.25" velScaleY="0" offsetX="0" offsetY="300" />
 			<MovingLayer image="Goliath Sky" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="-450" />
 		</Room>
-		<Room number="5" size="1" nonMoving="FileNotFound" offsetX="-480" open="false" foundAll="false">
+		<Room number="5" size="1" nonMoving="FileNotFound" offsetX="-480" open="true" foundAll="false">
 			<MovingLayer image="Goliath Foreground" timeToRotate="1" rotationDegree="0" velScaleX="00" velScaleY="0" offsetX="0" offsetY="-500" />
 			<MovingLayer image="Goliath Midground Rocks" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="-450" />
 			<MovingLayer image="Goliath Birds" timeToRotate="1" rotationDegree="0" velScaleX="0.25" velScaleY="0" offsetX="0" offsetY="0" />
