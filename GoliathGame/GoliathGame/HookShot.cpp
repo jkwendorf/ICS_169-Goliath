@@ -1,5 +1,6 @@
 #include "HookShot.h"
 #include "Utility.h"
+#include "Global.h"
 
 HookShot::HookShot() : 
 	hookedOnSomething(false), grappleInProgress(false), fireRight(false), isDisabled(false), grappleLength(400), 
@@ -9,12 +10,13 @@ HookShot::HookShot() :
 	sprite.setScale(0.025,0.025);
 	sprite.setOrigin(sprite.getLocalBounds().width/2, sprite.getLocalBounds().height/2);
 	currentCooldown = 0.0;
-	weaponCooldown = 2.0;
+	weaponCooldown = 1.0;
 	grappleBox = grappleLength/sqrt(2);
 	for(int x = 0; x < 10; x++)
 	{
 		hookshotChain[x].setTexture(*TextureManager::GetInstance().retrieveTexture("rock"));
 		hookshotChain[x].setOrigin(hookshotChain[x].getLocalBounds().width/2, hookshotChain[x].getLocalBounds().height/2);
+		//hookshotChain[x].setPosition(hookshotChain[x].getPosition().x, hookshotChain[x].getPosition().y - 40);
 	}
 }
 
@@ -74,8 +76,14 @@ void HookShot::updateChain(sf::Vector2f playerPos)
 	sf::Vector2f normalDirectionTowardHookshot = sprite.getPosition() - playerPos;
 	normalize(normalDirectionTowardHookshot);
 	sf::Vector2f directionTowardHookshot = sprite.getPosition() - playerPos;
-	//if(grappleInProgress || hookedOnSomething)
-		for(int x = 0; x < 10; x++)
+	
+	float angle = 90 + std::atan2f(normalDirectionTowardHookshot.y, normalDirectionTowardHookshot.x) * 180.f / 3.14159265358979323846f;
+	std::cout << "angle rotation " << angle << std::endl; 
+	for(int x = 0; x < 10; x++)
+	{
+		if(x > 1)
 			hookshotChain[x].setPosition(playerPos
-			+ sf::Vector2f(directionTowardHookshot.x * x / 10, directionTowardHookshot.y * x /10));
+			+ sf::Vector2f(directionTowardHookshot.x * x / 10, directionTowardHookshot.y * x /10  - 25));
+			hookshotChain[x].setRotation(angle);
+	}
 }

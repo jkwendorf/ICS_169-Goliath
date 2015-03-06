@@ -9,7 +9,7 @@ MainMenuState::MainMenuState(void)
 	f = new sf::Font();
 	if(f->loadFromFile("media/fonts/arial.ttf"))
 	{
-		bM = new ButtonManager(sf::Vector2f(SCREEN_WIDTH/2 - 100, SCREEN_HEIGHT/4 - 33), 15, sf::Vector2f(200, 66), TextureManager::GetInstance().retrieveTexture("ButtonTest"), f); 
+		bM = new ButtonManager(sf::Vector2f(SCREEN_WIDTH/2 - 150, SCREEN_HEIGHT/4), 15, sf::Vector2f(300, 66), TextureManager::GetInstance().retrieveTexture("ButtonTest"), f); 
 		bM->createButton("Play Game", [] {StateManager::getInstance().addState(TRANSITION, new LoadingState(1, 1), true);});
 		bM->createButton("Level Select", [] {StateManager::getInstance().changeToState(LEVEL_SELECT, false);});
 		//bM->createButton("Options", [] {});
@@ -92,6 +92,14 @@ void MainMenuState::update(float deltaTime, sf::RenderWindow& window)
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::U))
 	{
 		Global::GetInstance().unlockAllRooms = true;
+	}
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::T))
+	{
+		Global::GetInstance().useRB = !Global::GetInstance().useRB;
+	}
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::R))
+	{
+		Global::GetInstance().ResetProgress();
 	}
 }
 

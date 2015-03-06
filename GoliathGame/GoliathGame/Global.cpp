@@ -2,7 +2,7 @@
 #include <Xinput.h>
 
 Global::Global()
-	:inventory(new PlayerInventory()), played(false), unlockAllRooms(false)
+	:inventory(new PlayerInventory()), played(false), unlockAllRooms(false), useRB(false)
 {
 	test = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("GainItem")));
 
@@ -70,6 +70,7 @@ void Global::ParseXML() {
 			roomStruct.roomSize = room.attribute("size").as_int();
 			roomStruct.nonMovinglayer = room.attribute("nonMoving").as_string();
 			roomStruct.posOffset = sf::Vector2f(room.attribute("offsetX").as_float(), room.attribute("offsetY").as_float());
+			roomStruct.songName = room.attribute("music").as_string();
 			//Set in XML if the room is available and if the player collected all the treasure
 			roomStruct.open = room.attribute("open").as_bool();
 			roomStruct.foundAll = room.attribute("foundAll").as_bool();
@@ -80,8 +81,10 @@ void Global::ParseXML() {
 				l.imageName = layer.attribute("image").as_string();
 				l.scale = sf::Vector2f(layer.attribute("velScaleX").as_float(), layer.attribute("velScaleY").as_float());
 				l.posOffset = sf::Vector2f(layer.attribute("offsetX").as_float(), layer.attribute("offsetY").as_float());
+				l.sizeScale = sf::Vector2f(layer.attribute("scaleX").as_float(), layer.attribute("scaleY").as_float());
 				l.degrees = layer.attribute("rotationDegree").as_float();
 				l.timeToRotate = layer.attribute("timeToRotate").as_float();
+				l.drawInFront = layer.attribute("drawInFront").as_bool();
 				roomStruct.movingLayers.push_back(l);
 			}
 			roomSizes[str2] = roomStruct;
@@ -205,6 +208,35 @@ void Global::SaveProgress(int levelNum, int roomNum, bool open, bool foundAll)
 	doc.save_file("Levels.xml");
 	
 
+}
+
+void Global::ResetProgress()
+{
+	pugi::xml_document doc;
+
+	pugi::xml_parse_result result = doc.load_file("Levels.xml");
+	std::cout << result << std::endl;
+	pugi::xml_node gameNode = doc.child("Game");
+	
+	int i = 0;
+	for (pugi::xml_node level = gameNode.child("Level"); level; level = level.next_sibling("Level"))
+	{
+		for (pugi::xml_node room = level.child("Room"); room; room = room.next_sibling("Room"))
+		{
+			std::string str = "Level"+ std::to_string(level.attribute("number").as_int()) + "Room" + std::to_string(room.attribute("number").as_int());
+			if (str != "Level1Room1")
+			{
+				room.attribute("open").set_value(false);
+				room.attribute("foundAll").set_value(false);
+				roomSizes[str].foundAll = false;
+				roomSizes[str].open = false;
+			}
+
+		}
+	}
+
+	//doc.save_file(std::cout);
+	doc.save_file("Levels.xml");
 }
 
 void Global::LoadPlayerAttribtues() {

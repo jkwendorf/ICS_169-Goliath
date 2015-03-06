@@ -8,14 +8,14 @@ Layer::Layer(RoomStruct& roomStrct, int layerNum)
 	image[0].setPosition(roomStrct.movingLayers[layerNum].posOffset.x, roomStrct.movingLayers[layerNum].posOffset.y);
 	//image[0].setPosition(roomStrct.
 	//image[0].setOrigin(image[0].getGlobalBounds().left/2, image[0].getGlobalBounds().top/2);
-	image[0].scale(2.0f, 2.0f);
+	image[0].scale(roomStrct.movingLayers[layerNum].sizeScale.x, roomStrct.movingLayers[layerNum].sizeScale.y);
 	image[1] = sf::Sprite(*TextureManager::GetInstance().retrieveTexture(roomStrct.movingLayers[layerNum].imageName));
 	//l.image.setPosition(0.0f, 0.0f);
 	//std::cout << image[0].getGlobalBounds().left << std::endl;
 	image[1].setPosition(image[0].getGlobalBounds().left + image[0].getGlobalBounds().width, 
 		image[0].getGlobalBounds().top);
 	//image[1].setOrigin(image[0].getGlobalBounds().left/2, image[0].getGlobalBounds().top/2);
-	image[1].scale(2.0f, 2.0f);
+	image[1].scale(roomStrct.movingLayers[layerNum].sizeScale.x, roomStrct.movingLayers[layerNum].sizeScale.y);
 	scale = roomStrct.movingLayers[layerNum].scale;
 	degrees = roomStrct.movingLayers[layerNum].degrees;
 	timeToRotate = roomStrct.movingLayers[layerNum].timeToRotate;
