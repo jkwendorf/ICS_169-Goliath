@@ -12,12 +12,12 @@ PauseGameState::PauseGameState(void)
 	f = new sf::Font();
 	if(f->loadFromFile("media/fonts/arial.ttf"))
 	{
-		bM = new ButtonManager(sf::Vector2f(SCREEN_WIDTH/2 - 100, SCREEN_HEIGHT/4), 15, sf::Vector2f(200, 66), TextureManager::GetInstance().retrieveTexture("ButtonTest"), f); 
-		bM->createButton("Resume", [] {StateManager::getInstance().changeToState(GAME, true);});
+		bM = new ButtonManager(sf::Vector2f(SCREEN_WIDTH/2 - 150, SCREEN_HEIGHT/4), 15, sf::Vector2f(300, 66), TextureManager::GetInstance().retrieveTexture("ButtonTest"), f); 
+		bM->createButton("Resume Game", [] {StateManager::getInstance().changeToState(GAME, true);});
 		bM->createButton("Save Game", [&] {changeSaved();});
-		bM->createButton("Options", [] {});
+		//bM->createButton("Options", [] {});
 		//bM->createButton("Quit", [&] {setToQuit();});
-		bM->createButton("Quit", [&] {
+		bM->createButton("Return to Menu", [&] {
 			StateManager::getInstance().deleteState(GAME);
 			StateManager::getInstance().changeToState(MAIN_MENU, true);});
 
@@ -49,7 +49,7 @@ PauseGameState::PauseGameState(sf::RenderWindow& window)
 		bM->createButton("Save Game", [&] {changeSaved();});
 		bM->createButton("Options", [] {});
 		//bM->createButton("Quit", [&] {setToQuit();});
-		bM->createButton("Quit", [&] {
+		bM->createButton("Menu", [&] {
 			StateManager::getInstance().deleteState(GAME);
 			StateManager::getInstance().changeToState(MAIN_MENU, true);});
 
