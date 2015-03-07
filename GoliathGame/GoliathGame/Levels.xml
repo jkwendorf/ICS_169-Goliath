@@ -48,4 +48,28 @@
 		<Room number="3" size="1" nonMoving="banditCity" open="false" foundAll="false" />
 		<Room number="4" size="1" nonMoving="banditCity" open="false" foundAll="false" />
 	</Level>
+	<Level number="3" tilesheet="BanditTile" size="1" descriptionImage="goliathoverlay3" levelDescription="Level 3 - ">
+		<Room number="1" size="1" nonMoving="banditCity" open="true" foundAll="false" />
+	</Level>
+	<Level number="4" tilesheet="BanditTile" size="1" descriptionImage="goliathoverlay3" levelDescription="Level 4 - ">
+		<Room number="1" size="1" nonMoving="banditCity" open="true" foundAll="false" />
+	</Level>
+	<Level number="5" tilesheet="BanditTile" size="1" descriptionImage="goliathoverlay3" levelDescription="Level 5 - ">
+		<Room number="1" size="1" nonMoving="banditCity" open="true" foundAll="false" />
+	</Level>
+	<Level number="6" tilesheet="BanditTile" size="1" descriptionImage="goliathoverlay3" levelDescription="Level 6 - ">
+		<Room number="1" size="1" nonMoving="banditCity" open="true" foundAll="false" />
+	</Level>
+	<Level number="7" tilesheet="BanditTile" size="1" descriptionImage="goliathoverlay3" levelDescription="Level 7 - ">
+		<Room number="1" size="1" nonMoving="banditCity" open="true" foundAll="false" />
+	</Level>
+	<Level number="8" tilesheet="BanditTile" size="1" descriptionImage="goliathoverlay3" levelDescription="Level 8 - ">
+		<Room number="1" size="1" nonMoving="banditCity" open="true" foundAll="false" />
+	</Level>
+	<Level number="9" tilesheet="kirbytile" size="1" descriptionImage="" levelDescription="Level 9 - Where Am I?">
+		<Room number="1" size="1" nonMoving="KirbyBG" offsetY="-460" open="true" foundAll="true" music="GourmetR" />
+	</Level>
+	<Level number="10" tilesheet="megatile" size="1" descriptionImage="" levelDescription="Level 10 - What Game Is This?">
+		<Room number="1" size="1" nonMoving="MegaBG" offsetY="" open="true" foundAll="true" music="Mega" />
+	</Level>
 </Game>
