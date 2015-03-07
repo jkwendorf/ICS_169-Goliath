@@ -35,6 +35,13 @@ void Tile::changeOpened()
 	flags = 0x00;
 }
 
+void Tile::resetTile()
+{
+	flags = 0x02;
+	tileNum = 26;
+	health = 1;
+}
+
 sf::Vector2f Tile::getDirection()
 {
 	return dir;
