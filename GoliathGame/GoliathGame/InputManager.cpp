@@ -118,14 +118,14 @@ void InputManager::update(Player& s, Camera* camera, float deltaTime)
 	//std::cout << "Z axis: " << sf::Joystick::getAxisPosition(0, sf::Joystick::Z) << std::endl;
 	if(!Global::GetInstance().useRB)
 	{
-		//utility[2] = grappleReset && (sf::Mouse::isButtonPressed(sf::Mouse::Left) || (sf::Joystick::getAxisPosition(0, sf::Joystick::Z) < -0.1)) && !utility[2] ? true : false;
-		utility[2] = grappleReset && (sf::Mouse::isButtonPressed(sf::Mouse::Left) || (sf::Joystick::getAxisPosition(0, sf::Joystick::Z) > 30)) && !utility[2] ? true : false;
-		grappleReset = (sf::Joystick::getAxisPosition(0, sf::Joystick::Z) > -30 && sf::Joystick::getAxisPosition(0, sf::Joystick::Z) < 30 && !sf::Mouse::isButtonPressed(sf::Mouse::Left));
+		utility[2] = grappleReset && (sf::Mouse::isButtonPressed(sf::Mouse::Left) || (sf::Joystick::getAxisPosition(0, sf::Joystick::Z) < -0.1)) && !utility[2] ? true : false;
+		//utility[2] = grappleReset && (sf::Mouse::isButtonPressed(sf::Mouse::Left) || (sf::Joystick::getAxisPosition(0, sf::Joystick::Z) > 30)) && !utility[2] ? true : false;
+		grappleReset = (sf::Joystick::getAxisPosition(0, sf::Joystick::Z) > -30 && sf::Joystick::getAxisPosition(0, sf::Joystick::Z) < 30);
 	}
 	else
 	{
 		utility[2] = grappleReset && (sf::Mouse::isButtonPressed(sf::Mouse::Left) || sf::Joystick::isButtonPressed(0, 5)) && !utility[2] ? true : false;
-		grappleReset = !sf::Joystick::isButtonPressed(0, 5) && !sf::Mouse::isButtonPressed(sf::Mouse::Left);
+		grappleReset = !sf::Joystick::isButtonPressed(0, 5);
 	}
 	
 	//utility[3] = (sf::Mouse::isButtonPressed(sf::Mouse::Left) || sf::Joystick::isButtonPressed(0, 2)) && !utility[3] ? true : false;
