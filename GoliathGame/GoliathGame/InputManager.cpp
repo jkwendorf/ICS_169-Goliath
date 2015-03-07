@@ -21,8 +21,10 @@ InputManager::InputManager()
 	currentWeaponSwitchCooldown = 1.0;
 	weaponSwitchCooldown = 1.0;
 
-	currentGrappleCooldown = .5;
-	grappleCooldown = .5;
+	//currentGrappleCooldown = .5;
+	//grappleCooldown = .5;
+	currentGrappleCooldown = 0;
+	grappleCooldown = 0;
 	
 	viewChangedX = 0;
 	viewChangedY = 0;
@@ -117,6 +119,7 @@ void InputManager::update(Player& s, Camera* camera, float deltaTime)
 	if(!Global::GetInstance().useRB)
 	{
 		utility[2] = grappleReset && (sf::Mouse::isButtonPressed(sf::Mouse::Left) || (sf::Joystick::getAxisPosition(0, sf::Joystick::Z) < -0.1)) && !utility[2] ? true : false;
+		//utility[2] = grappleReset && (sf::Mouse::isButtonPressed(sf::Mouse::Left) || (sf::Joystick::getAxisPosition(0, sf::Joystick::Z) > 30)) && !utility[2] ? true : false;
 		grappleReset = (sf::Joystick::getAxisPosition(0, sf::Joystick::Z) > -30 && sf::Joystick::getAxisPosition(0, sf::Joystick::Z) < 30);
 	}
 	else
