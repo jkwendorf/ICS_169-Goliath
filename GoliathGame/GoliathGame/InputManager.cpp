@@ -21,8 +21,10 @@ InputManager::InputManager()
 	currentWeaponSwitchCooldown = 1.0;
 	weaponSwitchCooldown = 1.0;
 
-	currentGrappleCooldown = .5;
-	grappleCooldown = .5;
+	//currentGrappleCooldown = .5;
+	//grappleCooldown = .5;
+	currentGrappleCooldown = 0;
+	grappleCooldown = 0;
 	
 	viewChangedX = 0;
 	viewChangedY = 0;
@@ -117,12 +119,12 @@ void InputManager::update(Player& s, Camera* camera, float deltaTime)
 	if(!Global::GetInstance().useRB)
 	{
 		utility[2] = grappleReset && (sf::Mouse::isButtonPressed(sf::Mouse::Left) || (sf::Joystick::getAxisPosition(0, sf::Joystick::Z) < -0.1)) && !utility[2] ? true : false;
-		grappleReset = (sf::Joystick::getAxisPosition(0, sf::Joystick::Z) > -30 && sf::Joystick::getAxisPosition(0, sf::Joystick::Z) < 30);
+		grappleReset = (sf::Joystick::getAxisPosition(0, sf::Joystick::Z) > -30 && sf::Joystick::getAxisPosition(0, sf::Joystick::Z) < 30 && !sf::Mouse::isButtonPressed(sf::Mouse::Left));
 	}
 	else
 	{
 		utility[2] = grappleReset && (sf::Mouse::isButtonPressed(sf::Mouse::Left) || sf::Joystick::isButtonPressed(0, 5)) && !utility[2] ? true : false;
-		grappleReset = !sf::Joystick::isButtonPressed(0, 5);
+		grappleReset = !sf::Joystick::isButtonPressed(0, 5) && !sf::Mouse::isButtonPressed(sf::Mouse::Left);
 	}
 	
 	//utility[3] = (sf::Mouse::isButtonPressed(sf::Mouse::Left) || sf::Joystick::isButtonPressed(0, 2)) && !utility[3] ? true : false;
