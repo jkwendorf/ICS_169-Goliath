@@ -4,7 +4,7 @@
 		<Room number="1" size="1" nonMoving="Goliath Midground City" offsetX="0" offsetY="500" open="true" foundAll="false" music="Gaur">
 			<MovingLayer image="Goliath Sky" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="160" scaleX="2" scaleY="2" />
 		</Room>
-		<Room number="2" size="1" nonMoving="Goliath Midground City" offsetX="0" offsetY="500" open="false" foundAll="false" music="Gaur">
+		<Room number="2" size="1" nonMoving="Goliath Midground City" offsetX="0" offsetY="500" open="true" foundAll="false" music="Gaur">
 			<MovingLayer image="Goliath Birds" timeToRotate="1" rotationDegree="0" velScaleX="0.25" velScaleY="0" offsetX="0" offsetY="225" scaleX="2" scaleY="2" />
 			<MovingLayer image="Goliath Sky" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="-450" scaleX="2" scaleY="2" />
 		</Room>
@@ -66,16 +66,16 @@
 	<Level number="8" tilesheet="BanditTile" size="1" descriptionImage="goliathoverlay8" levelDescription="Level 8 - ">
 		<Room number="1" size="1" nonMoving="banditCity" open="false" foundAll="false" />
 	</Level>
-	<Level number="9" tilesheet="kirbytile" size="1" descriptionImage="" levelDescription="Level 9 - Where Am I?">
+	<Level number="9" tilesheet="kirbytile" size="1" descriptionImage="bonus1" levelDescription="Level 9 - Where Am I?">
 		<Room number="1" size="1" nonMoving="KirbyBG" offsetY="-460" open="true" foundAll="false" music="GourmetR" />
 	</Level>
-	<Level number="10" tilesheet="MegaTile" size="1" descriptionImage="" levelDescription="Level 10 - What Game Is This?">
+	<Level number="10" tilesheet="MegaTile" size="1" descriptionImage="bonus2" levelDescription="Level 10 - What Game Is This?">
 		<Room number="1" size="1" nonMoving="megabg" offsetX="0" offsetY="-4" open="true" foundAll="false" music="Mega" />
 	</Level>
-	<Level number="11" tilesheet="mariotile" size="1" descriptionImage="" levelDescription="Level 10 - Why Am I here?">
-		<Room number="1" size="1" nonMoving="mariobg" offsetY="" open="true" foundAll="true" music="Mario" />
+	<Level number="11" tilesheet="mariotile" size="1" descriptionImage="bonus3" levelDescription="Level 10 - Why Am I here?">
+		<Room number="1" size="1" nonMoving="mariobg" offsetY="" open="true" foundAll="false" music="Mario" />
 	</Level>
-	<Level number="12" tilesheet="megatile" size="1" descriptionImage="" levelDescription="Level 10 - What Is Happening?">
-		<Room number="1" size="1" nonMoving="MegaBG" offsetY="" open="true" foundAll="true" music="Castle" />
+	<Level number="12" tilesheet="megatile" size="1" descriptionImage="bonus4" levelDescription="Level 10 - What Is Happening?">
+		<Room number="1" size="1" nonMoving="MegaBG" offsetY="" open="false" foundAll="false" music="Castle" />
 	</Level>
 </Game>
