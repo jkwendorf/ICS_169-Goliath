@@ -16,6 +16,7 @@ public:
 	float timeToRotate;
 	float currentDegrees;
 	bool rotateForward;
+	bool inFront;
 
 	Layer(RoomStruct& roomStrct, int layerNum);
 	void update(float deltaTime, sf::Vector2f& vel);
