@@ -39,4 +39,5 @@ public:
 	bool isWaitOver(float deltaTime);
 	void takeDamage();
 	bool isHealthZero();
+	void resetTile();
 };

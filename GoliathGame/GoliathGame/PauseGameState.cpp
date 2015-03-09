@@ -2,11 +2,12 @@
 #include "StateManager.h"
 
 PauseGameState::PauseGameState(void)
-	: isPressedUp(false), isPressedDown(false), saved(false), pO(new PopOut()), backgroundUpdated(false)
+	: isPressedUp(false), isPressedDown(false), saved(false), pO(new PopOut()), backgroundUpdated(true)
 {
-	if(!backgroundTexture.create(SCREEN_WIDTH + 1, SCREEN_HEIGHT+ 1))
-		backgroundUpdated = true;
-	backgroundSprite.setTexture(backgroundTexture);
+	/*if(!backgroundTexture.create(SCREEN_WIDTH + 1, SCREEN_HEIGHT+ 1))
+		backgroundUpdated = true;*/
+	//backgroundSprite.setTexture(backgroundTexture);
+	backgroundSprite.setTexture(*TextureManager::GetInstance().retrieveTexture("MenuBG"));
 	backgroundSprite.setColor(sf::Color(64, 64, 64, 255));
 
 	f = new sf::Font();

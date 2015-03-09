@@ -24,7 +24,7 @@ void Camera::viewChange(sf::Vector2f playerPos)
 	{
 		Global::GetInstance().topLeft.x = 0;
 	}
-
+	
 	if(roomSize.x - Global::GetInstance().xOffset < playerPos.x)
 	{
 		int x = roomSize.x;
@@ -37,7 +37,7 @@ void Camera::viewChange(sf::Vector2f playerPos)
 	//If not, bottom edge is player's bottom most point
 	//Highest bottom point is TBD
 
-		Global::GetInstance().topLeft.y = playerPos.y - (PLAYER_DIM_Y / 2) + Global::GetInstance().yOffset - SCREEN_HEIGHT;
+	Global::GetInstance().topLeft.y = playerPos.y - (PLAYER_DIM_Y / 2) + Global::GetInstance().yOffset - SCREEN_HEIGHT;
 
 	if(Global::GetInstance().topLeft.y > roomSize.y - SCREEN_HEIGHT)
 	{
