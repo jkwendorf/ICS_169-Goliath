@@ -42,7 +42,7 @@
 			<MovingLayer image="Goliath Background Mountains" timeToRotate="1" rotationDegree="0" velScaleX="0.75" velScaleY="3" offsetX="0" offsetY="500" scaleX="2" scaleY="2" />
 			<MovingLayer image="Goliath Sky" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="500" scaleX="2" scaleY="2" />
 		</Room>
-		<Room number="2" size="1" nonMoving="GoliathCalfKnee" offsetX="320" offsetY="0" open="false" foundAll="false" music="Titan">
+		<Room number="2" size="1" nonMoving="GoliathCalfKnee" offsetX="320" offsetY="0" open="true" foundAll="true" music="Titan">
 			<MovingLayer image="ThighAnimate" timeToRotate="1" rotationDegree="5" velScaleX="0" velScaleY="0" offsetX="280" offsetY="-200" scaleX="1" scaleY="1" drawInFront="true" />
 		</Room>
 		<Room number="3" size="1" nonMoving="banditCity" open="false" foundAll="false" />
