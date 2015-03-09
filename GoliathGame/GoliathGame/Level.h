@@ -36,6 +36,7 @@ private:
 	std::vector<Tile*> arrowTileList;
 	std::list<Tile*> destructTileList;
 	std::list<Tile*> hitPointTileList;
+	std::list<Tile> hitPointCopy;
 	Player p;
 	Room* currentRoom;
 	sf::View view;
@@ -55,6 +56,7 @@ private:
 	bool arrowsCanFire;
 	bool levelStart;
 	bool screenShake;
+	bool allHitPointsHit;
 	int shakeOffset;
 
 	void viewCheck();
@@ -66,6 +68,8 @@ private:
 	void checkHitPointTilesForDmg(float deltaTime);
 	void loadSounds();
 	void playStompSound();
+	void checkHitPoints();
+	void resetHitPoints();
 
 	sf::Vector2f viewChangeOffset;
 	float screenShakeDuration;

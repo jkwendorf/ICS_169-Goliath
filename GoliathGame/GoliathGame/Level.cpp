@@ -14,7 +14,7 @@ Level::Level(int levelNumber, int roomNumber)
 	:changeScreen(false), levelNum(levelNumber), p(), collisionManager(new CollisionManager()), inputManager(),
 	levelInfo(Global::GetInstance().levelInfo.at("Level " + std::to_string(levelNum))), loading(1.0),
 	enemyAI(collisionManager), arrowCool(2.0f), screenShakeDuration(.65f), screenShakeCooldown(10.0f), currentScreenShakeCooldown(0.0f),
-	arrowsCanFire(true), fixedTime(0.0f), levelStart(true), screenShake(false), shakeOffset(1), introTimer(5.0f)
+	arrowsCanFire(true), fixedTime(0.0f), levelStart(true), screenShake(false), shakeOffset(1), introTimer(5.0f), allHitPointsHit(false)
 {
 	
 	currentRoom = new Room(levelNumber, roomNumber, enemyList, arrowTileList, destructTileList, hitPointTileList);
@@ -174,7 +174,7 @@ void Level::update(float deltaTime)
 			p.resetHealth();
 		}*/
 		p.resetHealth();
-
+		resetHitPoints();
 	}
 
 	std::vector<Tile*> nearTiles, nearTiles2, enemyTiles;
@@ -182,7 +182,7 @@ void Level::update(float deltaTime)
 	int nearTile = currentRoom->NearInteractableTiles(p);
 	if( nearTile != -999)
 	{
-		if((nearTile == 18 || nearTile == 19) && hitPointTileList.empty())
+		if((nearTile == 18 || nearTile == 19) && allHitPointsHit)
 		{
 			changeRoom();
 			deltaTime = 0.f;
@@ -262,6 +262,7 @@ void Level::update(float deltaTime)
 			p.resetHealth();
 			delete p.currentState;
 			p.currentState = new JumpingState();
+			resetHitPoints();
 			//currentRoom->bg.reset();
 		}
 
@@ -423,6 +424,7 @@ void Level::update(float deltaTime)
 		//std::cout << "Player position:" << p.sprite.getPosition().x << " " << p.sprite.getPosition().y << std::endl;
 		checkHitPointTilesForDmg(deltaTime);
 		checkDestructableTiles();
+		checkHitPoints();
 
 		//CODE TO DISABLE ARROW SHOOTER
 		//NEEDS TO BE REPLACED WITH SWITCH POSITION
@@ -613,12 +615,7 @@ void Level::checkDestructableTiles()
 	{
 		if(collisionManager->playerSwordCollideWithTile(p.playerSword, *it))
 		{
-			auto itToErase = it;
-			it++;
-			delete (*itToErase);
-			*itToErase = new Tile();
-			destructTileList.erase(itToErase);
-			continue;
+			(*it)->changeOpened();
 		}
 		it++;
 	}
@@ -627,12 +624,7 @@ void Level::checkDestructableTiles()
 	{
 		if((*iter)->isHealthZero())
 		{
-			auto iterToErase = iter;
-			iter++;
-			delete (*iterToErase);
-			*iterToErase = new Tile();
-			hitPointTileList.erase(iterToErase);
-			continue;
+			(*iter)->changeOpened();
 		}
 
 		iter++;
@@ -649,6 +641,37 @@ void Level::checkHitPointTilesForDmg(float deltaTime)
 			{
 				(*it)->takeDamage();
 			}
+		}
+	}
+}
+
+void Level::checkHitPoints()
+{
+	if(!hitPointTileList.empty())
+	{
+		for(auto it = hitPointTileList.begin(); it != hitPointTileList.end(); it++)
+		{
+			if((*it)->getTileNum() == 26)
+			{
+				break;	
+			}
+			allHitPointsHit = true;
+		}
+	}
+	else allHitPointsHit = true;
+}
+
+void Level::resetHitPoints()
+{
+	if(!hitPointTileList.empty())
+	{
+		for(auto it = hitPointTileList.begin(); it != hitPointTileList.end(); it++)
+		{
+			if((*it)->getTileNum() != 26)
+			{
+				(*it)->resetTile();
+			}
+			allHitPointsHit = false;
 		}
 	}
 }
