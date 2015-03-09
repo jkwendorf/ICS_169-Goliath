@@ -622,7 +622,7 @@ void Level::checkDestructableTiles()
 
 	for (auto iter = hitPointTileList.begin(); iter != hitPointTileList.end();)
 	{
-		if((*iter)->isHealthZero())
+		if((*iter)->isHealthZero() && (*iter)->getTileNum() == 26)
 		{
 			(*iter)->changeOpened();
 		}
@@ -672,6 +672,7 @@ void Level::resetHitPoints()
 				(*it)->resetTile();
 			}
 			allHitPointsHit = false;
+			p.destroyGoliathHitpoint = false;
 		}
 	}
 }
