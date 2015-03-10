@@ -23,6 +23,11 @@ enum GoliathSoundEnum
 	STOMP1 = 0,
 	STOMP2 = 1,
 	STOMP3 = 2,
+	HURT1 = 3,
+	HURT2 = 4,
+	DOWNED = 5,
+	GROWL1 = 6,
+	GROWL2 = 7
 };
 
 class Level : public BaseGameScreen
@@ -45,18 +50,18 @@ private:
 	sf::Sprite description;
 	sf::Text introDescription;
 	float arrowCool;
+	float growlPlay;
 
 	CollisionManager* collisionManager;
 	InputManager inputManager;
 	EnemyAI enemyAI;
 	std::vector<Projectile*> arrows;
 	Camera camera;
-	sf::Sound goliathSound[3];
+	sf::Sound goliathSound[8];
 
 	bool arrowsCanFire;
 	bool levelStart;
 	bool screenShake;
-	bool allHitPointsHit;
 	int shakeOffset;
 
 	void viewCheck();
@@ -66,9 +71,13 @@ private:
 	void setArrowTileArrows();
 	void checkDestructableTiles();
 	void checkHitPointTilesForDmg(float deltaTime);
+
 	void loadSounds();
+	void playHurtSound();
 	void playStompSound();
-	void checkHitPoints();
+	void playGrowlSound();
+
+	bool checkHitPoints();
 	void resetHitPoints();
 
 	sf::Vector2f viewChangeOffset;
