@@ -43,7 +43,7 @@ void Projectile::update(float deltaTime)
 			else if(velocity.x > 0)
 				bulletAnimation.update(deltaTime, sprite, 0, true);
 			//sprite.move(velocity.x * 100 * deltaTime, velocity.y * 100 * deltaTime);
-			sprite.move(velocity.x * 1500 * deltaTime, velocity.y * 750 * deltaTime);
+			sprite.move(velocity.x * 1500 * deltaTime, velocity.y * 1500 * deltaTime);
 			drawPlease = true;
 		}
 		else

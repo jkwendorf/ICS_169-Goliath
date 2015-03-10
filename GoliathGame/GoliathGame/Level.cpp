@@ -14,7 +14,7 @@ Level::Level(int levelNumber, int roomNumber)
 	:changeScreen(false), levelNum(levelNumber), p(), collisionManager(new CollisionManager()), inputManager(),
 	levelInfo(Global::GetInstance().levelInfo.at("Level " + std::to_string(levelNum))), loading(1.0),
 	enemyAI(collisionManager), arrowCool(2.0f), screenShakeDuration(.65f), screenShakeCooldown(10.0f), currentScreenShakeCooldown(0.0f),
-	arrowsCanFire(true), fixedTime(0.0f), levelStart(true), screenShake(false), shakeOffset(1), introTimer(5.0f), allHitPointsHit(false)
+	arrowsCanFire(true), fixedTime(0.0f), levelStart(true), screenShake(false), shakeOffset(1), introTimer(5.0f)
 {
 	Global::GetInstance().currentLevelNum = levelNumber;
 	currentRoom = new Room(levelNumber, roomNumber, enemyList, arrowTileList, destructTileList, hitPointTileList);
@@ -182,7 +182,7 @@ void Level::update(float deltaTime)
 	int nearTile = currentRoom->NearInteractableTiles(p);
 	if( nearTile != -999)
 	{
-		if((nearTile == 18 || nearTile == 19) && allHitPointsHit)
+		if((nearTile == 18 || nearTile == 19) && checkHitPoints())
 		{
 			changeRoom();
 			deltaTime = 0.f;
@@ -233,6 +233,7 @@ void Level::update(float deltaTime)
 					p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width/2, hookedTile->top + hookedTile->height));
 					p.destroyGoliathHitpoint = true;
 					p.goliathHitpoint = hookedTile;
+					playHurtSound();
 				}
 				else
 					//p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width/2, hookedTile->top + 5));
@@ -424,7 +425,13 @@ void Level::update(float deltaTime)
 		//std::cout << "Player position:" << p.sprite.getPosition().x << " " << p.sprite.getPosition().y << std::endl;
 		checkHitPointTilesForDmg(deltaTime);
 		checkDestructableTiles();
-		checkHitPoints();
+
+		growlPlay += deltaTime;
+		if(growlPlay > 2.5f && !hitPointTileList.empty())
+		{
+			playGrowlSound();
+			growlPlay = 0;
+		}
 
 		//CODE TO DISABLE ARROW SHOOTER
 		//NEEDS TO BE REPLACED WITH SWITCH POSITION
@@ -645,7 +652,7 @@ void Level::checkHitPointTilesForDmg(float deltaTime)
 	}
 }
 
-void Level::checkHitPoints()
+bool Level::checkHitPoints()
 {
 	if(!hitPointTileList.empty())
 	{
@@ -653,12 +660,12 @@ void Level::checkHitPoints()
 		{
 			if((*it)->getTileNum() == 26)
 			{
-				break;	
+				return false;
 			}
-			allHitPointsHit = true;
 		}
+		return true;
 	}
-	else allHitPointsHit = true;
+	else return true;
 }
 
 void Level::resetHitPoints()
@@ -671,7 +678,6 @@ void Level::resetHitPoints()
 			{
 				(*it)->resetTile();
 			}
-			allHitPointsHit = false;
 			p.destroyGoliathHitpoint = false;
 		}
 	}
@@ -690,10 +696,31 @@ void Level::loadSounds()
 	goliathSound[STOMP1] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("GoliathStomp1")));
 	goliathSound[STOMP2] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("GoliathStomp2")));
 	goliathSound[STOMP3] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("GoliathStomp3")));
+	goliathSound[HURT1] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("GoliathDamage")));
+	goliathSound[HURT2] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("GoliathDamage2")));
+	goliathSound[DOWNED] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("GoliathFuck")));
+	goliathSound[GROWL1] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("GoliathGrowl1")));
+	goliathSound[GROWL2] = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("GoliathGrowl2")));
 }
 
 void Level::playStompSound()
 {
 	int sound = rand() % 3;
+	goliathSound[sound].play();
+}
+
+void Level::playHurtSound()
+{
+	if(!checkHitPoints())
+	{
+		int sound = rand() % 2 + 3;
+		goliathSound[sound].play();
+	}
+	else goliathSound[DOWNED].play();
+}
+
+void Level::playGrowlSound()
+{
+	int sound = rand() % 2 + 6;
 	goliathSound[sound].play();
 }
