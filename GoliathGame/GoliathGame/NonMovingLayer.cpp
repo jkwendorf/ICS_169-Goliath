@@ -15,12 +15,13 @@ NonMovingLayer::NonMovingLayer(RoomStruct& roomstrct, int layerNum)
 
 void NonMovingLayer::Update(float deltaTime, sf::Vector2f vel)
 {
-	image.move(sf::Vector2f(vel.x * scale.x * deltaTime, vel.y * scale.y * deltaTime));
-	/*currentDegrees += deltaTime * degreesToRotate/timeToRotate;
-	currentTime += deltaTime;
-	if (timeToRotate > currentTime) {
-		image.rotate(currentDegrees);
-	}*/
+	//image.move(sf::Vector2f(vel.x * scale.x * deltaTime, vel.y * scale.y * deltaTime));
+	//currentDegrees += deltaTime * degreesToRotate/timeToRotate;
+	//currentTime += deltaTime;
+	//if (timeToRotate > currentTime) {
+	//	//image.rotate(currentDegrees);
+	//	image.setRotation(currentDegrees);
+	//}
 }
 
 void NonMovingLayer::draw(sf::RenderWindow& window)
