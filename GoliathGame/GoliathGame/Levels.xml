@@ -52,7 +52,7 @@
 			<MovingLayer image="Goliath Sky Darker" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="-0.3" offsetX="0" offsetY="200" scaleX="4" scaleY="4" />
 			<MovingLayer image="Goliath Sky Darker" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="-0.3" offsetX="0" offsetY="-600" scaleX="4" scaleY="4" />
 		</Room>
-		<Room number="3" size="1" nonMoving="Goliath Clouds" offsetX="0" offsetY="-400" scaleX="2" scaleY="2" open="true" foundAll="true" music="Titan">
+		<Room number="3" size="1" nonMoving="Goliath Clouds" offsetX="0" offsetY="-400" scaleX="2" scaleY="2" open="true" foundAll="false" music="Titan">
 			<MovingLayer image="Goliath ThighWaist" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="-600" scaleX="1.3" scaleY="1.3" drawInFront="true" />
 			<MovingLayer image="GoliathCalfKnee" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="-0.35" offsetX="300" offsetY="1300" scaleX="1.6" scaleY="1.6" drawInFront="true" />
 			<MovingLayer image="Goliath Clouds" timeToRotate="1" rotationDegree="0" velScaleX="1.25" velScaleY="3" offsetX="0" offsetY="500" scaleX="2" scaleY="2" />
@@ -62,7 +62,7 @@
 		</Room>
 	</Level>
 	<Level number="3" tilesheet="BanditTile" size="1" descriptionImage="goliathoverlay3" levelDescription="Level 3 - ">
-		<Room number="1" size="1" nonMoving="banditCity" open="true" foundAll="true" />
+		<Room number="1" size="1" nonMoving="banditCity" open="false" foundAll="false" />
 	</Level>
 	<Level number="4" tilesheet="BanditTile" size="1" descriptionImage="goliathoverlay4" levelDescription="Level 4 - ">
 		<Room number="1" size="1" nonMoving="banditCity" open="false" foundAll="false" />
