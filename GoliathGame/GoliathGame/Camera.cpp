@@ -49,7 +49,7 @@ void Camera::viewChange(sf::Vector2f playerPos)
 
 sf::Vector2f Camera::viewMove(bool up, float deltaTime)
 {
-	viewDifference = 100.0f * deltaTime;
+	viewDifference = 500.0f * deltaTime;
 	if(up)
 	{
 		viewChangedY -= viewDifference;
