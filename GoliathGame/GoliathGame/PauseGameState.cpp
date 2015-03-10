@@ -9,6 +9,8 @@ PauseGameState::PauseGameState(void)
 	//backgroundSprite.setTexture(backgroundTexture);
 	backgroundSprite.setTexture(*TextureManager::GetInstance().retrieveTexture("MenuBG"));
 	backgroundSprite.setColor(sf::Color(64, 64, 64, 255));
+	LevelStruct l = Global::GetInstance().levelInfo.at("Level " + std::to_string(Global::GetInstance().currentLevelNum));
+	descriptionSprite.setTexture(*TextureManager::GetInstance().retrieveTexture(l.imageName));
 
 	f = new sf::Font();
 	if(f->loadFromFile("media/fonts/arial.ttf"))
@@ -126,9 +128,12 @@ void PauseGameState::draw(sf::RenderWindow& window)
 
 	window.draw(backgroundSprite);
 	window.draw(pauseText);
+	window.draw(descriptionSprite);
 
 	if(!pO->checkActive())
+	{
 		bM->draw(window);
+	}
 	else
 		pO->draw(window);
 }

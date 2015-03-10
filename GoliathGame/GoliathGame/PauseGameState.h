@@ -27,7 +27,7 @@ private:
 	sf::Font* f;
 	sf::Text pauseText;
 	sf::Texture backgroundTexture;
-	sf::Sprite backgroundSprite;
+	sf::Sprite backgroundSprite, descriptionSprite;
 	bool isPressedUp, isPressedDown, saved, backgroundUpdated;
 };
 

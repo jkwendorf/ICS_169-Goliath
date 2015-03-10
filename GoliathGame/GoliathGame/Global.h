@@ -48,6 +48,7 @@ public :
 	int fps;
 	int xOffset;
 	int yOffset;
+	int currentLevelNum;
 	sf::Sprite* currentTileSheet[TileSheetRows * TileSheetCols];
 	sf::Sound bgMusic;
 	bool played;

@@ -16,7 +16,7 @@ Level::Level(int levelNumber, int roomNumber)
 	enemyAI(collisionManager), arrowCool(2.0f), screenShakeDuration(.65f), screenShakeCooldown(10.0f), currentScreenShakeCooldown(0.0f),
 	arrowsCanFire(true), fixedTime(0.0f), levelStart(true), screenShake(false), shakeOffset(1), introTimer(5.0f), allHitPointsHit(false)
 {
-	
+	Global::GetInstance().currentLevelNum = levelNumber;
 	currentRoom = new Room(levelNumber, roomNumber, enemyList, arrowTileList, destructTileList, hitPointTileList);
 	p.init(collisionManager, new JumpingState(), currentRoom->numTreasures);
 	//background.setTexture(*TextureManager::GetInstance().retrieveTexture("bandit canyon level"));

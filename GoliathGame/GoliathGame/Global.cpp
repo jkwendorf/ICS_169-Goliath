@@ -2,7 +2,7 @@
 #include <Xinput.h>
 
 Global::Global()
-	:inventory(new PlayerInventory()), played(false), unlockAllRooms(false), useRB(false)
+	:inventory(new PlayerInventory()), played(false), unlockAllRooms(false), useRB(false), currentLevelNum(0)
 {
 	test = sf::Sound(*AudioManager::GetInstance().retrieveSound(std::string("GainItem")));
 
