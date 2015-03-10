@@ -4,35 +4,27 @@
 		<Room number="1" size="1" nonMoving="Goliath Midground City" offsetX="0" offsetY="500" open="true" foundAll="true" music="Gaur">
 			<MovingLayer image="Goliath Sky" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="160" scaleX="2" scaleY="2" />
 		</Room>
-		<Room number="2" size="1" nonMoving="Goliath Midground City" offsetX="0" offsetY="500" open="true" foundAll="true" music="Gaur">
+		<Room number="2" size="1" nonMoving="Goliath Midground City" offsetX="0" offsetY="500" open="true" foundAll="false" music="Gaur">
 			<MovingLayer image="Goliath Birds" timeToRotate="1" rotationDegree="0" velScaleX="0.25" velScaleY="0" offsetX="0" offsetY="225" scaleX="2" scaleY="2" />
 			<MovingLayer image="Goliath Sky" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="-450" scaleX="2" scaleY="2" />
 		</Room>
-<<<<<<< HEAD
-		<Room number="3" size="1" nonMoving="Goliath Sky" offsetX="0" offsetY="-2000" open="true" foundAll="true" music="Colors">
-			<MovingLayer image="Goliath Background Mountains" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="-50" offsetY="150" scaleX="2" scaleY="2" />
-			<MovingLayer image="Goliath Sky" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="-380" scaleX="2" scaleY="2" />
-		</Room>
-		<Room number="4" size="1" nonMoving="FileNotFound" offsetX="-480" open="true" foundAll="true" music="Colors">
-=======
 		<Room number="3" size="1" nonMoving="Goliath Sky" offsetX="0" offsetY="-2000" open="true" foundAll="false" music="Colors">
 			<MovingLayer image="Goliath Background Mountains" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="-50" offsetY="150" scaleX="2" scaleY="2" />
 			<MovingLayer image="Goliath Sky" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="-380" scaleX="2" scaleY="2" />
 		</Room>
 		<Room number="4" size="1" nonMoving="FileNotFound" offsetX="-480" open="true" foundAll="false" music="Colors">
->>>>>>> 311ddea92afa22b5c535311faf8a6afd4105ca74
 			<MovingLayer image="Goliath Midground Rocks" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="-450" scaleX="2" scaleY="2" />
 			<MovingLayer image="Goliath Clouds" timeToRotate="1" rotationDegree="0" velScaleX="0.15" velScaleY="0" offsetX="0" offsetY="-100" scaleX="2" scaleY="2" />
 			<MovingLayer image="Goliath Birds" timeToRotate="1" rotationDegree="0" velScaleX="0.25" velScaleY="0" offsetX="0" offsetY="300" scaleX="2" scaleY="2" />
 			<MovingLayer image="Goliath Sky" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="-450" scaleX="2" scaleY="2" />
 		</Room>
-		<Room number="5" size="1" nonMoving="FileNotFound" offsetX="-480" open="true" foundAll="true" music="Colors">
+		<Room number="5" size="1" nonMoving="FileNotFound" offsetX="-480" open="false" foundAll="false" music="Colors">
 			<MovingLayer image="Goliath Foreground" timeToRotate="1" rotationDegree="0" velScaleX="00" velScaleY="0" offsetX="0" offsetY="-500" scaleX="2" scaleY="2" />
 			<MovingLayer image="Goliath Midground Rocks" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="-450" scaleX="2" scaleY="2" />
 			<MovingLayer image="Goliath Birds" timeToRotate="1" rotationDegree="0" velScaleX="0.25" velScaleY="0" offsetX="0" offsetY="0" scaleX="2" scaleY="2" />
 			<MovingLayer image="Goliath Sky" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="-450" scaleX="2" scaleY="2" />
 		</Room>
-		<Room number="6" size="1" nonMoving="FileNotFound" offsetX="-480" open="true" foundAll="true" music="Sorede">
+		<Room number="6" size="1" nonMoving="FileNotFound" offsetX="-480" open="false" foundAll="false" music="Sorede">
 			<MovingLayer image="Goliath Foreground" timeToRotate="1" rotationDegree="0" velScaleX="00" velScaleY="0" offsetX="0" offsetY="760" scaleX="2" scaleY="2" />
 			<MovingLayer image="Goliath Midground Rocks" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="760" scaleX="2" scaleY="2" />
 			<MovingLayer image="Goliath Clouds" timeToRotate="1" rotationDegree="0" velScaleX="0.15" velScaleY="0" offsetX="0" offsetY="175" scaleX="2" scaleY="2" />
@@ -43,12 +35,8 @@
 		</Room>
 	</Level>
 	<Level number="2" tilesheet="BanditTile" size="2" descriptionImage="goliathoverlay2" levelDescription="Level 2 - Scale the Goliath">
-<<<<<<< HEAD
-		<Room number="1" size="1" nonMoving="GoliathCalfKnee" offsetX="320" offsetY="0" open="true" foundAll="true" music="Titan">
-=======
 		<Room number="1" size="1" nonMoving="GoliathCalfKnee" offsetX="320" offsetY="0" open="true" foundAll="false" music="Titan">
 			<MovingLayer image="ThighAnimate" timeToRotate="1" rotationDegree="5" velScaleX="0" velScaleY="-0.35" offsetX="280" offsetY="-100" scaleX="1" scaleY="1" drawInFront="true" />
->>>>>>> 311ddea92afa22b5c535311faf8a6afd4105ca74
 			<MovingLayer image="Goliath Foreground" timeToRotate="1" rotationDegree="0" velScaleX="0.75" velScaleY="3" offsetX="0.0" offsetY="500" scaleX="2" scaleY="2" />
 			<MovingLayer image="Goliath Midground Rocks" timeToRotate="1" rotationDegree="0" velScaleX="0.75" velScaleY="3" offsetX="0" offsetY="500" scaleX="2" scaleY="2" />
 			<MovingLayer image="Goliath Clouds" timeToRotate="1" rotationDegree="0" velScaleX="1.25" velScaleY="3" offsetX="0" offsetY="500" scaleX="2" scaleY="2" />
@@ -83,12 +71,12 @@
 		<Room number="1" size="1" nonMoving="KirbyBG" offsetY="-460" open="true" foundAll="false" music="GourmetR" />
 	</Level>
 	<Level number="10" tilesheet="MegaTile" size="1" descriptionImage="bonus2" levelDescription="Level 10 - What Game Is This?">
-		<Room number="1" size="1" nonMoving="megabg" offsetX="0" offsetY="-4" open="true" foundAll="true" music="Mega" />
+		<Room number="1" size="1" nonMoving="megabg" offsetX="0" offsetY="-4" open="true" foundAll="false" music="Mega" />
 	</Level>
 	<Level number="11" tilesheet="mariotile" size="1" descriptionImage="bonus3" levelDescription="Level 10 - Why Am I here?">
-		<Room number="1" size="1" nonMoving="mariobg" offsetY="" open="true" foundAll="true" music="Mario" />
+		<Room number="1" size="1" nonMoving="mariobg" offsetY="" open="true" foundAll="false" music="Mario" />
 	</Level>
 	<Level number="12" tilesheet="megatile" size="1" descriptionImage="bonus4" levelDescription="Level 10 - What Is Happening?">
-		<Room number="1" size="1" nonMoving="MegaBG" offsetY="" open="true" foundAll="true" music="Castle" />
+		<Room number="1" size="1" nonMoving="MegaBG" offsetY="" open="false" foundAll="false" music="Castle" />
 	</Level>
 </Game>
