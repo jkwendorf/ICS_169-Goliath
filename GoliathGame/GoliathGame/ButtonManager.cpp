@@ -14,8 +14,15 @@ ButtonManager::ButtonManager(sf::Vector2f startingPos, int offset, sf::Vector2f 
 	masterFont = font;
 }
 
-ButtonManager::ButtonManager(sf::Vector2f startingPos, int itemsPerCol, int offset, sf::Vector2f buttonDim, sf::Texture* text, sf::Font* font)
+/*ButtonManager::ButtonManager(sf::Vector2f startingPos, int itemsPerCol, int offset, sf::Vector2f buttonDim, sf::Texture* text, sf::Font* font)
 	:startingPos(startingPos), itemsPerCol(itemsPerCol), offset(offset), buttonDim(buttonDim), current(0), canScrollHorizontal(true)
+{
+	masterTexture = text;
+	masterFont = font;
+}*/
+
+ButtonManager::ButtonManager(sf::Vector2f startingPos, int itemsPerRow, int offset, sf::Vector2f buttonDim, sf::Texture* text, sf::Font* font)
+	:startingPos(startingPos), itemsPerRow(itemsPerRow), offset(offset), buttonDim(buttonDim), current(0), canScrollHorizontal(true)
 {
 	masterTexture = text;
 	masterFont = font;
@@ -35,8 +42,12 @@ void ButtonManager::createButton(std::string text, std::function<void ()> onPres
 		buttonList.push_back(new Button(sf::Vector2f(startingPos.x, startingPos.y + buttonList.size()*(buttonDim.y + offset)), text, buttonDim, masterTexture, masterFont, onPress));
 	else
 	{
-		buttonList.push_back(new Button(sf::Vector2f(startingPos.x + (buttonList.size()/itemsPerCol *(buttonDim.x+offset)),
+		/*buttonList.push_back(new Button(sf::Vector2f(startingPos.x + (buttonList.size()/itemsPerCol *(buttonDim.x+offset)),
 		startingPos.y + (buttonList.size()%itemsPerCol)*(buttonDim.y + offset)),
+		text, buttonDim, masterTexture, masterFont, onPress));*/
+
+		buttonList.push_back(new Button(sf::Vector2f(startingPos.x + (buttonList.size()%itemsPerRow *(buttonDim.x+offset)),
+		startingPos.y + (buttonList.size()/itemsPerRow)*(buttonDim.y + offset)),
 		text, buttonDim, masterTexture, masterFont, onPress));
 	}
 	if(buttonList.size() == 1)
@@ -45,30 +56,78 @@ void ButtonManager::createButton(std::string text, std::function<void ()> onPres
 
 void ButtonManager::scrollUp()
 {
-	buttonList.at(current)->setSelected(false);
+	/*buttonList.at(current)->setSelected(false);
 	current--;
 
 	if(current < 0)
 		current = buttonList.size() - 1;
-	buttonList.at(current)->setSelected(true);
+	buttonList.at(current)->setSelected(true);*/
+
+	if(canScrollHorizontal && buttonList.size() > itemsPerRow)
+	{
+		buttonList.at(current)->setSelected(false);
+		current -= itemsPerRow;
+
+		if(current < 0)
+			current = buttonList.size() + current;
+		buttonList.at(current)->setSelected(true);
+	}
+	else if(!canScrollHorizontal)
+	{
+		buttonList.at(current)->setSelected(false);
+		current--;
+
+		if(current < 0)
+			current = buttonList.size() - 1;
+		buttonList.at(current)->setSelected(true);
+	}
 }
 
 void ButtonManager::scrollDown()
 {
-	buttonList.at(current)->setSelected(false);
+	/*buttonList.at(current)->setSelected(false);
 	current++;
 	
 	if(current >= buttonList.size())
 		current = 0;
-	buttonList.at(current)->setSelected(true);
+	buttonList.at(current)->setSelected(true);*/
+
+	if(canScrollHorizontal && buttonList.size() > itemsPerRow)
+	{
+		buttonList.at(current)->setSelected(false);
+		current += itemsPerRow;
+	
+		if(current >= buttonList.size())
+			current = current - buttonList.size();
+		buttonList.at(current)->setSelected(true);
+	}
+	else if(!canScrollHorizontal)
+	{
+		buttonList.at(current)->setSelected(false);
+		current++;
+	
+		if(current >= buttonList.size())
+			current = 0;
+		buttonList.at(current)->setSelected(true);
+	}
 }
 
 void ButtonManager::scrollLeft()
 {
-	if(canScrollHorizontal && buttonList.size() > itemsPerCol)
+	/*if(canScrollHorizontal && buttonList.size() > itemsPerCol)
 	{
 		buttonList.at(current)->setSelected(false);
 		current -= itemsPerCol;
+
+		if(current < 0)
+			current = buttonList.size() + current;
+		buttonList.at(current)->setSelected(true);
+	}*/
+
+	if(canScrollHorizontal)
+	{
+		buttonList.at(current)->setSelected(false);
+		current--;
 
 		if(current < 0)
 			current = buttonList.size() + current;
@@ -78,10 +137,19 @@ void ButtonManager::scrollLeft()
 
 void ButtonManager::scrollRight()
 {
-	if(canScrollHorizontal && buttonList.size() > itemsPerCol)
+	/*if(canScrollHorizontal && buttonList.size() > itemsPerCol)
 	{
 		buttonList.at(current)->setSelected(false);
 		current += itemsPerCol;
+
+		if(current >= buttonList.size())
+			current = current - buttonList.size();
+		buttonList.at(current)->setSelected(true);
+	}*/
+	if(canScrollHorizontal)
+	{
+		buttonList.at(current)->setSelected(false);
+		current++;
 
 		if(current >= buttonList.size())
 			current = current - buttonList.size();

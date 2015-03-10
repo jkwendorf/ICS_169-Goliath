@@ -6,7 +6,8 @@ class ButtonManager
 {
 public:
 	ButtonManager(sf::Vector2f startingPos, int offset, sf::Vector2f buttonDim, sf::Texture* text, sf::Font* font);
-	ButtonManager(sf::Vector2f startingPos, int itemsPerCol, int offset, sf::Vector2f buttonDim, sf::Texture* text, sf::Font* font);
+	//ButtonManager(sf::Vector2f startingPos, int itemsPerCol, int offset, sf::Vector2f buttonDim, sf::Texture* text, sf::Font* font);
+	ButtonManager(sf::Vector2f startingPos, int itemsPerRow, int offset, sf::Vector2f buttonDim, sf::Texture* text, sf::Font* font);
 	~ButtonManager();
 
 	void createButton(std::string text, std::function<void ()> onPress);
@@ -33,7 +34,7 @@ public:
 private:
 	ButtonManager();
 	std::vector<Button*> buttonList;
-	int offset, current, itemsPerCol;
+	int offset, current, itemsPerRow; //itemsPerCol;
 	sf::Vector2f startingPos, buttonDim;
 	sf::Texture* masterTexture;
 	sf::Font* masterFont;
