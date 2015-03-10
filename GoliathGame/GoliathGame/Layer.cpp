@@ -2,6 +2,7 @@
 
 Layer::Layer(RoomStruct& roomStrct, int layerNum)
 {
+	inFront = roomStrct.movingLayers[layerNum].drawInFront;
 	image[0] = sf::Sprite(*TextureManager::GetInstance().retrieveTexture(roomStrct.movingLayers[layerNum].imageName));
 	//l.image.setPosition(0.0f, 0.0f);
 	std::cout << "Herp derp: " << roomStrct.movingLayers[layerNum].posOffset.x << " " << roomStrct.movingLayers[layerNum].posOffset.y << std::endl;
