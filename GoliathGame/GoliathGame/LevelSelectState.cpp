@@ -9,7 +9,7 @@ LevelSelectState::LevelSelectState(void)
 	f = new sf::Font();
 	if(f->loadFromFile("media/fonts/arial.ttf"))
 	{
-		bM = new ButtonManager(sf::Vector2f(SCREEN_WIDTH/4, SCREEN_HEIGHT/8 + 50), 4, 15, sf::Vector2f(200, 66), TextureManager::GetInstance().retrieveTexture("ButtonTest"), f); 
+		bM = new ButtonManager(sf::Vector2f(SCREEN_WIDTH/4, SCREEN_HEIGHT/8 + 50), 3, 15, sf::Vector2f(200, 66), TextureManager::GetInstance().retrieveTexture("ButtonTest"), f); 
 		
 		// JW: We may want to have this be automated, so whenever the designers add a level to the Levels.xml, we'll create a new button
 
@@ -109,7 +109,7 @@ void LevelSelectState::loadContent()
 {
 	if(bM)
 		delete bM;
-	bM = new ButtonManager(sf::Vector2f(SCREEN_WIDTH/4, SCREEN_HEIGHT/8), 4, 15, sf::Vector2f(200, 66), TextureManager::GetInstance().retrieveTexture("ButtonTest"), f); 
+	bM = new ButtonManager(sf::Vector2f(SCREEN_WIDTH/4, SCREEN_HEIGHT/8), 3, 15, sf::Vector2f(200, 66), TextureManager::GetInstance().retrieveTexture("ButtonTest"), f); 
 		
 	// JW: We may want to have this be automated, so whenever the designers add a level to the Levels.xml, we'll create a new button
 
