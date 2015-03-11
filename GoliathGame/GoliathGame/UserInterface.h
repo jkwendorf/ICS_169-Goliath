@@ -17,6 +17,7 @@ public:
 	void setTreasureNumber(int numTreasure);
 	void addTreasure();
 	bool collectedAllTreasure();
+	void depleteHealth();
 
 private:
 	/*sf::RectangleShape healthBar1;

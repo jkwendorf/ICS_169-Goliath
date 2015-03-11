@@ -121,7 +121,9 @@ void Player::update(float deltaTime)
 		if(recoverTime < 1.0f)
 		{
 			drawPlease = !drawPlease;
-			ui->flashHealth();
+
+			if(!checkDead())
+				ui->flashHealth();
 
 			if(recoverTime <= 0.3f)
 				doHitVibrate = true;
@@ -847,6 +849,11 @@ void Player::resetHealth()
 	drawPlease = true;
 	ui->endFlash();
 	ui->resetUI();
+}
+
+void Player::depleteHealth()
+{
+	ui->depleteHealth();
 }
 
 bool Player::animationDone()

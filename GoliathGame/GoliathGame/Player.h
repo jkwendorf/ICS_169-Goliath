@@ -136,6 +136,7 @@ public:
 	void playHurtSound();
 	std::map<std::string,sf::Sprite> spriteDictionary;
 	bool animationDone();
+	void depleteHealth();
 	//sf::RectangleShape hitbox;
 private:	
 	sf::Sound soundEffects[8];
