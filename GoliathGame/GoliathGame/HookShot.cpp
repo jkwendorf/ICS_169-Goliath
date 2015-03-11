@@ -14,7 +14,7 @@ HookShot::HookShot() :
 	grappleBox = grappleLength/sqrt(2);
 	for(int x = 0; x < 10; x++)
 	{
-		hookshotChain[x].setTexture(*TextureManager::GetInstance().retrieveTexture("rock"));
+		hookshotChain[x].setTexture(*TextureManager::GetInstance().retrieveTexture("GrappleWire"));
 		hookshotChain[x].setOrigin(hookshotChain[x].getLocalBounds().width/2, hookshotChain[x].getLocalBounds().height/2);
 		//hookshotChain[x].setPosition(hookshotChain[x].getPosition().x, hookshotChain[x].getPosition().y - 40);
 	}
