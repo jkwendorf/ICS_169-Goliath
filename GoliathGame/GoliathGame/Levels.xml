@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <Game>
 	<Level number="1" tilesheet="BanditTile" size="6" descriptionImage="goliathoverlay1" levelDescription="" music="RLevel">
-		<Room number="1" size="1" nonMoving="Goliath Clouds" offsetX="0" offsetY="300" open="true" foundAll="true" >
+		<Room number="1" size="1" nonMoving="Goliath Clouds" offsetX="0" offsetY="300" open="true" foundAll="true">
 			<MovingLayer image="Goliath Midground City" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="-320" scaleX="2" scaleY="2" />
 			<MovingLayer image="Goliath Background Mountains" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="-350" scaleX="2" scaleY="2" />
 			<MovingLayer image="Goliath Sky" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="160" scaleX="2" scaleY="2" />
@@ -98,15 +98,19 @@
 		</Room>
 	</Level>
 	<Level number="4" tilesheet="BanditTile" size="1" descriptionImage="goliathoverlay4" levelDescription="" music="Titan">
-		<Room number="1" size="1" nonMoving="Goliath Head" open="true" foundAll="false" />
+		<Room number="1" size="1" nonMoving="Goliath Head" offsetX="0" offsetY="-100" open="true" foundAll="true" />
+		<MovingLayer image="Goliath Clouds" timeToRotate="1" rotationDegree="0" velScaleX="0.35" velScaleY="-0.5" offsetX="0" offsetY="400" scaleX="2" scaleY="2" />
+		<MovingLayer image="Goliath Clouds" timeToRotate="1" rotationDegree="0" velScaleX="0.3" velScaleY="-0.4" offsetX="0" offsetY="100" scaleX="2" scaleY="2" />
+		<MovingLayer image="Goliath Sky" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="0" scaleX="3" scaleY="3" />
+		<MovingLayer image="Goliath Sky" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="-600" scaleX="3" scaleY="3" />
 	</Level>
 	<Level number="5" tilesheet="kirbytile" size="1" descriptionImage="bonus1" levelDescription="" music="GourmetR">
-		<Room number="1" size="1" nonMoving="KirbyBG" offsetY="-460" open="true" foundAll="false" />
+		<Room number="1" size="1" nonMoving="KirbyBG" offsetY="-460" open="true" foundAll="true" />
 	</Level>
 	<Level number="6" tilesheet="MegaTile" size="1" descriptionImage="bonus2" levelDescription="" music="Mega">
 		<Room number="1" size="1" nonMoving="megabg" offsetX="0" offsetY="-4" open="true" foundAll="false" />
 	</Level>
-  <Level number="7" tilesheet="mariotile" size="1" descriptionImage="bonus3" levelDescription="" music="Mario">
-    <Room number="1" size="1" nonMoving="mariobg" offsetX="0" offsetY="-4" open="true" foundAll="false" />
-  </Level>
+	<Level number="7" tilesheet="mariotile" size="1" descriptionImage="bonus3" levelDescription="" music="Mario">
+		<Room number="1" size="1" nonMoving="mariobg" offsetX="0" offsetY="-4" open="true" foundAll="false" />
+	</Level>
 </Game>
