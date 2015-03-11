@@ -37,7 +37,7 @@ void Layer::update(float deltaTime, sf::Vector2f& vel)
 		{
 			std::cout << "things should be getting reset" << std::endl;
 			int j = (i == 0 ? 1 : 0);
-			image[i].setPosition(image[j].getGlobalBounds().left + image[j].getGlobalBounds().width, image[j].getGlobalBounds().top);
+			image[i].setPosition(image[j].getGlobalBounds().left + image[j].getGlobalBounds().width - 5, image[j].getGlobalBounds().top);
 		}
 		//std::cout << "Pos" << i << ": " << image[i].getGlobalBounds().left << ", " << image[i].getGlobalBounds().top << std::endl;
 		//if (movingLayers[i].rotateForward) {

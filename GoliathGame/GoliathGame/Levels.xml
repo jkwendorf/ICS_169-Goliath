@@ -79,17 +79,16 @@
 	<Level number="4" tilesheet="BanditTile" size="1" descriptionImage="goliathoverlay4" levelDescription="">
 		<Room number="1" size="1" nonMoving="banditCity" open="true" foundAll="true" />
 	</Level>
-  <Level number="5" tilesheet="kirbytile" size="1" descriptionImage="bonus1" levelDescription="">
-    <Room number="1" size="1" nonMoving="KirbyBG" offsetY="-460" open="true" foundAll="false" music="GourmetR" />
-  </Level>
-  <Level number="6" tilesheet="MegaTile" size="1" descriptionImage="bonus2" levelDescription="">
-    <Room number="1" size="1" nonMoving="megabg" offsetX="0" offsetY="-4" open="true" foundAll="false" music="Mega" />
-  </Level>
-  <Level number="7" tilesheet="mariotile" size="1" descriptionImage="bonus3" levelDescription="">
-    <Room number="1" size="1" nonMoving="mariobg" offsetY="" open="true" foundAll="false" music="Mario" />
-  </Level>
-  <Level number="8" tilesheet="megatile" size="1" descriptionImage="bonus4" levelDescription="">
-    <Room number="1" size="1" nonMoving="MegaBG" offsetY="" open="false" foundAll="false" music="Castle" />
-  </Level>
-
+	<Level number="5" tilesheet="kirbytile" size="1" descriptionImage="bonus1" levelDescription="">
+		<Room number="1" size="1" nonMoving="KirbyBG" offsetY="-460" open="true" foundAll="false" music="GourmetR" />
+	</Level>
+	<Level number="6" tilesheet="MegaTile" size="1" descriptionImage="bonus2" levelDescription="">
+		<Room number="1" size="1" nonMoving="megabg" offsetX="0" offsetY="-4" open="true" foundAll="false" music="Mega" />
+	</Level>
+	<Level number="7" tilesheet="mariotile" size="1" descriptionImage="bonus3" levelDescription="">
+		<Room number="1" size="1" nonMoving="mariobg" offsetY="" open="true" foundAll="false" music="Mario" />
+	</Level>
+	<Level number="8" tilesheet="megatile" size="1" descriptionImage="bonus4" levelDescription="">
+		<Room number="1" size="1" nonMoving="MegaBG" offsetY="" open="false" foundAll="false" music="Castle" />
+	</Level>
 </Game>

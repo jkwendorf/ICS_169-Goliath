@@ -259,11 +259,14 @@ void Level::update(float deltaTime)
 		//Check to see if the player has died
 		if(p.checkDead())
 		{
-			p.resetPosition(currentRoom->getStartPos());
-			p.resetHealth();
-			delete p.currentState;
-			p.currentState = new JumpingState();
-			resetHitPoints();
+			if (p.animationDone())
+			{
+				p.resetPosition(currentRoom->getStartPos());
+				p.resetHealth();
+				delete p.currentState;
+				p.currentState = new JumpingState();
+				resetHitPoints(); 
+			}
 			//currentRoom->bg.reset();
 		}
 
@@ -511,7 +514,8 @@ void Level::update(float deltaTime)
 				//check each "moving" projectile against enemies on the screen
 		//check enemy weapon collisions
 		//std::cout << "View level: " << view.getCenter().x - view.getSize().x/2 << std::endl;
-		currentRoom->setViewPosition(view.getCenter().x - view.getSize().x/2);
+		//currentRoom->setViewPosition(view.getCenter().x - view.getSize().x/2);
+		currentRoom->setViewPosition(camera.getView().getCenter().x - camera.getView().getSize().x/2);
 	}
 
 	if(introTimer > 0 && currentRoom->getRoomNumber() == 1)

@@ -128,13 +128,14 @@ public:
 	sf::Sprite crosshair;
 	float targetScale;
 	Tile closestGrappleTile;
-	Animation player;
+	Animation player, playerDeath;
 	bool gotHit, destroyGoliathHitpoint;
 	Tile* goliathHitpoint;
 	float recoverTime, vibrateTime;
 	bool drawPlease;
 	void playHurtSound();
 	std::map<std::string,sf::Sprite> spriteDictionary;
+	bool animationDone();
 	//sf::RectangleShape hitbox;
 private:	
 	sf::Sound soundEffects[8];

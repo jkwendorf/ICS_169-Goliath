@@ -14,6 +14,8 @@ void MoveCommand::init(Player* player_, MovementDirection direction_, float delt
 void MoveCommand::execute()
 {
 	player->horizontalAcceleration(dir, deltaTime);
+	if (player->checkDead())
+		return;
 	if (dir==RIGHT)
 		player->facingRight=true;
 	else if (dir==LEFT)

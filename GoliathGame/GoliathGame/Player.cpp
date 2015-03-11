@@ -20,12 +20,14 @@ Player::Player()
 	grappleSpeed = Global::GetInstance().playerAttributes[4];
 	gravity = Global::GetInstance().playerAttributes[5];
 	fallSpeed = Global::GetInstance().playerAttributes[6];
-	player = Animation(16, 1, 90, 120, .15); 
-	
+	player = Animation(16, 1, 90, 120, .15, false); 
+	playerDeath = Animation(32, 1, 90, 120, .15, true);
+
 	spriteDictionary = std::map<std::string, sf::Sprite>();
 	spriteDictionary["Idle"].setTexture(*TextureManager::GetInstance().retrieveTexture("David_Idle"));
 	spriteDictionary["Run"].setTexture(*TextureManager::GetInstance().retrieveTexture("davidrunright"));
 	spriteDictionary["Grapple"].setTexture(*TextureManager::GetInstance().retrieveTexture("David_Grapple"));
+	spriteDictionary["Death"].setTexture(*TextureManager::GetInstance().retrieveTexture("David_Death"));
 
 	for (std::map<std::string, sf::Sprite>::iterator it = spriteDictionary.begin(); it != spriteDictionary.end(); it++) {
 		it->second.setOrigin(45, 60);
@@ -35,6 +37,7 @@ Player::Player()
 	}
 	//sprite.setTexture(*TextureManager::GetInstance().retrieveTexture("davidrunright"));
 	sprite = spriteDictionary["Idle"];
+	//playerDeath = spriteDictionary["Death"];
 
 	crosshair.setTexture(*TextureManager::GetInstance().retrieveTexture("crosshair"));
 	crosshair.setPosition(-1000,-1000);
@@ -163,8 +166,8 @@ void Player::update(float deltaTime)
 			inputQueue.pop_front();
 		}
 	}*/
-	
-	hShot.update(deltaTime);
+	if (health > 0)
+		hShot.update(deltaTime);
 	//std::cout << sprite.getPosition().x << " " << sprite.getPosition().y << std::endl;
 	if(!hShot.grappleInProgress)
 	{
@@ -246,7 +249,7 @@ void Player::update(float deltaTime)
 	}
 	
 	//Check for nearest grappleTile
-	if(!collisionManager->isGrappleListEmpty())
+	if(!collisionManager->isGrappleListEmpty() && health > 0)
 	{
 		closestGrappleTile = collisionManager->getNearestGrappleTile(*this);
 		crosshair.setPosition(closestGrappleTile.left + closestGrappleTile.width/2, closestGrappleTile.top + closestGrappleTile.height/2);
@@ -263,14 +266,16 @@ void Player::update(float deltaTime)
 
 
 	//Animated sprite update
-	player.update(deltaTime, sprite, 0, facingRight);
+	if (health > 0)
+		player.update(deltaTime, sprite, 0, facingRight);
+	else
+		playerDeath.update(deltaTime, sprite, 0, facingRight);
 	//player.update(deltaTime, sprite, 1, facingRight);
 	//hitbox.setPosition(sprite.getPosition().x, sprite.getPosition().y);
 	BaseObject::update(deltaTime);
 	hitbox.setFillColor(sf::Color::Blue);
 	//Global::GetInstance().testingRect.setPosition(sprite.getPosition().x-(sprite.getGlobalBounds().width/2), sprite.getPosition().y-(sprite.getGlobalBounds().height/2));
 	//Global::GetInstance().testingRect.setSize(sf::Vector2f(sprite.getGlobalBounds().width, sprite.getGlobalBounds().height));
-
 
 }
 
@@ -376,7 +381,7 @@ void Player::draw(sf::RenderWindow& window)
 
 void Player::grapple()
 {
-	if(!collisionManager->isGrappleListEmpty())
+	if(!collisionManager->isGrappleListEmpty() && health > 0)
 	{
 		if(!hShot.grappleInProgress && !isVaulting)
 		{
@@ -411,7 +416,7 @@ void Player::resetPosition(sf::Vector2f& newPos)
 
 void Player::jump()
 {
-	if(!isHanging && !isFalling)
+	if(!isHanging && !isFalling && health > 0)
 	{
 		int sound = rand() % 2 + 1;
 		std::cout << "Sound Playing: " << sound << std::endl;
@@ -434,7 +439,13 @@ void Player::playerUpdate(sf::Vector2i roomSize, float deltaTime)
 			sf::Vector2f pos = sprite.getPosition();
 			sprite = spriteDictionary["Idle"];
 			sprite.setPosition(pos);
-		} 
+		}
+
+		if (health <= 0) {
+			sf::Vector2f pos = sprite.getPosition();
+			sprite = spriteDictionary["Death"];
+			sprite.setPosition(pos);
+		}
 	}
 	viewCheck(roomSize.x, roomSize.y);
 	update(deltaTime);
@@ -494,7 +505,11 @@ void Player::updateUI(sf::Vector2f offset)
 
 void Player::horizontalAcceleration(MovementDirection dir, float& deltaTime)
 {
-
+	if (health <= 0) {
+		vel.x = 0;
+		//vel.y = 0;
+		return;
+	}
 	if(!hShot.hookedOnSomething || !hShot.grappleInProgress)
 	{
 		if(dir != STILL)
@@ -832,4 +847,17 @@ void Player::resetHealth()
 	drawPlease = true;
 	ui->endFlash();
 	ui->resetUI();
+}
+
+bool Player::animationDone()
+{
+	if (health > 0)
+		return player.isAnimationDone();
+	else {
+		if (playerDeath.isAnimationDone()) {
+			playerDeath.reset();
+			return true;
+		}
+		return false;
+	}
 }
