@@ -137,6 +137,8 @@ public:
 	std::map<std::string,sf::Sprite> spriteDictionary;
 	bool animationDone();
 	void depleteHealth();
+	void playDeathSound();
+	bool deathSound;
 	//sf::RectangleShape hitbox;
 private:	
 	sf::Sound soundEffects[8];
