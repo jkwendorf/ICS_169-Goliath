@@ -31,6 +31,7 @@ void UserInterface::resetUI()
 	showHealth3 = false;
 	showHealth4 = true;
 	healthIcon.setTexture(*TextureManager::GetInstance().retrieveTexture("Heart4"));
+	drawPlease = true;
 }
 
 void UserInterface::draw(sf::RenderWindow& window)
@@ -117,6 +118,15 @@ void UserInterface::update(float h, float s, sf::Vector2f offset)
 
 	staminaBar.setSize(sf::Vector2f((s * 6), 50));
 	staminaBar.setPosition(Global::GetInstance().topLeft.x + 20 + offset.x, Global::GetInstance().topLeft.y + 90 + offset.y);*/
+}
+
+void UserInterface::depleteHealth()
+{
+	showHealth1 = false;
+	showHealth2 = false;
+	showHealth3 = false;
+	showHealth4 = false;
+	drawPlease = false;
 }
 	
 void UserInterface::update(float h, float s)

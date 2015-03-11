@@ -124,7 +124,7 @@ void Level::update(float deltaTime)
 	camera.viewChange(p.sprite.getPosition());
 	currentRoom->update(deltaTime);
 	if (currentRoom->bg.hitFloor()) {
-		goliathSound[STOMP1].play();
+		playStompSound();
 		shakeScreen(1.0f, 20);
 		currentRoom->bg.setHitFloor(false);
 		particleEmitter.resetAllParticles();
@@ -234,6 +234,7 @@ void Level::update(float deltaTime)
 					p.destroyGoliathHitpoint = true;
 					p.goliathHitpoint = hookedTile;
 					playHurtSound();
+					shakeScreen(1.0f, 30);
 				}
 				else
 					//p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width/2, hookedTile->top + 5));
@@ -259,10 +260,13 @@ void Level::update(float deltaTime)
 		//Check to see if the player has died
 		if(p.checkDead())
 		{
+			p.gotHit = true;
+			p.depleteHealth();
 			if (p.animationDone())
 			{
 				p.resetPosition(currentRoom->getStartPos());
 				p.resetHealth();
+				p.gotHit = false;
 				delete p.currentState;
 				p.currentState = new JumpingState();
 				resetHitPoints(); 

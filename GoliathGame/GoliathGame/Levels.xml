@@ -68,7 +68,6 @@
 			<MovingLayer image="Goliath Sky Darker" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="-0.3" offsetX="0" offsetY="-600" scaleX="4" scaleY="4" />
 		</Room>
 	</Level>
-  
 	<Level number="3" tilesheet="BanditTile" size="4" descriptionImage="goliathoverlay3" levelDescription="">
 		<Room number="1" size="1" nonMoving="Goliath Clouds" offsetX="0" offsetY="-4000" open="true" foundAll="false" music="Titan">
 			<MovingLayer image="Goliath StomachWaist" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="-400" scaleX="1.3" scaleY="1.3" />
@@ -77,28 +76,27 @@
 			<MovingLayer image="Goliath Sky" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="-400" scaleX="3" scaleY="3" />
 		</Room>
 		<Room number="2" size="1" nonMoving="GoliathClouds" offsetX="0" offsetY="-1000" scaleX="1.5" scaleY="1.5" open="true" foundAll="false" music="Titan">
-      <MovingLayer image="GoliathInterior" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="-400" offsetY="-300" scaleX="2" scaleY="2" drawInFront="true" />
+			<MovingLayer image="GoliathInterior" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="-400" offsetY="-300" scaleX="2" scaleY="2" drawInFront="true" />
 			<MovingLayer image="Goliath Clouds" timeToRotate="1" rotationDegree="0" velScaleX="0.35" velScaleY="-0.3" offsetX="0" offsetY="1000" scaleX="2" scaleY="2" />
 			<MovingLayer image="Goliath Clouds" timeToRotate="1" rotationDegree="0" velScaleX="0.3" velScaleY="-0.3" offsetX="0" offsetY="1500" scaleX="2" scaleY="2" />
 			<MovingLayer image="Goliath Sky Darker" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="-0.3" offsetX="0" offsetY="200" scaleX="3" scaleY="3" />
 			<MovingLayer image="Goliath Sky Darker" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="-0.3" offsetX="0" offsetY="-600" scaleX="3" scaleY="3" />
 		</Room>
-    <Room number="3" size="1" nonMoving="GoliathClouds" offsetX="0" offsetY="-1000" scaleX="1.5" scaleY="1.5" open="true" foundAll="false" music="Titan">
-      <MovingLayer image="GoliathInterior" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="-400" offsetY="-300" scaleX="2" scaleY="2" drawInFront="true" />
-      <MovingLayer image="Goliath Clouds" timeToRotate="1" rotationDegree="0" velScaleX="0.35" velScaleY="-0.3" offsetX="0" offsetY="1000" scaleX="2" scaleY="2" />
-      <MovingLayer image="Goliath Clouds" timeToRotate="1" rotationDegree="0" velScaleX="0.3" velScaleY="-0.3" offsetX="0" offsetY="1500" scaleX="2" scaleY="2" />
-      <MovingLayer image="Goliath Sky Darker" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="-0.3" offsetX="0" offsetY="200" scaleX="3" scaleY="3" />
-      <MovingLayer image="Goliath Sky Darker" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="-0.3" offsetX="0" offsetY="-600" scaleX="3" scaleY="3" />
-    </Room>
-    <Room number="4" size="1" nonMoving="GoliathClouds" offsetX="0" offsetY="-1000" scaleX="1.5" scaleY="1.5" open="true" foundAll="false" music="Titan">
-      <MovingLayer image="GoliathInterior" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="-900" offsetY="-300" scaleX="3" scaleY="3" drawInFront="true" />
-      <MovingLayer image="Goliath Clouds" timeToRotate="1" rotationDegree="0" velScaleX="0.35" velScaleY="-0.3" offsetX="0" offsetY="1000" scaleX="2" scaleY="2" />
-      <MovingLayer image="Goliath Clouds" timeToRotate="1" rotationDegree="0" velScaleX="0.3" velScaleY="-0.3" offsetX="0" offsetY="1500" scaleX="2" scaleY="2" />
-      <MovingLayer image="Goliath Sky Darker" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="-0.3" offsetX="0" offsetY="200" scaleX="3" scaleY="3" />
-      <MovingLayer image="Goliath Sky Darker" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="-0.3" offsetX="0" offsetY="-600" scaleX="3" scaleY="3" />
-    </Room>
+		<Room number="3" size="1" nonMoving="GoliathClouds" offsetX="0" offsetY="-1000" scaleX="1.5" scaleY="1.5" open="true" foundAll="false" music="Titan">
+			<MovingLayer image="GoliathInterior" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="-400" offsetY="-300" scaleX="2" scaleY="2" drawInFront="true" />
+			<MovingLayer image="Goliath Clouds" timeToRotate="1" rotationDegree="0" velScaleX="0.35" velScaleY="-0.3" offsetX="0" offsetY="1000" scaleX="2" scaleY="2" />
+			<MovingLayer image="Goliath Clouds" timeToRotate="1" rotationDegree="0" velScaleX="0.3" velScaleY="-0.3" offsetX="0" offsetY="1500" scaleX="2" scaleY="2" />
+			<MovingLayer image="Goliath Sky Darker" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="-0.3" offsetX="0" offsetY="200" scaleX="3" scaleY="3" />
+			<MovingLayer image="Goliath Sky Darker" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="-0.3" offsetX="0" offsetY="-600" scaleX="3" scaleY="3" />
+		</Room>
+		<Room number="4" size="1" nonMoving="GoliathClouds" offsetX="0" offsetY="-1000" scaleX="1.5" scaleY="1.5" open="true" foundAll="false" music="Titan">
+			<MovingLayer image="GoliathInterior" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="-900" offsetY="-300" scaleX="3" scaleY="3" drawInFront="true" />
+			<MovingLayer image="Goliath Clouds" timeToRotate="1" rotationDegree="0" velScaleX="0.35" velScaleY="-0.3" offsetX="0" offsetY="1000" scaleX="2" scaleY="2" />
+			<MovingLayer image="Goliath Clouds" timeToRotate="1" rotationDegree="0" velScaleX="0.3" velScaleY="-0.3" offsetX="0" offsetY="1500" scaleX="2" scaleY="2" />
+			<MovingLayer image="Goliath Sky Darker" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="-0.3" offsetX="0" offsetY="200" scaleX="3" scaleY="3" />
+			<MovingLayer image="Goliath Sky Darker" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="-0.3" offsetX="0" offsetY="-600" scaleX="3" scaleY="3" />
+		</Room>
 	</Level>
-  
 	<Level number="4" tilesheet="BanditTile" size="1" descriptionImage="goliathoverlay4" levelDescription="">
 		<Room number="1" size="1" nonMoving="banditCity" open="true" foundAll="false" />
 	</Level>
@@ -108,25 +106,4 @@
 	<Level number="6" tilesheet="MegaTile" size="1" descriptionImage="bonus2" levelDescription="">
 		<Room number="1" size="1" nonMoving="megabg" offsetX="0" offsetY="-4" open="true" foundAll="false" music="Mega" />
 	</Level>
-<<<<<<< HEAD
-  <Level number="7" tilesheet="mariotile" size="1" descriptionImage="bonus3" levelDescription="">
-    <Room number="1" size="1" nonMoving="mariobg" offsetY="" open="true" foundAll="false" music="Mario" />
-  </Level>
-  <Level number="8" tilesheet="megatile" size="1" descriptionImage="bonus4" levelDescription="">
-    <Room number="1" size="1" nonMoving="MegaBG" offsetY="" open="false" foundAll="false" music="Castle" />
-  </Level>
-=======
-	<Level number="5" tilesheet="kirbytile" size="1" descriptionImage="bonus1" levelDescription="">
-		<Room number="1" size="1" nonMoving="KirbyBG" offsetY="-460" open="true" foundAll="false" music="GourmetR" />
-	</Level>
-	<Level number="6" tilesheet="MegaTile" size="1" descriptionImage="bonus2" levelDescription="">
-		<Room number="1" size="1" nonMoving="megabg" offsetX="0" offsetY="-4" open="true" foundAll="false" music="Mega" />
-	</Level>
-	<Level number="7" tilesheet="mariotile" size="1" descriptionImage="bonus3" levelDescription="">
-		<Room number="1" size="1" nonMoving="mariobg" offsetY="" open="true" foundAll="false" music="Mario" />
-	</Level>
-	<Level number="8" tilesheet="megatile" size="1" descriptionImage="bonus4" levelDescription="">
-		<Room number="1" size="1" nonMoving="MegaBG" offsetY="" open="false" foundAll="false" music="Castle" />
-	</Level>
->>>>>>> origin/master
 </Game>
