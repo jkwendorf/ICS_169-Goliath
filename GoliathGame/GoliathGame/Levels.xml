@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <Game>
 	<Level number="1" tilesheet="BanditTile" size="6" descriptionImage="goliathoverlay1" levelDescription="" music="RLevel">
-		<Room number="1" size="1" nonMoving="Goliath Clouds" offsetX="0" offsetY="300" open="true" foundAll="true" >
+		<Room number="1" size="1" nonMoving="Goliath Clouds" offsetX="0" offsetY="300" open="true" foundAll="true">
 			<MovingLayer image="Goliath Midground City" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="-320" scaleX="2" scaleY="2" />
 			<MovingLayer image="Goliath Background Mountains" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="-350" scaleX="2" scaleY="2" />
 			<MovingLayer image="Goliath Sky" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="160" scaleX="2" scaleY="2" />
