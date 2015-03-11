@@ -181,6 +181,7 @@ void Level::update(float deltaTime)
 			levelStart = false;
 			p.resetHealth();
 		}*/
+		p.playDeathSound();
 		p.resetHealth();
 		resetHitPoints();
 	}
@@ -242,7 +243,7 @@ void Level::update(float deltaTime)
 					p.destroyGoliathHitpoint = true;
 					p.goliathHitpoint = hookedTile;
 					playHurtSound();
-					shakeScreen(1.0f, 30);
+					shakeScreen(1.0f, 40);
 				}
 				else
 					//p.hShot.grappleToLocation(sf::Vector2f(hookedTile->left + hookedTile->width/2, hookedTile->top + 5));
@@ -270,6 +271,7 @@ void Level::update(float deltaTime)
 		{
 			p.gotHit = true;
 			p.depleteHealth();
+			p.playDeathSound();
 			if (p.animationDone())
 			{
 				p.resetPosition(currentRoom->getStartPos());

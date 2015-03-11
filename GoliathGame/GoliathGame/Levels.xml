@@ -68,7 +68,7 @@
 			<MovingLayer image="Goliath Sky Darker" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="-0.3" offsetX="0" offsetY="-600" scaleX="4" scaleY="4" />
 		</Room>
 	</Level>
-	<Level number="3" tilesheet="BanditTile" size="4" descriptionImage="goliathoverlay3" levelDescription="">
+	<Level number="3" tilesheet="BanditTile" size="4" descriptionImage="goliathoverlay3" levelDescription="" music="RLevel">
 		<Room number="1" size="1" nonMoving="Goliath Clouds" offsetX="0" offsetY="-4000" open="true" foundAll="false" music="Titan">
 			<MovingLayer image="Goliath StomachWaist" timeToRotate="1" rotationDegree="0" velScaleX="0" velScaleY="0" offsetX="0" offsetY="-400" scaleX="1.3" scaleY="1.3" />
 			<MovingLayer image="Goliath Clouds" timeToRotate="1" rotationDegree="0" velScaleX="1.25" velScaleY="3" offsetX="0" offsetY="-800" scaleX="2" scaleY="2" />
