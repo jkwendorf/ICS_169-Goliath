@@ -106,4 +106,7 @@
 	<Level number="6" tilesheet="MegaTile" size="1" descriptionImage="bonus2" levelDescription="" music="Mega">
 		<Room number="1" size="1" nonMoving="megabg" offsetX="0" offsetY="-4" open="true" foundAll="false" />
 	</Level>
+  <Level number="7" tilesheet="mariotile" size="1" descriptionImage="bonus3" levelDescription="" music="Mario">
+    <Room number="1" size="1" nonMoving="mariobg" offsetX="0" offsetY="-4" open="true" foundAll="false" />
+  </Level>
 </Game>
