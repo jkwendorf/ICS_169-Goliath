@@ -39,6 +39,14 @@ Level::Level(int levelNumber, int roomNumber)
 	loadSounds();
 	//shakeScreen(5.0, 100);
 
+		//Music
+	if (!levelMusic.openFromFile("media/sound/" + levelInfo.songName + ".wav"))
+	{
+		std::cout << "Error for loading file" << std::endl;
+	}
+	levelMusic.setLoop(true);
+	levelMusic.play();
+
 	introDescription = sf::Text(levelInfo.description, Global::GetInstance().font);
 	introDescription.setOrigin(introDescription.getGlobalBounds().width/2, introDescription.getGlobalBounds().height/2);
 	if (levelInfo.imageName != "")

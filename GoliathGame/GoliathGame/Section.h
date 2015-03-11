@@ -20,6 +20,7 @@ private:
 	sf::Vector2i gDim;
 	sf::Vector2f startPos, offset;
 	std::string pathToText;
+	sf::Sprite portalTile;
 
 	Section();
 	void LoadTileMap(std::vector<std::shared_ptr<Enemy>> &enemyList, std::vector<Tile*> &arrowTileList, std::list<Tile*> &destructTileList, std::list<Tile*> &hitPointTileList);

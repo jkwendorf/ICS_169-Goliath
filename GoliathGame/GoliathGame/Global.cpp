@@ -57,6 +57,7 @@ void Global::ParseXML() {
 		LevelStruct l;
 		l.description = level.attribute("levelDescription").as_string();
 		l.imageName = level.attribute("descriptionImage").as_string();
+		l.songName = level.attribute("music").as_string();
 		l.levelSize = level.attribute("size").as_int();
 		levelInfo[str] = l;
 
@@ -70,7 +71,7 @@ void Global::ParseXML() {
 			roomStruct.roomSize = room.attribute("size").as_int();
 			roomStruct.nonMovinglayer = room.attribute("nonMoving").as_string();
 			roomStruct.posOffset = sf::Vector2f(room.attribute("offsetX").as_float(), room.attribute("offsetY").as_float());
-			roomStruct.songName = room.attribute("music").as_string();
+			//roomStruct.songName = room.attribute("music").as_string();
 			//Set in XML if the room is available and if the player collected all the treasure
 			roomStruct.open = room.attribute("open").as_bool();
 			roomStruct.foundAll = room.attribute("foundAll").as_bool();
