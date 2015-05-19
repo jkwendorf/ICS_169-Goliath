@@ -7,7 +7,7 @@ class Projectile : public BaseObject
 {
 public:
 	Projectile();
-	Projectile(sf::Vector2f startPos, sf::Vector2f vel);
+	Projectile(sf::Vector2f startPos, sf::Vector2f vel, float rotation=0.0f);
 	~Projectile();
 
 	sf::Vector2f startLocation;

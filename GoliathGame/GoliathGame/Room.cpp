@@ -10,13 +10,13 @@ Room::Room(int levelNumber, int roomNumber, std::vector<std::shared_ptr<Enemy>> 
 	
 	LoadRoom(levelNumber, enemyList, arrowTileList, destructTileList, hitPointTileList);
 	//Music
-	if (!roomMusic.openFromFile("media/sound/" + roomInfo.songName + ".wav"))
-	{
-		std::cout << "Error for loading file" << std::endl;
-	}
+	//if (!roomMusic.openFromFile("media/sound/" + roomInfo.songName + ".wav"))
+	//{
+	//	std::cout << "Error for loading file" << std::endl;
+	//}
 	g = Global::GetInstance();
-	roomMusic.setLoop(true);
-	roomMusic.play();
+	//roomMusic.setLoop(true);
+	//roomMusic.play();
 }
 
 Room::~Room()

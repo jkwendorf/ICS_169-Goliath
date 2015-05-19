@@ -39,6 +39,14 @@ Level::Level(int levelNumber, int roomNumber)
 	loadSounds();
 	//shakeScreen(5.0, 100);
 
+		//Music
+	if (!levelMusic.openFromFile("media/sound/" + levelInfo.songName + ".wav"))
+	{
+		std::cout << "Error for loading file" << std::endl;
+	}
+	levelMusic.setLoop(true);
+	levelMusic.play();
+
 	introDescription = sf::Text(levelInfo.description, Global::GetInstance().font);
 	introDescription.setOrigin(introDescription.getGlobalBounds().width/2, introDescription.getGlobalBounds().height/2);
 	if (levelInfo.imageName != "")
@@ -591,7 +599,7 @@ void Level::setArrowTileArrows()
 		//std::cout << "Shooter: " << a->left << ", " << a->top << std::endl;
 		if(a->getDirection().x == 1.0)
 		{
-			Projectile* pro = new Projectile(sf::Vector2f(a->left + (GAME_TILE_DIM), a->top), a->getDirection());
+			Projectile* pro = new Projectile(sf::Vector2f(a->left + (GAME_TILE_DIM+64), a->top + (GAME_TILE_DIM/2)), a->getDirection(), 0.0f);
 			pro->drawPlease = false;
 			pro->damage = 25;
 			arrows.push_back(pro);
@@ -599,7 +607,7 @@ void Level::setArrowTileArrows()
 		}
 		else if(a->getDirection().x == -1.0)
 		{
-			Projectile* pro = new Projectile(sf::Vector2f(a->left - (GAME_TILE_DIM), a->top), a->getDirection());
+			Projectile* pro = new Projectile(sf::Vector2f(a->left - (GAME_TILE_DIM), a->top + (GAME_TILE_DIM/2)), a->getDirection(), 180.0f);
 			pro->drawPlease = false;
 			pro->damage = 25;
 			arrows.push_back(pro);
@@ -607,7 +615,7 @@ void Level::setArrowTileArrows()
 		}
 		else if(a->getDirection().y == 1.0)
 		{
-			Projectile* pro = new Projectile(sf::Vector2f(a->left, a->top + (GAME_TILE_DIM)), a->getDirection());
+			Projectile* pro = new Projectile(sf::Vector2f(a->left + (GAME_TILE_DIM/2), a->top + (GAME_TILE_DIM+64)), a->getDirection(), 90.0f);
 			pro->drawPlease = false;
 			pro->damage = 25;
 			arrows.push_back(pro); 
@@ -615,7 +623,7 @@ void Level::setArrowTileArrows()
 		}
 		else if(a->getDirection().y == -1.0)
 		{
-			Projectile* pro = new Projectile(sf::Vector2f(a->left, a->top - (GAME_TILE_DIM)), a->getDirection());
+			Projectile* pro = new Projectile(sf::Vector2f(a->left + (GAME_TILE_DIM/2), a->top - (GAME_TILE_DIM+64)), a->getDirection(), 270.0f);
 			pro->drawPlease = false;
 			pro->damage = 25;
 			arrows.push_back(pro);

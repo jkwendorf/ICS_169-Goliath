@@ -21,7 +21,7 @@ Enemy::Enemy(sf::String body, float x, float y) :
 	moveSpeed = Global::GetInstance().enemyAttributes[3];
 
 	initialPosition = sf::Vector2f(x,y);
-	raycast = Projectile(sprite.getPosition(), sf::Vector2f(0.0,0.0));
+	raycast = Projectile(sprite.getPosition(), sf::Vector2f(0.0,0.0), 0.0f);
 	rayCool = 1.1f;
 
 	foundPlayer = false;
@@ -36,7 +36,7 @@ Enemy::Enemy(sf::String body, float x, float y) :
 
 	for(int x = 0; x < 3; x++)
 	{
-		ammo[x] = Projectile(sprite.getPosition(), sf::Vector2f(0.0,0.0));
+		ammo[x] = Projectile(sprite.getPosition(), sf::Vector2f(0.0,0.0), 0.0f);
 		ammo[x].sprite.setColor(sf::Color(x*50 + 150, 0, 0));
 		ammo[x].damage = 20.0f;
 	}
@@ -55,7 +55,7 @@ Enemy::Enemy(sf::String body, float x, float y, float range) :
 	moveSpeed = 250;
 	initialPosition = sf::Vector2f(x,y);
 
-	raycast = Projectile(sprite.getPosition(), sf::Vector2f(0.0,0.0));
+	raycast = Projectile(sprite.getPosition(), sf::Vector2f(0.0,0.0), 0.0f);
 	rayCool = 1.1f;
 
 	weaponCooldown = 2.0f;
@@ -67,7 +67,7 @@ Enemy::Enemy(sf::String body, float x, float y, float range) :
 
 	for(int x = 0; x < 3; x++)
 	{
-		ammo[x] = Projectile(sprite.getPosition(), sf::Vector2f(0.0,0.0));
+		ammo[x] = Projectile(sprite.getPosition(), sf::Vector2f(0.0,0.0), 0.0f);
 		ammo[x].sprite.setColor(sf::Color(x*50 + 150, 0, 0));
 		ammo[x].damage = 20.0f;
 	}
@@ -87,11 +87,11 @@ Enemy::Enemy(sf::String body, float x, float y, float range, float jp, float ms,
 	initialPosition = sf::Vector2f(x,y);
 
 	rayCool = 3.1f;
-	raycast = Projectile(sprite.getPosition(), sf::Vector2f(0.0,0.0));
+	raycast = Projectile(sprite.getPosition(), sf::Vector2f(0.0,0.0), 0.0f);
 
 	for(int x = 0; x < 3; x++)
 	{
-		ammo[x] = Projectile(sprite.getPosition(), sf::Vector2f(0.0,0.0));
+		ammo[x] = Projectile(sprite.getPosition(), sf::Vector2f(0.0,0.0), 0.0f);
 		ammo[x].sprite.setColor(sf::Color(x*50 + 150, 0, 0));
 		ammo[x].damage = 20.0f;
 	}

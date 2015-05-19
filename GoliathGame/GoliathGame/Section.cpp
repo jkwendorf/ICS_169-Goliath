@@ -8,6 +8,9 @@ Section::Section(int sectionNumber, std::string& s, sf::Vector2f& offset, std::v
 	mFoundAll(foundAll)
 {
 	LoadTileMap(enemyList, arrowTileList, destructTileList, hitPointTileList);
+	portalTile = sf::Sprite(*TextureManager::GetInstance().retrieveTexture("Goliath Portal"));
+	portalTile.setScale(0.0625,0.0625);
+
 }
 
 Section::~Section()
@@ -201,8 +204,16 @@ void Section::draw(sf::RenderWindow& w)
 				window.top > grid1[i]->top + GAME_TILE_DIM ||
 				window.top + SCREEN_HEIGHT < grid1[i]->top))
 			{
-				Global::GetInstance().currentTileSheet[grid1[i]->getTileNum()]->setPosition(sf::Vector2f(grid1[i]->left, grid1[i]->top));
-				w.draw(*Global::GetInstance().currentTileSheet[grid1[i]->getTileNum()]);
+				if (grid1[i]->getTileNum() == 18 || grid1[i]->getTileNum() == 19)
+				{
+					portalTile.setPosition(sf::Vector2f(grid1[i]->left, grid1[i]->top - 64));
+					w.draw(portalTile);
+				}
+				else 
+				{
+					Global::GetInstance().currentTileSheet[grid1[i]->getTileNum()]->setPosition(sf::Vector2f(grid1[i]->left, grid1[i]->top));
+					w.draw(*Global::GetInstance().currentTileSheet[grid1[i]->getTileNum()]);
+				}
 			}
 		}
 	//if(grid[i]->objectNum != -999)

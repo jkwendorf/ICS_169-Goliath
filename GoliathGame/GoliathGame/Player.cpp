@@ -21,7 +21,7 @@ Player::Player()
 	gravity = Global::GetInstance().playerAttributes[5];
 	fallSpeed = Global::GetInstance().playerAttributes[6];
 	player = Animation(16, 1, 90, 120, .15, false); 
-	playerDeath = Animation(32, 1, 90, 120, .15, true);
+	playerDeath = Animation(32, 1, 90, 120, .07, true);
 
 	spriteDictionary = std::map<std::string, sf::Sprite>();
 	spriteDictionary["Idle"].setTexture(*TextureManager::GetInstance().retrieveTexture("David_Idle"));

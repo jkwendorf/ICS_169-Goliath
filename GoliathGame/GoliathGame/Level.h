@@ -58,6 +58,8 @@ private:
 	std::vector<Projectile*> arrows;
 	Camera camera;
 	sf::Sound goliathSound[8];
+	sf::Music levelMusic;
+
 
 	bool arrowsCanFire;
 	bool levelStart;
