@@ -8,6 +8,7 @@
 #include "LevelSelectState.h"
 #include "ControlsState.h"
 #include "LoadingState.h"
+#include "CreditsState.h"
 
 enum StateEnum
 {
@@ -17,7 +18,8 @@ enum StateEnum
 	TRANSITION,
 	PAUSE_GAME,
 	LEVEL_SELECT,
-	END_GAME
+	END_GAME,
+	CREDITS
 };
 
 class StateManager

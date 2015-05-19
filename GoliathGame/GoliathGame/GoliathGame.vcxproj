@@ -97,6 +97,7 @@
     <ClCompile Include="ClimbCommand.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="ControlsState.cpp" />
+    <ClCompile Include="CreditsState.cpp" />
     <ClCompile Include="EndGameState.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyAI.cpp" />
@@ -160,6 +161,7 @@
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="Command.h" />
     <ClInclude Include="ControlsState.h" />
+    <ClInclude Include="CreditsState.h" />
     <ClInclude Include="Defines.h" />
     <ClInclude Include="EndGameState.h" />
     <ClInclude Include="Enemy.h" />

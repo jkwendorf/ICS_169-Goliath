@@ -14,6 +14,7 @@ MainMenuState::MainMenuState(void)
 		bM->createButton("Level Select", [] {StateManager::getInstance().changeToState(LEVEL_SELECT, false);});
 		//bM->createButton("Options", [] {});
 		bM->createButton("Controls", [] {StateManager::getInstance().changeToState(CONTROLS, false);});
+		bM->createButton("Credits", [] {StateManager::getInstance().changeToState(CREDITS, false);});
 		bM->createButton("Quit", [&] {setToQuit();});
 	}
 	bg.setTexture(*TextureManager::GetInstance().retrieveTexture("MenuBG"));
